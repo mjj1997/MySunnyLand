@@ -59,7 +59,7 @@ add_library(MySunnyLand::MySunnyLand_warnings ALIAS MySunnyLand_warnings)
 #add_library(MySunnyLand::MySunnyLand_warnings INTERFACE IMPORTED)
 
 # configure files based on CMake configuration options
-add_subdirectory(configured_files)
+# add_subdirectory(configured_files)
 
 # Adding the src:
 add_subdirectory(src)
@@ -77,20 +77,20 @@ endif()
 # Adding the tests:
 include(CTest)
 
-if(BUILD_TESTING)
-  message(AUTHOR_WARNING "Building Tests. Be sure to check out test/constexpr_tests.cpp for constexpr testing")
-  add_subdirectory(test)
-endif()
+# if(BUILD_TESTING)
+#   message(AUTHOR_WARNING "Building Tests. Be sure to check out test/constexpr_tests.cpp for constexpr testing")
+#   add_subdirectory(test)
+# endif()
 
 
-if(MySunnyLand_BUILD_FUZZ_TESTS)
-  message(AUTHOR_WARNING "Building Fuzz Tests, using fuzzing sanitizer https://www.llvm.org/docs/LibFuzzer.html")
-  if (NOT MySunnyLand_ENABLE_SANITIZER_ADDRESS AND NOT MySunnyLand_ENABLE_SANITIZER_THREAD)
-    message(WARNING "You need asan or tsan enabled for meaningful fuzz testing")
-  endif()
-  add_subdirectory(fuzz_test)
-
-endif()
+# if(MySunnyLand_BUILD_FUZZ_TESTS)
+#   message(AUTHOR_WARNING "Building Fuzz Tests, using fuzzing sanitizer https://www.llvm.org/docs/LibFuzzer.html")
+#   if (NOT MySunnyLand_ENABLE_SANITIZER_ADDRESS AND NOT MySunnyLand_ENABLE_SANITIZER_THREAD)
+#     message(WARNING "You need asan or tsan enabled for meaningful fuzz testing")
+#   endif()
+#   add_subdirectory(fuzz_test)
+#
+# endif()
 
 # If MSVC is being used, and ASAN is enabled, we need to set the debugger environment
 # so that it behaves well with MSVC's debugger, and we can run the target from visual studio
@@ -113,7 +113,7 @@ include(cmake/PackageProject.cmake)
 # we know we want to ship
 MySunnyLand_package_project(
   TARGETS
-  intro
+  # intro
   MySunnyLand_options
   MySunnyLand_warnings
   # FIXME: this does not work! CK

@@ -7,7 +7,7 @@ include(CheckCXXCompilerFlag)
 include(CheckCXXSourceCompiles)
 
 
-macro(myproject_supports_sanitizers)
+macro(MySunnyLand_supports_sanitizers)
   # Emscripten doesn't support sanitizers
   if(EMSCRIPTEN)
     set(SUPPORTS_UBSAN OFF)
@@ -58,110 +58,110 @@ macro(myproject_supports_sanitizers)
   endif()
 endmacro()
 
-macro(myproject_setup_options)
-  option(myproject_ENABLE_HARDENING "Enable hardening" ON)
-  option(myproject_ENABLE_COVERAGE "Enable coverage reporting" OFF)
+macro(MySunnyLand_setup_options)
+  option(MySunnyLand_ENABLE_HARDENING "Enable hardening" ON)
+  option(MySunnyLand_ENABLE_COVERAGE "Enable coverage reporting" OFF)
   cmake_dependent_option(
-    myproject_ENABLE_GLOBAL_HARDENING
+    MySunnyLand_ENABLE_GLOBAL_HARDENING
     "Attempt to push hardening options to built dependencies"
     ON
-    myproject_ENABLE_HARDENING
+    MySunnyLand_ENABLE_HARDENING
     OFF)
 
-  myproject_supports_sanitizers()
+  MySunnyLand_supports_sanitizers()
 
-  if(NOT PROJECT_IS_TOP_LEVEL OR myproject_PACKAGING_MAINTAINER_MODE)
-    option(myproject_ENABLE_IPO "Enable IPO/LTO" OFF)
-    option(myproject_WARNINGS_AS_ERRORS "Treat Warnings As Errors" OFF)
-    option(myproject_ENABLE_SANITIZER_ADDRESS "Enable address sanitizer" OFF)
-    option(myproject_ENABLE_SANITIZER_LEAK "Enable leak sanitizer" OFF)
-    option(myproject_ENABLE_SANITIZER_UNDEFINED "Enable undefined sanitizer" OFF)
-    option(myproject_ENABLE_SANITIZER_THREAD "Enable thread sanitizer" OFF)
-    option(myproject_ENABLE_SANITIZER_MEMORY "Enable memory sanitizer" OFF)
-    option(myproject_ENABLE_UNITY_BUILD "Enable unity builds" OFF)
-    option(myproject_ENABLE_CLANG_TIDY "Enable clang-tidy" OFF)
-    option(myproject_ENABLE_CPPCHECK "Enable cpp-check analysis" OFF)
-    option(myproject_ENABLE_PCH "Enable precompiled headers" OFF)
-    option(myproject_ENABLE_CACHE "Enable ccache" OFF)
+  if(NOT PROJECT_IS_TOP_LEVEL OR MySunnyLand_PACKAGING_MAINTAINER_MODE)
+    option(MySunnyLand_ENABLE_IPO "Enable IPO/LTO" OFF)
+    option(MySunnyLand_WARNINGS_AS_ERRORS "Treat Warnings As Errors" OFF)
+    option(MySunnyLand_ENABLE_SANITIZER_ADDRESS "Enable address sanitizer" OFF)
+    option(MySunnyLand_ENABLE_SANITIZER_LEAK "Enable leak sanitizer" OFF)
+    option(MySunnyLand_ENABLE_SANITIZER_UNDEFINED "Enable undefined sanitizer" OFF)
+    option(MySunnyLand_ENABLE_SANITIZER_THREAD "Enable thread sanitizer" OFF)
+    option(MySunnyLand_ENABLE_SANITIZER_MEMORY "Enable memory sanitizer" OFF)
+    option(MySunnyLand_ENABLE_UNITY_BUILD "Enable unity builds" OFF)
+    option(MySunnyLand_ENABLE_CLANG_TIDY "Enable clang-tidy" OFF)
+    option(MySunnyLand_ENABLE_CPPCHECK "Enable cpp-check analysis" OFF)
+    option(MySunnyLand_ENABLE_PCH "Enable precompiled headers" OFF)
+    option(MySunnyLand_ENABLE_CACHE "Enable ccache" OFF)
   else()
-    option(myproject_ENABLE_IPO "Enable IPO/LTO" ON)
-    option(myproject_WARNINGS_AS_ERRORS "Treat Warnings As Errors" ON)
-    option(myproject_ENABLE_SANITIZER_ADDRESS "Enable address sanitizer" ${SUPPORTS_ASAN})
-    option(myproject_ENABLE_SANITIZER_LEAK "Enable leak sanitizer" OFF)
-    option(myproject_ENABLE_SANITIZER_UNDEFINED "Enable undefined sanitizer" ${SUPPORTS_UBSAN})
-    option(myproject_ENABLE_SANITIZER_THREAD "Enable thread sanitizer" OFF)
-    option(myproject_ENABLE_SANITIZER_MEMORY "Enable memory sanitizer" OFF)
-    option(myproject_ENABLE_UNITY_BUILD "Enable unity builds" OFF)
-    option(myproject_ENABLE_CLANG_TIDY "Enable clang-tidy" ON)
-    option(myproject_ENABLE_CPPCHECK "Enable cpp-check analysis" ON)
-    option(myproject_ENABLE_PCH "Enable precompiled headers" OFF)
-    option(myproject_ENABLE_CACHE "Enable ccache" ON)
+    option(MySunnyLand_ENABLE_IPO "Enable IPO/LTO" ON)
+    option(MySunnyLand_WARNINGS_AS_ERRORS "Treat Warnings As Errors" ON)
+    option(MySunnyLand_ENABLE_SANITIZER_ADDRESS "Enable address sanitizer" ${SUPPORTS_ASAN})
+    option(MySunnyLand_ENABLE_SANITIZER_LEAK "Enable leak sanitizer" OFF)
+    option(MySunnyLand_ENABLE_SANITIZER_UNDEFINED "Enable undefined sanitizer" ${SUPPORTS_UBSAN})
+    option(MySunnyLand_ENABLE_SANITIZER_THREAD "Enable thread sanitizer" OFF)
+    option(MySunnyLand_ENABLE_SANITIZER_MEMORY "Enable memory sanitizer" OFF)
+    option(MySunnyLand_ENABLE_UNITY_BUILD "Enable unity builds" OFF)
+    option(MySunnyLand_ENABLE_CLANG_TIDY "Enable clang-tidy" ON)
+    option(MySunnyLand_ENABLE_CPPCHECK "Enable cpp-check analysis" ON)
+    option(MySunnyLand_ENABLE_PCH "Enable precompiled headers" OFF)
+    option(MySunnyLand_ENABLE_CACHE "Enable ccache" ON)
   endif()
 
   if(NOT PROJECT_IS_TOP_LEVEL)
     mark_as_advanced(
-      myproject_ENABLE_IPO
-      myproject_WARNINGS_AS_ERRORS
-      myproject_ENABLE_SANITIZER_ADDRESS
-      myproject_ENABLE_SANITIZER_LEAK
-      myproject_ENABLE_SANITIZER_UNDEFINED
-      myproject_ENABLE_SANITIZER_THREAD
-      myproject_ENABLE_SANITIZER_MEMORY
-      myproject_ENABLE_UNITY_BUILD
-      myproject_ENABLE_CLANG_TIDY
-      myproject_ENABLE_CPPCHECK
-      myproject_ENABLE_COVERAGE
-      myproject_ENABLE_PCH
-      myproject_ENABLE_CACHE)
+      MySunnyLand_ENABLE_IPO
+      MySunnyLand_WARNINGS_AS_ERRORS
+      MySunnyLand_ENABLE_SANITIZER_ADDRESS
+      MySunnyLand_ENABLE_SANITIZER_LEAK
+      MySunnyLand_ENABLE_SANITIZER_UNDEFINED
+      MySunnyLand_ENABLE_SANITIZER_THREAD
+      MySunnyLand_ENABLE_SANITIZER_MEMORY
+      MySunnyLand_ENABLE_UNITY_BUILD
+      MySunnyLand_ENABLE_CLANG_TIDY
+      MySunnyLand_ENABLE_CPPCHECK
+      MySunnyLand_ENABLE_COVERAGE
+      MySunnyLand_ENABLE_PCH
+      MySunnyLand_ENABLE_CACHE)
   endif()
 
-  myproject_check_libfuzzer_support(LIBFUZZER_SUPPORTED)
-  if(LIBFUZZER_SUPPORTED AND (myproject_ENABLE_SANITIZER_ADDRESS OR myproject_ENABLE_SANITIZER_THREAD OR myproject_ENABLE_SANITIZER_UNDEFINED))
+  MySunnyLand_check_libfuzzer_support(LIBFUZZER_SUPPORTED)
+  if(LIBFUZZER_SUPPORTED AND (MySunnyLand_ENABLE_SANITIZER_ADDRESS OR MySunnyLand_ENABLE_SANITIZER_THREAD OR MySunnyLand_ENABLE_SANITIZER_UNDEFINED))
     set(DEFAULT_FUZZER ON)
   else()
     set(DEFAULT_FUZZER OFF)
   endif()
 
-  option(myproject_BUILD_FUZZ_TESTS "Enable fuzz testing executable" ${DEFAULT_FUZZER})
+  option(MySunnyLand_BUILD_FUZZ_TESTS "Enable fuzz testing executable" ${DEFAULT_FUZZER})
 
 endmacro()
 
-macro(myproject_global_options)
-  if(myproject_ENABLE_IPO)
+macro(MySunnyLand_global_options)
+  if(MySunnyLand_ENABLE_IPO)
     include(cmake/InterproceduralOptimization.cmake)
-    myproject_enable_ipo()
+    MySunnyLand_enable_ipo()
   endif()
 
-  myproject_supports_sanitizers()
+  MySunnyLand_supports_sanitizers()
 
-  if(myproject_ENABLE_HARDENING AND myproject_ENABLE_GLOBAL_HARDENING)
+  if(MySunnyLand_ENABLE_HARDENING AND MySunnyLand_ENABLE_GLOBAL_HARDENING)
     include(cmake/Hardening.cmake)
     if(NOT SUPPORTS_UBSAN 
-       OR myproject_ENABLE_SANITIZER_UNDEFINED
-       OR myproject_ENABLE_SANITIZER_ADDRESS
-       OR myproject_ENABLE_SANITIZER_THREAD
-       OR myproject_ENABLE_SANITIZER_LEAK)
+       OR MySunnyLand_ENABLE_SANITIZER_UNDEFINED
+       OR MySunnyLand_ENABLE_SANITIZER_ADDRESS
+       OR MySunnyLand_ENABLE_SANITIZER_THREAD
+       OR MySunnyLand_ENABLE_SANITIZER_LEAK)
       set(ENABLE_UBSAN_MINIMAL_RUNTIME FALSE)
     else()
       set(ENABLE_UBSAN_MINIMAL_RUNTIME TRUE)
     endif()
-    message("${myproject_ENABLE_HARDENING} ${ENABLE_UBSAN_MINIMAL_RUNTIME} ${myproject_ENABLE_SANITIZER_UNDEFINED}")
-    myproject_enable_hardening(myproject_options ON ${ENABLE_UBSAN_MINIMAL_RUNTIME})
+    message("${MySunnyLand_ENABLE_HARDENING} ${ENABLE_UBSAN_MINIMAL_RUNTIME} ${MySunnyLand_ENABLE_SANITIZER_UNDEFINED}")
+    MySunnyLand_enable_hardening(MySunnyLand_options ON ${ENABLE_UBSAN_MINIMAL_RUNTIME})
   endif()
 endmacro()
 
-macro(myproject_local_options)
+macro(MySunnyLand_local_options)
   if(PROJECT_IS_TOP_LEVEL)
     include(cmake/StandardProjectSettings.cmake)
   endif()
 
-  add_library(myproject_warnings INTERFACE)
-  add_library(myproject_options INTERFACE)
+  add_library(MySunnyLand_warnings INTERFACE)
+  add_library(MySunnyLand_options INTERFACE)
 
   include(cmake/CompilerWarnings.cmake)
-  myproject_set_project_warnings(
-    myproject_warnings
-    ${myproject_WARNINGS_AS_ERRORS}
+  MySunnyLand_set_project_warnings(
+    MySunnyLand_warnings
+    ${MySunnyLand_WARNINGS_AS_ERRORS}
     ""
     ""
     ""
@@ -172,66 +172,66 @@ macro(myproject_local_options)
 
   if(NOT EMSCRIPTEN)
     include(cmake/Sanitizers.cmake)
-    myproject_enable_sanitizers(
-      myproject_options
-      ${myproject_ENABLE_SANITIZER_ADDRESS}
-      ${myproject_ENABLE_SANITIZER_LEAK}
-      ${myproject_ENABLE_SANITIZER_UNDEFINED}
-      ${myproject_ENABLE_SANITIZER_THREAD}
-      ${myproject_ENABLE_SANITIZER_MEMORY})
+    MySunnyLand_enable_sanitizers(
+      MySunnyLand_options
+      ${MySunnyLand_ENABLE_SANITIZER_ADDRESS}
+      ${MySunnyLand_ENABLE_SANITIZER_LEAK}
+      ${MySunnyLand_ENABLE_SANITIZER_UNDEFINED}
+      ${MySunnyLand_ENABLE_SANITIZER_THREAD}
+      ${MySunnyLand_ENABLE_SANITIZER_MEMORY})
   endif()
 
-  set_target_properties(myproject_options PROPERTIES UNITY_BUILD ${myproject_ENABLE_UNITY_BUILD})
+  set_target_properties(MySunnyLand_options PROPERTIES UNITY_BUILD ${MySunnyLand_ENABLE_UNITY_BUILD})
 
-  if(myproject_ENABLE_PCH)
+  if(MySunnyLand_ENABLE_PCH)
     target_precompile_headers(
-      myproject_options
+      MySunnyLand_options
       INTERFACE
       <vector>
       <string>
       <utility>)
   endif()
 
-  if(myproject_ENABLE_CACHE)
+  if(MySunnyLand_ENABLE_CACHE)
     include(cmake/Cache.cmake)
-    myproject_enable_cache()
+    MySunnyLand_enable_cache()
   endif()
 
   include(cmake/StaticAnalyzers.cmake)
-  if(myproject_ENABLE_CLANG_TIDY)
-    myproject_enable_clang_tidy(myproject_options ${myproject_WARNINGS_AS_ERRORS})
+  if(MySunnyLand_ENABLE_CLANG_TIDY)
+    MySunnyLand_enable_clang_tidy(MySunnyLand_options ${MySunnyLand_WARNINGS_AS_ERRORS})
   endif()
 
-  if(myproject_ENABLE_CPPCHECK)
-    myproject_enable_cppcheck(${myproject_WARNINGS_AS_ERRORS} "" # override cppcheck options
+  if(MySunnyLand_ENABLE_CPPCHECK)
+    MySunnyLand_enable_cppcheck(${MySunnyLand_WARNINGS_AS_ERRORS} "" # override cppcheck options
     )
   endif()
 
-  if(myproject_ENABLE_COVERAGE)
+  if(MySunnyLand_ENABLE_COVERAGE)
     include(cmake/Tests.cmake)
-    myproject_enable_coverage(myproject_options)
+    MySunnyLand_enable_coverage(MySunnyLand_options)
   endif()
 
-  if(myproject_WARNINGS_AS_ERRORS)
+  if(MySunnyLand_WARNINGS_AS_ERRORS)
     check_cxx_compiler_flag("-Wl,--fatal-warnings" LINKER_FATAL_WARNINGS)
     if(LINKER_FATAL_WARNINGS)
       # This is not working consistently, so disabling for now
-      # target_link_options(myproject_options INTERFACE -Wl,--fatal-warnings)
+      # target_link_options(MySunnyLand_options INTERFACE -Wl,--fatal-warnings)
     endif()
   endif()
 
-  if(myproject_ENABLE_HARDENING AND NOT myproject_ENABLE_GLOBAL_HARDENING)
+  if(MySunnyLand_ENABLE_HARDENING AND NOT MySunnyLand_ENABLE_GLOBAL_HARDENING)
     include(cmake/Hardening.cmake)
     if(NOT SUPPORTS_UBSAN 
-       OR myproject_ENABLE_SANITIZER_UNDEFINED
-       OR myproject_ENABLE_SANITIZER_ADDRESS
-       OR myproject_ENABLE_SANITIZER_THREAD
-       OR myproject_ENABLE_SANITIZER_LEAK)
+       OR MySunnyLand_ENABLE_SANITIZER_UNDEFINED
+       OR MySunnyLand_ENABLE_SANITIZER_ADDRESS
+       OR MySunnyLand_ENABLE_SANITIZER_THREAD
+       OR MySunnyLand_ENABLE_SANITIZER_LEAK)
       set(ENABLE_UBSAN_MINIMAL_RUNTIME FALSE)
     else()
       set(ENABLE_UBSAN_MINIMAL_RUNTIME TRUE)
     endif()
-    myproject_enable_hardening(myproject_options OFF ${ENABLE_UBSAN_MINIMAL_RUNTIME})
+    MySunnyLand_enable_hardening(MySunnyLand_options OFF ${ENABLE_UBSAN_MINIMAL_RUNTIME})
   endif()
 
 endmacro()

@@ -1,9 +1,13 @@
 #pragma once
 
+#include <memory>
+
 struct SDL_Window;
 struct SDL_Renderer;
 
 namespace engine::core { // 命名空间的最佳实践：与文件路径一致
+
+class FrameTimeController;
 
 /**
  * @brief 主游戏应用程序类，初始化SDL，管理游戏循环。
@@ -11,7 +15,7 @@ namespace engine::core { // 命名空间的最佳实践：与文件路径一致
 class GameApp final // final 表示该类不能被继承
 {
 public:
-    GameApp() = default;
+    GameApp();
     ~GameApp();
 
     // 禁止拷贝和移动
@@ -36,6 +40,9 @@ private:
     SDL_Window* m_window{ nullptr };
     SDL_Renderer* m_renderer{ nullptr };
     bool m_isRunning{ false };
+
+    // 引擎组件
+    std::unique_ptr<engine::core::FrameTimeController> m_frameTimeController;
 };
 
 } // namespace engine::core

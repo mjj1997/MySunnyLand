@@ -1,9 +1,15 @@
 #include "game_app.h"
+#include "frame_time_controller.h"
 
 #include <SDL3/SDL.h>
 #include <spdlog/spdlog.h>
 
 namespace engine::core {
+
+GameApp::GameApp()
+{
+    m_frameTimeController = std::make_unique<FrameTimeController>();
+}
 
 GameApp::~GameApp()
 {
@@ -20,11 +26,16 @@ void GameApp::run()
         return;
     }
 
+    m_frameTimeController->setTargetFps(144); // 设置目标帧率（临时，未来会从配置文件读取）
     while (m_isRunning) {
-        float deltaTime{ 0.01f }; // 每帧的时间间隔（临时设定）
+        m_frameTimeController->update();
+        double deltaTime{ m_frameTimeController->deltaTime() };
+
         handleEvents();
         update(deltaTime);
         render();
+
+        spdlog::info("deltaTime: {}", deltaTime);
     }
 
     clean();

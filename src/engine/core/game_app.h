@@ -5,6 +5,10 @@
 struct SDL_Window;
 struct SDL_Renderer;
 
+namespace engine::resource {
+class ResourceManager;
+}
+
 namespace engine::core { // 命名空间的最佳实践：与文件路径一致
 
 class FrameTimeController;
@@ -15,7 +19,7 @@ class FrameTimeController;
 class GameApp final // final 表示该类不能被继承
 {
 public:
-    GameApp();
+    GameApp() = default;
     ~GameApp();
 
     // 禁止拷贝和移动
@@ -36,6 +40,14 @@ private:
     void render();
     void clean();
 
+    // 各模块的初始化/创建函数，在 init() 中调用
+    bool initSDL();
+    bool initFrameTimeController();
+    bool initResourceManager();
+
+    // 测试用函数
+    void testResourceManager();
+
 private:
     SDL_Window* m_window{ nullptr };
     SDL_Renderer* m_renderer{ nullptr };
@@ -43,6 +55,7 @@ private:
 
     // 引擎组件
     std::unique_ptr<engine::core::FrameTimeController> m_frameTimeController;
+    std::unique_ptr<engine::resource::ResourceManager> m_resourceManager;
 };
 
 } // namespace engine::core

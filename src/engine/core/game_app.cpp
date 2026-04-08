@@ -33,7 +33,7 @@ void GameApp::run()
         update(deltaTime);
         render();
 
-        spdlog::info("deltaTime: {}", deltaTime);
+        // spdlog::info("deltaTime: {}", deltaTime);
     }
 
     clean();

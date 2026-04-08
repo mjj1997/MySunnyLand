@@ -73,7 +73,7 @@ void FontManager::unloadFont(const std::string& filePath, int pointSize)
     FontKey key{ filePath, pointSize };
     auto it = m_fonts.find(key);
     if (it != m_fonts.end()) {
-        spdlog::debug("卸载字体: {} ({}pt)", filePath, pointSize);
+        spdlog::debug("成功卸载字体: {} ({}pt)", filePath, pointSize);
         m_fonts.erase(it); // unique_ptr 处理 TTF_CloseFont
     } else {
         spdlog::warn("尝试卸载不存在的字体: {} ({}pt)", filePath, pointSize);

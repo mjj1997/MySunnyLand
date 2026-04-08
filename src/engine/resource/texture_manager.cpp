@@ -34,7 +34,7 @@ SDL_Texture* TextureManager::loadTexture(const std::string& filePath)
 
     // 使用带有自定义删除器的 unique_ptr 存储加载的纹理
     m_textures.emplace(filePath, std::unique_ptr<SDL_Texture, SDLTextureDeletor>(texture));
-    spdlog::debug("成功加载纹理并缓存纹理：{}", filePath);
+    spdlog::debug("成功加载并缓存纹理：{}", filePath);
 
     return texture;
 }

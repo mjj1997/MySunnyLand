@@ -80,7 +80,7 @@ void AudioManager::unloadSound(const std::string& filePath)
 {
     auto it = m_sounds.find(filePath);
     if (it != m_sounds.end()) {
-        spdlog::debug("卸载音效: {}", filePath);
+        spdlog::debug("成功卸载音效: {}", filePath);
         m_sounds.erase(it); // unique_ptr 处理 MIX_DestroyAudio
     } else {
         spdlog::warn("尝试卸载不存在的音效: {}", filePath);

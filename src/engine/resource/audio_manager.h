@@ -33,17 +33,17 @@ public:
 
     // 仅供 ResourceManager 访问的方法
 private:
-    MIX_Audio* loadSound(const std::string& file_path); ///< @brief 从文件路径加载音效（预解码）
+    MIX_Audio* loadSound(const std::string& filePath); ///< @brief 从文件路径加载音效（预解码）
     ///< @brief 尝试获取已加载音效的指针，如果未加载则尝试加载
-    MIX_Audio* getSound(const std::string& file_path);
-    void unloadSound(const std::string& file_path); ///< @brief 卸载指定的音效资源
-    void clearSounds();                             ///< @brief 清空所有音效资源
+    MIX_Audio* getSound(const std::string& filePath);
+    void unloadSound(const std::string& filePath); ///< @brief 卸载指定的音效资源
+    void clearSounds();                            ///< @brief 清空所有音效资源
 
-    MIX_Audio* loadMusic(const std::string& file_path); ///< @brief 从文件路径加载音乐（流式解码）
+    MIX_Audio* loadMusic(const std::string& filePath); ///< @brief 从文件路径加载音乐（流式解码）
     ///< @brief 尝试获取已加载音乐的指针，如果未加载则尝试加载
-    MIX_Audio* getMusic(const std::string& file_path);
-    void unloadMusic(const std::string& file_path); ///< @brief 卸载指定的音乐资源
-    void clearMusics();                             ///< @brief 清空所有音乐资源
+    MIX_Audio* getMusic(const std::string& filePath);
+    void unloadMusic(const std::string& filePath); ///< @brief 卸载指定的音乐资源
+    void clearMusics();                            ///< @brief 清空所有音乐资源
 
     void clearAudio(); ///< @brief 清空所有音频资源
 

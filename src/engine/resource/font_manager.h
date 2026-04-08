@@ -1,0 +1,68 @@
+#pragma once
+
+#include <SDL3_ttf/SDL_ttf.h> // SDL_ttf 主头文件
+
+#include <functional> // 用于 std::hash
+#include <memory>     // 用于 std::unique_ptr
+#include <string>
+#include <unordered_map>
+#include <utility> // 用于 std::pair
+
+namespace engine::resource {
+
+// 定义字体键类型（路径 + 大小）
+using FontKey = std::pair<std::string, int>;
+
+// FontKey 的自定义哈希函数（std::pair<std::string, int>），用于 std::unordered_map
+struct FontKeyHash
+{
+    std::size_t operator()(const FontKey& key) const
+    {
+        std::hash<std::string> stringHasher;
+        std::hash<int> intHasher;
+        return stringHasher(key.first) ^ intHasher(key.second);
+    }
+};
+
+/**
+ * @brief 管理 SDL_ttf 字体资源（TTF_Font）。
+ *
+ * 提供字体的加载和缓存功能，通过文件路径和点大小来标识。
+ * 构造失败会抛出异常。仅供 ResourceManager 内部使用。
+ */
+class FontManager final
+{
+public:
+    /**
+     * @brief 构造函数。初始化 SDL_ttf。
+     * @throws std::runtime_error 如果 SDL_ttf 初始化失败。
+     */
+    FontManager();
+
+    ~FontManager(); ///< @brief 需要手动添加析构函数，清理资源并关闭 SDL_ttf。
+
+    // 当前设计中，我们只需要一个FontManager，所有权不变，所以不需要拷贝、移动相关构造及赋值运算符
+    FontManager(const FontManager&) = delete;
+    FontManager& operator=(const FontManager&) = delete;
+    FontManager(FontManager&&) = delete;
+    FontManager& operator=(FontManager&&) = delete;
+
+private:
+    // TTF_Font 的自定义删除器
+    struct SDLFontDeletor
+    {
+        void operator()(TTF_Font* font) const
+        {
+            if (font) {
+                TTF_CloseFont(font);
+            }
+        }
+    };
+
+    // 字体存储（FontKey -> TTF_Font）。
+    // unordered_map 的键需要能转换为哈希值，对于基础数据类型，系统会自动转换
+    // 但是对于对于自定义类型（系统无法自动转化），则需要提供自定义哈希函数（第三个模版参数）
+    std::unordered_map<FontKey, std::unique_ptr<TTF_Font, SDLFontDeletor>, FontKeyHash> m_fonts;
+};
+
+} // namespace engine::resource

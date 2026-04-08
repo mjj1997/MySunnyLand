@@ -1,9 +1,6 @@
 add_executable(SunnyLand)
 
-target_sources(
-  SunnyLand
-  PRIVATE main.cpp
-)
+target_sources(SunnyLand PRIVATE main.cpp engine/core/game_app.cpp engine/core/frame_time_controller.cpp)
 
 target_link_libraries(
   SunnyLand
@@ -13,8 +10,7 @@ target_link_libraries(
           SDL3_ttf::SDL3_ttf
           glm::glm
           nlohmann_json::nlohmann_json
-          spdlog::spdlog
-          )
+          spdlog::spdlog)
 
 # 1. 定义资源目录
 set(RESOURCE_SRC_DIR "${PROJECT_SOURCE_DIR}/assets")

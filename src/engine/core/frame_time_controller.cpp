@@ -16,23 +16,24 @@ FrameTimeController::FrameTimeController()
 void FrameTimeController::update()
 {
     m_currentFrameStartTimestamp = SDL_GetTicksNS(); // 记录进入 update 时的时间戳
-    auto deltaTime = static_cast<double>(m_currentFrameStartTimestamp - m_lastFrameEndTimestamp)
-                     / 1.0e9;
-    // 如果设置了目标帧率，则限制帧率；否则 m_deltaTime = deltaTime
+    auto currentDeltaTime = static_cast<double>(m_currentFrameStartTimestamp
+                                                - m_lastFrameEndTimestamp)
+                            / 1.0e9;
+    // 如果设置了目标帧率，则限制帧率；否则 m_deltaTime = currentDeltaTime
     if (m_targetFrameTime > 0.0) {
-        limitFrameRate(deltaTime);
+        limitFrameRate(currentDeltaTime);
     } else {
-        m_deltaTime = deltaTime;
+        m_deltaTime = currentDeltaTime;
     }
 
     m_lastFrameEndTimestamp = SDL_GetTicksNS(); // 记录离开 update 时的时间戳
 }
 
-void FrameTimeController::limitFrameRate(double deltaTime)
+void FrameTimeController::limitFrameRate(double currentDeltaTime)
 {
     // 如果当前帧耗费的时间小于目标帧时间，则等待剩余时间
-    if (deltaTime < m_targetFrameTime) {
-        double s2Wait{ m_targetFrameTime - deltaTime };        // 需要等待的时间差（秒）
+    if (currentDeltaTime < m_targetFrameTime) {
+        double s2Wait{ m_targetFrameTime - currentDeltaTime }; // 需要等待的时间差（秒）
         Uint64 ns2Wait{ static_cast<Uint64>(s2Wait * 1.0e9) }; // 转换为纳秒
         SDL_DelayNS(ns2Wait);
         m_deltaTime = static_cast<double>(SDL_GetTicksNS() - m_lastFrameEndTimestamp) / 1.0e9;

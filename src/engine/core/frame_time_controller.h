@@ -75,7 +75,7 @@ private:
      * 
      * @param deltaTime 当前帧的执行时间（秒）
      */
-    void limitFrameRate(double deltaTime);
+    void limitFrameRate(double currentDeltaTime);
 
 private:
     Uint64 m_lastFrameEndTimestamp{ 0 };      ///< @brief 上一帧结束的时间戳

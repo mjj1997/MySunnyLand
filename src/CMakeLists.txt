@@ -1,6 +1,14 @@
 add_executable(SunnyLand)
 
-target_sources(SunnyLand PRIVATE main.cpp engine/core/game_app.cpp engine/core/frame_time_controller.cpp)
+target_sources(
+  SunnyLand
+  PRIVATE main.cpp
+          engine/core/game_app.cpp
+          engine/core/frame_time_controller.cpp
+          engine/resource/texture_manager.cpp
+          engine/resource/audio_manager.cpp
+          engine/resource/font_manager.cpp
+          engine/resource/resource_manager.cpp)
 
 target_link_libraries(
   SunnyLand

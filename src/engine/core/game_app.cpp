@@ -7,6 +7,8 @@
 
 namespace engine::core {
 
+GameApp::GameApp() = default;
+
 GameApp::~GameApp()
 {
     if (m_isRunning) {

@@ -19,7 +19,7 @@ class FrameTimeController;
 class GameApp final // final 表示该类不能被继承
 {
 public:
-    GameApp() = default;
+    GameApp();
     ~GameApp();
 
     // 禁止拷贝和移动

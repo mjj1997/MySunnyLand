@@ -31,7 +31,7 @@ public:
      */
     explicit ResourceManager(SDL_Renderer* renderer);
 
-    ~ResourceManager() = default; // 显式声明析构函数，这是为了能让智能指针正确管理仅有前向声明的类
+    ~ResourceManager(); // 显式声明析构函数，这是为了能让智能指针正确管理仅有前向声明的类
 
     ///< @brief 清空所有资源
     void clear();

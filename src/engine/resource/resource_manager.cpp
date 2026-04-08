@@ -17,6 +17,8 @@ ResourceManager::ResourceManager(SDL_Renderer* renderer)
     spdlog::trace("ResourceManager 构造成功。");
 }
 
+ResourceManager::~ResourceManager() = default;
+
 void ResourceManager::clear()
 {
     m_textureManager->clearTextures();

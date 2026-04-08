@@ -38,7 +38,10 @@ SDL_Texture* ResourceManager::getTexture(const std::string& filePath)
     return m_textureManager->getTexture(filePath);
 }
 
-void ResourceManager::unloadTexture(const std::string& filePath) {}
+void ResourceManager::unloadTexture(const std::string& filePath)
+{
+    m_textureManager->unloadTexture(filePath);
+}
 
 glm::vec2 ResourceManager::getTextureSize(const std::string& filePath)
 {

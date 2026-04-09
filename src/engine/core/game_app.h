@@ -46,9 +46,9 @@ private:
     void clean();
 
     // 各模块的初始化/创建函数，在 init() 中调用
-    bool initSDL();
-    bool initFrameTimeController();
-    bool initResourceManager();
+    [[nodiscard]] bool initSDL();
+    [[nodiscard]] bool initFrameTimeController();
+    [[nodiscard]] bool initResourceManager();
     [[nodiscard]] bool initRenderer();
     [[nodiscard]] bool initCamera();
 

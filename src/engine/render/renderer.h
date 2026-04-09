@@ -13,6 +13,8 @@ class ResourceManager;
 
 namespace engine::render {
 
+class Sprite;
+
 /**
  * @brief 封装 SDL3 渲染操作
  *
@@ -50,6 +52,10 @@ public:
     // --- getters and setters ---
     ///< @brief 获取底层的 SDL_Renderer 指针
     SDL_Renderer* renderer() const { return m_renderer; }
+
+private:
+    ///< @brief 获取精灵的源矩形，用于具体绘制。出现错误则返回std::nullopt并跳过绘制
+    std::optional<SDL_FRect> getSpriteSrcRect(const Sprite& sprite);
 
 private:
     ///< @brief 指向 SDL_Renderer 的非拥有指针

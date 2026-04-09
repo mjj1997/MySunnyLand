@@ -1,5 +1,6 @@
 #include "renderer.h"
 #include "../resource/resource_manager.h"
+#include "camera.h"
 #include "sprite.h"
 
 #include <SDL3/SDL.h>
@@ -77,6 +78,14 @@ std::optional<SDL_FRect> Renderer::getSpriteSrcRect(const Sprite& sprite)
         }
         return defaultRect;
     }
+}
+
+bool Renderer::isRectInViewport(const Camera& camera, const SDL_FRect& rect)
+{
+    glm::vec2 viewportSize{ camera.viewportSize() };
+    // 相当于 AABB 碰撞检测
+    return rect.x + rect.w >= 0 && rect.x <= viewportSize.x && rect.y + rect.h >= 0
+           && rect.y <= viewportSize.y;
 }
 
 } // namespace engine::render

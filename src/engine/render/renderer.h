@@ -14,6 +14,7 @@ class ResourceManager;
 namespace engine::render {
 
 class Sprite;
+class Camera;
 
 /**
  * @brief 封装 SDL3 渲染操作
@@ -56,6 +57,8 @@ public:
 private:
     ///< @brief 获取精灵的源矩形，用于具体绘制。出现错误则返回std::nullopt并跳过绘制
     std::optional<SDL_FRect> getSpriteSrcRect(const Sprite& sprite);
+    ///< @brief 判断矩形是否在视口中，用于视口裁剪
+    bool isRectInViewport(const Camera& camera, const SDL_FRect& rect);
 
 private:
     ///< @brief 指向 SDL_Renderer 的非拥有指针

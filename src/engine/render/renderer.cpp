@@ -73,6 +73,65 @@ void Renderer::drawSprite(const Camera& camera,
     }
 }
 
+void Renderer::drawParallax(const Camera& camera,
+                            const Sprite& sprite,
+                            const glm::vec2& position,
+                            const glm::vec2& scrollFactor,
+                            const glm::bvec2& repeat,
+                            const glm::vec2& scale)
+{
+    SDL_Texture* texture{ m_resourceManager->getTexture(sprite.textureId()) };
+    if (!texture) {
+        spdlog::error("无法为 ID {} 获取纹理。", sprite.textureId());
+        return;
+    }
+
+    auto srcRect = getSpriteSrcRect(sprite);
+    if (!srcRect.has_value()) {
+        spdlog::error("无法获取精灵的源矩形, ID: {}", sprite.textureId());
+        return;
+    }
+
+    // 应用相机变换
+    glm::vec2 positionScreen{ camera.worldToScreenWithParallax(position, scrollFactor) };
+
+    // 计算缩放后的纹理尺寸
+    float scaledWidth{ srcRect.value().w * scale.x };
+    float scaledHeight{ srcRect.value().h * scale.y };
+
+    glm::vec2 startPos;
+    glm::vec2 endPos;
+    glm::vec2 viewportSize{ camera.viewportSize() };
+    if (repeat.x) {
+        // 重复背景纹理的 x 坐标范围，从 -scaledWidth 到 0
+        startPos.x = glm::mod(positionScreen.x, scaledWidth) - scaledWidth;
+        endPos.x = viewportSize.x;
+    } else {
+        startPos.x = positionScreen.x;
+        // 结束点是一个纹理宽度之后，但不超过视口宽度
+        endPos.x = glm::min(positionScreen.x + scaledWidth, viewportSize.x);
+    }
+    if (repeat.y) {
+        // 重复背景纹理的 y 坐标范围，从 -scaledHeight 到 0
+        startPos.y = glm::mod(positionScreen.y, scaledHeight) - scaledHeight;
+        endPos.y = viewportSize.y;
+    } else {
+        startPos.y = positionScreen.y;
+        // 结束点是一个纹理高度之后，但不超过视口高度
+        endPos.y = glm::min(positionScreen.y + scaledHeight, viewportSize.y);
+    }
+
+    for (float y{ startPos.y }; y < endPos.y; y += scaledHeight) {
+        for (float x{ startPos.x }; x < endPos.x; x += scaledWidth) {
+            SDL_FRect destRect{ x, y, scaledWidth, scaledHeight };
+            if (!SDL_RenderTexture(m_renderer, texture, NULL, &destRect)) {
+                spdlog::error("渲染视差纹理失败(ID: {}): {}", sprite.textureId(), SDL_GetError());
+                return;
+            }
+        }
+    }
+}
+
 void Renderer::present()
 {
     SDL_RenderPresent(m_renderer);

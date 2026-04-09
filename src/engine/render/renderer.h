@@ -55,6 +55,21 @@ public:
                     const glm::vec2& scale = { 1.0f, 1.0f },
                     double angle = 0.0f);
 
+    /**
+     * @brief 绘制视差滚动背景
+     * 
+     * @param sprite 包含纹理ID、源矩形和翻转状态的 Sprite 对象。
+     * @param position 世界坐标中的左上角位置。
+     * @param scrollFactor 滚动因子。
+     * @param scale 缩放因子。
+     */
+    void drawParallax(const Camera& camera,
+                      const Sprite& sprite,
+                      const glm::vec2& position,
+                      const glm::vec2& scrollFactor,
+                      const glm::bvec2& repeat = { true, true },
+                      const glm::vec2& scale = { 1.0f, 1.0f });
+
     // --- 封装 SDL 渲染函数 ---
     void present();     ///< @brief 更新屏幕，包装 SDL_RenderPresent 函数
     void clearScreen(); ///< @brief 清屏，包装 SDL_RenderClear 函数

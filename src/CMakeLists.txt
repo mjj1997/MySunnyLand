@@ -8,7 +8,9 @@ target_sources(
           engine/resource/texture_manager.cpp
           engine/resource/audio_manager.cpp
           engine/resource/font_manager.cpp
-          engine/resource/resource_manager.cpp)
+          engine/resource/resource_manager.cpp
+          engine/render/camera.cpp
+          engine/render/renderer.cpp)
 
 target_link_libraries(
   SunnyLand

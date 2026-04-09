@@ -13,9 +13,9 @@ namespace engine::render {
 class Camera final
 {
 public:
-    Camera(const glm::vec2& viewportSize,
-           const glm::vec2& position = glm::vec2(0.0f, 0.0f),
-           const std::optional<engine::utils::Rect> limitBounds = std::nullopt);
+    explicit Camera(const glm::vec2& viewportSize,
+                    const glm::vec2& position = glm::vec2(0.0f, 0.0f),
+                    const std::optional<engine::utils::Rect> limitBounds = std::nullopt);
 
     // 禁用拷贝和移动语义
     Camera(const Camera&) = delete;

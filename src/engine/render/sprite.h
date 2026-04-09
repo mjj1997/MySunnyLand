@@ -25,9 +25,9 @@ public:
      * @param source_rect 可选的源矩形（SDL_FRect），定义要使用的纹理部分。如果为 std::nullopt，则使用整个纹理。
      * @param is_flipped 是否水平翻转
      */
-    Sprite(const std::string& textureId,
-           const std::optional<SDL_FRect>& sourceRect = std::nullopt,
-           bool isFlipped = false)
+    explicit Sprite(const std::string& textureId,
+                    const std::optional<SDL_FRect>& sourceRect = std::nullopt,
+                    bool isFlipped = false)
         : m_textureId(textureId)
         , m_sourceRect(sourceRect)
         , m_isFlipped(isFlipped)

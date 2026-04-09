@@ -159,7 +159,8 @@ bool GameApp::initResourceManager()
 bool GameApp::initRenderer()
 {
     try {
-        m_renderer = std::make_unique<engine::render::Renderer>(m_sdlRenderer, m_resourceManager);
+        m_renderer = std::make_unique<engine::render::Renderer>(m_sdlRenderer,
+                                                                m_resourceManager.get());
     } catch (const std::exception& e) {
         spdlog::error("初始化渲染器失败: {}", e.what());
         return false;

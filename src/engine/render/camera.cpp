@@ -14,6 +14,17 @@ Camera::Camera(const glm::vec2& viewportSize,
     spdlog::trace("Camera 初始化成功，位置: {},{}", position.x, position.y);
 }
 
+void Camera::update(double deltaTime)
+{
+    // TODO: 自动跟随目标
+}
+
+void Camera::move(const glm::vec2& offset)
+{
+    m_position += offset;
+    clampPosition();
+}
+
 glm::vec2 Camera::worldToScreen(const glm::vec2& worldPos) const
 {
     // 世界坐标 - 相机位置 = 屏幕坐标

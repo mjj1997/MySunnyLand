@@ -23,6 +23,9 @@ public:
     Camera(Camera&&) = delete;
     Camera& operator=(Camera&&) = delete;
 
+    void update(double deltaTime);      ///< @brief 更新相机位置
+    void move(const glm::vec2& offset); ///< @brief 移动相机
+
     glm::vec2 worldToScreen(const glm::vec2& worldPos) const; ///< @brief 世界坐标转屏幕坐标
     ///< @brief 世界坐标转屏幕坐标，考虑视差滚动
     glm::vec2 worldToScreenWithParallax(const glm::vec2& worldPos,

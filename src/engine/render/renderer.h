@@ -1,5 +1,7 @@
 #pragma once
 
+#include <glm/glm.hpp>
+
 #include <optional>
 
 struct SDL_Renderer;
@@ -35,6 +37,15 @@ public:
     Renderer& operator=(const Renderer&) = delete;
     Renderer(Renderer&&) = delete;
     Renderer& operator=(Renderer&&) = delete;
+
+    // --- 封装 SDL 渲染函数 ---
+    void present();     ///< @brief 更新屏幕，包装 SDL_RenderPresent 函数
+    void clearScreen(); ///< @brief 清屏，包装 SDL_RenderClear 函数
+
+    ///< @brief 设置绘制颜色，包装 SDL_SetRenderDrawColor 函数，使用 Uint8 类型
+    void setDrawColor(Uint8 r, Uint8 g, Uint8 b, Uint8 a = 255);
+    ///< @brief 设置绘制颜色，包装 SDL_SetRenderDrawColorFloat 函数，使用 float 类型
+    void setDrawColorFloat(float r, float g, float b, float a = 1.0f);
 
     // --- getters and setters ---
     ///< @brief 获取底层的 SDL_Renderer 指针

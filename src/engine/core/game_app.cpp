@@ -134,6 +134,9 @@ bool GameApp::initSDL()
         return false;
     }
 
+    // 设置逻辑分辨率
+    SDL_SetRenderLogicalPresentation(m_sdlRenderer, 640, 360, SDL_LOGICAL_PRESENTATION_LETTERBOX);
+
     spdlog::trace("SDL 初始化成功。");
     return true;
 }

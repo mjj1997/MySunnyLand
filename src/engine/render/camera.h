@@ -23,6 +23,12 @@ public:
     Camera(Camera&&) = delete;
     Camera& operator=(Camera&&) = delete;
 
+    glm::vec2 worldToScreen(const glm::vec2& worldPos) const; ///< @brief 世界坐标转屏幕坐标
+    ///< @brief 世界坐标转屏幕坐标，考虑视差滚动
+    glm::vec2 worldToScreenWithParallax(const glm::vec2& worldPos,
+                                        const glm::vec2& scrollFactor) const;
+    glm::vec2 screenToWorld(const glm::vec2& screenPos) const; ///< @brief 屏幕坐标转世界坐标
+
     // --- getters and setters ---
     glm::vec2 viewportSize() const;                         ///< @brief 获取视口大小
     const glm::vec2& position() const;                      ///< @brief 获取相机位置

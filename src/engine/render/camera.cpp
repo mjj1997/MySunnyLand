@@ -14,6 +14,25 @@ Camera::Camera(const glm::vec2& viewportSize,
     spdlog::trace("Camera 初始化成功，位置: {},{}", position.x, position.y);
 }
 
+glm::vec2 Camera::worldToScreen(const glm::vec2& worldPos) const
+{
+    // 世界坐标 - 相机位置 = 屏幕坐标
+    return worldPos - m_position;
+}
+
+glm::vec2 Camera::worldToScreenWithParallax(const glm::vec2& worldPos,
+                                            const glm::vec2& scrollFactor) const
+{
+    // 世界坐标 - 相机位置 * 滚动因子 = 屏幕坐标
+    return worldPos - m_position * scrollFactor;
+}
+
+glm::vec2 Camera::screenToWorld(const glm::vec2& screenPos) const
+{
+    // 屏幕坐标 + 相机位置 = 世界坐标
+    return screenPos + m_position;
+}
+
 glm::vec2 Camera::viewportSize() const
 {
     return m_viewportSize;

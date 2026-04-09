@@ -81,7 +81,7 @@ void GameApp::handleEvents()
 
 void GameApp::update(double deltaTime)
 {
-    // 更新游戏状态, 暂时为空
+    testCamera();
 }
 
 void GameApp::render()
@@ -220,6 +220,23 @@ void GameApp::testRenderer()
                            glm::vec2{ 1.0f, 1.0f },
                            rotation);
     m_renderer->drawUiSprite(spriteUi, glm::vec2{ 100.0f, 100.0f });
+}
+
+void GameApp::testCamera()
+{
+    auto* keyState = SDL_GetKeyboardState(nullptr);
+    if (keyState[SDL_SCANCODE_UP]) {
+        m_camera->move(glm::vec2{ 0.0f, -1.0f });
+    }
+    if (keyState[SDL_SCANCODE_DOWN]) {
+        m_camera->move(glm::vec2{ 0.0f, 1.0f });
+    }
+    if (keyState[SDL_SCANCODE_LEFT]) {
+        m_camera->move(glm::vec2{ -1.0f, 0.0f });
+    }
+    if (keyState[SDL_SCANCODE_RIGHT]) {
+        m_camera->move(glm::vec2{ 1.0f, 0.0f });
+    }
 }
 
 } // namespace engine::core

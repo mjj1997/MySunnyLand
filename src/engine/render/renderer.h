@@ -41,6 +41,20 @@ public:
     Renderer(Renderer&&) = delete;
     Renderer& operator=(Renderer&&) = delete;
 
+    /**
+     * @brief 绘制一个精灵
+     * 
+     * @param sprite 包含纹理ID、源矩形和翻转状态的 Sprite 对象。
+     * @param position 世界坐标中的左上角位置。
+     * @param scale 缩放因子。
+     * @param angle 旋转角度（度）。
+     */
+    void drawSprite(const Camera& camera,
+                    const Sprite& sprite,
+                    const glm::vec2& position,
+                    const glm::vec2& scale = { 1.0f, 1.0f },
+                    double angle = 0.0f);
+
     // --- 封装 SDL 渲染函数 ---
     void present();     ///< @brief 更新屏幕，包装 SDL_RenderPresent 函数
     void clearScreen(); ///< @brief 清屏，包装 SDL_RenderClear 函数

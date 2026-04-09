@@ -29,6 +29,50 @@ Renderer::Renderer(SDL_Renderer* sdlRenderer, engine::resource::ResourceManager*
     spdlog::trace("Renderer 构造成功。");
 }
 
+void Renderer::drawSprite(const Camera& camera,
+                          const Sprite& sprite,
+                          const glm::vec2& position,
+                          const glm::vec2& scale,
+                          double angle)
+{
+    SDL_Texture* texture{ m_resourceManager->getTexture(sprite.textureId()) };
+    if (!texture) {
+        spdlog::error("无法为 ID {} 获取纹理。", sprite.textureId());
+        return;
+    }
+
+    auto srcRect = getSpriteSrcRect(sprite);
+    if (!srcRect.has_value()) {
+        spdlog::error("无法获取精灵的源矩形, ID: {}", sprite.textureId());
+        return;
+    }
+
+    // 应用相机变换
+    glm::vec2 positionScreen{ camera.worldToScreen(position) };
+
+    // 计算目标矩形，注意 position 是精灵的左上角坐标
+    float scaledWidth{ srcRect.value().w * scale.x };
+    float scaledHeight{ srcRect.value().h * scale.y };
+    SDL_FRect destRect{ positionScreen.x, positionScreen.y, scaledWidth, scaledHeight };
+
+    // 视口裁剪：如果精灵超出视口，则不绘制
+    if (!isRectInViewport(camera, destRect)) {
+        spdlog::info("精灵超出视口范围, ID: {}", sprite.textureId());
+        return;
+    }
+
+    // 执行绘制(默认旋转中心为精灵的中心点)
+    if (!SDL_RenderTextureRotated(m_renderer,
+                                  texture,
+                                  &srcRect.value(),
+                                  &destRect,
+                                  angle,
+                                  NULL,
+                                  sprite.isFlipped() ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE)) {
+        spdlog::error("渲染旋转纹理失败(ID: {}): {}", sprite.textureId(), SDL_GetError());
+    }
+}
+
 void Renderer::present()
 {
     SDL_RenderPresent(m_renderer);

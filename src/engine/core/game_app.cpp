@@ -1,4 +1,6 @@
 #include "game_app.h"
+#include "../render/camera.h"
+#include "../render/renderer.h"
 #include "../resource/resource_manager.h"
 #include "frame_time_controller.h"
 
@@ -49,6 +51,12 @@ bool GameApp::init()
         return false;
     }
     if (!initResourceManager()) {
+        return false;
+    }
+    if (!initRenderer()) {
+        return false;
+    }
+    if (!initCamera()) {
         return false;
     }
 
@@ -145,6 +153,30 @@ bool GameApp::initResourceManager()
     }
 
     spdlog::trace("资源管理器初始化成功。");
+    return true;
+}
+
+bool GameApp::initRenderer()
+{
+    try {
+        m_sdlRenderer = std::make_unique<engine::render::Renderer>(m_renderer, m_resourceManager);
+    } catch (const std::exception& e) {
+        spdlog::error("初始化渲染器失败: {}", e.what());
+        return false;
+    }
+    spdlog::trace("渲染器初始化成功。");
+    return true;
+}
+
+bool GameApp::initCamera()
+{
+    try {
+        m_camera = std::make_unique<engine::render::Camera>(glm::vec2{ 640.0f, 360.0f });
+    } catch (const std::exception& e) {
+        spdlog::error("初始化相机失败: {}", e.what());
+        return false;
+    }
+    spdlog::trace("相机初始化成功。");
     return true;
 }
 

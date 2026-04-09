@@ -9,6 +9,11 @@ namespace engine::resource {
 class ResourceManager;
 }
 
+namespace engine::render {
+class Renderer;
+class Camera;
+} // namespace engine::render
+
 namespace engine::core { // 命名空间的最佳实践：与文件路径一致
 
 class FrameTimeController;
@@ -44,6 +49,8 @@ private:
     bool initSDL();
     bool initFrameTimeController();
     bool initResourceManager();
+    [[nodiscard]] bool initRenderer();
+    [[nodiscard]] bool initCamera();
 
     // 测试用函数
     void testResourceManager();
@@ -56,6 +63,8 @@ private:
     // 引擎组件
     std::unique_ptr<engine::core::FrameTimeController> m_frameTimeController;
     std::unique_ptr<engine::resource::ResourceManager> m_resourceManager;
+    std::unique_ptr<engine::render::Renderer> m_sdlRenderer;
+    std::unique_ptr<engine::render::Camera> m_camera;
 };
 
 } // namespace engine::core

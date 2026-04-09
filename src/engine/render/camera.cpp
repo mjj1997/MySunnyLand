@@ -51,12 +51,32 @@ std::optional<engine::utils::Rect> Camera::limitBounds() const
 void Camera::setPosition(const glm::vec2& position)
 {
     m_position = position;
+    clampPosition();
 }
 
 void Camera::setLimitBounds(const engine::utils::Rect& bounds)
 {
     m_limitBounds = bounds;
+    clampPosition();
 }
 
-// TODO: 实现相机位置的边界检查
+void Camera::clampPosition()
+{
+    // 边界检查需要确保相机视图（position 到 position + viewportSize）在 limitBounds 内
+    if (m_limitBounds.has_value() && m_limitBounds.value().size.x > 0
+        && m_limitBounds.value().size.y > 0) {
+        // 计算允许的相机位置范围
+        glm::vec2 minCameraPos = m_limitBounds.value().position;
+        glm::vec2 maxCameraPos = m_limitBounds.value().position + m_limitBounds.value().size
+                                 - m_viewportSize;
+
+        // 确保 maxCameraPos 不小于 minCameraPos (视口可能比世界还大)
+        maxCameraPos.x = std::max(minCameraPos.x, maxCameraPos.x);
+        maxCameraPos.y = std::max(minCameraPos.y, maxCameraPos.y);
+
+        m_position = glm::clamp(m_position, minCameraPos, maxCameraPos);
+    }
+    // 如果 limitBounds 无效则不进行限制
+}
+
 } // namespace engine::render

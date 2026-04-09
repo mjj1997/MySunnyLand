@@ -38,6 +38,9 @@ public:
     void setLimitBounds(const engine::utils::Rect& bounds); ///< @brief 设置限制相机的移动范围
 
 private:
+    void clampPosition(); ///< @brief 限制相机位置在边界内
+
+private:
     glm::vec2 m_viewportSize;                         ///< @brief 视口大小（屏幕大小）
     glm::vec2 m_position;                             ///< @brief 相机左上角的世界坐标
     std::optional<engine::utils::Rect> m_limitBounds; ///< @brief 限制相机的移动范围，空值表示不限制

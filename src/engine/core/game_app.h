@@ -57,13 +57,13 @@ private:
 
 private:
     SDL_Window* m_window{ nullptr };
-    SDL_Renderer* m_renderer{ nullptr };
+    SDL_Renderer* m_sdlRenderer{ nullptr };
     bool m_isRunning{ false };
 
     // 引擎组件
     std::unique_ptr<engine::core::FrameTimeController> m_frameTimeController;
     std::unique_ptr<engine::resource::ResourceManager> m_resourceManager;
-    std::unique_ptr<engine::render::Renderer> m_sdlRenderer;
+    std::unique_ptr<engine::render::Renderer> m_renderer;
     std::unique_ptr<engine::render::Camera> m_camera;
 };
 

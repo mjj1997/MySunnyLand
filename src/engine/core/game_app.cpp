@@ -95,9 +95,9 @@ void GameApp::clean()
     // 为了确保正确的销毁顺序，有些智能指针对象也需要手动管理
     m_resourceManager.reset();
 
-    if (m_renderer != nullptr) {
-        SDL_DestroyRenderer(m_renderer);
-        m_renderer = nullptr;
+    if (m_sdlRenderer != nullptr) {
+        SDL_DestroyRenderer(m_sdlRenderer);
+        m_sdlRenderer = nullptr;
     }
     if (m_window != nullptr) {
         SDL_DestroyWindow(m_window);
@@ -120,8 +120,8 @@ bool GameApp::initSDL()
         return false;
     }
 
-    m_renderer = SDL_CreateRenderer(m_window, nullptr);
-    if (m_renderer == nullptr) {
+    m_sdlRenderer = SDL_CreateRenderer(m_window, nullptr);
+    if (m_sdlRenderer == nullptr) {
         spdlog::error("SDL 创建渲染器失败！SDL 错误：{}", SDL_GetError());
         return false;
     }
@@ -146,7 +146,7 @@ bool GameApp::initFrameTimeController()
 bool GameApp::initResourceManager()
 {
     try {
-        m_resourceManager = std::make_unique<engine::resource::ResourceManager>(m_renderer);
+        m_resourceManager = std::make_unique<engine::resource::ResourceManager>(m_sdlRenderer);
     } catch (const std::exception& e) {
         spdlog::error("初始化资源管理器失败: {}", e.what());
         return false;
@@ -159,7 +159,7 @@ bool GameApp::initResourceManager()
 bool GameApp::initRenderer()
 {
     try {
-        m_sdlRenderer = std::make_unique<engine::render::Renderer>(m_renderer, m_resourceManager);
+        m_renderer = std::make_unique<engine::render::Renderer>(m_sdlRenderer, m_resourceManager);
     } catch (const std::exception& e) {
         spdlog::error("初始化渲染器失败: {}", e.what());
         return false;

@@ -54,6 +54,7 @@ private:
 
     // 测试用函数
     void testResourceManager();
+    void testRenderer();
 
 private:
     SDL_Window* m_window{ nullptr };

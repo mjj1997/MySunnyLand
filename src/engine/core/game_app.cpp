@@ -1,6 +1,7 @@
 #include "game_app.h"
 #include "../render/camera.h"
 #include "../render/renderer.h"
+#include "../render/sprite.h"
 #include "../resource/resource_manager.h"
 #include "frame_time_controller.h"
 
@@ -85,7 +86,14 @@ void GameApp::update(double deltaTime)
 
 void GameApp::render()
 {
-    // 渲染游戏状态, 暂时为空
+    // 1. 清除屏幕
+    m_renderer->clearScreen();
+
+    // 2. 具体渲染代码
+    testRenderer();
+
+    // 3. 更新屏幕显示
+    m_renderer->present();
 }
 
 void GameApp::clean()
@@ -189,6 +197,29 @@ void GameApp::testResourceManager()
     m_resourceManager->unloadTexture("assets/textures/Actors/eagle-attack.png");
     m_resourceManager->unloadSound("assets/audio/button_click.wav");
     m_resourceManager->unloadFont("assets/fonts/VonwaonBitmap-16px.ttf", 16);
+}
+
+void GameApp::testRenderer()
+{
+    engine::render::Sprite spriteWorld{ "assets/textures/Actors/frog.png" };
+    engine::render::Sprite spriteUi{ "assets/textures/UI/buttons/Start1.png" };
+    engine::render::Sprite spriteParallax{ "assets/textures/Layers/back.png" };
+
+    static float rotation{ 0.0f };
+    rotation += 0.1f;
+
+    // 注意渲染顺序(先渲染背景, 再渲染角色, 最后渲染UI)
+    m_renderer->drawParallax(*m_camera,
+                             spriteParallax,
+                             glm::vec2{ 100.0f, 100.0f },
+                             glm::vec2{ 0.5f, 0.5f },
+                             glm::bvec2{ true, false });
+    m_renderer->drawSprite(*m_camera,
+                           spriteWorld,
+                           glm::vec2{ 200.0f, 200.0f },
+                           glm::vec2{ 1.0f, 1.0f },
+                           rotation);
+    m_renderer->drawUiSprite(spriteUi, glm::vec2{ 100.0f, 100.0f });
 }
 
 } // namespace engine::core

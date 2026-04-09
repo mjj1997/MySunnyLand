@@ -132,6 +132,45 @@ void Renderer::drawParallax(const Camera& camera,
     }
 }
 
+void Renderer::drawUiSprite(const Sprite& sprite,
+                            const glm::vec2& position,
+                            const std::optional<glm::vec2>& size)
+{
+    SDL_Texture* texture{ m_resourceManager->getTexture(sprite.textureId()) };
+    if (!texture) {
+        spdlog::error("无法为 ID {} 获取纹理。", sprite.textureId());
+        return;
+    }
+
+    auto srcRect = getSpriteSrcRect(sprite);
+    if (!srcRect.has_value()) {
+        spdlog::error("无法获取精灵的源矩形, ID: {}", sprite.textureId());
+        return;
+    }
+
+    SDL_FRect destRect{ position.x, position.y, 0, 0 }; // 首先确定目标矩形的左上角坐标
+    if (size.has_value()) {
+        // 如果提供了尺寸，则使用提供的尺寸
+        destRect.w = size.value().x;
+        destRect.h = size.value().y;
+    } else {
+        // 如果未提供尺寸，则使用纹理的原始尺寸
+        destRect.w = srcRect.value().w;
+        destRect.h = srcRect.value().h;
+    }
+
+    // 执行绘制(未考虑UI旋转)
+    if (!SDL_RenderTextureRotated(m_renderer,
+                                  texture,
+                                  &srcRect.value(),
+                                  &destRect,
+                                  0.0,
+                                  nullptr,
+                                  sprite.isFlipped() ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE)) {
+        spdlog::error("渲染 UI Sprite 失败 (ID: {}): {}", sprite.textureId(), SDL_GetError());
+    }
+}
+
 void Renderer::present()
 {
     SDL_RenderPresent(m_renderer);

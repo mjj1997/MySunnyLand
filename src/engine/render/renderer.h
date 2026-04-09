@@ -70,6 +70,17 @@ public:
                       const glm::bvec2& repeat = { true, true },
                       const glm::vec2& scale = { 1.0f, 1.0f });
 
+    /**
+     * @brief 在屏幕坐标中直接渲染一个用于UI的Sprite对象。
+     *
+     * @param sprite 包含纹理ID、源矩形和翻转状态的Sprite对象。
+     * @param position 屏幕坐标中的左上角位置。
+     * @param size 可选：目标矩形的大小。如果为 std::nullopt，则使用Sprite的原始大小。
+     */
+    void drawUiSprite(const Sprite& sprite,
+                      const glm::vec2& position,
+                      const std::optional<glm::vec2>& size = std::nullopt);
+
     // --- 封装 SDL 渲染函数 ---
     void present();     ///< @brief 更新屏幕，包装 SDL_RenderPresent 函数
     void clearScreen(); ///< @brief 清屏，包装 SDL_RenderClear 函数

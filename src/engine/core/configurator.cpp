@@ -9,6 +9,34 @@ namespace engine::core {
 
 Configurator::Configurator(const std::string& filePath)
 {
+    loadFromFile(filePath);
+}
+
+bool Configurator::loadFromFile(const std::string& filePath)
+{
+    std::ifstream file{ filePath };
+    if (!file.is_open()) {
+        // 配置文件不存在，使用默认设置并创建默认配置文件
+        spdlog::warn("配置文件 '{}' 未找到。使用默认设置并创建默认配置文件。", filePath);
+        if (!saveToFile(filePath)) {
+            spdlog::error("无法创建默认配置文件 '{}'。", filePath);
+            return false;
+        }
+        return false;
+    }
+
+    try {
+        nlohmann::json json;
+        file >> json;
+        fromJson(json);
+        spdlog::info("成功从配置文件 '{}' 加载配置。", filePath);
+        return true;
+    } catch (const std::exception& e) {
+        spdlog::error("从配置文件 '{}' 加载配置时出错：{}。使用默认配置。", filePath, e.what());
+    }
+    return false;
+}
+
 bool Configurator::saveToFile(const std::string& filePath)
 {
     std::ofstream file{ filePath };

@@ -25,6 +25,8 @@ public:
     Configurator(Configurator&&) = delete;
     Configurator& operator=(Configurator&&) = delete;
 
+    ///< @brief 从指定的 JSON 文件加载配置。成功返回 true，否则返回 false。
+    bool loadFromFile(const std::string& filePath);
     ///< @brief 将当前配置保存到指定的 JSON 文件。成功返回 true，否则返回 false。
     [[nodiscard]] bool saveToFile(const std::string& filePath);
 

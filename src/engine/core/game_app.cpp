@@ -3,6 +3,7 @@
 #include "../render/renderer.h"
 #include "../render/sprite.h"
 #include "../resource/resource_manager.h"
+#include "configurator.h"
 #include "frame_time_controller.h"
 
 #include <SDL3/SDL.h>
@@ -45,6 +46,9 @@ void GameApp::run()
 bool GameApp::init()
 {
     spdlog::trace("初始化 GameApp ...");
+    if (!initConfigurator()) {
+        return false;
+    }
     if (!initSDL()) {
         return false;
     }
@@ -189,6 +193,18 @@ bool GameApp::initCamera()
         return false;
     }
     spdlog::trace("相机初始化成功。");
+    return true;
+}
+
+bool GameApp::initConfigurator()
+{
+    try {
+        m_configurator = std::make_unique<engine::core::Configurator>("assets/config.json");
+    } catch (const std::exception& e) {
+        spdlog::error("初始化配置管理器失败: {}", e.what());
+        return false;
+    }
+    spdlog::trace("配置管理器初始化成功。");
     return true;
 }
 

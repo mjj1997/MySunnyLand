@@ -3,10 +3,31 @@
 #include <nlohmann/json.hpp>
 #include <spdlog/spdlog.h>
 
+#include <fstream>
+
 namespace engine::core {
 
 Configurator::Configurator(const std::string& filePath)
 {
+bool Configurator::saveToFile(const std::string& filePath)
+{
+    std::ofstream file{ filePath };
+    if (!file.is_open()) {
+        spdlog::error("无法打开配置文件 '{}'。", filePath);
+        return false;
+    }
+
+    try {
+        nlohmann::ordered_json json{ toJson() };
+        file << json.dump(4);
+        spdlog::info("成功将配置保存到文件 '{}'。", filePath);
+        return true;
+    } catch (const std::exception& e) {
+        spdlog::error("保存配置到文件 '{}' 时出错：{}。", filePath, e.what());
+    }
+    return false;
+}
+
 void Configurator::fromJson(const nlohmann::json& json)
 {
     if (json.contains("window")) {

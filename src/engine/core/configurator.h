@@ -25,6 +25,9 @@ public:
     Configurator(Configurator&&) = delete;
     Configurator& operator=(Configurator&&) = delete;
 
+    ///< @brief 将当前配置保存到指定的 JSON 文件。成功返回 true，否则返回 false。
+    [[nodiscard]] bool saveToFile(const std::string& filePath);
+
 public:
     // --- 默认配置值 --- (为了方便拓展，全部设置为公有)
     // 窗口设置

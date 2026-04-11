@@ -55,6 +55,7 @@ public:
 
 private:
     void fromJson(const nlohmann::json& json); ///< @brief 从 JSON 对象反序列化配置。
+    nlohmann::ordered_json toJson() const;     ///< @brief 将当前配置转换为 JSON 对象（按顺序）。
 };
 
 } // namespace engine::core

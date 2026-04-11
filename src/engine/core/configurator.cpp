@@ -57,6 +57,19 @@ void Configurator::fromJson(const nlohmann::json& json)
     }
 }
 
+nlohmann::ordered_json Configurator::toJson() const
+{
+    return nlohmann::ordered_json{
+        { "window",
+          { { "title", m_windowTitle },
+            { "width", m_windowWidth },
+            { "height", m_windowHeight },
+            { "resizable", m_windowResizable } } },
+        { "graphics", { { "VSync", m_isVSyncEnabled } } },
+        { "performance", { { "targetFps", m_targetFps } } },
+        { "audio", { { "musicVolume", m_musicVolume }, { "soundVolume", m_soundVolume } } },
+        { "inputMappings", m_inputMappings }
+    };
 }
 
 } // namespace engine::core

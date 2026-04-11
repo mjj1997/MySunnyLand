@@ -1,5 +1,7 @@
 #pragma once
 
+#include <nlohmann/json_fwd.hpp> // nlohmann_json 提供的前向声明
+
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -51,6 +53,8 @@ public:
         // 可以继续添加更多默认动作
     };
 
+private:
+    void fromJson(const nlohmann::json& json); ///< @brief 从 JSON 对象反序列化配置。
 };
 
 } // namespace engine::core

@@ -10,7 +10,8 @@ target_sources(
           engine/resource/font_manager.cpp
           engine/resource/resource_manager.cpp
           engine/render/camera.cpp
-          engine/render/renderer.cpp)
+          engine/render/renderer.cpp
+          engine/core/configurator.cpp)
 
 target_link_libraries(
   SunnyLand

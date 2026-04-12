@@ -42,7 +42,30 @@ void InputManager::initMappings(const engine::core::Configurator* config)
         // 设置 "按键 -> 动作" 的映射
         spdlog::trace("映射动作: {}", action);
         for (const std::string& keyName : keyNames) {
-            // TODO: 根据按键名称获取scancode或鼠标按钮
+            // 尝试根据按键名称获取scancode
+            SDL_Scancode scancode{ scancodeFromString(keyName) };
+            // 尝试根据按键名称获取鼠标按钮
+            Uint32 mouseButton{ mouseButtonUint32FromString(keyName) };
+            // 未来可添加其它输入类型 ...
+
+            if (scancode != SDL_SCANCODE_UNKNOWN) {
+                // 如果 scancode 有效,则将 action 添加到 m_scancode2ActionsMap 中的对应列表
+                m_scancode2ActionsMap[scancode].push_back(action);
+                spdlog::trace("  映射按键: {} (Scancode: {}) 到动作: {}",
+                              keyName,
+                              static_cast<int>(scancode),
+                              action);
+            } else if (mouseButton != 0) {
+                // 如果鼠标按钮有效,则将 action 添加到 m_mouseButton2ActionsMap 中的对应列表
+                m_mouseButton2ActionsMap[mouseButton].push_back(action);
+                spdlog::trace("  映射鼠标按钮: {} (Button ID: {}) 到动作: {}",
+                              keyName,
+                              static_cast<int>(mouseButton),
+                              action);
+                // else if: 未来可添加其它输入类型 ...
+            } else {
+                spdlog::warn("输入映射警告: 未知键或按钮名称 '{}' 用于动作 '{}'.", keyName, action);
+            }
         }
     }
     spdlog::trace("输入映射初始化完成.");

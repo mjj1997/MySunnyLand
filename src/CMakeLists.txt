@@ -11,7 +11,8 @@ target_sources(
           engine/resource/resource_manager.cpp
           engine/render/camera.cpp
           engine/render/renderer.cpp
-          engine/core/configurator.cpp)
+          engine/core/configurator.cpp
+          engine/input/input_manager.cpp)
 
 target_link_libraries(
   SunnyLand

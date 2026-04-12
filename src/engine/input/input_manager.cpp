@@ -48,4 +48,12 @@ void InputManager::initMappings(const engine::core::Configurator* config)
     spdlog::trace("输入映射初始化完成.");
 }
 
+// --- 工具函数 ---
+
+// 将键盘按键名称字符串转换为 SDL_Scancode
+SDL_Scancode InputManager::scancodeFromString(const std::string& keyName)
+{
+    return SDL_GetScancodeFromName(keyName.c_str());
+}
+
 } // namespace engine::input

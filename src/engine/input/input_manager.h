@@ -24,6 +24,9 @@ private:
     ///< @brief 根据 Configurator配置初始化映射表
     void initMappings(const engine::core::Configurator* config);
 
+    ///< @brief 将字符串键名转换为 SDL_Scancode
+    SDL_Scancode scancodeFromString(const std::string& keyName);
+
 private:
     ///< @brief 存储动作名称到按键名称列表的映射
     std::unordered_map<std::string, std::vector<std::string>> m_action2KeyNamesMap;

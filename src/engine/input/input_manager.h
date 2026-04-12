@@ -26,6 +26,8 @@ private:
 
     ///< @brief 将字符串键名转换为 SDL_Scancode
     SDL_Scancode scancodeFromString(const std::string& keyName);
+    ///< @brief 将字符串按钮名转换为 SDL_Button
+    Uint32 mouseButtonUint32FromString(const std::string& buttonName);
 
 private:
     ///< @brief 存储动作名称到按键名称列表的映射

@@ -56,4 +56,27 @@ SDL_Scancode InputManager::scancodeFromString(const std::string& keyName)
     return SDL_GetScancodeFromName(keyName.c_str());
 }
 
+// 将鼠标按钮名称字符串转换为 SDL 按钮 Uint32 值
+Uint32 InputManager::mouseButtonUint32FromString(const std::string& buttonName)
+{
+    if (buttonName == "MouseLeft") {
+        return SDL_BUTTON_LEFT;
+    }
+    if (buttonName == "MouseRight") {
+        return SDL_BUTTON_RIGHT;
+    }
+    if (buttonName == "MouseMiddle") {
+        return SDL_BUTTON_MIDDLE;
+    }
+    // 鼠标侧键
+    if (buttonName == "MouseX1") {
+        return SDL_BUTTON_X1;
+    }
+    if (buttonName == "MouseX2") {
+        return SDL_BUTTON_X2;
+    }
+    // 0 表示无效按钮
+    return 0;
+}
+
 } // namespace engine::input

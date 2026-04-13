@@ -1,6 +1,7 @@
 #include "input_manager.h"
 #include "../core/configurator.h"
 
+#include <SDL3/SDL.h>
 #include <glm/vec2.hpp>
 #include <spdlog/spdlog.h>
 
@@ -12,6 +13,13 @@ InputManager::InputManager(const engine::core::Configurator* config)
 {
     // 初始化映射表
     initMappings(config);
+
+    // 获取初始鼠标位置
+    float x;
+    float y;
+    SDL_GetMouseState(&x, &y);
+    m_mousePosition = glm::vec2{ x, y };
+    spdlog::trace("初始鼠标位置: ({}, {})", m_mousePosition.x, m_mousePosition.y);
 }
 
 // --- 更新和事件处理 ---

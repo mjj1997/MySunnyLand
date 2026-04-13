@@ -63,6 +63,7 @@ private:
     void testResourceManager();
     void testRenderer();
     void testCamera();
+    void testInputManager();
 
 private:
     SDL_Window* m_window{ nullptr };

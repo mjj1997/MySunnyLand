@@ -84,6 +84,8 @@ void GameApp::handleEvents()
         m_isRunning = false;
         return;
     }
+
+    testInputManager();
 }
 
 void GameApp::update(double deltaTime)
@@ -285,6 +287,25 @@ void GameApp::testCamera()
     }
     if (keyState[SDL_SCANCODE_RIGHT]) {
         m_camera->move(glm::vec2{ 1.0f, 0.0f });
+    }
+}
+
+void GameApp::testInputManager()
+{
+    std::vector<std::string> actions = { "moveUp",    "moveDown",       "moveLeft",
+                                         "moveRight", "jump",           "attack",
+                                         "pause",     "mouseLeftClick", "mouseRightClick" };
+
+    for (const auto& action : actions) {
+        if (m_inputManager->isActionPressed(action)) {
+            spdlog::info(" {} 按下 ", action);
+        }
+        if (m_inputManager->isActionReleased(action)) {
+            spdlog::info(" {} 抬起 ", action);
+        }
+        if (m_inputManager->isActionDown(action)) {
+            spdlog::info(" {} 按下中 ", action);
+        }
     }
 }
 

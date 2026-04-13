@@ -85,8 +85,7 @@ void InputManager::initMappings(const engine::core::Configurator* config)
     }
 
     m_actionToKeyNames = config->m_inputMappings; // 获取配置中的输入映射（动作 -> 按键名称）
-    m_scancodeToActions.clear();
-    m_mouseButtonToActions.clear();
+    m_inputKeyToActions.clear();
     m_actionStates.clear();
 
     // 如果配置中没有定义鼠标按钮动作(通常不需要配置),则添加默认映射, 用于 UI
@@ -114,15 +113,15 @@ void InputManager::initMappings(const engine::core::Configurator* config)
             // 未来可添加其它输入类型 ...
 
             if (scancode != SDL_SCANCODE_UNKNOWN) {
-                // 如果 scancode 有效,则将 action 添加到 m_scancodeToActions 中的对应列表
-                m_scancodeToActions[scancode].push_back(action);
+                // 如果 scancode 有效,则将 action 添加到 m_inputKeyToActions 中的对应列表
+                m_inputKeyToActions[scancode].push_back(action);
                 spdlog::trace("  映射按键: {} (Scancode: {}) 到动作: {}",
                               keyName,
                               static_cast<int>(scancode),
                               action);
             } else if (mouseButton != 0) {
-                // 如果鼠标按钮有效,则将 action 添加到 m_mouseButtonToActions 中的对应列表
-                m_mouseButtonToActions[mouseButton].push_back(action);
+                // 如果鼠标按钮有效,则将 action 添加到 m_inputKeyToActions 中的对应列表
+                m_inputKeyToActions[mouseButton].push_back(action);
                 spdlog::trace("  映射鼠标按钮: {} (Button ID: {}) 到动作: {}",
                               keyName,
                               static_cast<int>(mouseButton),
@@ -145,7 +144,7 @@ void InputManager::processEvent(const SDL_Event& event)
         bool isDown{ event.key.down };
         bool isRepeat{ event.key.repeat };
 
-        if (auto it = m_scancodeToActions.find(scancode); it != m_scancodeToActions.end()) {
+        if (auto it = m_inputKeyToActions.find(scancode); it != m_inputKeyToActions.end()) {
             // 如果按键有对应的 actions
             const std::vector<std::string>& actions{ it->second };
             for (const std::string& action : actions) {
@@ -159,7 +158,7 @@ void InputManager::processEvent(const SDL_Event& event)
         Uint8 button{ event.button.button }; // 获取鼠标按钮
         bool isDown{ event.button.down };
 
-        if (auto it = m_mouseButtonToActions.find(button); it != m_mouseButtonToActions.end()) {
+        if (auto it = m_inputKeyToActions.find(button); it != m_inputKeyToActions.end()) {
             // 如果鼠标按钮有对应的 actions
             const std::vector<std::string>& actions{ it->second };
             for (const std::string& action : actions) {

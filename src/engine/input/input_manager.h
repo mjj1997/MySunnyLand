@@ -5,6 +5,7 @@
 
 #include <string>
 #include <unordered_map>
+#include <variant>
 #include <vector>
 
 namespace engine::core {
@@ -19,6 +20,8 @@ enum class ActionState {
     HeldDown,         ///< @brief 动作被持续按下
     ReleasedThisFrame ///< @brief 动作在本帧刚刚被释放
 };
+
+using InputKey = std::variant<SDL_Scancode, Uint32>;
 
 class InputManager final
 {
@@ -64,10 +67,8 @@ private:
 
     ///< @brief 存储动作名称到按键名称列表的映射
     std::unordered_map<std::string, std::vector<std::string>> m_actionToKeyNames;
-    ///< @brief 从键盘（Scancode）到关联的动作名称列表
-    std::unordered_map<SDL_Scancode, std::vector<std::string>> m_scancodeToActions;
-    ///< @brief 从鼠标按钮 (Uint32) 到关联的动作名称列表
-    std::unordered_map<Uint32, std::vector<std::string>> m_mouseButtonToActions;
+    ///< @brief 从键盘（Scancode）或鼠标按钮 (Uint32) 到关联的动作名称列表
+    std::unordered_map<InputKey, std::vector<std::string>> m_inputKeyToActions;
 
     std::unordered_map<std::string, ActionState> m_actionStates; ///< @brief 存储每个动作的当前状态
 

@@ -126,4 +126,25 @@ Uint32 InputManager::mouseButtonUint32FromString(const std::string& buttonName)
     return 0;
 }
 
+void InputManager::updateActionState(const std::string& action,
+                                     bool isInputActive,
+                                     bool isRepeatEvent)
+{
+    auto it = m_actionStates.find(action);
+    if (it == m_actionStates.end()) {
+        spdlog::warn("尝试更新未注册动作的状态: {}", action);
+        return;
+    }
+
+    if (isInputActive) { // 输入被激活（按下）
+        if (isRepeatEvent) {
+            it->second = ActionState::HeldDown;
+        } else { // 非重复事件
+            it->second = ActionState::PressedThisFrame;
+        }
+    } else { // 输入被释放（松开）
+        it->second = ActionState::ReleasedThisFrame;
+    }
+}
+
 } // namespace engine::input

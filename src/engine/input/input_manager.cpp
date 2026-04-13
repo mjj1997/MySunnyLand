@@ -9,8 +9,14 @@
 
 namespace engine::input {
 
-InputManager::InputManager(const engine::core::Configurator* config)
+InputManager::InputManager(SDL_Renderer* sdlRenderer, const engine::core::Configurator* config)
+    : m_sdlRenderer(sdlRenderer)
 {
+    if (!m_sdlRenderer) {
+        spdlog::error("输入管理器: SDL_Renderer 为空指针");
+        throw std::runtime_error("输入管理器: SDL_Renderer 为空指针");
+    }
+
     // 初始化映射表
     initMappings(config);
 

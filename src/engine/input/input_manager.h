@@ -25,10 +25,11 @@ class InputManager final
 public:
     /**
      * @brief 构造函数
+     * @param sdlRenderer 指向 SDL_Renderer 的指针
      * @param config 配置对象
      * @throws std::runtime_error 如果任一指针为 nullptr。
      */
-    InputManager(const engine::core::Configurator* config);
+    InputManager(SDL_Renderer* sdlRenderer, const engine::core::Configurator* config);
 
     void update(); ///< @brief 更新输入状态，每轮循环最先调用
 

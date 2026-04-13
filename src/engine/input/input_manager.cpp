@@ -48,6 +48,32 @@ void InputManager::update()
     }
 }
 
+// --- 状态查询方法 ---
+
+bool InputManager::isActionDown(const std::string& action) const
+{
+    if (auto it = m_actionStates.find(action); it != m_actionStates.end()) {
+        return it->second == ActionState::PressedThisFrame || it->second == ActionState::HeldDown;
+    }
+    return false;
+}
+
+bool InputManager::isActionPressed(const std::string& action) const
+{
+    if (auto it = m_actionStates.find(action); it != m_actionStates.end()) {
+        return it->second == ActionState::PressedThisFrame;
+    }
+    return false;
+}
+
+bool InputManager::isActionReleased(const std::string& action) const
+{
+    if (auto it = m_actionStates.find(action); it != m_actionStates.end()) {
+        return it->second == ActionState::ReleasedThisFrame;
+    }
+    return false;
+}
+
 // --- 初始化输入映射 ---
 
 void InputManager::initMappings(const engine::core::Configurator* config)

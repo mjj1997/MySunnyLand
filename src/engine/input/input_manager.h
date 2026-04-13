@@ -33,6 +33,12 @@ public:
 
     void update(); ///< @brief 更新输入状态，每轮循环最先调用
 
+    // 动作状态检查
+    ///< @brief 动作当前是否触发 (持续按下或本帧按下)
+    bool isActionDown(const std::string& action) const;
+    bool isActionPressed(const std::string& action) const;  ///< @brief 动作是否在本帧刚刚按下
+    bool isActionReleased(const std::string& action) const; ///< @brief 动作是否在本帧刚刚释放
+
     bool shouldQuit() const;             ///< @brief 查询退出状态
     void setShouldQuit(bool shouldQuit); ///< @brief 设置退出状态
 

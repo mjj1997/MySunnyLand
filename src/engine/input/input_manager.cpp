@@ -135,8 +135,13 @@ void InputManager::processEvent(const SDL_Event& event)
                 updateActionState(action, isDown, false); // 更新action状态
             }
         }
+        // 在点击时更新鼠标位置
+        m_mousePosition = glm::vec2{ event.button.x, event.button.y };
         break;
     }
+    case SDL_EVENT_MOUSE_MOTION: // 处理鼠标运动
+        m_mousePosition = glm::vec2{ event.motion.x, event.motion.y };
+        break;
     case SDL_EVENT_QUIT:
         m_shouldQuit = true;
         break;

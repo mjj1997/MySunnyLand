@@ -95,6 +95,29 @@ void InputManager::initMappings(const engine::core::Configurator* config)
     spdlog::trace("输入映射初始化完成.");
 }
 
+void InputManager::processEvent(const SDL_Event& event)
+{
+    switch (event.type) {
+    case SDL_EVENT_KEY_DOWN:
+    case SDL_EVENT_KEY_UP: {
+        SDL_Scancode scancode{ event.key.scancode }; // 获取按键的scancode
+        bool isDown{ event.key.down };
+        bool isRepeat{ event.key.repeat };
+
+        if (auto it = m_scancodeToActions.find(scancode); it != m_scancodeToActions.end()) {
+            // 如果按键有对应的 actions
+            const std::vector<std::string>& actions{ it->second };
+            for (const std::string& action : actions) {
+                updateActionState(action, isDown, isRepeat); // 更新action状态
+            }
+        }
+        break;
+    }
+    default:
+        break;
+    }
+}
+
 // --- 工具函数 ---
 
 // 将键盘按键名称字符串转换为 SDL_Scancode

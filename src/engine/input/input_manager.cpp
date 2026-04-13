@@ -217,4 +217,11 @@ glm::vec2 InputManager::mousePosition() const
     return m_mousePosition;
 }
 
+glm::vec2 InputManager::logicalMousePosition() const
+{
+    glm::vec2 logicalPos;
+    // TODO: 通过窗口坐标获取渲染坐标（逻辑坐标）
+    return logicalPos;
+}
+
 } // namespace engine::input

@@ -35,6 +35,8 @@ public:
     void setShouldQuit(bool shouldQuit); ///< @brief 设置退出状态
 
     glm::vec2 mousePosition() const;        ///< @brief 获取鼠标位置 （屏幕坐标）
+    glm::vec2 logicalMousePosition() const; ///< @brief 获取鼠标位置 （逻辑坐标）
+
 private:
     ///< @brief 根据 Configurator配置初始化映射表
     void initMappings(const engine::core::Configurator* config);

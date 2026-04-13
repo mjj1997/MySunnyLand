@@ -32,6 +32,7 @@ void GameApp::run()
     while (m_isRunning) {
         m_frameTimeController->update();
         double deltaTime{ m_frameTimeController->deltaTime() };
+        m_inputManager->update(); // 每帧首先更新输入管理器
 
         handleEvents();
         update(deltaTime);
@@ -78,11 +79,10 @@ bool GameApp::init()
 
 void GameApp::handleEvents()
 {
-    SDL_Event event;
-    while (SDL_PollEvent(&event)) {
-        if (event.type == SDL_EVENT_QUIT) {
-            m_isRunning = false;
-        }
+    while (m_inputManager->shouldQuit()) {
+        spdlog::trace("GameApp 收到来自 InputManager 的退出信号。");
+        m_isRunning = false;
+        return;
     }
 }
 

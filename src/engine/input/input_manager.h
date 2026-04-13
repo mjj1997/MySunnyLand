@@ -31,11 +31,11 @@ private:
 
 private:
     ///< @brief 存储动作名称到按键名称列表的映射
-    std::unordered_map<std::string, std::vector<std::string>> m_action2KeyNamesMap;
+    std::unordered_map<std::string, std::vector<std::string>> m_actionToKeyNames;
     ///< @brief 从键盘（Scancode）到关联的动作名称列表
-    std::unordered_map<SDL_Scancode, std::vector<std::string>> m_scancode2ActionsMap;
+    std::unordered_map<SDL_Scancode, std::vector<std::string>> m_scancodeToActions;
     ///< @brief 从鼠标按钮 (Uint32) 到关联的动作名称列表
-    std::unordered_map<Uint32, std::vector<std::string>> m_mouseButton2ActionsMap;
+    std::unordered_map<Uint32, std::vector<std::string>> m_mouseButtonToActions;
 };
 
 } // namespace engine::input

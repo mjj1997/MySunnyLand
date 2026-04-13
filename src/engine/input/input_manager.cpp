@@ -23,22 +23,22 @@ void InputManager::initMappings(const engine::core::Configurator* config)
         throw std::runtime_error("输入管理器: Config 为空指针");
     }
 
-    m_action2KeyNamesMap = config->m_inputMappings; // 获取配置中的输入映射（动作 -> 按键名称）
-    m_scancode2ActionsMap.clear();
-    m_mouseButton2ActionsMap.clear();
+    m_actionToKeyNames = config->m_inputMappings; // 获取配置中的输入映射（动作 -> 按键名称）
+    m_scancodeToActions.clear();
+    m_mouseButtonToActions.clear();
 
     // 如果配置中没有定义鼠标按钮动作(通常不需要配置),则添加默认映射, 用于 UI
-    if (m_action2KeyNamesMap.find("MouseLeftClick") == m_action2KeyNamesMap.end()) {
+    if (m_actionToKeyNames.find("MouseLeftClick") == m_actionToKeyNames.end()) {
         spdlog::debug("配置中没有定义 'MouseLeftClick' 动作,添加默认映射到 'MouseLeft'.");
-        m_action2KeyNamesMap["MouseLeftClick"] = { "MouseLeft" }; // 如果缺失则添加默认映射
+        m_actionToKeyNames["MouseLeftClick"] = { "MouseLeft" }; // 如果缺失则添加默认映射
     }
-    if (m_action2KeyNamesMap.find("MouseRightClick") == m_action2KeyNamesMap.end()) {
+    if (m_actionToKeyNames.find("MouseRightClick") == m_actionToKeyNames.end()) {
         spdlog::debug("配置中没有定义 'MouseRightClick' 动作,添加默认映射到 'MouseRight'.");
-        m_action2KeyNamesMap["MouseRightClick"] = { "MouseRight" }; // 如果缺失则添加默认映射
+        m_actionToKeyNames["MouseRightClick"] = { "MouseRight" }; // 如果缺失则添加默认映射
     }
 
     // 遍历 动作 -> 按键名称 的映射
-    for (const auto& [action, keyNames] : m_action2KeyNamesMap) {
+    for (const auto& [action, keyNames] : m_actionToKeyNames) {
         // 设置 "按键 -> 动作" 的映射
         spdlog::trace("映射动作: {}", action);
         for (const std::string& keyName : keyNames) {
@@ -49,15 +49,15 @@ void InputManager::initMappings(const engine::core::Configurator* config)
             // 未来可添加其它输入类型 ...
 
             if (scancode != SDL_SCANCODE_UNKNOWN) {
-                // 如果 scancode 有效,则将 action 添加到 m_scancode2ActionsMap 中的对应列表
-                m_scancode2ActionsMap[scancode].push_back(action);
+                // 如果 scancode 有效,则将 action 添加到 m_scancodeToActions 中的对应列表
+                m_scancodeToActions[scancode].push_back(action);
                 spdlog::trace("  映射按键: {} (Scancode: {}) 到动作: {}",
                               keyName,
                               static_cast<int>(scancode),
                               action);
             } else if (mouseButton != 0) {
-                // 如果鼠标按钮有效,则将 action 添加到 m_mouseButton2ActionsMap 中的对应列表
-                m_mouseButton2ActionsMap[mouseButton].push_back(action);
+                // 如果鼠标按钮有效,则将 action 添加到 m_mouseButtonToActions 中的对应列表
+                m_mouseButtonToActions[mouseButton].push_back(action);
                 spdlog::trace("  映射鼠标按钮: {} (Button ID: {}) 到动作: {}",
                               keyName,
                               static_cast<int>(mouseButton),

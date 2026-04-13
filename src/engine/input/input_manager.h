@@ -29,6 +29,9 @@ public:
 
     void update(); ///< @brief 更新输入状态，每轮循环最先调用
 
+    bool shouldQuit() const;             ///< @brief 查询退出状态
+    void setShouldQuit(bool shouldQuit); ///< @brief 设置退出状态
+
 private:
     ///< @brief 根据 Configurator配置初始化映射表
     void initMappings(const engine::core::Configurator* config);
@@ -51,6 +54,8 @@ private:
     std::unordered_map<Uint32, std::vector<std::string>> m_mouseButtonToActions;
 
     std::unordered_map<std::string, ActionState> m_actionStates; ///< @brief 存储每个动作的当前状态
+
+    bool m_shouldQuit{ false }; ///< @brief 退出标志
 };
 
 } // namespace engine::input

@@ -185,4 +185,14 @@ void InputManager::updateActionState(const std::string& action,
     }
 }
 
+bool InputManager::shouldQuit() const
+{
+    return m_shouldQuit;
+}
+
+void InputManager::setShouldQuit(bool shouldQuit)
+{
+    m_shouldQuit = shouldQuit;
+}
+
 } // namespace engine::input

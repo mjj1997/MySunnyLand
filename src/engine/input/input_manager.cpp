@@ -90,13 +90,13 @@ void InputManager::initMappings(const engine::core::Configurator* config)
     m_actionStates.clear();
 
     // 如果配置中没有定义鼠标按钮动作(通常不需要配置),则添加默认映射, 用于 UI
-    if (m_actionToKeyNames.find("MouseLeftClick") == m_actionToKeyNames.end()) {
-        spdlog::debug("配置中没有定义 'MouseLeftClick' 动作,添加默认映射到 'MouseLeft'.");
-        m_actionToKeyNames["MouseLeftClick"] = { "MouseLeft" }; // 如果缺失则添加默认映射
+    if (m_actionToKeyNames.find("mouseLeftClick") == m_actionToKeyNames.end()) {
+        spdlog::debug("配置中没有定义 'mouseLeftClick' 动作,添加默认映射到 'MouseLeft'.");
+        m_actionToKeyNames["mouseLeftClick"] = { "MouseLeft" }; // 如果缺失则添加默认映射
     }
-    if (m_actionToKeyNames.find("MouseRightClick") == m_actionToKeyNames.end()) {
-        spdlog::debug("配置中没有定义 'MouseRightClick' 动作,添加默认映射到 'MouseRight'.");
-        m_actionToKeyNames["MouseRightClick"] = { "MouseRight" }; // 如果缺失则添加默认映射
+    if (m_actionToKeyNames.find("mouseRightClick") == m_actionToKeyNames.end()) {
+        spdlog::debug("配置中没有定义 'mouseRightClick' 动作,添加默认映射到 'MouseRight'.");
+        m_actionToKeyNames["mouseRightClick"] = { "MouseRight" }; // 如果缺失则添加默认映射
     }
 
     // 遍历 动作 -> 按键名称 的映射

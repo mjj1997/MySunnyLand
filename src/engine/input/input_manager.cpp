@@ -13,6 +13,26 @@ InputManager::InputManager(const engine::core::Configurator* config)
     initMappings(config);
 }
 
+// --- 更新和事件处理 ---
+
+void InputManager::update()
+{
+    // 1. 根据上一帧的值更新默认的动作状态
+    for (auto& [action, state] : m_actionStates) {
+        if (state == ActionState::PressedThisFrame) {
+            state = ActionState::HeldDown; // 当某个键按下不动时，并不会生成SDL_Event。
+        } else if (state == ActionState::ReleasedThisFrame) {
+            state = ActionState::Inactive;
+        }
+    }
+
+    // 2. 处理所有待处理的 SDL 事件 (这将设定 m_actionStates 的值)
+    SDL_Event event;
+    while (SDL_PollEvent(&event)) {
+        processEvent(event);
+    }
+}
+
 // --- 初始化输入映射 ---
 
 void InputManager::initMappings(const engine::core::Configurator* config)

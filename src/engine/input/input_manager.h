@@ -27,9 +27,13 @@ public:
      */
     InputManager(const engine::core::Configurator* config);
 
+    void update(); ///< @brief 更新输入状态，每轮循环最先调用
+
 private:
     ///< @brief 根据 Configurator配置初始化映射表
     void initMappings(const engine::core::Configurator* config);
+    ///< @brief 处理 SDL 事件（将按键转换为动作状态）
+    void processEvent(const SDL_Event& event);
 
     ///< @brief 将字符串键名转换为 SDL_Scancode
     SDL_Scancode scancodeFromString(const std::string& keyName);

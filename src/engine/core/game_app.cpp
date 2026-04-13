@@ -1,4 +1,5 @@
 #include "game_app.h"
+#include "../input/input_manager.h"
 #include "../render/camera.h"
 #include "../render/renderer.h"
 #include "../render/sprite.h"
@@ -61,6 +62,9 @@ bool GameApp::init()
         return false;
     }
     if (!initCamera()) {
+        return false;
+    }
+    if (!initInputManager()) {
         return false;
     }
 
@@ -218,6 +222,19 @@ bool GameApp::initConfigurator()
         return false;
     }
     spdlog::trace("配置管理器初始化成功。");
+    return true;
+}
+
+bool GameApp::initInputManager()
+{
+    try {
+        m_inputManager = std::make_unique<engine::input::InputManager>(m_sdlRenderer,
+                                                                       m_configurator.get());
+    } catch (const std::exception& e) {
+        spdlog::error("初始化输入管理器失败: {}", e.what());
+        return false;
+    }
+    spdlog::trace("输入管理器初始化成功。");
     return true;
 }
 

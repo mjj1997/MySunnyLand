@@ -1,5 +1,6 @@
 #pragma once
 
+#include <SDL3/SDL_render.h>
 #include <glm/vec2.hpp>
 
 #include <string>
@@ -51,6 +52,9 @@ private:
     void updateActionState(const std::string& action, bool isInputActive, bool isRepeatEvent);
 
 private:
+    ///< @brief 用于获取逻辑坐标的 SDL_Renderer 指针
+    SDL_Renderer* m_sdlRenderer;
+
     ///< @brief 存储动作名称到按键名称列表的映射
     std::unordered_map<std::string, std::vector<std::string>> m_actionToKeyNames;
     ///< @brief 从键盘（Scancode）到关联的动作名称列表

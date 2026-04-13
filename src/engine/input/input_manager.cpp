@@ -1,6 +1,7 @@
 #include "input_manager.h"
 #include "../core/configurator.h"
 
+#include <glm/vec2.hpp>
 #include <spdlog/spdlog.h>
 
 #include <stdexcept>
@@ -196,6 +197,11 @@ bool InputManager::shouldQuit() const
 void InputManager::setShouldQuit(bool shouldQuit)
 {
     m_shouldQuit = shouldQuit;
+}
+
+glm::vec2 InputManager::mousePosition() const
+{
+    return m_mousePosition;
 }
 
 } // namespace engine::input

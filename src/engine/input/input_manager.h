@@ -1,5 +1,7 @@
 #pragma once
 
+#include <glm/vec2.hpp>
+
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -32,6 +34,7 @@ public:
     bool shouldQuit() const;             ///< @brief 查询退出状态
     void setShouldQuit(bool shouldQuit); ///< @brief 设置退出状态
 
+    glm::vec2 mousePosition() const;        ///< @brief 获取鼠标位置 （屏幕坐标）
 private:
     ///< @brief 根据 Configurator配置初始化映射表
     void initMappings(const engine::core::Configurator* config);
@@ -56,6 +59,7 @@ private:
     std::unordered_map<std::string, ActionState> m_actionStates; ///< @brief 存储每个动作的当前状态
 
     bool m_shouldQuit{ false }; ///< @brief 退出标志
+    glm::vec2 m_mousePosition;  ///< @brief 鼠标位置 (针对屏幕坐标)
 };
 
 } // namespace engine::input

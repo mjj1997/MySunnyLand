@@ -113,6 +113,21 @@ void InputManager::processEvent(const SDL_Event& event)
         }
         break;
     }
+    case SDL_EVENT_MOUSE_BUTTON_DOWN:
+    case SDL_EVENT_MOUSE_BUTTON_UP: {
+        Uint8 button{ event.button.button }; // 获取鼠标按钮
+        bool isDown{ event.button.down };
+
+        if (auto it = m_mouseButtonToActions.find(button); it != m_mouseButtonToActions.end()) {
+            // 如果鼠标按钮有对应的 actions
+            const std::vector<std::string>& actions{ it->second };
+            for (const std::string& action : actions) {
+                // 鼠标事件不考虑repeat, 所以第三个参数传false
+                updateActionState(action, isDown, false); // 更新action状态
+            }
+        }
+        break;
+    }
     default:
         break;
     }

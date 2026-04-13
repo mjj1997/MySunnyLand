@@ -128,6 +128,9 @@ void InputManager::processEvent(const SDL_Event& event)
         }
         break;
     }
+    case SDL_EVENT_QUIT:
+        m_shouldQuit = true;
+        break;
     default:
         break;
     }

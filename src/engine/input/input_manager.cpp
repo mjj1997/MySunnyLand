@@ -226,7 +226,12 @@ glm::vec2 InputManager::mousePosition() const
 glm::vec2 InputManager::logicalMousePosition() const
 {
     glm::vec2 logicalPos;
-    // TODO: 通过窗口坐标获取渲染坐标（逻辑坐标）
+    // 通过窗口坐标获取渲染坐标（逻辑坐标）
+    SDL_RenderCoordinatesFromWindow(m_sdlRenderer,
+                                    m_mousePosition.x,
+                                    m_mousePosition.y,
+                                    &logicalPos.x,
+                                    &logicalPos.y);
     return logicalPos;
 }
 

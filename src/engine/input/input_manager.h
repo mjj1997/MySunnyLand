@@ -10,6 +10,13 @@ class Configurator;
 
 namespace engine::input {
 
+enum class ActionState {
+    Inactive,         ///< @brief 动作未激活
+    PressedThisFrame, ///< @brief 动作在本帧刚刚被按下
+    HeldDown,         ///< @brief 动作被持续按下
+    ReleasedThisFrame ///< @brief 动作在本帧刚刚被释放
+};
+
 class InputManager final
 {
 public:
@@ -36,6 +43,8 @@ private:
     std::unordered_map<SDL_Scancode, std::vector<std::string>> m_scancodeToActions;
     ///< @brief 从鼠标按钮 (Uint32) 到关联的动作名称列表
     std::unordered_map<Uint32, std::vector<std::string>> m_mouseButtonToActions;
+
+    std::unordered_map<std::string, ActionState> m_actionStates; ///< @brief 存储每个动作的当前状态
 };
 
 } // namespace engine::input

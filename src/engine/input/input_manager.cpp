@@ -26,6 +26,7 @@ void InputManager::initMappings(const engine::core::Configurator* config)
     m_actionToKeyNames = config->m_inputMappings; // 获取配置中的输入映射（动作 -> 按键名称）
     m_scancodeToActions.clear();
     m_mouseButtonToActions.clear();
+    m_actionStates.clear();
 
     // 如果配置中没有定义鼠标按钮动作(通常不需要配置),则添加默认映射, 用于 UI
     if (m_actionToKeyNames.find("MouseLeftClick") == m_actionToKeyNames.end()) {
@@ -39,6 +40,9 @@ void InputManager::initMappings(const engine::core::Configurator* config)
 
     // 遍历 动作 -> 按键名称 的映射
     for (const auto& [action, keyNames] : m_actionToKeyNames) {
+        // 每个动作对应一个动作状态，初始化为 Inactive
+        m_actionStates[action] = ActionState::Inactive;
+
         // 设置 "按键 -> 动作" 的映射
         spdlog::trace("映射动作: {}", action);
         for (const std::string& keyName : keyNames) {

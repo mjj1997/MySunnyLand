@@ -1,0 +1,33 @@
+#pragma once
+
+#include "../component/component_base.h"
+
+#include <memory>
+#include <typeindex> // 用于类型索引
+#include <unordered_map>
+namespace engine::object {
+
+/**
+ * @brief 游戏对象类，负责管理游戏对象的组件。
+ * 
+ * 该类管理游戏对象的组件，并提供添加、获取、检查和移除组件的功能。
+ * 它还提供更新和渲染游戏对象的方法。
+ */
+class GameObject final
+{
+public:
+    ///< @brief 构造函数。
+    explicit GameObject();
+
+    // 禁止拷贝和移动，确保唯一性 (通常游戏对象不应随意拷贝)
+    GameObject(const GameObject&) = delete;
+    GameObject& operator=(const GameObject&) = delete;
+    GameObject(GameObject&&) = delete;
+    GameObject& operator=(GameObject&&) = delete;
+
+private:
+    std::unordered_map<std::type_index, std::unique_ptr<engine::component::ComponentBase>>
+        m_components;             ///< @brief 组件列表
+};
+
+} // namespace engine::object

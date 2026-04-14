@@ -14,6 +14,10 @@ class Renderer;
 class Camera;
 } // namespace engine::render
 
+namespace engine::input {
+class InputManager;
+}
+
 namespace engine::core { // 命名空间的最佳实践：与文件路径一致
 
 class FrameTimeController;
@@ -53,11 +57,13 @@ private:
     [[nodiscard]] bool initRenderer();
     [[nodiscard]] bool initCamera();
     [[nodiscard]] bool initConfigurator();
+    [[nodiscard]] bool initInputManager();
 
     // 测试用函数
     void testResourceManager();
     void testRenderer();
     void testCamera();
+    void testInputManager();
 
 private:
     SDL_Window* m_window{ nullptr };
@@ -70,6 +76,7 @@ private:
     std::unique_ptr<engine::render::Renderer> m_renderer;
     std::unique_ptr<engine::render::Camera> m_camera;
     std::unique_ptr<engine::core::Configurator> m_configurator;
+    std::unique_ptr<engine::input::InputManager> m_inputManager;
 };
 
 } // namespace engine::core

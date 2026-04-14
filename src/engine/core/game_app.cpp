@@ -1,4 +1,5 @@
 #include "game_app.h"
+#include "../input/input_manager.h"
 #include "../render/camera.h"
 #include "../render/renderer.h"
 #include "../render/sprite.h"
@@ -31,6 +32,7 @@ void GameApp::run()
     while (m_isRunning) {
         m_frameTimeController->update();
         double deltaTime{ m_frameTimeController->deltaTime() };
+        m_inputManager->update(); // 每帧首先更新输入管理器
 
         handleEvents();
         update(deltaTime);
@@ -63,6 +65,9 @@ bool GameApp::init()
     if (!initCamera()) {
         return false;
     }
+    if (!initInputManager()) {
+        return false;
+    }
 
     // 测试资源管理器
     testResourceManager();
@@ -74,12 +79,13 @@ bool GameApp::init()
 
 void GameApp::handleEvents()
 {
-    SDL_Event event;
-    while (SDL_PollEvent(&event)) {
-        if (event.type == SDL_EVENT_QUIT) {
-            m_isRunning = false;
-        }
+    while (m_inputManager->shouldQuit()) {
+        spdlog::trace("GameApp 收到来自 InputManager 的退出信号。");
+        m_isRunning = false;
+        return;
     }
+
+    testInputManager();
 }
 
 void GameApp::update(double deltaTime)
@@ -221,6 +227,19 @@ bool GameApp::initConfigurator()
     return true;
 }
 
+bool GameApp::initInputManager()
+{
+    try {
+        m_inputManager = std::make_unique<engine::input::InputManager>(m_sdlRenderer,
+                                                                       m_configurator.get());
+    } catch (const std::exception& e) {
+        spdlog::error("初始化输入管理器失败: {}", e.what());
+        return false;
+    }
+    spdlog::trace("输入管理器初始化成功。");
+    return true;
+}
+
 void GameApp::testResourceManager()
 {
     m_resourceManager->getTexture("assets/textures/Actors/eagle-attack.png");
@@ -268,6 +287,25 @@ void GameApp::testCamera()
     }
     if (keyState[SDL_SCANCODE_RIGHT]) {
         m_camera->move(glm::vec2{ 1.0f, 0.0f });
+    }
+}
+
+void GameApp::testInputManager()
+{
+    std::vector<std::string> actions = { "moveUp",    "moveDown",       "moveLeft",
+                                         "moveRight", "jump",           "attack",
+                                         "pause",     "mouseLeftClick", "mouseRightClick" };
+
+    for (const auto& action : actions) {
+        if (m_inputManager->isActionPressed(action)) {
+            spdlog::info(" {} 按下 ", action);
+        }
+        if (m_inputManager->isActionReleased(action)) {
+            spdlog::info(" {} 抬起 ", action);
+        }
+        if (m_inputManager->isActionDown(action)) {
+            spdlog::info(" {} 按下中 ", action);
+        }
     }
 }
 

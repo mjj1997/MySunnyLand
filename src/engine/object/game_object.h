@@ -114,6 +114,12 @@ public:
         }
     }
 
+    // 关键循环函数
+    void handleInput();            ///< @brief 处理输入
+    void update(double deltaTime); ///< @brief 更新所有组件
+    void render();                 ///< @brief 渲染所有组件
+    void clean();                  ///< @brief 清理所有组件
+
 private:
     std::unordered_map<std::type_index, std::unique_ptr<engine::component::ComponentBase>>
         m_components;             ///< @brief 组件列表

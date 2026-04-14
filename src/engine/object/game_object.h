@@ -60,6 +60,22 @@ public:
         return m_components.contains(std::type_index{ typeid(T) });
     }
 
+    /**
+     * @brief 移除组件
+     * 
+     * @tparam T 组件类型
+     */
+    template<ComponentType T>
+    void removeComponent()
+    {
+        auto typeIndex = std::type_index{ typeid(T) };
+        auto it = m_components.find(typeIndex);
+        if (it != m_components.end()) {
+            it->second->clean();
+            m_components.erase(it);
+        }
+    }
+
 private:
     std::unordered_map<std::type_index, std::unique_ptr<engine::component::ComponentBase>>
         m_components;             ///< @brief 组件列表

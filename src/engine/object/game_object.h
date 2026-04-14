@@ -2,10 +2,14 @@
 
 #include "../component/component_base.h"
 
+#include <concepts>
 #include <memory>
 #include <typeindex> // 用于类型索引
 #include <unordered_map>
 namespace engine::object {
+
+template<typename T>
+concept ComponentType = std::derived_from<T, engine::component::ComponentBase>;
 
 /**
  * @brief 游戏对象类，负责管理游戏对象的组件。

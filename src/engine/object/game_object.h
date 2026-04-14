@@ -47,6 +47,19 @@ public:
         return nullptr;
     }
 
+    /**
+     * @brief 检查是否存在组件
+     * 
+     * @tparam T 组件类型
+     * @return 是否存在组件
+     */
+    template<ComponentType T>
+    bool hasComponent() const
+    {
+        // contains方法为 C++20 新增
+        return m_components.contains(std::type_index{ typeid(T) });
+    }
+
 private:
     std::unordered_map<std::type_index, std::unique_ptr<engine::component::ComponentBase>>
         m_components;             ///< @brief 组件列表

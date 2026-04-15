@@ -33,6 +33,15 @@ public:
     GameObject(GameObject&&) = delete;
     GameObject& operator=(GameObject&&) = delete;
 
+    // getters and setters
+    void setName(const std::string& name) { m_name = name; } ///< @brief 设置名称
+    const std::string& getName() const { return m_name; }    ///< @brief 获取名称
+    void setTag(const std::string& tag) { m_tag = tag; }     ///< @brief 设置标签
+    const std::string& getTag() const { return m_tag; }      ///< @brief 获取标签
+    ///< @brief 设置是否需要删除
+    void setShouldRemove(bool shouldRemove) { m_shouldRemove = shouldRemove; }
+    bool shouldRemove() const { return m_shouldRemove; } ///< @brief 获取是否需要删除
+
     /**
      * @brief 添加组件 (里面会完成组件的 init())
      * 
@@ -123,6 +132,9 @@ public:
 private:
     std::unordered_map<std::type_index, std::unique_ptr<engine::component::ComponentBase>>
         m_components;             ///< @brief 组件列表
+    std::string m_name;           ///< @brief 名称
+    std::string m_tag;            ///< @brief 标签
+    bool m_shouldRemove{ false }; ///< @brief 延迟删除的标识，将来由场景类负责删除
 };
 
 } // namespace engine::object

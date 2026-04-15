@@ -4,9 +4,11 @@
 
 namespace engine::object {
 
-GameObject::GameObject()
+GameObject::GameObject(const std::string& name, const std::string& tag)
+    : m_name{ name }
+    , m_tag{ tag }
 {
-    spdlog::trace("GameObject created.");
+    spdlog::trace("GameObject created: {} {}", m_name, m_tag);
 }
 
 void GameObject::handleInput()

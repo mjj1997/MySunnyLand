@@ -24,8 +24,8 @@ concept ComponentType = std::derived_from<T, engine::component::ComponentBase>;
 class GameObject final
 {
 public:
-    ///< @brief 构造函数。
-    explicit GameObject();
+    ///< @brief 构造函数。默认名称为空，标签为空
+    explicit GameObject(const std::string& name = "", const std::string& tag = "");
 
     // 禁止拷贝和移动，确保唯一性 (通常游戏对象不应随意拷贝)
     GameObject(const GameObject&) = delete;
@@ -72,7 +72,7 @@ public:
         m_components[typeIndex] = std::move(newComponent); // 移动组件到容器中
         ptr->init();                                       // 初始化组件
 
-        spdlog::debug("GameObject::addComponent: added component {}", typeid(T).name());
+        spdlog::debug("GameObject::addComponent: {} added component {}", m_name, typeid(T).name());
         return ptr; // 返回非拥有指针
     }
 

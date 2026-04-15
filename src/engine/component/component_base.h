@@ -1,5 +1,9 @@
 #pragma once
 
+namespace engine::core {
+class Context;
+}
+
 namespace engine::object {
 class GameObject;
 }
@@ -35,10 +39,17 @@ public:
 protected:
     ///< @brief 保留两段初始化的机制，GameObject 添加组件时自动调用，不需要外部调用
     virtual void init() {}
-    virtual void handleInput() {} ///< @brief 处理输入
-    virtual void update(float) {} ///< @brief 更新
-    virtual void render() {}      ///< @brief 渲染
-    virtual void clean() {}       ///< @brief 清理
+    virtual void handleInput(engine::core::Context& context) {} ///< @brief 处理输入
+
+    /**
+     * @brief 更新组件状态(纯虚函数，必须在子类中重新实现)
+     * @param deltaTime 距上一帧的时间间隔（秒）
+     * @param context 引擎上下文对象，包含渲染器、输入管理器等
+     */
+    virtual void update(double deltaTime, engine::core::Context& context) = 0;
+
+    virtual void render(engine::core::Context& context) {} ///< @brief 渲染
+    virtual void clean() {}                                ///< @brief 清理
 
     engine::object::GameObject* m_owner{ nullptr }; ///< @brief 指向拥有此组件的 GameObject
 };

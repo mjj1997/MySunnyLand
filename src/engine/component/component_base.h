@@ -11,7 +11,7 @@ class GameObject;
 namespace engine::component {
 
 /**
- * @brief 组件的抽象基类。
+ * @brief 所有游戏组件的抽象基类。
  *
  * 所有具体组件都应从此类继承。
  * 定义了组件生命周期中可能调用的通用方法。
@@ -33,7 +33,7 @@ public:
     ///< @brief 设置拥有此组件的 GameObject
     void setOwner(engine::object::GameObject* owner) { m_owner = owner; }
     ///< @brief 获取拥有此组件的 GameObject
-    engine::object::GameObject* owner() const { return m_owner; }
+    [[nodiscard]] engine::object::GameObject* owner() const { return m_owner; }
 
     // 关键循环函数，全部设为保护，只有 GameObject 可以调用 (未来改为 = 0 以实现抽象类)
 protected:

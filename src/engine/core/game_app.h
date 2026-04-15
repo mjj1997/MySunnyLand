@@ -64,6 +64,7 @@ private:
     void testRenderer();
     void testCamera();
     void testInputManager();
+    void testGameObject();
 
 private:
     SDL_Window* m_window{ nullptr };

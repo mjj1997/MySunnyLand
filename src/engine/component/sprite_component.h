@@ -52,6 +52,15 @@ public:
     SpriteComponent(SpriteComponent&&) = delete;
     SpriteComponent& operator=(SpriteComponent&&) = delete;
 
+    // Getters
+    const engine::render::Sprite& sprite() const { return m_sprite; }     ///< @brief 获取精灵对象
+    const std::string& textureId() const { return m_sprite.textureId(); } ///< @brief 获取纹理ID
+    bool isFlipped() const { return m_sprite.isFlipped(); }               ///< @brief 获取是否翻转
+    engine::utils::Alignment alignment() const { return m_alignment; }    ///< @brief 获取对齐方式
+    bool isHidden() const { return m_isHidden; }                          ///< @brief 获取是否隐藏
+    const glm::vec2& spriteSize() const { return m_spriteSize; }          ///< @brief 获取精灵尺寸
+    const glm::vec2& offset() const { return m_offset; }                  ///< @brief 获取偏移量
+
 protected:
     // ComponentBase 虚函数覆盖
     void init() override;                                             ///< @brief 初始化函数需要覆盖

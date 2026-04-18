@@ -42,4 +42,19 @@ void SpriteComponent::init()
     // TODO: 更新大小及偏移
 }
 
+void SpriteComponent::updateSpriteSize()
+{
+    if (!m_resourceManager) {
+        spdlog::error("ResourceManager 为空！无法获取纹理尺寸。");
+        return;
+    }
+
+    if (m_sprite.sourceRect().has_value()) {
+        const auto& srcRect = m_sprite.sourceRect().value();
+        m_spriteSize = glm::vec2{ srcRect.w, srcRect.h };
+    } else {
+        m_spriteSize = m_resourceManager->getTextureSize(m_sprite.textureId());
+    }
+}
+
 } // namespace engine::component

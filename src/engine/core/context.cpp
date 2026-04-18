@@ -1,8 +1,8 @@
 #include "context.h"
-#include <../input/input_manager.h>
-#include <../render/camera.h>
-#include <../render/renderer.h>
-#include <../resource/resource_manager.h>
+#include "../input/input_manager.h"
+#include "../render/camera.h"
+#include "../render/renderer.h"
+#include "../resource/resource_manager.h"
 
 #include <spdlog/spdlog.h>
 

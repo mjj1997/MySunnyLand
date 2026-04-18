@@ -24,6 +24,31 @@ SpriteComponent::SpriteComponent(const std::string& textureId,
     spdlog::trace("创建 SpriteComponent，纹理ID: {}", textureId);
 }
 
+void SpriteComponent::setSpriteById(const std::string& textureId,
+                                    const std::optional<SDL_FRect>& sourceRect)
+{
+    m_sprite.setTextureId(textureId);
+    m_sprite.setSourceRect(sourceRect);
+
+    updateSpriteSize();
+    updateOffset();
+}
+
+void SpriteComponent::setSourceRect(const std::optional<SDL_FRect>& sourceRect)
+{
+    m_sprite.setSourceRect(sourceRect);
+
+    updateSpriteSize();
+    updateOffset();
+}
+
+void SpriteComponent::setAlignment(engine::utils::Alignment anchor)
+{
+    m_alignment = anchor;
+
+    updateOffset();
+}
+
 void SpriteComponent::init()
 {
     if (!m_owner) {

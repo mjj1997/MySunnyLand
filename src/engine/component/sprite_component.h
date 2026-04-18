@@ -61,6 +61,15 @@ public:
     const glm::vec2& spriteSize() const { return m_spriteSize; }          ///< @brief 获取精灵尺寸
     const glm::vec2& offset() const { return m_offset; }                  ///< @brief 获取偏移量
 
+    // Setters
+    void setSpriteById(
+        const std::string& textureId,
+        const std::optional<SDL_FRect>& sourceRect = std::nullopt); ///< @brief 设置精灵对象
+    void setSourceRect(const std::optional<SDL_FRect>& sourceRect); ///< @brief 设置源矩形
+    void setFlipped(bool flipped) { m_sprite.setFlipped(flipped); } ///< @brief 设置是否翻转
+    void setAlignment(engine::utils::Alignment anchor);             ///< @brief 设置对齐方式
+    void setHidden(bool hidden) { m_isHidden = hidden; }            ///< @brief 设置是否隐藏
+
 protected:
     // ComponentBase 虚函数覆盖
     void init() override;                                             ///< @brief 初始化函数需要覆盖

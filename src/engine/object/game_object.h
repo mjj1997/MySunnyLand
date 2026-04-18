@@ -35,9 +35,9 @@ public:
 
     // getters and setters
     void setName(const std::string& name) { m_name = name; } ///< @brief 设置名称
-    const std::string& getName() const { return m_name; }    ///< @brief 获取名称
+    const std::string& name() const { return m_name; }       ///< @brief 获取名称
     void setTag(const std::string& tag) { m_tag = tag; }     ///< @brief 设置标签
-    const std::string& getTag() const { return m_tag; }      ///< @brief 获取标签
+    const std::string& tag() const { return m_tag; }         ///< @brief 获取标签
     ///< @brief 设置是否需要删除
     void setShouldRemove(bool shouldRemove) { m_shouldRemove = shouldRemove; }
     bool shouldRemove() const { return m_shouldRemove; } ///< @brief 获取是否需要删除

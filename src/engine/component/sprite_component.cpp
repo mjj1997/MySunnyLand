@@ -1,5 +1,7 @@
 #include "sprite_component.h"
+#include "../core/context.h"
 #include "../object/game_object.h"
+#include "../render/renderer.h"
 #include "../resource/resource_manager.h"
 #include "transform_component.h"
 
@@ -67,6 +69,21 @@ void SpriteComponent::init()
     // 更新大小及偏移
     updateSpriteSize();
     updateOffset();
+}
+
+void SpriteComponent::render(engine::core::Context& context)
+{
+    if (m_isHidden || !m_transformComponent || !m_resourceManager) {
+        return;
+    }
+
+    // 获取变换数据（位置、缩放、旋转），位置考虑偏移量
+    const auto& pos = m_transformComponent->position() + m_offset;
+    const auto& scaleFactor = m_transformComponent->scale();
+    const auto& angle = m_transformComponent->rotation();
+
+    // 执行渲染操作
+    context.renderer().drawSprite(context.camera(), m_sprite, pos, scaleFactor, angle);
 }
 
 void SpriteComponent::updateSpriteSize()

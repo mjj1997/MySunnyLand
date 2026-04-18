@@ -70,6 +70,9 @@ public:
     void setAlignment(engine::utils::Alignment anchor);             ///< @brief 设置对齐方式
     void setHidden(bool hidden) { m_isHidden = hidden; }            ///< @brief 设置是否隐藏
 
+    ///< @brief 辅助函数，更新偏移量（根据当前的 m_alignment 和 m_spriteSize 计算 m_offset）。
+    void updateOffset();
+
 protected:
     // ComponentBase 虚函数覆盖
     void init() override;                                             ///< @brief 初始化函数需要覆盖
@@ -79,8 +82,6 @@ protected:
 private:
     ///< @brief 辅助函数，更新精灵大小（根据 m_sprite 的 sourceRect 更新 m_spriteSize）。
     void updateSpriteSize();
-    ///< @brief 辅助函数，更新偏移量（根据当前的 m_alignment 和 m_spriteSize 计算 m_offset）。
-    void updateOffset();
 
     ///< @brief 保存资源管理器指针，用于获取纹理大小
     engine::resource::ResourceManager* m_resourceManager{ nullptr };

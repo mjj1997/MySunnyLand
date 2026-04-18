@@ -39,7 +39,9 @@ void SpriteComponent::init()
         return;
     }
 
-    // TODO: 更新大小及偏移
+    // 更新大小及偏移
+    updateSpriteSize();
+    updateOffset();
 }
 
 void SpriteComponent::updateSpriteSize()

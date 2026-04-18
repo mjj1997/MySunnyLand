@@ -57,4 +57,48 @@ void SpriteComponent::updateSpriteSize()
     }
 }
 
+void SpriteComponent::updateOffset()
+{
+    // 如果精灵尺寸无效，偏移为 0
+    if (m_spriteSize.x <= 0 || m_spriteSize.y <= 0) {
+        m_offset = glm::vec2{ 0.0f, 0.0f };
+        return;
+    }
+
+    auto scaleFactor = m_transformComponent->scale();
+    // 计算精灵左上角相对于 TransformComponent::m_position 的偏移量
+    switch (m_alignment) {
+    case engine::utils::Alignment::TopLeft:
+        m_offset = glm::vec2{ 0.0f, 0.0f } * scaleFactor;
+        break;
+    case engine::utils::Alignment::TopCenter:
+        m_offset = glm::vec2{ -m_spriteSize.x / 2.0f, 0.0f } * scaleFactor;
+        break;
+    case engine::utils::Alignment::TopRight:
+        m_offset = glm::vec2{ -m_spriteSize.x, 0.0f } * scaleFactor;
+        break;
+    case engine::utils::Alignment::CenterLeft:
+        m_offset = glm::vec2{ 0.0f, -m_spriteSize.y / 2.0f } * scaleFactor;
+        break;
+    case engine::utils::Alignment::Center:
+        m_offset = glm::vec2{ -m_spriteSize.x / 2.0f, -m_spriteSize.y / 2.0f } * scaleFactor;
+        break;
+    case engine::utils::Alignment::CenterRight:
+        m_offset = glm::vec2{ -m_spriteSize.x, -m_spriteSize.y / 2.0f } * scaleFactor;
+        break;
+    case engine::utils::Alignment::BottomLeft:
+        m_offset = glm::vec2{ 0.0f, -m_spriteSize.y } * scaleFactor;
+        break;
+    case engine::utils::Alignment::BottomCenter:
+        m_offset = glm::vec2{ -m_spriteSize.x / 2.0f, -m_spriteSize.y } * scaleFactor;
+        break;
+    case engine::utils::Alignment::BottomRight:
+        m_offset = glm::vec2{ -m_spriteSize.x, -m_spriteSize.y } * scaleFactor;
+        break;
+    case engine::utils::Alignment::None:
+    default:
+        break;
+    }
+}
+
 } // namespace engine::component

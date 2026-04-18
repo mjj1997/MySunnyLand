@@ -61,6 +61,9 @@ protected:
 private:
     ///< @brief 辅助函数，更新精灵大小（根据 m_sprite 的 sourceRect 更新 m_spriteSize）。
     void updateSpriteSize();
+    ///< @brief 辅助函数，更新偏移量（根据当前的 m_alignment 和 m_spriteSize 计算 m_offset）。
+    void updateOffset();
+
     ///< @brief 保存资源管理器指针，用于获取纹理大小
     engine::resource::ResourceManager* m_resourceManager{ nullptr };
     ///< @brief 缓存 TransformComponent 指针（非必须），用于更新偏移量。
@@ -71,6 +74,7 @@ private:
     bool m_isHidden{ false }; ///< @brief 是否隐藏（不渲染）
 
     glm::vec2 m_spriteSize{ 0.0f, 0.0f }; ///< @brief 精灵尺寸
+    glm::vec2 m_offset{ 0.0f, 0.0f };     ///< @brief 偏移量
 };
 
 } // namespace engine::component

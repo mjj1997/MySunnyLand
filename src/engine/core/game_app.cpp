@@ -6,6 +6,7 @@
 #include "../render/sprite.h"
 #include "../resource/resource_manager.h"
 #include "configurator.h"
+#include "context.h"
 #include "frame_time_controller.h"
 
 #include <SDL3/SDL.h>
@@ -67,6 +68,9 @@ bool GameApp::init()
         return false;
     }
     if (!initInputManager()) {
+        return false;
+    }
+    if (!initContext()) {
         return false;
     }
 
@@ -241,6 +245,21 @@ bool GameApp::initInputManager()
         return false;
     }
     spdlog::trace("输入管理器初始化成功。");
+    return true;
+}
+
+bool GameApp::initContext()
+{
+    try {
+        m_context = std::make_unique<engine::core::Context>(*m_inputManager,
+                                                            *m_renderer,
+                                                            *m_camera,
+                                                            *m_resourceManager);
+    } catch (const std::exception& e) {
+        spdlog::error("初始化上下文失败: {}", e.what());
+        return false;
+    }
+    spdlog::trace("上下文初始化成功。");
     return true;
 }
 

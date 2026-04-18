@@ -22,6 +22,7 @@ namespace engine::core { // 命名空间的最佳实践：与文件路径一致
 
 class FrameTimeController;
 class Configurator;
+class Context;
 
 /**
  * @brief 主游戏应用程序类，初始化SDL，管理游戏循环。
@@ -58,6 +59,7 @@ private:
     [[nodiscard]] bool initCamera();
     [[nodiscard]] bool initConfigurator();
     [[nodiscard]] bool initInputManager();
+    [[nodiscard]] bool initContext();
 
     // 测试用函数
     void testResourceManager();
@@ -78,6 +80,7 @@ private:
     std::unique_ptr<engine::render::Camera> m_camera;
     std::unique_ptr<engine::core::Configurator> m_configurator;
     std::unique_ptr<engine::input::InputManager> m_inputManager;
+    std::unique_ptr<engine::core::Context> m_context;
 };
 
 } // namespace engine::core

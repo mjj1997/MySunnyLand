@@ -48,6 +48,13 @@ public:
     virtual void handleInput();            ///< @brief 处理输入。
     virtual void clean();                  ///< @brief 清理场景。
 
+    /// @brief 直接向场景中添加一个游戏对象。（初始化时可用，游戏进行中不安全） （&&表示右值引用，与std::move搭配使用，避免拷贝）
+    virtual void addGameObject(std::unique_ptr<engine::object::GameObject>&& gameObject);
+    /// @brief 直接从场景中移除一个游戏对象。（一般不使用，但保留实现的逻辑）
+    virtual void removeGameObject(engine::object::GameObject* gameObject);
+    /// @brief 根据名称查找游戏对象（返回找到的第一个对象）。
+    engine::object::GameObject* findGameObjectByName(const std::string& name) const;
+
     // getters and setters
     void setName(const std::string& name) { m_sceneName = name; } ///< @brief 设置场景名称
     const std::string& name() const { return m_sceneName; }       ///< @brief 获取场景名称

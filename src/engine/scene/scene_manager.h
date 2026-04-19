@@ -37,6 +37,14 @@ public:
     void clean();
 
 private:
+    // 直接切换场景
+    ///< @brief 将一个新场景压入栈顶，使其成为活动场景。
+    void pushScene(std::unique_ptr<SceneBase>&& scene);
+    ///< @brief 移除栈顶场景。
+    void popScene();
+    ///< @brief 清理场景栈所有场景，将此场景设为栈顶场景。
+    void replaceScene(std::unique_ptr<SceneBase>&& scene);
+
     engine::core::Context& m_context;                     ///< @brief 引擎上下文引用
     std::vector<std::unique_ptr<SceneBase>> m_sceneStack; ///< @brief 场景栈
 };

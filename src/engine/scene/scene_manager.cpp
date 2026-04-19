@@ -68,4 +68,67 @@ void SceneManager::clean()
     }
 }
 
+
+// --- Private Methods ---
+
+void SceneManager::pushScene(std::unique_ptr<SceneBase>&& scene)
+{
+    if (!scene) {
+        spdlog::warn("尝试将空场景压入栈。");
+        return;
+    }
+
+    spdlog::debug("正在将场景 '{}' 压入栈。", scene->name());
+
+    // 初始化新场景
+    if (!scene->isInitialized()) { // 确保只初始化一次
+        scene->init();
+    }
+
+    // 将新场景移入栈顶
+    m_sceneStack.push_back(std::move(scene));
+}
+
+void SceneManager::popScene()
+{
+    if (m_sceneStack.empty()) {
+        spdlog::warn("尝试从空场景栈中弹出。");
+        return;
+    }
+
+    spdlog::debug("正在从栈中弹出场景 '{}' 。", m_sceneStack.back()->name());
+
+    // 清理并移除栈顶场景
+    if (m_sceneStack.back()) {
+        m_sceneStack.back()->clean(); // 显式调用清理
+    }
+    m_sceneStack.pop_back();
+}
+
+void SceneManager::replaceScene(std::unique_ptr<SceneBase>&& scene)
+{
+    if (!scene) {
+        spdlog::warn("尝试用空场景替换。");
+        return;
+    }
+
+    spdlog::debug("正在用场景 '{}' 替换场景 '{}' 。", scene->name(), m_sceneStack.back()->name());
+
+    // 清理并移除场景栈中所有场景
+    while (!m_sceneStack.empty()) {
+        if (m_sceneStack.back()) {
+            m_sceneStack.back()->clean();
+        }
+        m_sceneStack.pop_back();
+    }
+
+    // 初始化新场景
+    if (!scene->isInitialized()) {
+        scene->init();
+    }
+
+    // 将新场景压入栈顶
+    m_sceneStack.push_back(std::move(scene));
+}
+
 } // namespace engine::scene

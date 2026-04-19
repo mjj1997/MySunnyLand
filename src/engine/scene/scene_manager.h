@@ -26,6 +26,11 @@ public:
     SceneManager(SceneManager&&) = delete;
     SceneManager& operator=(SceneManager&&) = delete;
 
+    // 延时切换场景
+    void requestPushScene(std::unique_ptr<SceneBase>&& scene);    ///< @brief 请求压入一个新场景。
+    void requestPopScene();                                       ///< @brief 请求弹出当前场景。
+    void requestReplaceScene(std::unique_ptr<SceneBase>&& scene); ///< @brief 请求替换当前场景。
+
     // getters
     SceneBase* currentScene() const; ///< @brief 获取当前活动场景（栈顶场景）的指针。
     engine::core::Context& context() const { return m_context; } ///< @brief 获取引擎上下文引用。
@@ -47,6 +52,10 @@ private:
 
     engine::core::Context& m_context;                     ///< @brief 引擎上下文引用
     std::vector<std::unique_ptr<SceneBase>> m_sceneStack; ///< @brief 场景栈
+
+    enum class PendingAction { None, Push, Pop, Replace }; ///< @brief 待处理的动作
+    PendingAction m_pendingAction{ PendingAction::None };  ///< @brief 待处理的动作
+    std::unique_ptr<SceneBase> m_pendingScene;             ///< @brief 待处理场景
 };
 
 } // namespace engine::scene

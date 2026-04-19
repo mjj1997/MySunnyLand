@@ -42,6 +42,9 @@ public:
     void clean();
 
 private:
+    ///< @brief 处理挂起的场景操作（每轮更新最后调用）。
+    void processPendingActions();
+
     // 直接切换场景
     ///< @brief 将一个新场景压入栈顶，使其成为活动场景。
     void pushScene(std::unique_ptr<SceneBase>&& scene);

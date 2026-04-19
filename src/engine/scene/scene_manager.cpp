@@ -87,6 +87,29 @@ void SceneManager::requestReplaceScene(std::unique_ptr<SceneBase>&& scene)
 
 // --- Private Methods ---
 
+void SceneManager::processPendingActions()
+{
+    if (m_pendingAction == PendingAction::None) {
+        return;
+    }
+
+    switch (m_pendingAction) {
+    case PendingAction::Push:
+        pushScene(std::move(m_pendingScene));
+        break;
+    case PendingAction::Pop:
+        popScene();
+        break;
+    case PendingAction::Replace:
+        replaceScene(std::move(m_pendingScene));
+        break;
+    default:
+        break;
+    }
+
+    m_pendingAction = PendingAction::None;
+}
+
 void SceneManager::pushScene(std::unique_ptr<SceneBase>&& scene)
 {
     if (!scene) {

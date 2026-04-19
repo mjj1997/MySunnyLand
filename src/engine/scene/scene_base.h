@@ -74,6 +74,8 @@ public:
     }
 
 protected:
+    void processPendingAdditions(); ///< @brief 处理待添加的游戏对象。（每轮更新的最后调用）
+
     std::string m_sceneName;          ///< @brief 场景名称
     engine::core::Context& m_context; ///< @brief 上下文引用（构造时传入）
 

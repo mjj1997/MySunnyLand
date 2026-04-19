@@ -143,4 +143,13 @@ engine::object::GameObject* SceneBase::findGameObjectByName(const std::string& n
     return nullptr;
 }
 
+void SceneBase::processPendingAdditions()
+{
+    // 处理待添加的游戏对象
+    for (auto& gameObject : m_pendingAdditions) {
+        addGameObject(std::move(gameObject));
+    }
+    m_pendingAdditions.clear();
+}
+
 } // namespace engine::scene

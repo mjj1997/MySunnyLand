@@ -50,8 +50,12 @@ public:
 
     /// @brief 直接向场景中添加一个游戏对象。（初始化时可用，游戏进行中不安全） （&&表示右值引用，与std::move搭配使用，避免拷贝）
     virtual void addGameObject(std::unique_ptr<engine::object::GameObject>&& gameObject);
+    /// @brief 安全地添加游戏对象。（添加到 m_pendingAdditions 中）
+    virtual void safeAddGameObject(std::unique_ptr<engine::object::GameObject>&& gameObject);
     /// @brief 直接从场景中移除一个游戏对象。（一般不使用，但保留实现的逻辑）
     virtual void removeGameObject(engine::object::GameObject* gameObject);
+    /// @brief 安全地移除游戏对象。（设置 m_shouldRemove 标记）
+    virtual void safeRemoveGameObject(engine::object::GameObject* gameObject);
     /// @brief 根据名称查找游戏对象（返回找到的第一个对象）。
     engine::object::GameObject* findGameObjectByName(const std::string& name) const;
 
@@ -72,10 +76,13 @@ public:
 protected:
     std::string m_sceneName;          ///< @brief 场景名称
     engine::core::Context& m_context; ///< @brief 上下文引用（构造时传入）
+
     ///< @brief 场景是否已初始化(非当前场景很可能未被删除，因此需要初始化标志避免重复初始化)
     bool m_isInitialized{ false };
     ///< @brief 场景中的游戏对象
     std::vector<std::unique_ptr<engine::object::GameObject>> m_gameObjects;
+    ///< @brief 待添加的游戏对象（延时添加）
+    std::vector<std::unique_ptr<engine::object::GameObject>> m_pendingAdditions;
 };
 
 } // namespace engine::scene

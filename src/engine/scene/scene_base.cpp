@@ -93,6 +93,15 @@ void SceneBase::addGameObject(std::unique_ptr<engine::object::GameObject>&& game
     }
 }
 
+void SceneBase::safeAddGameObject(std::unique_ptr<engine::object::GameObject>&& gameObject)
+{
+    if (gameObject) {
+        m_pendingAdditions.push_back(std::move(gameObject));
+    } else {
+        spdlog::warn("尝试向场景 '{}' 添加空游戏对象。", m_sceneName);
+    }
+}
+
 void SceneBase::removeGameObject(engine::object::GameObject* gameObject)
 {
     if (!gameObject) {
@@ -116,6 +125,11 @@ void SceneBase::removeGameObject(engine::object::GameObject* gameObject)
     } else {
         spdlog::warn("游戏对象指针未找到在场景 '{}' 中。", m_sceneName);
     }
+}
+
+void SceneBase::safeRemoveGameObject(engine::object::GameObject* gameObject)
+{
+    gameObject->setShouldRemove(true);
 }
 
 engine::object::GameObject* SceneBase::findGameObjectByName(const std::string& name) const

@@ -21,9 +21,9 @@ public:
     /**
      * @brief 构造一个精灵
      *
-     * @param texture_id 纹理资源的标识符。不应为空。
-     * @param source_rect 可选的源矩形（SDL_FRect），定义要使用的纹理部分。如果为 std::nullopt，则使用整个纹理。
-     * @param is_flipped 是否水平翻转
+     * @param textureId 纹理资源的标识符。不应为空。
+     * @param sourceRect 可选的源矩形（SDL_FRect），定义要使用的纹理部分。如果为 std::nullopt，则使用整个纹理。
+     * @param isFlipped 是否水平翻转
      */
     explicit Sprite(const std::string& textureId,
                     const std::optional<SDL_FRect>& sourceRect = std::nullopt,

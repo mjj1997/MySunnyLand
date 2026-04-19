@@ -1,4 +1,6 @@
 #include "game_app.h"
+#include "../component/sprite_component.h"
+#include "../component/transform_component.h"
 #include "../input/input_manager.h"
 #include "../object/game_object.h"
 #include "../render/camera.h"
@@ -6,12 +8,15 @@
 #include "../render/sprite.h"
 #include "../resource/resource_manager.h"
 #include "configurator.h"
+#include "context.h"
 #include "frame_time_controller.h"
 
 #include <SDL3/SDL.h>
 #include <spdlog/spdlog.h>
 
 namespace engine::core {
+
+engine::object::GameObject gameObject{ "testGameObject" };
 
 GameApp::GameApp() = default;
 
@@ -69,6 +74,9 @@ bool GameApp::init()
     if (!initInputManager()) {
         return false;
     }
+    if (!initContext()) {
+        return false;
+    }
 
     // 测试资源管理器
     testResourceManager();
@@ -104,6 +112,7 @@ void GameApp::render()
 
     // 2. 具体渲染代码
     testRenderer();
+    gameObject.render(*m_context);
 
     // 3. 更新屏幕显示
     m_renderer->present();
@@ -244,6 +253,21 @@ bool GameApp::initInputManager()
     return true;
 }
 
+bool GameApp::initContext()
+{
+    try {
+        m_context = std::make_unique<engine::core::Context>(*m_inputManager,
+                                                            *m_renderer,
+                                                            *m_camera,
+                                                            *m_resourceManager);
+    } catch (const std::exception& e) {
+        spdlog::error("初始化上下文失败: {}", e.what());
+        return false;
+    }
+    spdlog::trace("上下文初始化成功。");
+    return true;
+}
+
 void GameApp::testResourceManager()
 {
     m_resourceManager->getTexture("assets/textures/Actors/eagle-attack.png");
@@ -315,8 +339,26 @@ void GameApp::testInputManager()
 
 void GameApp::testGameObject()
 {
-    engine::object::GameObject gameObject{ "testGameObject" };
-    gameObject.addComponent<engine::component::ComponentBase>();
+    spdlog::info("========== 测试组件系统 ==========");
+
+    // 1. 添加 TransformComponent，让对象出现在 (100, 100)
+    gameObject.addComponent<engine::component::TransformComponent>(glm::vec2{ 100.0f, 100.0f });
+
+    // 2. 添加 SpriteComponent，显示箱子贴图，设置渲染中心为图片的几何中心
+    const std::string textureId{ "assets/textures/Props/big-crate.png" };
+    gameObject.addComponent<engine::component::SpriteComponent>(textureId,
+                                                                *m_resourceManager,
+                                                                engine::utils::Alignment::Center);
+
+    // 3. 获取 TransformComponent，修改缩放和旋转
+    // 放大 2 倍
+    gameObject.getComponent<engine::component::TransformComponent>()->setScale(
+        glm::vec2{ 2.0f, 2.0f });
+    // 旋转 30 度
+    gameObject.getComponent<engine::component::TransformComponent>()->setRotation(30.0f);
+    spdlog::info("✓ Transform 组件配置完成");
+
+    spdlog::info("====================================");
 }
 
 } // namespace engine::core

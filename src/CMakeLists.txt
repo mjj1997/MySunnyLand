@@ -13,7 +13,10 @@ target_sources(
           engine/render/renderer.cpp
           engine/core/configurator.cpp
           engine/input/input_manager.cpp
-          engine/object/game_object.cpp)
+          engine/object/game_object.cpp
+          engine/core/context.cpp
+          engine/component/transform_component.cpp
+          engine/component/sprite_component.cpp)
 
 target_link_libraries(
   SunnyLand

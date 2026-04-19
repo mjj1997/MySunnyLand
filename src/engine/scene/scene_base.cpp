@@ -40,6 +40,8 @@ void SceneBase::update(double deltaTime)
             it = m_gameObjects.erase(it); // 删除需要移除的对象，智能指针自动管理内存
         }
     }
+
+    processPendingAdditions(); // 处理待添加（延时添加）的游戏对象
 }
 
 void SceneBase::render()

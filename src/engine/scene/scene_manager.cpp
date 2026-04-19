@@ -34,6 +34,9 @@ void SceneManager::update(double deltaTime)
     if (scene) {
         scene->update(deltaTime);
     }
+
+    // 执行可能的切换场景操作
+    processPendingActions();
 }
 
 void SceneManager::render()

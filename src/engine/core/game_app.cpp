@@ -1,4 +1,5 @@
 #include "game_app.h"
+#include "../../game/scene/game_scene.h"
 #include "../component/sprite_component.h"
 #include "../component/transform_component.h"
 #include "../input/input_manager.h"
@@ -80,6 +81,9 @@ bool GameApp::init()
         return false;
     }
 
+    // 创建第一个场景并压入场景栈
+    auto scene = std::make_unique<game::scene::GameScene>("GameScene", *m_context);
+    m_sceneManager->requestPushScene(std::move(scene));
 
     m_isRunning = true;
     spdlog::trace("GameApp 初始化成功。");
@@ -95,10 +99,12 @@ void GameApp::handleEvents()
         return;
     }
 
+    m_sceneManager->handleInput();
 }
 
 void GameApp::update(double deltaTime)
 {
+    m_sceneManager->update(deltaTime);
 }
 
 void GameApp::render()
@@ -107,6 +113,7 @@ void GameApp::render()
     m_renderer->clearScreen();
 
     // 2. 具体渲染代码
+    m_sceneManager->render();
 
     // 3. 更新屏幕显示
     m_renderer->present();

@@ -18,6 +18,10 @@ public:
     void render() override;
     void handleInput() override;
     void clean() override;
+
+private:
+    // 测试函数
+    void createTestObject();
 };
 
 } // namespace game::scene

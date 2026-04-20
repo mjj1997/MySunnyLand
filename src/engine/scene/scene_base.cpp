@@ -137,10 +137,13 @@ void SceneBase::safeRemoveGameObject(engine::object::GameObject* gameObject)
 engine::object::GameObject* SceneBase::findGameObjectByName(const std::string& name) const
 {
     // 找到第一个符合条件的游戏对象就返回
-    for (const auto& obj : m_gameObjects) {
-        if (obj && obj->name() == name) {
-            return obj.get();
-        }
+    auto it = std::find_if(m_gameObjects.begin(),
+                           m_gameObjects.end(),
+                           [name](const std::unique_ptr<engine::object::GameObject>& p) {
+                               return p && p->name() == name;
+                           });
+    if (it != m_gameObjects.end()) {
+        return (*it).get();
     }
     return nullptr;
 }

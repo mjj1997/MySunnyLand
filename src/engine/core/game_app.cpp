@@ -93,7 +93,7 @@ bool GameApp::init()
 
 void GameApp::handleEvents()
 {
-    while (m_inputManager->shouldQuit()) {
+    if (m_inputManager->shouldQuit()) {
         spdlog::trace("GameApp 收到来自 InputManager 的退出信号。");
         m_isRunning = false;
         return;

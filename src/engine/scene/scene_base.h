@@ -13,6 +13,7 @@ class GameObject;
 }
 
 namespace engine::scene {
+class SceneManager;
 
 /**
  * @brief 场景基类，负责管理场景中的游戏对象和场景生命周期。
@@ -28,8 +29,11 @@ public:
      *
      * @param name 场景的名称。
      * @param context 场景上下文。
+     * @param sceneManager 场景管理器。
      */
-    SceneBase(std::string name, engine::core::Context& context);
+    SceneBase(std::string name,
+              engine::core::Context& context,
+              engine::scene::SceneManager& sceneManager);
 
     // 1. 基类必须声明虚析构函数才能让派生类析构函数被正确调用。
     // 2. 析构函数定义必须写在cpp中，不然需要引入GameObject头文件
@@ -67,6 +71,8 @@ public:
     bool isInitialized() const { return m_isInitialized; } ///< @brief 获取场景是否已初始化
 
     engine::core::Context& context() const { return m_context; } ///< @brief 获取上下文引用
+    ///< @brief 获取场景管理器引用
+    engine::scene::SceneManager& sceneManager() const { return m_sceneManager; }
     /// @brief 获取场景中的游戏对象容器。
     const std::vector<std::unique_ptr<engine::object::GameObject>>& gameObjects() const
     {
@@ -76,8 +82,9 @@ public:
 protected:
     void processPendingAdditions(); ///< @brief 处理待添加的游戏对象。（每轮更新的最后调用）
 
-    std::string m_sceneName;          ///< @brief 场景名称
-    engine::core::Context& m_context; ///< @brief 上下文引用（构造时传入）
+    std::string m_sceneName;                     ///< @brief 场景名称
+    engine::core::Context& m_context;            ///< @brief 上下文引用（构造时传入）
+    engine::scene::SceneManager& m_sceneManager; ///< @brief 场景管理器引用（构造时传入）
 
     ///< @brief 场景是否已初始化(非当前场景很可能未被删除，因此需要初始化标志避免重复初始化)
     bool m_isInitialized{ false };

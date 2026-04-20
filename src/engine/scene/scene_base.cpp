@@ -7,9 +7,12 @@
 
 namespace engine::scene {
 
-SceneBase::SceneBase(std::string name, engine::core::Context& context)
+SceneBase::SceneBase(std::string name,
+                     engine::core::Context& context,
+                     engine::scene::SceneManager& sceneManager)
     : m_sceneName{ std::move(name) }
     , m_context{ context }
+    , m_sceneManager{ sceneManager }
     , m_isInitialized{ false }
 {
     spdlog::trace("场景 '{}' 构造完成。", m_sceneName);

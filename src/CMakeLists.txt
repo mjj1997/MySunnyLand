@@ -20,7 +20,8 @@ target_sources(
           engine/scene/scene_base.cpp
           engine/scene/scene_manager.cpp
           game/scene/game_scene.cpp
-          engine/component/parallax_component.cpp)
+          engine/component/parallax_component.cpp
+          engine/scene/level_loader.cpp)
 
 target_link_libraries(
   SunnyLand

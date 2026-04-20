@@ -7,6 +7,7 @@
 #include "../render/renderer.h"
 #include "../render/sprite.h"
 #include "../resource/resource_manager.h"
+#include "../scene/scene_manager.h"
 #include "configurator.h"
 #include "context.h"
 #include "frame_time_controller.h"
@@ -73,6 +74,9 @@ bool GameApp::init()
         return false;
     }
     if (!initContext()) {
+        return false;
+    }
+    if (!initSceneManager()) {
         return false;
     }
 
@@ -255,6 +259,18 @@ bool GameApp::initContext()
         return false;
     }
     spdlog::trace("上下文初始化成功。");
+    return true;
+}
+
+bool GameApp::initSceneManager()
+{
+    try {
+        m_sceneManager = std::make_unique<engine::scene::SceneManager>(*m_context);
+    } catch (const std::exception& e) {
+        spdlog::error("初始化场景管理器失败: {}", e.what());
+        return false;
+    }
+    spdlog::trace("场景管理器初始化成功。");
     return true;
 }
 

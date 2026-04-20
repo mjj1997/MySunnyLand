@@ -18,6 +18,10 @@ namespace engine::input {
 class InputManager;
 }
 
+namespace engine::scene {
+class SceneManager;
+}
+
 namespace engine::core { // 命名空间的最佳实践：与文件路径一致
 
 class FrameTimeController;
@@ -60,13 +64,7 @@ private:
     [[nodiscard]] bool initConfigurator();
     [[nodiscard]] bool initInputManager();
     [[nodiscard]] bool initContext();
-
-    // 测试用函数
-    void testResourceManager();
-    void testRenderer();
-    void testCamera();
-    void testInputManager();
-    void testGameObject();
+    [[nodiscard]] bool initSceneManager();
 
 private:
     SDL_Window* m_window{ nullptr };
@@ -81,6 +79,7 @@ private:
     std::unique_ptr<engine::core::Configurator> m_configurator;
     std::unique_ptr<engine::input::InputManager> m_inputManager;
     std::unique_ptr<engine::core::Context> m_context;
+    std::unique_ptr<engine::scene::SceneManager> m_sceneManager;
 };
 
 } // namespace engine::core

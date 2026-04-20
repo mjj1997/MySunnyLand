@@ -16,7 +16,10 @@ target_sources(
           engine/object/game_object.cpp
           engine/core/context.cpp
           engine/component/transform_component.cpp
-          engine/component/sprite_component.cpp)
+          engine/component/sprite_component.cpp
+          engine/scene/scene_base.cpp
+          engine/scene/scene_manager.cpp
+          game/scene/game_scene.cpp)
 
 target_link_libraries(
   SunnyLand

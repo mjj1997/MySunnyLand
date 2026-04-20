@@ -16,8 +16,6 @@
 
 namespace engine::core {
 
-engine::object::GameObject gameObject{ "testGameObject" };
-
 GameApp::GameApp() = default;
 
 GameApp::~GameApp()
@@ -78,13 +76,9 @@ bool GameApp::init()
         return false;
     }
 
-    // 测试资源管理器
-    testResourceManager();
 
     m_isRunning = true;
     spdlog::trace("GameApp 初始化成功。");
-
-    testGameObject();
 
     return true;
 }
@@ -97,12 +91,10 @@ void GameApp::handleEvents()
         return;
     }
 
-    testInputManager();
 }
 
 void GameApp::update(double deltaTime)
 {
-    testCamera();
 }
 
 void GameApp::render()
@@ -111,8 +103,6 @@ void GameApp::render()
     m_renderer->clearScreen();
 
     // 2. 具体渲染代码
-    testRenderer();
-    gameObject.render(*m_context);
 
     // 3. 更新屏幕显示
     m_renderer->present();
@@ -266,99 +256,6 @@ bool GameApp::initContext()
     }
     spdlog::trace("上下文初始化成功。");
     return true;
-}
-
-void GameApp::testResourceManager()
-{
-    m_resourceManager->getTexture("assets/textures/Actors/eagle-attack.png");
-    m_resourceManager->getSound("assets/audio/button_click.wav");
-    m_resourceManager->getFont("assets/fonts/VonwaonBitmap-16px.ttf", 16);
-    m_resourceManager->unloadTexture("assets/textures/Actors/eagle-attack.png");
-    m_resourceManager->unloadSound("assets/audio/button_click.wav");
-    m_resourceManager->unloadFont("assets/fonts/VonwaonBitmap-16px.ttf", 16);
-}
-
-void GameApp::testRenderer()
-{
-    engine::render::Sprite spriteWorld{ "assets/textures/Actors/frog.png" };
-    engine::render::Sprite spriteUi{ "assets/textures/UI/buttons/Start1.png" };
-    engine::render::Sprite spriteParallax{ "assets/textures/Layers/back.png" };
-
-    static float rotation{ 0.0f };
-    rotation += 0.1f;
-
-    // 注意渲染顺序(先渲染背景, 再渲染角色, 最后渲染UI)
-    m_renderer->drawParallax(*m_camera,
-                             spriteParallax,
-                             glm::vec2{ 100.0f, 100.0f },
-                             glm::vec2{ 0.5f, 0.5f },
-                             glm::bvec2{ true, false });
-    m_renderer->drawSprite(*m_camera,
-                           spriteWorld,
-                           glm::vec2{ 200.0f, 200.0f },
-                           glm::vec2{ 1.0f, 1.0f },
-                           rotation);
-    m_renderer->drawUiSprite(spriteUi, glm::vec2{ 100.0f, 100.0f });
-}
-
-void GameApp::testCamera()
-{
-    auto* keyState = SDL_GetKeyboardState(nullptr);
-    if (keyState[SDL_SCANCODE_UP]) {
-        m_camera->move(glm::vec2{ 0.0f, -1.0f });
-    }
-    if (keyState[SDL_SCANCODE_DOWN]) {
-        m_camera->move(glm::vec2{ 0.0f, 1.0f });
-    }
-    if (keyState[SDL_SCANCODE_LEFT]) {
-        m_camera->move(glm::vec2{ -1.0f, 0.0f });
-    }
-    if (keyState[SDL_SCANCODE_RIGHT]) {
-        m_camera->move(glm::vec2{ 1.0f, 0.0f });
-    }
-}
-
-void GameApp::testInputManager()
-{
-    std::vector<std::string> actions = { "moveUp",    "moveDown",       "moveLeft",
-                                         "moveRight", "jump",           "attack",
-                                         "pause",     "mouseLeftClick", "mouseRightClick" };
-
-    for (const auto& action : actions) {
-        if (m_inputManager->isActionPressed(action)) {
-            spdlog::info(" {} 按下 ", action);
-        }
-        if (m_inputManager->isActionReleased(action)) {
-            spdlog::info(" {} 抬起 ", action);
-        }
-        if (m_inputManager->isActionDown(action)) {
-            spdlog::info(" {} 按下中 ", action);
-        }
-    }
-}
-
-void GameApp::testGameObject()
-{
-    spdlog::info("========== 测试组件系统 ==========");
-
-    // 1. 添加 TransformComponent，让对象出现在 (100, 100)
-    gameObject.addComponent<engine::component::TransformComponent>(glm::vec2{ 100.0f, 100.0f });
-
-    // 2. 添加 SpriteComponent，显示箱子贴图，设置渲染中心为图片的几何中心
-    const std::string textureId{ "assets/textures/Props/big-crate.png" };
-    gameObject.addComponent<engine::component::SpriteComponent>(textureId,
-                                                                *m_resourceManager,
-                                                                engine::utils::Alignment::Center);
-
-    // 3. 获取 TransformComponent，修改缩放和旋转
-    // 放大 2 倍
-    gameObject.getComponent<engine::component::TransformComponent>()->setScale(
-        glm::vec2{ 2.0f, 2.0f });
-    // 旋转 30 度
-    gameObject.getComponent<engine::component::TransformComponent>()->setRotation(30.0f);
-    spdlog::info("✓ Transform 组件配置完成");
-
-    spdlog::info("====================================");
 }
 
 } // namespace engine::core

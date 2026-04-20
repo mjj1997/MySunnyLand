@@ -61,13 +61,6 @@ private:
     [[nodiscard]] bool initInputManager();
     [[nodiscard]] bool initContext();
 
-    // 测试用函数
-    void testResourceManager();
-    void testRenderer();
-    void testCamera();
-    void testInputManager();
-    void testGameObject();
-
 private:
     SDL_Window* m_window{ nullptr };
     SDL_Renderer* m_sdlRenderer{ nullptr };

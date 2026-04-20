@@ -9,8 +9,10 @@
 namespace game::scene {
 
 // 构造函数: 调用基类构造函数
-GameScene::GameScene(std::string name, engine::core::Context& context)
-    : SceneBase{ name, context }
+GameScene::GameScene(std::string name,
+                     engine::core::Context& context,
+                     engine::scene::SceneManager& sceneManager)
+    : SceneBase{ name, context, sceneManager }
 {
     spdlog::trace("GameScene 构造完成。");
 }

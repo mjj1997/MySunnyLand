@@ -10,10 +10,6 @@
 #include <optional>
 #include <string>
 
-namespace engine::core {
-class Context;
-}
-
 namespace engine::resource {
 class ResourceManager;
 }

@@ -28,6 +28,16 @@ private:
     ///< @brief 加载对象图层
     void loadObjectLayer(const nlohmann::json& layerJson, SceneBase& scene);
 
+    /**
+     * @brief 解析图片路径，合并地图路径和相对路径。例如：
+     * 1. 地图路径："assets/maps/level1.tmj"
+     * 2. 相对路径："../textures/Layers/back.png"
+     * 3. 最终路径："assets/textures/Layers/back.png"
+     * @param imagePath （图片）相对路径
+     * @return std::string 解析后的完整路径。
+     */
+    std::string resolvePath(std::string imagePath);
+
     ///< @brief 地图路径（拼接路径时需要）
     std::string m_mapPath;
 };

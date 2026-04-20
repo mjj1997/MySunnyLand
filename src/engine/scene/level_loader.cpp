@@ -3,6 +3,7 @@
 #include <nlohmann/json.hpp>
 #include <spdlog/spdlog.h>
 
+#include <filesystem>
 #include <fstream>
 
 namespace engine::scene {
@@ -71,6 +72,21 @@ void LevelLoader::loadTileLayer(const nlohmann::json& layerJson, SceneBase& scen
 void LevelLoader::loadObjectLayer(const nlohmann::json& layerJson, SceneBase& scene)
 {
     // TODO
+}
+
+std::string LevelLoader::resolvePath(std::string imagePath)
+{
+    try {
+        // 获取地图文件的父目录（相对于可执行文件） "assets/maps/level1.tmj" -> "assets/maps"
+        auto mapDir = std::filesystem::path(m_mapPath).parent_path();
+        // 合并路径（相对于可执行文件）并返回。
+        /* std::filesystem::canonical：解析路径中的当前目录（.）和上级目录（..）导航符，得到一个干净的路径 */
+        auto finalPath = std::filesystem::canonical(mapDir / imagePath);
+        return finalPath.string();
+    } catch (const std::exception& e) {
+        spdlog::error("解析路径失败: {}", e.what());
+        return imagePath;
+    }
 }
 
 } // namespace engine::scene

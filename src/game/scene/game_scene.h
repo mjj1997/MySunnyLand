@@ -24,6 +24,7 @@ public:
 private:
     // 测试函数
     void createTestObject();
+    void testCamera();
 };
 
 } // namespace game::scene

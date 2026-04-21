@@ -53,6 +53,13 @@ public:
      */
     TileLayerComponent(glm::ivec2 tileSize, glm::ivec2 mapSize, std::vector<TileInfo>&& tiles);
 
+    /**
+     * @brief 根据瓦片坐标获取瓦片信息
+     * @param pos 瓦片坐标 (0 <= x < m_mapSize.x, 0 <= y < m_mapSize.y)
+     * @return const TileInfo* 指向瓦片信息的指针，如果坐标无效则返回 nullptr
+     */
+    const TileInfo* tileInfoAt(glm::ivec2 pos) const;
+
     // getters and setters
     glm::ivec2 tileSize() const { return m_tileSize; } ///< @brief 获取单个瓦片尺寸
     glm::ivec2 mapSize() const { return m_mapSize; }   ///< @brief 获取地图尺寸

@@ -21,6 +21,22 @@ TileLayerComponent::TileLayerComponent(glm::ivec2 tileSize,
     spdlog::trace("TileLayerComponent 构造完成");
 }
 
+const TileInfo* TileLayerComponent::tileInfoAt(glm::ivec2 pos) const
+{
+    if (pos.x < 0 || pos.x >= m_mapSize.x || pos.y < 0 || pos.y >= m_mapSize.y) {
+        spdlog::warn("TileLayerComponent: 瓦片坐标越界: ({}, {})", pos.x, pos.y);
+        return nullptr;
+    }
+
+    const auto index = static_cast<size_t>(pos.y * m_mapSize.x + pos.x);
+    if (index >= m_tiles.size()) {
+        spdlog::warn("TileLayerComponent: 索引超出瓦片向量范围: {}", index);
+        return nullptr;
+    }
+
+    return &m_tiles.at(index);
+}
+
 void TileLayerComponent::init()
 {
     if (!m_owner) {

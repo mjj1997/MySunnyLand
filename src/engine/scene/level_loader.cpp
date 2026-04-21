@@ -15,14 +15,14 @@
 
 namespace engine::scene {
 
-bool LevelLoader::loadLevel(const std::string& levelPath, SceneBase& scene)
+bool LevelLoader::loadLevel(const std::string& mapPath, SceneBase& scene)
 {
-    m_mapPath = levelPath;
+    m_mapPath = mapPath;
 
     // 1. 加载 JSON 文件
-    std::ifstream file{ levelPath };
+    std::ifstream file{ mapPath };
     if (!file.is_open()) {
-        spdlog::error("无法打开关卡文件: {}", levelPath);
+        spdlog::error("无法打开关卡文件: {}", mapPath);
         return false;
     }
 
@@ -38,7 +38,7 @@ bool LevelLoader::loadLevel(const std::string& levelPath, SceneBase& scene)
     // 3. 加载图层数据
     if (!jsonData.contains("layers") || !jsonData["layers"].is_array()) {
         // 地图文件中必须有 layers 数组
-        spdlog::error("地图文件 '{}' 中缺少或无效的 'layers' 数组。", levelPath);
+        spdlog::error("地图文件 '{}' 中缺少或无效的 'layers' 数组。", mapPath);
         return false;
     }
 
@@ -62,7 +62,7 @@ bool LevelLoader::loadLevel(const std::string& levelPath, SceneBase& scene)
         }
     }
 
-    spdlog::info("关卡加载完成: {}", levelPath);
+    spdlog::info("关卡加载完成: {}", mapPath);
     return true;
 }
 

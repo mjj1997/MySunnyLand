@@ -37,6 +37,20 @@ const TileInfo* TileLayerComponent::tileInfoAt(glm::ivec2 pos) const
     return &m_tiles.at(index);
 }
 
+TileType TileLayerComponent::tileTypeAt(glm::ivec2 pos) const
+{
+    const auto* info = tileInfoAt(pos);
+    return info ? info->type : TileType::Empty;
+}
+
+TileType TileLayerComponent::tileTypeAtWorldPos(const glm::vec2& worldPos) const
+{
+    glm::vec2 relativePos{ worldPos - m_offset };
+    int tileX{ static_cast<int>(std::floor(relativePos.x / m_tileSize.x)) };
+    int tileY{ static_cast<int>(std::floor(relativePos.y / m_tileSize.y)) };
+    return tileTypeAt(glm::ivec2{ tileX, tileY });
+}
+
 void TileLayerComponent::init()
 {
     if (!m_owner) {

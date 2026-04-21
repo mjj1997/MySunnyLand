@@ -60,6 +60,20 @@ public:
      */
     const TileInfo* tileInfoAt(glm::ivec2 pos) const;
 
+    /**
+     * @brief 根据瓦片坐标获取瓦片类型
+     * @param pos 瓦片坐标 (0 <= x < m_mapSize.x, 0 <= y < m_mapSize.y)
+     * @return TileType 瓦片类型，如果坐标无效则返回 TileType::Empty
+     */
+    TileType tileTypeAt(glm::ivec2 pos) const;
+
+    /**
+      * @brief 根据世界坐标获取瓦片类型
+      * @param worldPos 世界坐标(单位：像素)
+      * @return TileType 瓦片类型，如果坐标无效或对应空瓦片则返回 TileType::Empty
+      */
+    TileType tileTypeAtWorldPos(const glm::vec2& worldPos) const;
+
     // getters and setters
     glm::ivec2 tileSize() const { return m_tileSize; } ///< @brief 获取单个瓦片尺寸
     glm::ivec2 mapSize() const { return m_mapSize; }   ///< @brief 获取地图尺寸

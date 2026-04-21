@@ -5,6 +5,7 @@
 #include "../../engine/input/input_manager.h"
 #include "../../engine/object/game_object.h"
 #include "../../engine/render/camera.h"
+#include "../../engine/scene/level_loader.h"
 
 #include <spdlog/spdlog.h>
 
@@ -21,6 +22,10 @@ GameScene::GameScene(std::string name,
 
 void GameScene::init()
 {
+    // 加载关卡
+    engine::scene::LevelLoader levelLoader;
+    levelLoader.loadLevel("assets/maps/level1.tmj", *this);
+
     // 创建 testObject
     createTestObject();
 
@@ -41,6 +46,8 @@ void GameScene::render()
 void GameScene::handleInput()
 {
     SceneBase::handleInput();
+
+    testCamera();
 }
 
 void GameScene::clean()

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../render/sprite.h"
 #include "component_base.h"
 
 namespace engine::component {
@@ -12,6 +13,20 @@ enum class TileType {
     Normal, ///< @brief 普通瓦片
     Solid,  ///< @brief 静止可碰撞瓦片
     // 未来补充其它类型
+};
+
+/**
+ * @brief 包含单个瓦片的渲染和逻辑信息。
+ */
+struct TileInfo
+{
+    TileInfo(engine::render::Sprite s = engine::render::Sprite(), TileType t = TileType::Empty)
+        : sprite{ std::move(s) }
+        , type{ t }
+    {}
+
+    engine::render::Sprite sprite; ///< @brief 瓦片的视觉表示
+    TileType type;                 ///< @brief 瓦片的逻辑类型
 };
 
 /**

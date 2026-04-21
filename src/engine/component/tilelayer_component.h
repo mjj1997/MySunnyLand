@@ -5,6 +5,16 @@
 namespace engine::component {
 
 /**
+ * @brief 定义瓦片的类型，用于游戏逻辑（例如碰撞）。
+ */
+enum class TileType {
+    Empty,  ///< @brief 空白瓦片
+    Normal, ///< @brief 普通瓦片
+    Solid,  ///< @brief 静止可碰撞瓦片
+    // 未来补充其它类型
+};
+
+/**
  * @brief 管理和渲染瓦片地图层。
  *
  * 存储瓦片地图的布局、每个瓦片的精灵信息和类型。

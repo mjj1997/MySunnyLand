@@ -1,5 +1,12 @@
 #include "level_loader.h"
+#include "../component/parallax_component.h"
+#include "../component/transform_component.h"
+#include "../core/context.h"
+#include "../object/game_object.h"
+#include "../render/sprite.h"
+#include "../scene/scene_base.h"
 
+#include <glm/vec2.hpp>
 #include <nlohmann/json.hpp>
 #include <spdlog/spdlog.h>
 
@@ -61,7 +68,37 @@ bool LevelLoader::loadLevel(const std::string& levelPath, SceneBase& scene)
 
 void LevelLoader::loadImageLayer(const nlohmann::json& layerJson, SceneBase& scene)
 {
-    // TODO
+    // 获取纹理相对路径 （会自动处理'\/'符号）
+    const std::string& imagePath{ layerJson.value("image", "") };
+    if (imagePath.empty()) {
+        spdlog::error("图层 '{}' 缺少 'image' 属性。", layerJson.value("name", "Unnamed"));
+        return;
+    }
+    auto textureId = resolvePath(imagePath);
+
+    // 获取图层偏移量（json中没有则代表未设置，给默认值即可）
+    const glm::vec2 offset{ glm::vec2{ layerJson.value("offsetx", 0.0f),
+                                       layerJson.value("offsety", 0.0f) } };
+
+    // 获取视差因子及重复标志
+    const glm::vec2 scrollFactor{ glm::vec2{ layerJson.value("parallaxx", 1.0f),
+                                             layerJson.value("parallaxy", 1.0f) } };
+    const glm::bvec2 repeat{ glm::bvec2{ layerJson.value("repeatx", false),
+                                         layerJson.value("repeaty", false) } };
+
+    // 获取图层名称
+    const std::string& layerName{ layerJson.value("name", "Unnamed") };
+
+    /*  可用类似方法获取其它各种属性，这里我们暂时用不上 */
+
+    // 创建游戏对象
+    auto gameObject = std::make_unique<engine::object::GameObject>(layerName);
+    // 依次添加Transform，Parallax组件
+    gameObject->addComponent<engine::component::TransformComponent>(offset);
+    gameObject->addComponent<engine::component::ParallaxComponent>(textureId, scrollFactor, repeat);
+    // 添加到场景中
+    scene.addGameObject(std::move(gameObject));
+    spdlog::info("加载图层: '{}' 完成", layerName);
 }
 
 void LevelLoader::loadTileLayer(const nlohmann::json& layerJson, SceneBase& scene)

@@ -45,6 +45,14 @@ class TileLayerComponent final : public ComponentBase
 public:
     TileLayerComponent() = default;
 
+    /**
+     * @brief 构造函数
+     * @param tileSize 单个瓦片尺寸（像素）
+     * @param mapSize 地图尺寸（瓦片数）
+     * @param tiles 初始化瓦片数据的容器 (会被移动)
+     */
+    TileLayerComponent(glm::ivec2 tileSize, glm::ivec2 mapSize, std::vector<TileInfo>&& tiles);
+
     // getters and setters
     glm::ivec2 tileSize() const { return m_tileSize; } ///< @brief 获取单个瓦片尺寸
     glm::ivec2 mapSize() const { return m_mapSize; }   ///< @brief 获取地图尺寸

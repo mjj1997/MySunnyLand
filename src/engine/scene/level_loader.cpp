@@ -1,5 +1,6 @@
 #include "level_loader.h"
 #include "../component/parallax_component.h"
+#include "../component/tilelayer_component.h"
 #include "../component/transform_component.h"
 #include "../core/context.h"
 #include "../object/game_object.h"
@@ -115,7 +116,31 @@ void LevelLoader::loadImageLayer(const nlohmann::json& layerJson, SceneBase& sce
 
 void LevelLoader::loadTileLayer(const nlohmann::json& layerJson, SceneBase& scene)
 {
-    // TODO
+    if (!layerJson.contains("data") || !layerJson["data"].is_array()) {
+        spdlog::error("图层 '{}' 缺少 'data' 属性。", layerJson.value("name", "Unnamed"));
+        return;
+    }
+
+    // 准备 TileInfo Vector (瓦片数量 = 地图宽度 * 地图高度)
+    std::vector<engine::component::TileInfo> tiles;
+    tiles.reserve(m_mapSize.x * m_mapSize.y);
+
+    // 根据gid获取必要信息，并依次填充 TileInfo Vector
+    for (const auto& gid : layerJson["data"]) {
+        tiles.push_back(tileInfoByGid(gid));
+    }
+
+    // 获取图层名称
+    const std::string& layerName{ layerJson.value("name", "Unnamed") };
+    // 创建游戏对象
+    auto gameObject = std::make_unique<engine::object::GameObject>(layerName);
+    // 添加Tilelayer组件
+    gameObject->addComponent<engine::component::TileLayerComponent>(m_tileSize,
+                                                                    m_mapSize,
+                                                                    std::move(tiles));
+    // 添加到场景中
+    scene.addGameObject(std::move(gameObject));
+    spdlog::info("加载图层: '{}' 完成", layerName);
 }
 
 void LevelLoader::loadObjectLayer(const nlohmann::json& layerJson, SceneBase& scene)

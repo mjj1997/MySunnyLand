@@ -7,6 +7,7 @@
 #include "../../engine/render/camera.h"
 #include "../../engine/scene/level_loader.h"
 
+#include <nlohmann/json.hpp>
 #include <spdlog/spdlog.h>
 
 namespace game::scene {

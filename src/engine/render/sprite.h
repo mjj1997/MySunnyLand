@@ -19,6 +19,11 @@ class Sprite final
 {
 public:
     /**
+     * @brief 默认构造函数(创建一个空的精灵，不包含任何纹理或源矩形)
+     */
+    Sprite() = default;
+
+    /**
      * @brief 构造一个精灵
      *
      * @param textureId 纹理资源的标识符。不应为空。

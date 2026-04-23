@@ -32,6 +32,11 @@ SDL_Texture* TextureManager::loadTexture(const std::string& filePath)
         return nullptr;
     }
 
+    // 设置纹理缩放模式为最近邻插值
+    if (!SDL_SetTextureScaleMode(texture, SDL_SCALEMODE_NEAREST)) {
+        spdlog::warn("无法设置纹理缩放模式为最近邻插值");
+    }
+
     // 使用带有自定义删除器的 unique_ptr 存储加载的纹理
     m_textures.emplace(filePath, std::unique_ptr<SDL_Texture, SDLTextureDeletor>(texture));
     spdlog::debug("成功加载并缓存纹理：{}", filePath);

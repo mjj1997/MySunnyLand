@@ -6,6 +6,10 @@
 #include <map>
 #include <string>
 
+namespace engine::component {
+struct TileInfo;
+}
+
 namespace engine::scene {
 class SceneBase;
 
@@ -41,6 +45,7 @@ private:
      */
     std::string resolvePath(const std::string& relativePath, const std::string& filePath);
 
+    engine::component::TileInfo tileInfoByGid(int gid);
     void loadTileset(const std::string& tilesetPath, int firstGid);
 
     ///< @brief 地图路径（拼接路径时需要）

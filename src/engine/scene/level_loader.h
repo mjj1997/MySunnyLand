@@ -1,7 +1,9 @@
 #pragma once
 
+#include <glm/vec2.hpp>
 #include <nlohmann/json_fwd.hpp>
 
+#include <map>
 #include <string>
 
 namespace engine::scene {
@@ -40,6 +42,9 @@ private:
 
     ///< @brief 地图路径（拼接路径时需要）
     std::string m_mapPath;
+    glm::ivec2 m_mapSize;
+    glm::ivec2 m_tileSize;
+    std::map<int, nlohmann::json> m_tilesets;
 };
 
 } // namespace engine::scene

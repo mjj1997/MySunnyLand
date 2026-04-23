@@ -180,8 +180,9 @@ engine::component::TileInfo LevelLoader::tileInfoByGid(int gid)
     const auto& tileset = it->second;
     auto localId = gid - it->first;                             // 计算瓦片在图块集中的局部ID
     const std::string filePath = tileset.value("filePath", ""); // 获取图块集文件路径
+    const auto& tileSetFirstGid = it->first;
     if (filePath.empty()) {
-        spdlog::error("Tileset 文件 '{}' 缺少 'filePath' 属性。", it->second);
+        spdlog::error("Tileset 文件 '{}' 缺少 'filePath' 属性。", tileSetFirstGid);
         return engine::component::TileInfo{};
     }
 
@@ -203,7 +204,7 @@ engine::component::TileInfo LevelLoader::tileInfoByGid(int gid)
     } else { // 这是多图片的情况
         if (!tileset.contains("tiles")) {
             // 没有tiles字段的话不符合数据格式要求，直接返回空的瓦片信息
-            spdlog::error("Tileset 文件 '{}' 缺少 'tiles' 属性。", it->second);
+            spdlog::error("Tileset 文件 '{}' 缺少 'tiles' 属性。", tileSetFirstGid);
             return engine::component::TileInfo{};
         }
 
@@ -214,7 +215,7 @@ engine::component::TileInfo LevelLoader::tileInfoByGid(int gid)
                 if (!tile.contains("image")) {
                     // 没有image字段的话不符合数据格式要求，直接返回空的瓦片信息
                     spdlog::error("Tileset 文件 '{}' 中瓦片 {} 缺少 'image' 属性。",
-                                  it->second,
+                                  tileSetFirstGid,
                                   tileId);
                     return engine::component::TileInfo{};
                 }
@@ -240,7 +241,7 @@ engine::component::TileInfo LevelLoader::tileInfoByGid(int gid)
     }
 
     // 如果能走到这里，说明查找失败，返回空的瓦片信息
-    spdlog::error("Tileset 文件 '{}' 中未找到gid为 {} 的瓦片。", it->second, gid);
+    spdlog::error("Tileset 文件 '{}' 中未找到gid为 {} 的瓦片。", tileSetFirstGid, gid);
     return engine::component::TileInfo{};
 }
 

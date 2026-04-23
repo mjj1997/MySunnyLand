@@ -169,30 +169,30 @@ engine::component::TileInfo LevelLoader::tileInfoByGid(int gid)
         return engine::component::TileInfo{};
     }
 
-    // upper_bound：查找 tilesets 中键大于 gid 的第一个元素，返回迭代器
-    auto it = m_tilesets.upper_bound(gid);
-    if (it == m_tilesets.begin()) {
+    // upper_bound：查找 tileSets 中键大于 gid 的第一个元素，返回迭代器
+    auto it = m_tileSets.upper_bound(gid);
+    if (it == m_tileSets.begin()) {
         spdlog::error("gid为 {} 的瓦片未找到图块集。", gid);
         return engine::component::TileInfo{};
     }
     --it; // 前移一个位置，这样就得到不大于gid的最近一个元素（我们需要的）
 
-    const auto& tileset = it->second;
-    auto localId = gid - it->first;                             // 计算瓦片在图块集中的局部ID
-    const std::string filePath = tileset.value("filePath", ""); // 获取图块集文件路径
+    const auto& tileSetData = it->second;
     const auto& tileSetFirstGid = it->first;
+    const std::string filePath = tileSetData.value("filePath", ""); // 获取图块集文件路径
     if (filePath.empty()) {
         spdlog::error("Tileset 文件 '{}' 缺少 'filePath' 属性。", tileSetFirstGid);
         return engine::component::TileInfo{};
     }
 
+    auto localId = gid - tileSetFirstGid; // 计算瓦片在图块集中的局部ID
     // 图块集分为两种情况，需要分别考虑
-    if (tileset.contains("image")) { // 这是单一图片的情况
+    if (tileSetData.contains("image")) { // 这是单一图片的情况
         // 获取图片路径
-        auto textureId = resolvePath(tileset["image"].get<std::string>(), filePath);
+        auto textureId = resolvePath(tileSetData["image"].get<std::string>(), filePath);
         // 计算瓦片在图片网格中的坐标
-        auto coordinateX = localId % tileset["columns"].get<int>();
-        auto coordinateY = localId / tileset["columns"].get<int>();
+        auto coordinateX = localId % tileSetData["columns"].get<int>();
+        auto coordinateY = localId / tileSetData["columns"].get<int>();
         // 根据坐标确定源矩形
         SDL_FRect srcRect{ static_cast<float>(coordinateX * m_tileSize.x),
                            static_cast<float>(coordinateY * m_tileSize.y),
@@ -202,14 +202,14 @@ engine::component::TileInfo LevelLoader::tileInfoByGid(int gid)
         // 目前只完成渲染，以后再考虑瓦片类型
         return engine::component::TileInfo{ sprite, engine::component::TileType::Normal };
     } else { // 这是多图片的情况
-        if (!tileset.contains("tiles")) {
+        if (!tileSetData.contains("tiles")) {
             // 没有tiles字段的话不符合数据格式要求，直接返回空的瓦片信息
             spdlog::error("Tileset 文件 '{}' 缺少 'tiles' 属性。", tileSetFirstGid);
             return engine::component::TileInfo{};
         }
 
         // 遍历tiles数组，根据id查找对应的瓦片
-        for (const auto& tile : tileset["tiles"]) {
+        for (const auto& tile : tileSetData["tiles"]) {
             auto tileId = tile.value("id", 0);
             if (tileId == localId) { // 找到对应的瓦片，进行后续操作
                 if (!tile.contains("image")) {
@@ -245,21 +245,21 @@ engine::component::TileInfo LevelLoader::tileInfoByGid(int gid)
     return engine::component::TileInfo{};
 }
 
-void LevelLoader::loadTileset(const std::string& tilesetPath, int firstGid)
+void LevelLoader::loadTileset(const std::string& tileSetPath, int firstGid)
 {
-    std::ifstream file{ tilesetPath };
+    std::ifstream file{ tileSetPath };
     if (!file.is_open()) {
-        spdlog::error("无法打开瓦片集文件: {}", tilesetPath);
+        spdlog::error("无法打开瓦片集文件: {}", tileSetPath);
         return;
     }
 
-    nlohmann::json tilesetData;
-    file >> tilesetData;
+    nlohmann::json tileSetData;
+    file >> tileSetData;
 
     // 注入瓦片集文件路径，方便后续加载瓦片时解析相对路径
-    tilesetData["filePath"] = tilesetPath;
+    tileSetData["filePath"] = tileSetPath;
 
-    m_tilesets[firstGid] = std::move(tilesetData);
+    m_tileSets[firstGid] = std::move(tileSetData);
 }
 
 } // namespace engine::scene

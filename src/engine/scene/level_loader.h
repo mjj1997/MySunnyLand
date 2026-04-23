@@ -46,13 +46,13 @@ private:
     std::string resolvePath(const std::string& relativePath, const std::string& filePath);
 
     engine::component::TileInfo tileInfoByGid(int gid);
-    void loadTileset(const std::string& tilesetPath, int firstGid);
+    void loadTileset(const std::string& tileSetPath, int firstGid);
 
     ///< @brief 地图路径（拼接路径时需要）
     std::string m_mapPath;
     glm::ivec2 m_mapSize;
     glm::ivec2 m_tileSize;
-    std::map<int, nlohmann::json> m_tilesets;
+    std::map<int, nlohmann::json> m_tileSets;
 };
 
 } // namespace engine::scene

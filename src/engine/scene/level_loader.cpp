@@ -17,8 +17,6 @@ namespace engine::scene {
 
 bool LevelLoader::loadLevel(const std::string& mapPath, SceneBase& scene)
 {
-    m_mapPath = mapPath;
-
     // 1. 加载 JSON 文件
     std::ifstream file{ mapPath };
     if (!file.is_open()) {
@@ -35,7 +33,21 @@ bool LevelLoader::loadLevel(const std::string& mapPath, SceneBase& scene)
         return false;
     }
 
-    // 3. 加载图层数据
+    // 3. 获取基本地图信息（地图路径、地图尺寸、瓦片尺寸）
+    m_mapPath = mapPath;
+    m_mapSize = glm::ivec2{ jsonData.value("width", 0), jsonData.value("height", 0) };
+    m_tileSize = glm::ivec2{ jsonData.value("tilewidth", 0), jsonData.value("tileheight", 0) };
+
+    // 4. 加载瓦片集数据
+    if (jsonData.contains("tilesets") && jsonData["tilesets"].is_array()) {
+        for (const auto& tileset : jsonData["tilesets"]) {
+            auto tilesetPath = resolvePath(tileset["source"].get<std::string>());
+            auto firstGid = tileset["firstgid"].get<int>();
+            loadTileset(tilesetPath, firstGid);
+        }
+    }
+
+    // 5. 加载图层数据
     if (!jsonData.contains("layers") || !jsonData["layers"].is_array()) {
         // 地图文件中必须有 layers 数组
         spdlog::error("地图文件 '{}' 中缺少或无效的 'layers' 数组。", mapPath);

@@ -126,4 +126,21 @@ std::string LevelLoader::resolvePath(std::string imagePath)
     }
 }
 
+void LevelLoader::loadTileset(const std::string& tilesetPath, int firstGid)
+{
+    std::ifstream file{ tilesetPath };
+    if (!file.is_open()) {
+        spdlog::error("无法打开瓦片集文件: {}", tilesetPath);
+        return;
+    }
+
+    nlohmann::json tilesetData;
+    file >> tilesetData;
+
+    // 注入瓦片集文件路径，方便后续加载瓦片时解析相对路径
+    tilesetData["filePath"] = tilesetPath;
+
+    m_tilesets[firstGid] = std::move(tilesetData);
+}
+
 } // namespace engine::scene

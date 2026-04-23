@@ -39,6 +39,7 @@ private:
      * @return std::string 解析后的完整路径。
      */
     std::string resolvePath(std::string imagePath);
+    void loadTileset(const std::string& tilesetPath, int firstGid);
 
     ///< @brief 地图路径（拼接路径时需要）
     std::string m_mapPath;

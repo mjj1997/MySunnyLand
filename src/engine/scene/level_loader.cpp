@@ -42,7 +42,7 @@ bool LevelLoader::loadLevel(const std::string& mapPath, SceneBase& scene)
     // 4. 加载瓦片集数据
     if (jsonData.contains("tilesets") && jsonData["tilesets"].is_array()) {
         for (const auto& tileset : jsonData["tilesets"]) {
-            auto tilesetPath = resolvePath(tileset["source"].get<std::string>());
+            auto tilesetPath = resolvePath(tileset["source"].get<std::string>(), m_mapPath);
             auto firstGid = tileset["firstgid"].get<int>();
             loadTileset(tilesetPath, firstGid);
         }
@@ -87,7 +87,7 @@ void LevelLoader::loadImageLayer(const nlohmann::json& layerJson, SceneBase& sce
         spdlog::error("图层 '{}' 缺少 'image' 属性。", layerJson.value("name", "Unnamed"));
         return;
     }
-    auto textureId = resolvePath(imagePath);
+    auto textureId = resolvePath(imagePath, m_mapPath);
 
     // 获取图层偏移量（json中没有则代表未设置，给默认值即可）
     const glm::vec2 offset{ glm::vec2{ layerJson.value("offsetx", 0.0f),

@@ -12,6 +12,7 @@
 #include <nlohmann/json.hpp>
 #include <spdlog/spdlog.h>
 
+#include <algorithm>
 #include <filesystem>
 #include <fstream>
 
@@ -127,9 +128,10 @@ void LevelLoader::loadTileLayer(const nlohmann::json& layerJson, SceneBase& scen
     tiles.reserve(m_mapSize.x * m_mapSize.y);
 
     // 根据gid获取必要信息，并依次填充 TileInfo Vector
-    for (const auto& gid : layerJson["data"]) {
-        tiles.push_back(tileInfoByGid(gid));
-    }
+    std::transform(layerJson["data"].begin(),
+                   layerJson["data"].end(),
+                   std::back_inserter(tiles),
+                   [this](const auto& gid) { return tileInfoByGid(gid); });
 
     // 获取图层名称
     const std::string& layerName{ layerJson.value("name", "Unnamed") };

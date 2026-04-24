@@ -23,7 +23,8 @@ enum class TileType {
  */
 struct TileInfo
 {
-    TileInfo(engine::render::Sprite s = engine::render::Sprite(), TileType t = TileType::Empty)
+    explicit TileInfo(engine::render::Sprite s = engine::render::Sprite(),
+                      TileType t = TileType::Empty)
         : sprite{ std::move(s) }
         , type{ t }
     {}

@@ -1,5 +1,6 @@
 #include "level_loader.h"
 #include "../component/parallax_component.h"
+#include "../component/sprite_component.h"
 #include "../component/tilelayer_component.h"
 #include "../component/transform_component.h"
 #include "../core/context.h"
@@ -11,6 +12,7 @@
 #include <nlohmann/json.hpp>
 #include <spdlog/spdlog.h>
 
+#include <algorithm>
 #include <filesystem>
 #include <fstream>
 
@@ -126,9 +128,10 @@ void LevelLoader::loadTileLayer(const nlohmann::json& layerJson, SceneBase& scen
     tiles.reserve(m_mapSize.x * m_mapSize.y);
 
     // 根据gid获取必要信息，并依次填充 TileInfo Vector
-    for (const auto& gid : layerJson["data"]) {
-        tiles.push_back(tileInfoByGid(gid));
-    }
+    std::transform(layerJson["data"].begin(),
+                   layerJson["data"].end(),
+                   std::back_inserter(tiles),
+                   [this](const auto& gid) { return tileInfoByGid(gid); });
 
     // 获取图层名称
     const std::string& layerName{ layerJson.value("name", "Unnamed") };
@@ -145,7 +148,62 @@ void LevelLoader::loadTileLayer(const nlohmann::json& layerJson, SceneBase& scen
 
 void LevelLoader::loadObjectLayer(const nlohmann::json& layerJson, SceneBase& scene)
 {
-    // TODO
+    if (!layerJson.contains("objects") || !layerJson["objects"].is_array()) {
+        spdlog::error("对象图层 '{}' 缺少 'objects' 属性。", layerJson.value("name", "Unnamed"));
+        return;
+    }
+
+    for (const auto& object : layerJson["objects"]) {
+        auto gid = object.value("gid", 0);
+
+        if (gid == 0) {
+            // 如果gid为0，代表是自定义形状，如碰撞盒，我们以后再处理
+            // TODO: Handle shapes
+        } else {
+            // 如果gid存在，则代表这是一个带图像的对象
+            auto tileInfo = tileInfoByGid(gid);
+            if (tileInfo.sprite.textureId().empty()) {
+                spdlog::error("gid为 {} 的瓦片没有图像纹理。", gid);
+                continue;
+            }
+
+            // 1. 获取Transform信息
+            auto position = glm::vec2{ object.value("x", 0.0f), object.value("y", 0.0f) };
+            auto dstRectSize = glm::vec2{ object.value("width", 0.0f),
+                                          object.value("height", 0.0f) };
+
+            // !! 关键的坐标转换 !!
+            // 从 Tiled 中获取的坐标是左下角，而 SDL 游戏引擎的坐标是左上角，所以需要转换
+            position = glm::vec2{ position.x, position.y - dstRectSize.y };
+
+            auto rotation = object.value("rotation", 0.0f);
+
+            // 2. 计算缩放
+            auto srcRect = tileInfo.sprite.sourceRect();
+            if (!srcRect) {
+                spdlog::error("gid为 {} 的瓦片没有源矩形。", gid);
+                continue;
+            }
+            auto srcRectSize = glm::vec2{ srcRect->w, srcRect->h };
+            auto scale = dstRectSize / srcRectSize;
+
+            // 3. 获取对象名称
+            const std::string& objectName{ object.value("name", "Unnamed") };
+
+            // 4. 创建GameObject并添加组件
+            auto gameObject = std::make_unique<engine::object::GameObject>(objectName);
+            gameObject->addComponent<engine::component::TransformComponent>(position,
+                                                                            scale,
+                                                                            rotation);
+            gameObject->addComponent<engine::component::SpriteComponent>(std::move(tileInfo.sprite),
+                                                                         scene.context()
+                                                                             .resourceManager());
+
+            // 5. 添加到场景中
+            scene.addGameObject(std::move(gameObject));
+            spdlog::info("加载对象: '{}' 完成", objectName);
+        }
+    }
 }
 
 std::string LevelLoader::resolvePath(const std::string& relativePath, const std::string& filePath)

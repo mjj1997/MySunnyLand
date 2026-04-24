@@ -40,6 +40,17 @@ public:
                     engine::utils::Alignment alignment = engine::utils::Alignment::None,
                     std::optional<SDL_FRect> sourceRect = std::nullopt,
                     bool isFlipped = false);
+
+    /**
+     * @brief 构造函数
+     * @param sprite 已存在的 Sprite 对象。
+     * @param resourceManager 资源管理器指针。
+     * @param alignment 初始对齐方式。
+     */
+    SpriteComponent(engine::render::Sprite&& sprite,
+                    engine::resource::ResourceManager& resourceManager,
+                    engine::utils::Alignment alignment = engine::utils::Alignment::None);
+
     ~SpriteComponent() override = default;
 
     // 禁止拷贝和移动

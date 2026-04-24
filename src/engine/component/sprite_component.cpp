@@ -26,6 +26,19 @@ SpriteComponent::SpriteComponent(const std::string& textureId,
     spdlog::trace("创建 SpriteComponent，纹理ID: {}", textureId);
 }
 
+SpriteComponent::SpriteComponent(engine::render::Sprite&& sprite,
+                                 engine::resource::ResourceManager& resourceManager,
+                                 engine::utils::Alignment alignment)
+    : m_resourceManager{ &resourceManager }
+    , m_sprite{ std::move(sprite) }
+    , m_alignment{ alignment }
+{
+    if (!m_resourceManager) {
+        spdlog::critical("创建 SpriteComponent 时 ResourceManager 为空！，此组件将无效。");
+    }
+    spdlog::trace("创建 SpriteComponent，纹理ID: {}", m_sprite.textureId());
+}
+
 void SpriteComponent::setSpriteById(const std::string& textureId,
                                     const std::optional<SDL_FRect>& sourceRect)
 {

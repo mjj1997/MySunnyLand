@@ -37,7 +37,7 @@ void GameApp::run()
 
     while (m_isRunning) {
         m_frameTimeController->update();
-        double deltaTime{ m_frameTimeController->deltaTime() };
+        float deltaTime{ m_frameTimeController->deltaTime() };
         m_inputManager->update(); // 每帧首先更新输入管理器
 
         handleEvents();

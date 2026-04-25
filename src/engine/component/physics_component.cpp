@@ -1,5 +1,6 @@
 #include "physics_component.h"
 #include "../object/game_object.h"
+#include "../physics/physics_engine.h"
 #include "transform_component.h"
 
 #include <spdlog/spdlog.h>
@@ -35,13 +36,15 @@ void PhysicsComponent::init()
         spdlog::warn("物理组件初始化时，同一 GameObject 上没有找到 TransformComponent。");
     }
 
-    // TODO: 注册到 PhysicsEngine
+    // 注册到 PhysicsEngine
+    m_physicsEngine->registerComponent(this);
     spdlog::trace("物理组件初始化完成。");
 }
 
 void PhysicsComponent::clean()
 {
-    // TODO: 从 PhysicsEngine 注销
+    // 从 PhysicsEngine 注销
+    m_physicsEngine->unregisterComponent(this);
     spdlog::trace("物理组件清理完成。");
 }
 

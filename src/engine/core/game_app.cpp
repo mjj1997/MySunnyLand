@@ -4,6 +4,7 @@
 #include "../component/transform_component.h"
 #include "../input/input_manager.h"
 #include "../object/game_object.h"
+#include "../physics/physics_engine.h"
 #include "../render/camera.h"
 #include "../render/renderer.h"
 #include "../render/sprite.h"
@@ -275,7 +276,8 @@ bool GameApp::initContext()
         m_context = std::make_unique<engine::core::Context>(*m_inputManager,
                                                             *m_renderer,
                                                             *m_camera,
-                                                            *m_resourceManager);
+                                                            *m_resourceManager,
+                                                            *m_physicsEngine);
     } catch (const std::exception& e) {
         spdlog::error("初始化上下文失败: {}", e.what());
         return false;

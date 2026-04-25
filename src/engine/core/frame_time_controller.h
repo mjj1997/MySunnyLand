@@ -29,16 +29,16 @@ public:
     /**
      * @brief 获取经过时间缩放调整后的帧间时间差（deltaTime）。
      *
-     * @return double 缩放后的 deltaTime (秒)。
+     * @return float 缩放后的 deltaTime (秒)。
      */
-    double deltaTime() const;
+    float deltaTime() const;
 
     /**
      * @brief 获取未经过时间缩放的原始帧间时间差。
      *
-     * @return double 未缩放的 deltaTime (秒)。
+     * @return float 未缩放的 deltaTime (秒)。
      */
-    double unscaledDeltaTime() const;
+    float unscaledDeltaTime() const;
 
     /**
      * @brief 设置时间缩放因子。
@@ -46,14 +46,14 @@ public:
      * @param scale 时间缩放值。1.0 为正常速度，< 1.0 为慢动作，> 1.0 为快进。
      *              不允许负值。
      */
-    void setTimeScale(double scale);
+    void setTimeScale(float scale);
 
     /**
      * @brief 获取当前的时间缩放因子。
      *
-     * @return double 当前的时间缩放因子。
+     * @return float 当前的时间缩放因子。
      */
-    double timeScale() const;
+    float timeScale() const;
 
     /**
      * @brief 设置目标帧率。
@@ -75,17 +75,17 @@ private:
      * 
      * @param deltaTime 当前帧的执行时间（秒）
      */
-    void limitFrameRate(double currentDeltaTime);
+    void limitFrameRate(float currentDeltaTime);
 
 private:
     Uint64 m_lastFrameEndTimestamp{ 0 };      ///< @brief 上一帧结束的时间戳
     Uint64 m_currentFrameStartTimestamp{ 0 }; ///< @brief 当前帧开始的时间戳
-    double m_deltaTime{ 0.0 };                ///< @brief 未缩放的帧间时间差 (秒)
-    double m_timeScale{ 1.0 };                ///< @brief 时间缩放因子
+    float m_deltaTime{ 0.0f };                ///< @brief 未缩放的帧间时间差 (秒)
+    float m_timeScale{ 1.0f };                ///< @brief 时间缩放因子
 
     // 帧率限制相关
     int m_targetFps{ 0 };            ///< @brief 目标 FPS (0 表示不限制)
-    double m_targetFrameTime{ 0.0 }; ///< @brief 目标每帧时间 (秒)
+    float m_targetFrameTime{ 0.0f }; ///< @brief 目标每帧时间 (秒)
 };
 
 } // namespace engine::core

@@ -21,7 +21,7 @@ void PhysicsEngine::unregisterComponent(engine::component::PhysicsComponent* com
     spdlog::trace("物理组件注销完成。");
 }
 
-void PhysicsEngine::update(double deltaTime)
+void PhysicsEngine::update(float deltaTime)
 {
     // 遍历所有注册的物理组件
     for (auto* physicsComponent : m_components) {

@@ -18,6 +18,10 @@ namespace engine::input {
 class InputManager;
 }
 
+namespace engine::physics {
+class PhysicsEngine;
+}
+
 namespace engine::scene {
 class SceneManager;
 }
@@ -63,6 +67,7 @@ private:
     [[nodiscard]] bool initCamera();
     [[nodiscard]] bool initConfigurator();
     [[nodiscard]] bool initInputManager();
+    [[nodiscard]] bool initPhysicsEngine();
     [[nodiscard]] bool initContext();
     [[nodiscard]] bool initSceneManager();
 
@@ -78,6 +83,7 @@ private:
     std::unique_ptr<engine::render::Camera> m_camera;
     std::unique_ptr<engine::core::Configurator> m_configurator;
     std::unique_ptr<engine::input::InputManager> m_inputManager;
+    std::unique_ptr<engine::physics::PhysicsEngine> m_physicsEngine;
     std::unique_ptr<engine::core::Context> m_context;
     std::unique_ptr<engine::scene::SceneManager> m_sceneManager;
 };

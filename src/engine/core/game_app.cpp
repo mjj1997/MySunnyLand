@@ -74,6 +74,9 @@ bool GameApp::init()
     if (!initInputManager()) {
         return false;
     }
+    if (!initPhysicsEngine()) {
+        return false;
+    }
     if (!initContext()) {
         return false;
     }
@@ -251,6 +254,18 @@ bool GameApp::initInputManager()
         return false;
     }
     spdlog::trace("输入管理器初始化成功。");
+    return true;
+}
+
+bool GameApp::initPhysicsEngine()
+{
+    try {
+        m_physicsEngine = std::make_unique<engine::physics::PhysicsEngine>();
+    } catch (const std::exception& e) {
+        spdlog::error("初始化物理引擎失败: {}", e.what());
+        return false;
+    }
+    spdlog::trace("物理引擎初始化成功。");
     return true;
 }
 

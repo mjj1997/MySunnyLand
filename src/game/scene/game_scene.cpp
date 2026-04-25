@@ -1,4 +1,5 @@
 #include "game_scene.h"
+#include "../../engine/component/physics_component.h"
 #include "../../engine/component/sprite_component.h"
 #include "../../engine/component/transform_component.h"
 #include "../../engine/core/context.h"
@@ -48,7 +49,7 @@ void GameScene::handleInput()
 {
     SceneBase::handleInput();
 
-    testCamera();
+    testObject();
 }
 
 void GameScene::clean()
@@ -61,12 +62,14 @@ void GameScene::createTestObject()
     spdlog::trace("在 GameScene 中创建 testObject...");
 
     auto testObject = std::make_unique<engine::object::GameObject>("testObject");
+    m_testObject = testObject.get();
 
     // 添加组件
     testObject->addComponent<engine::component::TransformComponent>(glm::vec2{ 100.0f, 100.0f });
     testObject
         ->addComponent<engine::component::SpriteComponent>("assets/textures/Props/big-crate.png",
                                                            context().resourceManager());
+    testObject->addComponent<engine::component::PhysicsComponent>(&context().physicsEngine());
 
     // 将创建好的 GameObject 添加到场景中 （一定要用std::move，否则传递的是左值）
     addGameObject(std::move(testObject));
@@ -89,6 +92,32 @@ void GameScene::testCamera()
     }
     if (inputManager.isActionDown("moveRight")) {
         camera.move(glm::vec2{ 2.0f, 0.0f });
+    }
+}
+
+void GameScene::testObject()
+{
+    if (!m_testObject) {
+        return;
+    }
+
+    auto& inputManager = context().inputManager();
+    auto* physicsComponent = m_testObject->getComponent<engine::component::PhysicsComponent>();
+    if (!physicsComponent) {
+        return;
+    }
+
+    if (inputManager.isActionDown("moveLeft")) {
+        m_testObject->getComponent<engine::component::TransformComponent>()->translate(
+            glm::vec2{ -2.0f, 0.0f });
+    }
+    if (inputManager.isActionDown("moveRight")) {
+        m_testObject->getComponent<engine::component::TransformComponent>()->translate(
+            glm::vec2{ 2.0f, 0.0f });
+    }
+
+    if (inputManager.isActionDown("jump")) {
+        physicsComponent->setVelocity(glm::vec2{ physicsComponent->velocity().x, -400.0f });
     }
 }
 

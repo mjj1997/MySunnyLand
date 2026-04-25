@@ -25,6 +25,9 @@ private:
     // 测试函数
     void createTestObject();
     void testCamera();
+    void testObject();
+
+    engine::object::GameObject* m_testObject{ nullptr };
 };
 
 } // namespace game::scene

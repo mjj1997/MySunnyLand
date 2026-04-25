@@ -36,7 +36,7 @@ public:
     engine::core::Context& context() const { return m_context; } ///< @brief 获取引擎上下文引用。
 
     // 核心循环函数
-    void update(double deltaTime);
+    void update(float deltaTime);
     void render();
     void handleInput();
     void clean();

@@ -16,7 +16,7 @@ public:
 
     // 覆盖场景基类的核心方法
     void init() override;
-    void update(double deltaTime) override;
+    void update(float deltaTime) override;
     void render() override;
     void handleInput() override;
     void clean() override;

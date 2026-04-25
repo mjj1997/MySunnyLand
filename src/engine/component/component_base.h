@@ -46,7 +46,7 @@ protected:
      * @param deltaTime 距上一帧的时间间隔（秒）
      * @param context 引擎上下文对象，包含渲染器、输入管理器等
      */
-    virtual void update(double deltaTime, engine::core::Context& context) = 0;
+    virtual void update(float deltaTime, engine::core::Context& context) = 0;
 
     virtual void render(engine::core::Context& context) {} ///< @brief 渲染
     virtual void clean() {}                                ///< @brief 清理

@@ -14,7 +14,7 @@ Camera::Camera(const glm::vec2& viewportSize,
     spdlog::trace("Camera 初始化成功，位置: {},{}", position.x, position.y);
 }
 
-void Camera::update(double deltaTime)
+void Camera::update(float deltaTime)
 {
     // TODO: 自动跟随目标
 }

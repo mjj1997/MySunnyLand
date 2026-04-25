@@ -34,7 +34,7 @@ void GameScene::init()
     spdlog::trace("GameScene 初始化完成。");
 }
 
-void GameScene::update(double deltaTime)
+void GameScene::update(float deltaTime)
 {
     SceneBase::update(deltaTime);
 }

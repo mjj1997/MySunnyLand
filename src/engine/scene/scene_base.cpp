@@ -26,7 +26,7 @@ void SceneBase::init()
     spdlog::trace("场景 '{}' 初始化完成。", m_sceneName);
 }
 
-void SceneBase::update(double deltaTime)
+void SceneBase::update(float deltaTime)
 {
     if (!m_isInitialized)
         return;

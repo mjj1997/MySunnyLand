@@ -82,9 +82,9 @@ public:
 
 protected:
     // ComponentBase 虚函数覆盖
-    void init() override;                                             ///< @brief 初始化函数需要覆盖
-    void update(double deltaTime, engine::core::Context&) override {} ///< @brief 更新函数留空
-    void render(engine::core::Context& context) override;             ///< @brief 渲染函数需要覆盖
+    void init() override;                                            ///< @brief 初始化函数需要覆盖
+    void update(float deltaTime, engine::core::Context&) override {} ///< @brief 更新函数留空
+    void render(engine::core::Context& context) override;            ///< @brief 渲染函数需要覆盖
 
 private:
     ///< @brief 辅助函数，更新精灵大小（根据 m_sprite 的 sourceRect 更新 m_spriteSize）。

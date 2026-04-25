@@ -27,7 +27,7 @@ SceneBase* SceneManager::currentScene() const
     return m_sceneStack.back().get(); // 返回栈顶场景的裸指针
 }
 
-void SceneManager::update(double deltaTime)
+void SceneManager::update(float deltaTime)
 {
     // 只更新栈顶（当前）场景
     SceneBase* scene = currentScene();

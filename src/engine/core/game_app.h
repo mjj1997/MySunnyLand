@@ -51,7 +51,7 @@ public:
 private:
     [[nodiscard]] bool init(); // nodiscard属性 表示该函数返回值不应该被忽略
     void handleEvents();
-    void update(double deltaTime);
+    void update(float deltaTime);
     void render();
     void clean();
 

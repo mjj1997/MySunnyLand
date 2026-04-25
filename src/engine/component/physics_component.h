@@ -68,7 +68,7 @@ public:
 protected:
     // 核心循环方法
     void init() override;
-    void update(double deltaTime, engine::core::Context&) override {}
+    void update(float deltaTime, engine::core::Context&) override {}
     void clean() override;
 
 private:

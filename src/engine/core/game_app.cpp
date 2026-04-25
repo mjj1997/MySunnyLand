@@ -102,7 +102,7 @@ void GameApp::handleEvents()
     m_sceneManager->handleInput();
 }
 
-void GameApp::update(double deltaTime)
+void GameApp::update(float deltaTime)
 {
     m_sceneManager->update(deltaTime);
 }

@@ -24,6 +24,9 @@ public:
     PhysicsEngine(PhysicsEngine&&) = delete;
     PhysicsEngine& operator=(PhysicsEngine&&) = delete;
 
+    void registerComponent(engine::component::PhysicsComponent* component); ///< @brief 注册物理组件
+    void unregisterComponent(engine::component::PhysicsComponent* component); ///< @brief 注销物理组件
+
     // 设置器/获取器
     ///< @brief 设置全局重力加速度
     void setGravity(const glm::vec2& gravity) { m_gravity = gravity; }

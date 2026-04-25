@@ -23,7 +23,8 @@ target_sources(
           engine/component/parallax_component.cpp
           engine/scene/level_loader.cpp
           engine/component/tilelayer_component.cpp
-          engine/component/physics_component.cpp)
+          engine/component/physics_component.cpp
+          engine/physics/physics_engine.cpp)
 
 target_link_libraries(
   SunnyLand

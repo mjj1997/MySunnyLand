@@ -15,7 +15,6 @@ SceneManager::SceneManager(engine::core::Context& context)
 SceneManager::~SceneManager()
 {
     spdlog::trace("场景管理器已销毁。");
-    clean(); // 即使不手动调用 clean() 也能确保清理
 }
 
 SceneBase* SceneManager::currentScene() const

@@ -127,6 +127,9 @@ void GameApp::clean()
 {
     spdlog::trace("关闭 GameApp ...");
 
+    // 先关闭场景管理器，确保所有场景都被清理
+    m_sceneManager->clean();
+
     // 为了确保正确的销毁顺序，有些智能指针对象也需要手动管理
     m_resourceManager.reset();
 

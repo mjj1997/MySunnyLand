@@ -19,7 +19,7 @@ void GameObject::handleInput(engine::core::Context& context)
     }
 }
 
-void GameObject::update(double deltaTime, engine::core::Context& context)
+void GameObject::update(float deltaTime, engine::core::Context& context)
 {
     // 遍历所有组件并调用它们的 update 方法
     for (auto& [type, component] : m_components) {

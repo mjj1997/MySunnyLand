@@ -1,5 +1,7 @@
 #include "scene_base.h"
+#include "../core/context.h"
 #include "../object/game_object.h"
+#include "../physics/physics_engine.h"
 
 #include <spdlog/spdlog.h>
 
@@ -26,12 +28,15 @@ void SceneBase::init()
     spdlog::trace("场景 '{}' 初始化完成。", m_sceneName);
 }
 
-void SceneBase::update(double deltaTime)
+void SceneBase::update(float deltaTime)
 {
     if (!m_isInitialized)
         return;
 
-    // 更新所有游戏对象，并删除需要移除的对象
+    // 首先更新物理引擎
+    m_context.physicsEngine().update(deltaTime);
+
+    // 然后再更新所有游戏对象，并删除需要移除的对象
     for (auto it = m_gameObjects.begin(); it != m_gameObjects.end();) {
         if (*it && !(*it)->shouldRemove()) { // 正常更新游戏对象
             (*it)->update(deltaTime, m_context);

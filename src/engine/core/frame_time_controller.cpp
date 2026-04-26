@@ -16,8 +16,8 @@ FrameTimeController::FrameTimeController()
 void FrameTimeController::update()
 {
     m_currentFrameStartTimestamp = SDL_GetTicksNS(); // 记录进入 update 时的时间戳
-    auto currentDeltaTime = static_cast<double>(m_currentFrameStartTimestamp
-                                                - m_lastFrameEndTimestamp)
+    auto currentDeltaTime = static_cast<float>(m_currentFrameStartTimestamp
+                                               - m_lastFrameEndTimestamp)
                             / 1.0e9;
     // 如果设置了目标帧率，则限制帧率；否则 m_deltaTime = currentDeltaTime
     if (m_targetFrameTime > 0.0) {
@@ -29,37 +29,37 @@ void FrameTimeController::update()
     m_lastFrameEndTimestamp = SDL_GetTicksNS(); // 记录离开 update 时的时间戳
 }
 
-void FrameTimeController::limitFrameRate(double currentDeltaTime)
+void FrameTimeController::limitFrameRate(float currentDeltaTime)
 {
     // 如果当前帧耗费的时间小于目标帧时间，则等待剩余时间
     if (currentDeltaTime < m_targetFrameTime) {
-        double s2Wait{ m_targetFrameTime - currentDeltaTime }; // 需要等待的时间差（秒）
-        Uint64 ns2Wait{ static_cast<Uint64>(s2Wait * 1.0e9) }; // 转换为纳秒
-        SDL_DelayNS(ns2Wait);
-        m_deltaTime = static_cast<double>(SDL_GetTicksNS() - m_lastFrameEndTimestamp) / 1.0e9;
+        float secondsToWait{ m_targetFrameTime - currentDeltaTime }; // 需要等待的时间差（秒）
+        Uint64 nanoSecondsToWait{ static_cast<Uint64>(secondsToWait * 1.0e9) }; // 转换为纳秒
+        SDL_DelayNS(nanoSecondsToWait);
+        m_deltaTime = static_cast<float>(SDL_GetTicksNS() - m_lastFrameEndTimestamp) / 1.0e9;
     }
 }
 
-double FrameTimeController::deltaTime() const
+float FrameTimeController::deltaTime() const
 {
     return m_deltaTime * m_timeScale;
 }
 
-double FrameTimeController::unscaledDeltaTime() const
+float FrameTimeController::unscaledDeltaTime() const
 {
     return m_deltaTime;
 }
 
-void FrameTimeController::setTimeScale(double scale)
+void FrameTimeController::setTimeScale(float scale)
 {
-    if (scale < 0.0) {
+    if (scale < 0.0f) {
         spdlog::warn("Time scale 不能为负。Clamping to 0.");
-        scale = 0.0; // 防止负时间缩放
+        scale = 0.0f; // 防止负时间缩放
     }
     m_timeScale = scale;
 }
 
-double FrameTimeController::timeScale() const
+float FrameTimeController::timeScale() const
 {
     return m_timeScale;
 }
@@ -74,10 +74,10 @@ void FrameTimeController::setTargetFps(int fps)
     }
 
     if (m_targetFps > 0) {
-        m_targetFrameTime = 1.0 / static_cast<double>(m_targetFps);
+        m_targetFrameTime = 1.0f / static_cast<float>(m_targetFps);
         spdlog::info("Target FPS 设置为: {} (Frame time: {:.6f}s)", m_targetFps, m_targetFrameTime);
     } else {
-        m_targetFrameTime = 0.0;
+        m_targetFrameTime = 0.0f;
         spdlog::info("Target FPS 设置为: Unlimited");
     }
 }

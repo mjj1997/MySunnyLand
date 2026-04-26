@@ -124,10 +124,10 @@ public:
     }
 
     // 关键循环函数
-    void handleInput(engine::core::Context& context);              ///< @brief 处理输入
-    void update(double deltaTime, engine::core::Context& context); ///< @brief 更新所有组件
-    void render(engine::core::Context& context);                   ///< @brief 渲染所有组件
-    void clean();                                                  ///< @brief 清理所有组件
+    void handleInput(engine::core::Context& context);             ///< @brief 处理输入
+    void update(float deltaTime, engine::core::Context& context); ///< @brief 更新所有组件
+    void render(engine::core::Context& context);                  ///< @brief 渲染所有组件
+    void clean();                                                 ///< @brief 清理所有组件
 
 private:
     std::unordered_map<std::type_index, std::unique_ptr<engine::component::ComponentBase>>

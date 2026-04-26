@@ -47,7 +47,7 @@ public:
 
 protected:
     ///< @brief 覆盖纯虚函数，这里不需要实现
-    void update(double deltaTime, engine::core::Context&) override {}
+    void update(float deltaTime, engine::core::Context&) override {}
 
 private:
     glm::vec2 m_position{ 0.0f, 0.0f }; ///< @brief 位置

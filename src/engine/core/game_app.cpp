@@ -4,6 +4,7 @@
 #include "../component/transform_component.h"
 #include "../input/input_manager.h"
 #include "../object/game_object.h"
+#include "../physics/physics_engine.h"
 #include "../render/camera.h"
 #include "../render/renderer.h"
 #include "../render/sprite.h"
@@ -37,7 +38,7 @@ void GameApp::run()
 
     while (m_isRunning) {
         m_frameTimeController->update();
-        double deltaTime{ m_frameTimeController->deltaTime() };
+        float deltaTime{ m_frameTimeController->deltaTime() };
         m_inputManager->update(); // 每帧首先更新输入管理器
 
         handleEvents();
@@ -74,6 +75,9 @@ bool GameApp::init()
     if (!initInputManager()) {
         return false;
     }
+    if (!initPhysicsEngine()) {
+        return false;
+    }
     if (!initContext()) {
         return false;
     }
@@ -102,7 +106,7 @@ void GameApp::handleEvents()
     m_sceneManager->handleInput();
 }
 
-void GameApp::update(double deltaTime)
+void GameApp::update(float deltaTime)
 {
     m_sceneManager->update(deltaTime);
 }
@@ -122,6 +126,9 @@ void GameApp::render()
 void GameApp::clean()
 {
     spdlog::trace("关闭 GameApp ...");
+
+    // 先关闭场景管理器，确保所有场景都被清理
+    m_sceneManager->clean();
 
     // 为了确保正确的销毁顺序，有些智能指针对象也需要手动管理
     m_resourceManager.reset();
@@ -254,13 +261,26 @@ bool GameApp::initInputManager()
     return true;
 }
 
+bool GameApp::initPhysicsEngine()
+{
+    try {
+        m_physicsEngine = std::make_unique<engine::physics::PhysicsEngine>();
+    } catch (const std::exception& e) {
+        spdlog::error("初始化物理引擎失败: {}", e.what());
+        return false;
+    }
+    spdlog::trace("物理引擎初始化成功。");
+    return true;
+}
+
 bool GameApp::initContext()
 {
     try {
         m_context = std::make_unique<engine::core::Context>(*m_inputManager,
                                                             *m_renderer,
                                                             *m_camera,
-                                                            *m_resourceManager);
+                                                            *m_resourceManager,
+                                                            *m_physicsEngine);
     } catch (const std::exception& e) {
         spdlog::error("初始化上下文失败: {}", e.what());
         return false;

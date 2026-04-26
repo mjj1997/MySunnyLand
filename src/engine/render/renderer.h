@@ -54,7 +54,7 @@ public:
                     const Sprite& sprite,
                     const glm::vec2& position,
                     const glm::vec2& scale = { 1.0f, 1.0f },
-                    double angle = 0.0f);
+                    double angle = 0.0);
 
     /**
      * @brief 绘制视差滚动背景

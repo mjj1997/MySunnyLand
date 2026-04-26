@@ -15,7 +15,6 @@ SceneManager::SceneManager(engine::core::Context& context)
 SceneManager::~SceneManager()
 {
     spdlog::trace("场景管理器已销毁。");
-    clean(); // 即使不手动调用 clean() 也能确保清理
 }
 
 SceneBase* SceneManager::currentScene() const
@@ -27,7 +26,7 @@ SceneBase* SceneManager::currentScene() const
     return m_sceneStack.back().get(); // 返回栈顶场景的裸指针
 }
 
-void SceneManager::update(double deltaTime)
+void SceneManager::update(float deltaTime)
 {
     // 只更新栈顶（当前）场景
     SceneBase* scene = currentScene();

@@ -121,4 +121,12 @@ void GameScene::testObject()
     }
 }
 
+void GameScene::testCollisionPairs()
+{
+    auto& collisionPairs = context().physicsEngine().collisionPairs();
+    for (const auto& pair : collisionPairs) {
+        spdlog::info("碰撞对: {} - {}", pair.first->name(), pair.second->name());
+    }
+}
+
 } // namespace game::scene

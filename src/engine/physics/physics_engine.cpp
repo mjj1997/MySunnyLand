@@ -26,6 +26,9 @@ void PhysicsEngine::unregisterComponent(engine::component::PhysicsComponent* com
 
 void PhysicsEngine::update(float deltaTime)
 {
+    // 每帧开始时，清空上一帧的碰撞记录
+    m_collisionPairs.clear();
+
     // 遍历所有注册的物理组件
     for (auto* physicsComponent : m_components) {
         // 检查组件是否有效和启用
@@ -55,6 +58,9 @@ void PhysicsEngine::update(float deltaTime)
         physicsComponent->setVelocity(
             glm::clamp(physicsComponent->velocity(), -m_maxSpeed, m_maxSpeed));
     }
+
+    // 执行碰撞检测
+    checkObjectCollisions();
 }
 
 void PhysicsEngine::checkObjectCollisions()

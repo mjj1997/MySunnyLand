@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../utils/math.h"
+
 namespace engine::component {
 class ColliderComponent;
 }
@@ -27,6 +29,15 @@ bool checkAabbOverlap(const glm::vec2& aPos,
                       const glm::vec2& aSize,
                       const glm::vec2& bPos,
                       const glm::vec2& bSize);
+
+/**
+ * @brief 检查两个矩形是否重叠。
+ * 
+ * @param a 第一个矩形。
+ * @param b 第二个矩形。
+ * @return true 如果矩形重叠，否则为 false。
+ */
+bool checkRectOverlap(const engine::utils::Rect& a, const engine::utils::Rect& b);
 
 /**
  * @brief 检查两个圆形是否重叠。

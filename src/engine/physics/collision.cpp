@@ -70,6 +70,11 @@ bool collision::checkAabbOverlap(const glm::vec2& aPos,
     return true;
 }
 
+bool collision::checkRectOverlap(const engine::utils::Rect& a, const engine::utils::Rect& b)
+{
+    return checkAabbOverlap(a.position, a.size, b.position, b.size);
+}
+
 bool collision::checkCircleOverlap(const glm::vec2& aCenter,
                                    const float aRadius,
                                    const glm::vec2& bCenter,

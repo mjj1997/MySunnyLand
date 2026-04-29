@@ -31,6 +31,12 @@ public:
                                bool isTrigger = false,
                                bool isActive = true);
 
+    /**
+     * @brief 根据当前的 alignment 和 collider 尺寸计算 offset。
+     * @note 需要用到 TransformComponent 的 scale，因此 TransformComponent 更新 scale 时，也要调用此方法。
+     */
+    void updateOffset();
+
     // --- Getters & Setters ---
     ///< @brief 获取缓存的 TransformComponent
     const TransformComponent* transformComponent() const { return m_transformComponent; }

@@ -20,6 +20,57 @@ ColliderComponent::ColliderComponent(std::unique_ptr<engine::physics::ColliderBa
     }
 }
 
+void ColliderComponent::updateOffset()
+{
+    if (!m_collider) {
+        return;
+    }
+
+    // 获取碰撞器的最小包围盒(AABB)尺寸
+    auto colliderAabbSize{ m_collider->aabbSize() };
+    // 如果 AABB 尺寸无效，偏移为 0
+    if (colliderAabbSize.x <= 0.0f || colliderAabbSize.y <= 0.0f) {
+        m_offset = glm::vec2{ 0.0f, 0.0f };
+        return;
+    }
+
+    auto scaleFactor = m_transformComponent->scale();
+    // 计算碰撞器左上角相对于 TransformComponent::m_position 的偏移量
+    switch (m_alignment) {
+    case engine::utils::Alignment::TopLeft:
+        m_offset = glm::vec2{ 0.0f, 0.0f } * scaleFactor;
+        break;
+    case engine::utils::Alignment::TopCenter:
+        m_offset = glm::vec2{ -colliderAabbSize.x / 2.0f, 0.0f } * scaleFactor;
+        break;
+    case engine::utils::Alignment::TopRight:
+        m_offset = glm::vec2{ -colliderAabbSize.x, 0.0f } * scaleFactor;
+        break;
+    case engine::utils::Alignment::CenterLeft:
+        m_offset = glm::vec2{ 0.0f, -colliderAabbSize.y / 2.0f } * scaleFactor;
+        break;
+    case engine::utils::Alignment::Center:
+        m_offset = glm::vec2{ -colliderAabbSize.x / 2.0f, -colliderAabbSize.y / 2.0f }
+                   * scaleFactor;
+        break;
+    case engine::utils::Alignment::CenterRight:
+        m_offset = glm::vec2{ -colliderAabbSize.x, -colliderAabbSize.y / 2.0f } * scaleFactor;
+        break;
+    case engine::utils::Alignment::BottomLeft:
+        m_offset = glm::vec2{ 0.0f, -colliderAabbSize.y } * scaleFactor;
+        break;
+    case engine::utils::Alignment::BottomCenter:
+        m_offset = glm::vec2{ -colliderAabbSize.x / 2.0f, -colliderAabbSize.y } * scaleFactor;
+        break;
+    case engine::utils::Alignment::BottomRight:
+        m_offset = glm::vec2{ -colliderAabbSize.x, -colliderAabbSize.y } * scaleFactor;
+        break;
+    case engine::utils::Alignment::None:
+    default:
+        break;
+    }
+}
+
 void ColliderComponent::setAlignment(engine::utils::Alignment anchor)
 {
     m_alignment = anchor;

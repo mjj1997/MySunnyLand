@@ -29,6 +29,14 @@ bool collision::checkCollision(const engine::component::ColliderComponent& a,
         return true;
     }
     // Circle vs Circle: 判断两个圆心距离是否小于两个圆的半径之和
+    else if (aCollider->type() == engine::physics::ColliderType::Circle
+             && bCollider->type() == engine::physics::ColliderType::Circle) {
+        auto aCenter = aPos + 0.5f * aSize; // 圆心位置
+        auto bCenter = bPos + 0.5f * bSize;
+        auto aRadius = 0.5f * aSize.x; // 圆的半径等于AABB的一半宽度
+        auto bRadius = 0.5f * bSize.x;
+        return checkCircleOverlap(aCenter, aRadius, bCenter, bRadius);
+    }
     // AABB vs Circle: 判断圆心到AABB的最邻近点是否在圆内
     // Circle vs AABB
 

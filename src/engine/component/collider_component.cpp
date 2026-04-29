@@ -71,6 +71,22 @@ void ColliderComponent::updateOffset()
     }
 }
 
+engine::utils::Rect ColliderComponent::worldAabb() const
+{
+    if (!m_transformComponent || !m_collider) {
+        return engine::utils::Rect{ glm::vec2{ 0.0f, 0.0f }, glm::vec2{ 0.0f, 0.0f } };
+    }
+
+    // 计算最小包围盒的左上角坐标
+    const glm::vec2 topLeftPos{ m_transformComponent->position() + m_offset };
+    // 计算最小包围盒的尺寸
+    const glm::vec2 aabSize{ m_collider->aabbSize() };
+    const glm::vec2 scaleFactor{ m_transformComponent->scale() };
+    glm::vec2 scaledSize{ aabSize * scaleFactor };
+    //返回最小包围盒的 Rect
+    return engine::utils::Rect{ topLeftPos, scaledSize };
+}
+
 void ColliderComponent::setAlignment(engine::utils::Alignment anchor)
 {
     m_alignment = anchor;

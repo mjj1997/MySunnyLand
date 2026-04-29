@@ -2,6 +2,7 @@
 
 #include "../physics/collider.h"
 #include "../utils/alignment.h"
+#include "../utils/math.h"
 #include "component_base.h"
 
 #include <memory>
@@ -36,6 +37,8 @@ public:
      * @note 需要用到 TransformComponent 的 scale，因此 TransformComponent 更新 scale 时，也要调用此方法。
      */
     void updateOffset();
+
+    engine::utils::Rect worldAabb() const; ///< @brief 获取世界坐标系下的最小轴对齐包围盒（AABB）。
 
     // --- Getters & Setters ---
     ///< @brief 获取缓存的 TransformComponent

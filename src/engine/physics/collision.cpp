@@ -13,10 +13,21 @@ bool collision::checkCollision(const engine::component::ColliderComponent& a,
     auto aTransformComponent = a.transformComponent();
     auto bTransformComponent = b.transformComponent();
 
-    // 先计算最小包围盒是否碰撞，如果没有碰撞，那一定是返回false (不考虑AABB的旋转)
+    // 先判断最小包围盒是否碰撞，如果没有碰撞，那一定是返回false (不考虑AABB的旋转)
+    auto aSize = aCollider->aabbSize() * aTransformComponent->scale();
+    auto bSize = bCollider->aabbSize() * bTransformComponent->scale();
+    auto aPos = aTransformComponent->position() + a.offset();
+    auto bPos = bTransformComponent->position() + b.offset();
+    if (!checkAabbOverlap(aPos, aSize, bPos, bSize)) {
+        return false;
+    }
 
     // --- 如果最小包围盒有碰撞，再进行更细致的判断 ---
     // AABB vs AABB, 直接返回真
+    if (aCollider->type() == engine::physics::ColliderType::Aabb
+        && bCollider->type() == engine::physics::ColliderType::Aabb) {
+        return true;
+    }
     // Circle vs Circle: 判断两个圆心距离是否小于两个圆的半径之和
     // AABB vs Circle: 判断圆心到AABB的最邻近点是否在圆内
     // Circle vs AABB

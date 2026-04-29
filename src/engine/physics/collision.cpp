@@ -24,4 +24,17 @@ bool collision::checkCollision(const engine::component::ColliderComponent& a,
     return false;
 }
 
+bool collision::checkAabbOverlap(const glm::vec2& aPos,
+                                 const glm::vec2& aSize,
+                                 const glm::vec2& bPos,
+                                 const glm::vec2& bSize)
+{
+    // 检查两个AABB是否重叠，根据AABB的左上角坐标和尺寸判断
+    if (aPos.x + aSize.x <= bPos.x || aPos.x >= bPos.x + bSize.x || aPos.y + aSize.y <= bPos.y
+        || aPos.y >= bPos.y + bSize.y) {
+        return false;
+    }
+    return true;
+}
+
 } // namespace engine::physics

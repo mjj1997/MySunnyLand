@@ -75,7 +75,7 @@ void ColliderComponent::setAlignment(engine::utils::Alignment anchor)
 {
     m_alignment = anchor;
     if (m_transformComponent && m_collider) {
-        // TODO: 更新偏移量
+        updateOffset();
     }
 }
 
@@ -95,6 +95,7 @@ void ColliderComponent::init()
     }
 
     // 在获取 TransformComponent 后，更新偏移量
+    updateOffset();
 }
 
 } // namespace engine::component

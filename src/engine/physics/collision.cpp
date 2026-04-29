@@ -48,4 +48,12 @@ bool collision::checkAabbOverlap(const glm::vec2& aPos,
     return true;
 }
 
+bool collision::checkCircleOverlap(const glm::vec2& aCenter,
+                                   const float aRadius,
+                                   const glm::vec2& bCenter,
+                                   const float bRadius)
+{
+    return (glm::length(aCenter - bCenter) < aRadius + bRadius);
+}
+
 } // namespace engine::physics

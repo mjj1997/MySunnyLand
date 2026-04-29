@@ -28,6 +28,20 @@ bool checkAabbOverlap(const glm::vec2& aPos,
                       const glm::vec2& bPos,
                       const glm::vec2& bSize);
 
+/**
+ * @brief 检查两个圆形是否重叠。
+ * 
+ * @param aCenter 第一个圆的中心。
+ * @param aRadius 第一个圆的半径。
+ * @param bCenter 第二个圆的中心。
+ * @param bRadius 第二个圆的半径。
+ * @return true 如果两个圆重叠，否则为 false。
+ */
+bool checkCircleOverlap(const glm::vec2& aCenter,
+                        const float aRadius,
+                        const glm::vec2& bCenter,
+                        const float bRadius);
+
 // 未来可以添加更多碰撞检测相关的函数
 
 } // namespace engine::physics::collision

@@ -64,4 +64,11 @@ bool collision::checkCircleOverlap(const glm::vec2& aCenter,
     return (glm::length(aCenter - bCenter) < aRadius + bRadius);
 }
 
+bool collision::checkPointInCircle(const glm::vec2& point,
+                                   const glm::vec2& center,
+                                   const float radius)
+{
+    return (glm::length(point - center) < radius);
+}
+
 } // namespace engine::physics

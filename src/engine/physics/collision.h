@@ -42,6 +42,16 @@ bool checkCircleOverlap(const glm::vec2& aCenter,
                         const glm::vec2& bCenter,
                         const float bRadius);
 
+/**
+ * @brief 检查一个点是否在圆内。
+ * 
+ * @param point 要检查的点。
+ * @param center 圆的中心。
+ * @param radius 圆的半径。
+ * @return true 如果点在圆内，否则为 false。
+ */
+bool checkPointInCircle(const glm::vec2& point, const glm::vec2& center, const float radius);
+
 // 未来可以添加更多碰撞检测相关的函数
 
 } // namespace engine::physics::collision

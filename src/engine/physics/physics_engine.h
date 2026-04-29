@@ -44,6 +44,8 @@ public:
     float maxSpeed() const { return m_maxSpeed; }                 ///< @brief 获取当前的最大速度
 
 private:
+    void checkObjectCollisions();
+
     ///< @brief 注册的物理组件容器，非拥有指针
     std::vector<engine::component::PhysicsComponent*> m_components;
     ///< @brief 存储本帧发生的碰撞对

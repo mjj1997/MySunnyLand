@@ -8,6 +8,10 @@ namespace engine::component {
 class PhysicsComponent;
 }
 
+namespace engine::object {
+class GameObject;
+}
+
 namespace engine::physics {
 
 /**
@@ -31,6 +35,8 @@ public:
     void update(float deltaTime);
 
     // 设置器/获取器
+    ///< @brief 获取本帧发生的碰撞对 vector
+    const auto& collisionPairs() const { return m_collisionPairs; }
     ///< @brief 设置全局重力加速度
     void setGravity(const glm::vec2& gravity) { m_gravity = gravity; }
     const glm::vec2& gravity() const { return m_gravity; } ///< @brief 获取当前的全局重力加速度
@@ -40,6 +46,8 @@ public:
 private:
     ///< @brief 注册的物理组件容器，非拥有指针
     std::vector<engine::component::PhysicsComponent*> m_components;
+    ///< @brief 存储本帧发生的碰撞对
+    std::vector<std::pair<engine::object::GameObject*, engine::object::GameObject*>> m_collisionPairs;
 
     ///< @brief 默认重力值 (像素/秒^2, 相当于 100像素 对应现实 1m)
     glm::vec2 m_gravity{ 0.0f, 980.0f };

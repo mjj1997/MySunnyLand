@@ -38,7 +38,21 @@ bool collision::checkCollision(const engine::component::ColliderComponent& a,
         return checkCircleOverlap(aCenter, aRadius, bCenter, bRadius);
     }
     // AABB vs Circle: 判断圆心到AABB的最邻近点是否在圆内
+    else if (aCollider->type() == engine::physics::ColliderType::Aabb
+             && bCollider->type() == engine::physics::ColliderType::Circle) {
+        auto bCenter = bPos + 0.5f * bSize;
+        auto bRadius = 0.5f * bSize.x;
+        auto nearestPoint = glm::clamp(bCenter, aPos, aPos + aSize); // 计算圆心到AABB的最邻近点
+        return checkPointInCircle(nearestPoint, bCenter, bRadius);
+    }
     // Circle vs AABB
+    else if (aCollider->type() == engine::physics::ColliderType::Circle
+             && bCollider->type() == engine::physics::ColliderType::Aabb) {
+        auto aCenter = aPos + 0.5f * aSize;
+        auto aRadius = 0.5f * aSize.x;
+        auto nearestPoint = glm::clamp(aCenter, bPos, bPos + bSize); // 计算圆心到AABB的最邻近点
+        return checkPointInCircle(nearestPoint, aCenter, aRadius);
+    }
 
     return false;
 }

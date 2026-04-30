@@ -1,6 +1,9 @@
 #include "physics_engine.h"
+#include "../component/collider_component.h"
 #include "../component/physics_component.h"
 #include "../component/transform_component.h"
+#include "../object/game_object.h"
+#include "collision.h"
 
 #include <glm/common.hpp>
 #include <spdlog/spdlog.h>
@@ -23,6 +26,9 @@ void PhysicsEngine::unregisterComponent(engine::component::PhysicsComponent* com
 
 void PhysicsEngine::update(float deltaTime)
 {
+    // 每帧开始时，清空上一帧的碰撞记录
+    m_collisionPairs.clear();
+
     // 遍历所有注册的物理组件
     for (auto* physicsComponent : m_components) {
         // 检查组件是否有效和启用
@@ -51,6 +57,53 @@ void PhysicsEngine::update(float deltaTime)
         // 限制最大速度：v = min(v, max_speed)
         physicsComponent->setVelocity(
             glm::clamp(physicsComponent->velocity(), -m_maxSpeed, m_maxSpeed));
+    }
+
+    // 执行碰撞检测
+    checkObjectCollisions();
+}
+
+void PhysicsEngine::checkObjectCollisions()
+{
+    for (size_t i{ 0 }; i < m_components.size(); ++i) {
+        auto* physicsComponentA = m_components[i];
+        if (!physicsComponentA || !physicsComponentA->isEnabled()) {
+            continue;
+        }
+
+        auto* gameObjectA = physicsComponentA->owner();
+        if (!gameObjectA) {
+            continue;
+        }
+
+        auto* colliderComponentA = gameObjectA->getComponent<engine::component::ColliderComponent>();
+        if (!colliderComponentA || !colliderComponentA->isActive()) {
+            continue;
+        }
+
+        for (size_t j{ i + 1 }; j < m_components.size(); ++j) {
+            auto* physicsComponentB = m_components[j];
+            if (!physicsComponentB || !physicsComponentB->isEnabled()) {
+                continue;
+            }
+
+            auto* gameObjectB = physicsComponentB->owner();
+            if (!gameObjectB) {
+                continue;
+            }
+
+            auto* colliderComponentB = gameObjectB
+                                           ->getComponent<engine::component::ColliderComponent>();
+            if (!colliderComponentB || !colliderComponentB->isActive()) {
+                continue;
+            }
+
+            // 通过保护性测试后，正式执行逻辑
+            if (collision::checkCollision(*colliderComponentA, *colliderComponentB)) {
+                // 记录碰撞对
+                m_collisionPairs.emplace_back(gameObjectA, gameObjectB);
+            }
+        }
     }
 }
 

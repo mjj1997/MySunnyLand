@@ -324,7 +324,18 @@ engine::component::TileInfo LevelLoader::tileInfoByGid(int gid)
     }
 
 
+engine::component::TileType LevelLoader::getTileType(const nlohmann::json& tileJson)
+{
+    if (tileJson.contains("properties")) {
+        for (const auto& property : tileJson["properties"]) {
+            if (property.value("name", "") == "solid") {
+                return property.value("value", false) ? engine::component::TileType::Solid
+                                                      : engine::component::TileType::Normal;
+            }
+        }
+    }
 
+    return engine::component::TileType::Normal;
 }
 
 } // namespace engine::scene

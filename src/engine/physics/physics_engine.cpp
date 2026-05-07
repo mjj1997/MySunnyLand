@@ -24,6 +24,20 @@ void PhysicsEngine::unregisterComponent(engine::component::PhysicsComponent* com
     spdlog::trace("物理组件注销完成。");
 }
 
+void PhysicsEngine::registerCollisionLayer(engine::component::TileLayerComponent* layer)
+{
+    m_collisionTileLayers.push_back(layer);
+    spdlog::trace("碰撞瓦片图层注册完成。");
+}
+
+void PhysicsEngine::unregisterCollisionLayer(engine::component::TileLayerComponent* layer)
+{
+    // 使用 remove-erase 范式安全地移除组件
+    auto it = std::remove(m_collisionTileLayers.begin(), m_collisionTileLayers.end(), layer);
+    m_collisionTileLayers.erase(it, m_collisionTileLayers.end());
+    spdlog::trace("碰撞瓦片图层注销完成。");
+}
+
 void PhysicsEngine::update(float deltaTime)
 {
     // 每帧开始时，清空上一帧的碰撞记录

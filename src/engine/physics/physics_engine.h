@@ -6,7 +6,8 @@
 
 namespace engine::component {
 class PhysicsComponent;
-}
+class TileLayerComponent;
+} // namespace engine::component
 
 namespace engine::object {
 class GameObject;
@@ -31,6 +32,12 @@ public:
     void registerComponent(engine::component::PhysicsComponent* component); ///< @brief 注册物理组件
     void unregisterComponent(engine::component::PhysicsComponent* component); ///< @brief 注销物理组件
 
+    // 如果瓦片层需要进行碰撞检测则注册。（不需要则不必注册）
+    ///< @brief 注册用于碰撞检测的 TileLayerComponent
+    void registerCollisionLayer(engine::component::TileLayerComponent* layer);
+    ///< @brief 注销用于碰撞检测的 TileLayerComponent
+    void unregisterCollisionLayer(engine::component::TileLayerComponent* layer);
+
     ///< @brief 核心循环：更新所有注册的物理组件的状态
     void update(float deltaTime);
 
@@ -48,6 +55,9 @@ private:
 
     ///< @brief 注册的物理组件容器，非拥有指针
     std::vector<engine::component::PhysicsComponent*> m_components;
+    ///< @brief 注册的碰撞瓦片图层容器
+    std::vector<engine::component::TileLayerComponent*> m_collisionTileLayers;
+
     ///< @brief 存储本帧发生的碰撞对
     std::vector<std::pair<engine::object::GameObject*, engine::object::GameObject*>> m_collisionPairs;
 

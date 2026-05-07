@@ -320,9 +320,18 @@ engine::component::TileInfo LevelLoader::tileInfoByGid(int gid)
     return engine::component::TileInfo{};
 }
 
+engine::component::TileType LevelLoader::tileTypeById(const nlohmann::json& tileSetJson, int localId)
 {
+    if (tileSetJson.contains("tiles")) {
+        for (const auto& tile : tileSetJson["tiles"]) {
+            if (tile.value("id", -1) == localId) {
+                return getTileType(tile);
+            }
+        }
     }
 
+    return engine::component::TileType::Normal;
+}
 
 engine::component::TileType LevelLoader::getTileType(const nlohmann::json& tileJson)
 {

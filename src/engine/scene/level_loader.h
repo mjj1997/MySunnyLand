@@ -48,6 +48,7 @@ private:
 
     void loadTileset(const std::string& tileSetPath, int firstGid);
     engine::component::TileInfo tileInfoByGid(int gid);
+    engine::component::TileType tileTypeById(const nlohmann::json& tileSetJson, int localId);
     engine::component::TileType getTileType(const nlohmann::json& tileJson);
 
     ///< @brief 地图路径（拼接路径时需要）

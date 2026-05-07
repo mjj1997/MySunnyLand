@@ -274,8 +274,8 @@ engine::component::TileInfo LevelLoader::tileInfoByGid(int gid)
                            static_cast<float>(m_tileSize.x),
                            static_cast<float>(m_tileSize.y) };
         engine::render::Sprite sprite{ textureId, srcRect };
-        // 目前只完成渲染，以后再考虑瓦片类型
-        return engine::component::TileInfo{ sprite, engine::component::TileType::Normal };
+        auto tileType = tileTypeById(tileSetData, localId);
+        return engine::component::TileInfo{ sprite, tileType };
     } else { // 这是多图片的情况
         if (!tileSetData.contains("tiles")) {
             // 没有tiles字段的话不符合数据格式要求，直接返回空的瓦片信息
@@ -309,8 +309,8 @@ engine::component::TileInfo LevelLoader::tileInfoByGid(int gid)
                                    static_cast<float>(tile.value("width", imageWidth)),
                                    static_cast<float>(tile.value("height", imageHeight)) };
                 engine::render::Sprite sprite{ textureId, srcRect };
-                // 目前只完成渲染，以后再考虑瓦片类型
-                return engine::component::TileInfo{ sprite, engine::component::TileType::Normal };
+                auto tileType = getTileType(tile);
+                return engine::component::TileInfo{ sprite, tileType };
             }
         }
     }

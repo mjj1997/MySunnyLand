@@ -52,6 +52,7 @@ public:
 
 private:
     void checkObjectCollisions();
+    void resolveTileCollisions(engine::component::PhysicsComponent* component, float deltaTime);
 
     ///< @brief 注册的物理组件容器，非拥有指针
     std::vector<engine::component::PhysicsComponent*> m_components;

@@ -62,15 +62,8 @@ void PhysicsEngine::update(float deltaTime)
         physicsComponent->setVelocity(newVelocity);
         physicsComponent->clearForce(); // 清除当前帧的力
 
-        // 更新位置：S += v * dt
-        auto* transforomComponent = physicsComponent->transformComponent();
-        if (transforomComponent) {
-            transforomComponent->translate(physicsComponent->velocity() * deltaTime);
-        }
-
-        // 限制最大速度：v = min(v, max_speed)
-        physicsComponent->setVelocity(
-            glm::clamp(physicsComponent->velocity(), -m_maxSpeed, m_maxSpeed));
+        // 处理瓦片层碰撞（速度和位置的更新移入 resolveTileCollisions()）
+        resolveTileCollisions(physicsComponent, deltaTime);
     }
 
     // 执行碰撞检测
@@ -118,6 +111,23 @@ void PhysicsEngine::checkObjectCollisions()
                 m_collisionPairs.emplace_back(gameObjectA, gameObjectB);
             }
         }
+    }
+}
+
+void PhysicsEngine::resolveTileCollisions(engine::component::PhysicsComponent* component,
+                                          float deltaTime)
+{
+    // -- 检查组件是否有效 --
+    auto* gameObject = component->owner();
+    if (!gameObject) {
+        return;
+    }
+
+    auto* transformComponent = gameObject->getComponent<engine::component::TransformComponent>();
+    auto* colliderComponent = gameObject->getComponent<engine::component::ColliderComponent>();
+    if (!transformComponent || !colliderComponent || !colliderComponent->isActive()
+        || colliderComponent->isTrigger()) {
+        return;
     }
 }
 

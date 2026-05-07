@@ -221,6 +221,23 @@ std::string LevelLoader::resolvePath(const std::string& relativePath, const std:
     }
 }
 
+void LevelLoader::loadTileset(const std::string& tileSetPath, int firstGid)
+{
+    std::ifstream file{ tileSetPath };
+    if (!file.is_open()) {
+        spdlog::error("无法打开瓦片集文件: {}", tileSetPath);
+        return;
+    }
+
+    nlohmann::json tileSetData;
+    file >> tileSetData;
+
+    // 注入瓦片集文件路径，方便后续加载瓦片时解析相对路径
+    tileSetData["filePath"] = tileSetPath;
+
+    m_tileSets[firstGid] = std::move(tileSetData);
+}
+
 engine::component::TileInfo LevelLoader::tileInfoByGid(int gid)
 {
     if (gid == 0) {
@@ -303,21 +320,11 @@ engine::component::TileInfo LevelLoader::tileInfoByGid(int gid)
     return engine::component::TileInfo{};
 }
 
-void LevelLoader::loadTileset(const std::string& tileSetPath, int firstGid)
 {
-    std::ifstream file{ tileSetPath };
-    if (!file.is_open()) {
-        spdlog::error("无法打开瓦片集文件: {}", tileSetPath);
-        return;
     }
 
-    nlohmann::json tileSetData;
-    file >> tileSetData;
 
-    // 注入瓦片集文件路径，方便后续加载瓦片时解析相对路径
-    tileSetData["filePath"] = tileSetPath;
 
-    m_tileSets[firstGid] = std::move(tileSetData);
 }
 
 } // namespace engine::scene

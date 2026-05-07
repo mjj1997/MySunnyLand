@@ -45,8 +45,8 @@ private:
      */
     std::string resolvePath(const std::string& relativePath, const std::string& filePath);
 
-    engine::component::TileInfo tileInfoByGid(int gid);
     void loadTileset(const std::string& tileSetPath, int firstGid);
+    engine::component::TileInfo tileInfoByGid(int gid);
 
     ///< @brief 地图路径（拼接路径时需要）
     std::string m_mapPath;

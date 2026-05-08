@@ -140,12 +140,17 @@ void GameScene::testObject()
     }
 
     if (inputManager.isActionDown("moveLeft")) {
-        m_testObject->getComponent<engine::component::TransformComponent>()->translate(
-            glm::vec2{ -2.0f, 0.0f });
+        physicsComponent->setVelocity(glm::vec2{ -100.0f, physicsComponent->velocity().y });
+    } else {
+        physicsComponent->setVelocity(
+            glm::vec2{ 0.9f * physicsComponent->velocity().x, physicsComponent->velocity().y });
     }
+
     if (inputManager.isActionDown("moveRight")) {
-        m_testObject->getComponent<engine::component::TransformComponent>()->translate(
-            glm::vec2{ 2.0f, 0.0f });
+        physicsComponent->setVelocity(glm::vec2{ 100.0f, physicsComponent->velocity().y });
+    } else {
+        physicsComponent->setVelocity(
+            glm::vec2{ 0.9f * physicsComponent->velocity().x, physicsComponent->velocity().y });
     }
 
     if (inputManager.isActionDown("jump")) {

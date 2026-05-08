@@ -151,7 +151,7 @@ void PhysicsEngine::resolveTileCollisions(engine::component::PhysicsComponent* c
             // 获取瓦片坐标的 X 方向分量。两块瓦片的 X 坐标相同
             // 右上角、右下角瓦片的 X 坐标
             auto tileXRight = static_cast<int>(
-                std::floor(newObjectPosition.x + objectSize.x / tileSize.x));
+                std::floor((newObjectPosition.x + objectSize.x) / tileSize.x));
             // 获取瓦片坐标的 Y 方向分量。分为上和下两个部分
             // 右上角瓦片的 Y 坐标
             auto tileYTop = static_cast<int>(std::floor(objectPosition.y / tileSize.y));
@@ -197,7 +197,7 @@ void PhysicsEngine::resolveTileCollisions(engine::component::PhysicsComponent* c
             // 检查底部碰撞，需要分别测试左下和右下角
             // 获取瓦片坐标的 Y 方向分量。两块瓦片的 Y 坐标相同
             auto tileYBottom = static_cast<int>(
-                std::floor(newObjectPosition.y + objectSize.y / tileSize.y));
+                std::floor((newObjectPosition.y + objectSize.y) / tileSize.y));
             // 获取瓦片坐标的 X 方向分量。分为左和右两个部分
             // 左下角瓦片的 X 坐标
             auto tileXLeft = static_cast<int>(std::floor(objectPosition.x / tileSize.x));
@@ -205,7 +205,7 @@ void PhysicsEngine::resolveTileCollisions(engine::component::PhysicsComponent* c
             auto tileTypeBottomLeft = tileLayer->tileTypeAt(glm::ivec2{ tileXLeft, tileYBottom });
             // 右下角瓦片的 X 坐标
             auto tileXRight = static_cast<int>(
-                std::floor((objectPosition.x + objectSize.x - epsilon / tileSize.x)));
+                std::floor((objectPosition.x + objectSize.x - epsilon) / tileSize.x));
             // 右下角瓦片类型
             auto tileTypeBottomRight = tileLayer->tileTypeAt(glm::ivec2{ tileXRight, tileYBottom });
 

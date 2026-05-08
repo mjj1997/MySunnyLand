@@ -2,6 +2,7 @@
 #include "../../engine/component/collider_component.h"
 #include "../../engine/component/physics_component.h"
 #include "../../engine/component/sprite_component.h"
+#include "../../engine/component/tilelayer_component.h"
 #include "../../engine/component/transform_component.h"
 #include "../../engine/core/context.h"
 #include "../../engine/input/input_manager.h"
@@ -30,6 +31,16 @@ void GameScene::init()
     // 加载关卡
     engine::scene::LevelLoader levelLoader;
     levelLoader.loadLevel("assets/maps/level1.tmj", *this);
+
+    // 注册 “main” 层到物理引擎
+    auto* layerObjectMain = findGameObjectByName("main");
+    if (layerObjectMain != nullptr) {
+        auto* tileLayer = layerObjectMain->getComponent<engine::component::TileLayerComponent>();
+        if (tileLayer != nullptr) {
+            context().physicsEngine().registerCollisionLayer(tileLayer);
+            spdlog::info("已注册 “main” 层到物理引擎。");
+        }
+    }
 
     // 创建 testObject
     createTestObject();

@@ -2,6 +2,7 @@
 #include "../../engine/component/collider_component.h"
 #include "../../engine/component/physics_component.h"
 #include "../../engine/component/sprite_component.h"
+#include "../../engine/component/tilelayer_component.h"
 #include "../../engine/component/transform_component.h"
 #include "../../engine/core/context.h"
 #include "../../engine/input/input_manager.h"
@@ -30,6 +31,16 @@ void GameScene::init()
     // 加载关卡
     engine::scene::LevelLoader levelLoader;
     levelLoader.loadLevel("assets/maps/level1.tmj", *this);
+
+    // 注册 “main” 层到物理引擎
+    auto* layerObjectMain = findGameObjectByName("main");
+    if (layerObjectMain != nullptr) {
+        auto* tileLayer = layerObjectMain->getComponent<engine::component::TileLayerComponent>();
+        if (tileLayer != nullptr) {
+            context().physicsEngine().registerCollisionLayer(tileLayer);
+            spdlog::info("已注册 “main” 层到物理引擎。");
+        }
+    }
 
     // 创建 testObject
     createTestObject();
@@ -129,12 +140,17 @@ void GameScene::testObject()
     }
 
     if (inputManager.isActionDown("moveLeft")) {
-        m_testObject->getComponent<engine::component::TransformComponent>()->translate(
-            glm::vec2{ -2.0f, 0.0f });
+        physicsComponent->setVelocity(glm::vec2{ -100.0f, physicsComponent->velocity().y });
+    } else {
+        physicsComponent->setVelocity(
+            glm::vec2{ 0.9f * physicsComponent->velocity().x, physicsComponent->velocity().y });
     }
+
     if (inputManager.isActionDown("moveRight")) {
-        m_testObject->getComponent<engine::component::TransformComponent>()->translate(
-            glm::vec2{ 2.0f, 0.0f });
+        physicsComponent->setVelocity(glm::vec2{ 100.0f, physicsComponent->velocity().y });
+    } else {
+        physicsComponent->setVelocity(
+            glm::vec2{ 0.9f * physicsComponent->velocity().x, physicsComponent->velocity().y });
     }
 
     if (inputManager.isActionDown("jump")) {

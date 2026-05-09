@@ -8,7 +8,8 @@
 
 namespace engine::component {
 struct TileInfo;
-}
+enum class TileType;
+} // namespace engine::component
 
 namespace engine::scene {
 class SceneBase;
@@ -45,8 +46,10 @@ private:
      */
     std::string resolvePath(const std::string& relativePath, const std::string& filePath);
 
-    engine::component::TileInfo tileInfoByGid(int gid);
     void loadTileset(const std::string& tileSetPath, int firstGid);
+    engine::component::TileInfo tileInfoByGid(int gid);
+    engine::component::TileType tileTypeById(const nlohmann::json& tileSetJson, int localId);
+    engine::component::TileType getTileType(const nlohmann::json& tileJson);
 
     ///< @brief 地图路径（拼接路径时需要）
     std::string m_mapPath;

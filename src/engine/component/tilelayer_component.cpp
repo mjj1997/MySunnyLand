@@ -1,5 +1,6 @@
 #include "tilelayer_component.h"
 #include "../core/context.h"
+#include "../physics/physics_engine.h"
 #include "../render/renderer.h"
 
 #include <spdlog/spdlog.h>
@@ -88,6 +89,13 @@ void TileLayerComponent::render(engine::core::Context& context)
                 context.renderer().drawSprite(context.camera(), tileInfo.sprite, tileTopLeftPos);
             }
         }
+    }
+}
+
+void TileLayerComponent::clean()
+{
+    if (m_physicsEngine) {
+        m_physicsEngine->unregisterCollisionLayer(this);
     }
 }
 

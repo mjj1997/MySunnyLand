@@ -27,6 +27,9 @@ void PhysicsEngine::unregisterComponent(engine::component::PhysicsComponent* com
 
 void PhysicsEngine::registerCollisionLayer(engine::component::TileLayerComponent* layer)
 {
+    // 设置物理引擎实例指针, 方便反注册
+    layer->setPhysicsEngine(this);
+
     m_collisionTileLayers.push_back(layer);
     spdlog::trace("碰撞瓦片图层注册完成。");
 }

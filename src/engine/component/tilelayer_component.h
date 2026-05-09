@@ -6,6 +6,10 @@
 #include <glm/vec2.hpp>
 #include <vector>
 
+namespace engine::physics {
+class PhysicsEngine;
+}
+
 namespace engine::component {
 
 /**
@@ -88,12 +92,15 @@ public:
 
     void setOffset(const glm::vec2& offset) { m_offset = offset; } ///< @brief 设置瓦片层的偏移量
     void setHidden(bool hidden) { m_isHidden = hidden; } ///< @brief 设置是否隐藏（不渲染）
+    ///< @brief 设置物理引擎实例指针
+    void setPhysicsEngine(engine::physics::PhysicsEngine* engine) { m_physicsEngine = engine; }
 
 protected:
     // 核心循环方法
     void init() override;
     void update(float deltaTime, engine::core::Context&) override {}
     void render(engine::core::Context& context) override;
+    void clean() override;
 
 private:
     glm::ivec2 m_tileSize; ///< @brief 单个瓦片尺寸（像素）
@@ -103,6 +110,8 @@ private:
     ///< @brief 瓦片层在世界中的偏移量 (瓦片层通常不需要缩放及旋转，因此不引入Transform组件)
     glm::vec2 m_offset{ 0.0f, 0.0f }; // m_offset 最好也保持默认的0，以免增加不必要的复杂性
     bool m_isHidden{ false };         ///< @brief 是否隐藏（不渲染）
+    ///< @brief 物理引擎实例指针。clean() 方法中可能需要反注册
+    engine::physics::PhysicsEngine* m_physicsEngine{ nullptr };
 };
 
 } // namespace engine::component

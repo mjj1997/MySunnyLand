@@ -51,8 +51,13 @@ public:
     float maxSpeed() const { return m_maxSpeed; }                 ///< @brief 获取当前的最大速度
 
 private:
+    ///< @brief 检测并处理对象之间的碰撞，并记录需要游戏逻辑处理的碰撞对。
     void checkObjectCollisions();
+    /// @brief 检测并处理游戏对象和瓦片层之间的碰撞。
     void resolveTileCollisions(engine::component::PhysicsComponent* component, float deltaTime);
+    /// @brief 处理可移动物体与 Solid 物体的碰撞。
+    void resolveSolidCollisions(engine::object::GameObject* movingObject,
+                                engine::object::GameObject* solidObject);
 
     ///< @brief 注册的物理组件容器，非拥有指针
     std::vector<engine::component::PhysicsComponent*> m_components;

@@ -111,8 +111,15 @@ void PhysicsEngine::checkObjectCollisions()
 
             // 通过保护性测试后，正式执行逻辑
             if (collision::checkCollision(*colliderComponentA, *colliderComponentB)) {
-                // 记录碰撞对
-                m_collisionPairs.emplace_back(gameObjectA, gameObjectB);
+                // 如果是可移动物体与 Solid 物体碰撞，则直接处理位置变化，不用记录碰撞对
+                if (gameObjectA->tag() != "solid" && gameObjectB->tag() == "solid") {
+                    resolveSolidCollisions(gameObjectA, gameObjectB);
+                } else if (gameObjectA->tag() == "solid" && gameObjectB->tag() != "solid") {
+                    resolveSolidCollisions(gameObjectB, gameObjectA);
+                } else {
+                    // 记录碰撞对
+                    m_collisionPairs.emplace_back(gameObjectA, gameObjectB);
+                }
             }
         }
     }
@@ -246,5 +253,9 @@ void PhysicsEngine::resolveTileCollisions(engine::component::PhysicsComponent* c
     transformComponent->translate(newObjectPosition - objectPosition);
     component->setVelocity(glm::clamp(component->velocity(), -m_maxSpeed, m_maxSpeed));
 }
+
+void PhysicsEngine::resolveSolidCollisions(engine::object::GameObject* movingObject,
+                                           engine::object::GameObject* solidObject)
+{}
 
 } // namespace engine::physics

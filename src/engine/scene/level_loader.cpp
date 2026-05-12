@@ -451,7 +451,7 @@ std::optional<nlohmann::json> LevelLoader::getTileJsonByGid(int gid) const
     for (const auto& tile : tileSetData["tiles"]) {
         auto tileId = tile.value("id", 0);
         if (tileId == localId) {
-            return tile;
+            return std::make_optional(tile);
         }
     }
 

@@ -3,9 +3,10 @@
 #include "../utils/math.h"
 
 #include <glm/vec2.hpp>
-#include <nlohmann/json_fwd.hpp>
+#include <nlohmann/json.hpp>
 
 #include <map>
+#include <optional>
 #include <string>
 
 namespace engine::component {

@@ -85,6 +85,13 @@ private:
      */
     std::optional<engine::utils::Rect> getColliderRect(const nlohmann::json& tileJson);
 
+    /**
+     * @brief 根据全局 ID 获取瓦片json对象 (用于对象层获取瓦片信息)
+     * @param gid 全局 ID
+     * @return 瓦片json对象
+     */
+    std::optional<nlohmann::json> getTileJsonByGid(int gid) const;
+
     ///< @brief 地图路径（拼接路径时需要）
     std::string m_mapPath;
     glm::ivec2 m_mapSize;

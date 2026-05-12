@@ -373,4 +373,35 @@ std::optional<engine::utils::Rect> LevelLoader::getColliderRect(const nlohmann::
     return std::nullopt;
 }
 
+std::optional<nlohmann::json> LevelLoader::getTileJsonByGid(int gid) const
+{
+    // 1. 查找 tileSets 中键大于 gid 的第一个元素，返回迭代器
+    auto it = m_tileSets.upper_bound(gid);
+    if (it == m_tileSets.begin()) {
+        spdlog::error("gid为 {} 的瓦片未找到图块集。", gid);
+        return std::nullopt;
+    }
+    --it; // 前移一个位置，这样就得到不大于gid的最近一个元素（我们需要的）
+
+    // 2. 获取图块集 json 对象
+    const auto& tileSetData = it->second;
+    const auto& tileSetFirstGid = it->first;
+    if (!tileSetData.contains("tiles")) {
+        // 没有tiles字段的话不符合数据格式要求，直接返回空
+        spdlog::error("Tileset 文件 '{}' 缺少 'tiles' 属性。", tileSetFirstGid);
+        return std::nullopt;
+    }
+
+    // 3. 遍历tiles数组，根据id查找对应的瓦片并返回瓦片 json 对象
+    auto localId = gid - tileSetFirstGid; // 计算瓦片在图块集中的局部ID
+    for (const auto& tile : tileSetData["tiles"]) {
+        auto tileId = tile.value("id", 0);
+        if (tileId == localId) {
+            return tile;
+        }
+    }
+
+    return std::nullopt;
+}
+
 } // namespace engine::scene

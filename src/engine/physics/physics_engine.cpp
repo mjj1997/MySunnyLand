@@ -243,7 +243,7 @@ void PhysicsEngine::resolveTileCollisions(engine::component::PhysicsComponent* c
         }
     }
     // 更新物体位置，并限制最大速度
-    transformComponent->setPosition(newObjectPosition);
+    transformComponent->translate(newObjectPosition - objectPosition);
     component->setVelocity(glm::clamp(component->velocity(), -m_maxSpeed, m_maxSpeed));
 }
 

@@ -51,6 +51,31 @@ private:
     engine::component::TileType tileTypeById(const nlohmann::json& tileSetJson, int localId);
     engine::component::TileType getTileType(const nlohmann::json& tileJson);
 
+    /**
+     * @brief 获取瓦片属性
+     * @tparam T 属性类型
+     * @param tileJson 瓦片json数据
+     * @param propertyName 属性名称
+     * @return 属性值，如果属性不存在则返回 std::nullopt
+     */
+    template<typename T>
+    std::optional<T> getTileProperty(const nlohmann::json& tileJson, const std::string& propertyName)
+    {
+        if (!tileJson.contains("properties")) {
+            return std::nullopt;
+        }
+
+        for (const auto& property : tileJson["properties"]) {
+            if (property.contains("name") && property["name"] == propertyName) {
+                if (property.contains("value")) {
+                    return property["value"].get<T>();
+                }
+            }
+        }
+
+        return std::nullopt;
+    }
+
     ///< @brief 地图路径（拼接路径时需要）
     std::string m_mapPath;
     glm::ivec2 m_mapSize;

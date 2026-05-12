@@ -347,4 +347,30 @@ engine::component::TileType LevelLoader::getTileType(const nlohmann::json& tileJ
     return engine::component::TileType::Normal;
 }
 
+std::optional<engine::utils::Rect> LevelLoader::getColliderRect(const nlohmann::json& tileJson)
+{
+    if (!tileJson.contains("objectgroup")) {
+        return std::nullopt;
+    }
+
+    const auto& objectGroup = tileJson["objectgroup"];
+    if (!objectGroup.contains("objects")) {
+        return std::nullopt;
+    }
+
+    // 一个图片只支持一个碰撞器。如果有多个，就返回第一个不为空的碰撞器
+    for (const auto& object : objectGroup["objects"]) {
+        auto rect = engine::utils::Rect{
+            glm::vec2{ object.value("x", 0.0f), object.value("y", 0.0f) },
+            glm::vec2{ object.value("width", 0.0f), object.value("height", 0.0f) }
+        };
+        if (rect.size.x > 0.0f && rect.size.y > 0.0f) {
+            return rect;
+        }
+    }
+
+    // 如果没有找到不为空的碰撞器，就返回空
+    return std::nullopt;
+}
+
 } // namespace engine::scene

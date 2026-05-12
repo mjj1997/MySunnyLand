@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../utils/math.h"
+
 #include <glm/vec2.hpp>
 #include <nlohmann/json_fwd.hpp>
 
@@ -75,6 +77,13 @@ private:
 
         return std::nullopt;
     }
+
+    /**
+     * @brief 获取瓦片碰撞器矩形
+     * @param tileJson 瓦片json数据
+     * @return 碰撞器矩形，如果碰撞器不存在则返回 std::nullopt
+     */
+    std::optional<engine::utils::Rect> getColliderRect(const nlohmann::json& tileJson);
 
     ///< @brief 地图路径（拼接路径时需要）
     std::string m_mapPath;

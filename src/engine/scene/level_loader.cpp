@@ -260,36 +260,58 @@ void LevelLoader::loadObjectLayer(const nlohmann::json& layerJson, SceneBase& sc
     }
 }
 
-std::string LevelLoader::resolvePath(const std::string& relativePath, const std::string& filePath)
+std::optional<engine::utils::Rect> LevelLoader::getColliderRect(const nlohmann::json& tileJson)
 {
-    try {
-        // 获取地图/瓦片集文件的父目录（相对于可执行文件） "assets/maps/level1.tmj" -> "assets/maps"
-        auto fileDir = std::filesystem::path(filePath).parent_path();
-        // 合并路径（相对于可执行文件）并返回。
-        /* std::filesystem::canonical：解析路径中的当前目录（.）和上级目录（..）导航符，得到一个干净的路径 */
-        auto finalPath = std::filesystem::canonical(fileDir / relativePath);
-        return finalPath.string();
-    } catch (const std::exception& e) {
-        spdlog::error("解析路径失败: {}", e.what());
-        return relativePath;
+    if (!tileJson.contains("objectgroup")) {
+        return std::nullopt;
     }
+
+    const auto& objectGroup = tileJson["objectgroup"];
+    if (!objectGroup.contains("objects")) {
+        return std::nullopt;
+    }
+
+    // 一个图片只支持一个碰撞器。如果有多个，就返回第一个不为空的碰撞器
+    for (const auto& object : objectGroup["objects"]) {
+        auto rect = engine::utils::Rect{
+            glm::vec2{ object.value("x", 0.0f), object.value("y", 0.0f) },
+            glm::vec2{ object.value("width", 0.0f), object.value("height", 0.0f) }
+        };
+        if (rect.size.x > 0.0f && rect.size.y > 0.0f) {
+            return rect;
+        }
+    }
+
+    // 如果没有找到不为空的碰撞器，就返回空
+    return std::nullopt;
 }
 
-void LevelLoader::loadTileset(const std::string& tileSetPath, int firstGid)
+engine::component::TileType LevelLoader::getTileType(const nlohmann::json& tileJson)
 {
-    std::ifstream file{ tileSetPath };
-    if (!file.is_open()) {
-        spdlog::error("无法打开瓦片集文件: {}", tileSetPath);
-        return;
+    if (tileJson.contains("properties")) {
+        for (const auto& property : tileJson["properties"]) {
+            if (property.value("name", "") == "solid") {
+                return property.value("value", false) ? engine::component::TileType::Solid
+                                                      : engine::component::TileType::Normal;
+            }
+        }
     }
 
-    nlohmann::json tileSetData;
-    file >> tileSetData;
+    return engine::component::TileType::Normal;
+}
 
-    // 注入瓦片集文件路径，方便后续加载瓦片时解析相对路径
-    tileSetData["filePath"] = tileSetPath;
+engine::component::TileType LevelLoader::getTileTypeById(const nlohmann::json& tileSetJson,
+                                                         int localId)
+{
+    if (tileSetJson.contains("tiles")) {
+        for (const auto& tile : tileSetJson["tiles"]) {
+            if (tile.value("id", -1) == localId) {
+                return getTileType(tile);
+            }
+        }
+    }
 
-    m_tileSets[firstGid] = std::move(tileSetData);
+    return engine::component::TileType::Normal;
 }
 
 engine::component::TileInfo LevelLoader::getTileInfoByGid(int gid)
@@ -374,60 +396,6 @@ engine::component::TileInfo LevelLoader::getTileInfoByGid(int gid)
     return engine::component::TileInfo{};
 }
 
-engine::component::TileType LevelLoader::getTileTypeById(const nlohmann::json& tileSetJson,
-                                                         int localId)
-{
-    if (tileSetJson.contains("tiles")) {
-        for (const auto& tile : tileSetJson["tiles"]) {
-            if (tile.value("id", -1) == localId) {
-                return getTileType(tile);
-            }
-        }
-    }
-
-    return engine::component::TileType::Normal;
-}
-
-engine::component::TileType LevelLoader::getTileType(const nlohmann::json& tileJson)
-{
-    if (tileJson.contains("properties")) {
-        for (const auto& property : tileJson["properties"]) {
-            if (property.value("name", "") == "solid") {
-                return property.value("value", false) ? engine::component::TileType::Solid
-                                                      : engine::component::TileType::Normal;
-            }
-        }
-    }
-
-    return engine::component::TileType::Normal;
-}
-
-std::optional<engine::utils::Rect> LevelLoader::getColliderRect(const nlohmann::json& tileJson)
-{
-    if (!tileJson.contains("objectgroup")) {
-        return std::nullopt;
-    }
-
-    const auto& objectGroup = tileJson["objectgroup"];
-    if (!objectGroup.contains("objects")) {
-        return std::nullopt;
-    }
-
-    // 一个图片只支持一个碰撞器。如果有多个，就返回第一个不为空的碰撞器
-    for (const auto& object : objectGroup["objects"]) {
-        auto rect = engine::utils::Rect{
-            glm::vec2{ object.value("x", 0.0f), object.value("y", 0.0f) },
-            glm::vec2{ object.value("width", 0.0f), object.value("height", 0.0f) }
-        };
-        if (rect.size.x > 0.0f && rect.size.y > 0.0f) {
-            return rect;
-        }
-    }
-
-    // 如果没有找到不为空的碰撞器，就返回空
-    return std::nullopt;
-}
-
 std::optional<nlohmann::json> LevelLoader::getTileJsonByGid(int gid) const
 {
     // 1. 查找 tileSets 中键大于 gid 的第一个元素，返回迭代器
@@ -457,6 +425,38 @@ std::optional<nlohmann::json> LevelLoader::getTileJsonByGid(int gid) const
     }
 
     return std::nullopt;
+}
+
+void LevelLoader::loadTileset(const std::string& tileSetPath, int firstGid)
+{
+    std::ifstream file{ tileSetPath };
+    if (!file.is_open()) {
+        spdlog::error("无法打开瓦片集文件: {}", tileSetPath);
+        return;
+    }
+
+    nlohmann::json tileSetData;
+    file >> tileSetData;
+
+    // 注入瓦片集文件路径，方便后续加载瓦片时解析相对路径
+    tileSetData["filePath"] = tileSetPath;
+
+    m_tileSets[firstGid] = std::move(tileSetData);
+}
+
+std::string LevelLoader::resolvePath(const std::string& relativePath, const std::string& filePath)
+{
+    try {
+        // 获取地图/瓦片集文件的父目录（相对于可执行文件） "assets/maps/level1.tmj" -> "assets/maps"
+        auto fileDir = std::filesystem::path(filePath).parent_path();
+        // 合并路径（相对于可执行文件）并返回。
+        /* std::filesystem::canonical：解析路径中的当前目录（.）和上级目录（..）导航符，得到一个干净的路径 */
+        auto finalPath = std::filesystem::canonical(fileDir / relativePath);
+        return finalPath.string();
+    } catch (const std::exception& e) {
+        spdlog::error("解析路径失败: {}", e.what());
+        return relativePath;
+    }
 }
 
 } // namespace engine::scene

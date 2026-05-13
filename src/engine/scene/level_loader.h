@@ -39,22 +39,6 @@ private:
     void loadObjectLayer(const nlohmann::json& layerJson, SceneBase& scene);
 
     /**
-     * @brief 解析图片路径，合并文件路径和相对路径。例如：
-     * 1. 文件路径："assets/maps/level1.tmj"
-     * 2. 相对路径："../textures/Layers/back.png"
-     * 3. 最终路径："assets/textures/Layers/back.png"
-     * @param relativePath 相对路径（相对于文件）
-     * @param filePath 文件路径
-     * @return std::string 解析后的完整路径。
-     */
-    std::string resolvePath(const std::string& relativePath, const std::string& filePath);
-
-    void loadTileset(const std::string& tileSetPath, int firstGid);
-    engine::component::TileInfo getTileInfoByGid(int gid);
-    engine::component::TileType getTileTypeById(const nlohmann::json& tileSetJson, int localId);
-    engine::component::TileType getTileType(const nlohmann::json& tileJson);
-
-    /**
      * @brief 获取瓦片属性
      * @tparam T 属性类型
      * @param tileJson 瓦片json数据
@@ -87,11 +71,51 @@ private:
     std::optional<engine::utils::Rect> getColliderRect(const nlohmann::json& tileJson);
 
     /**
+     * @brief 根据瓦片json对象获取瓦片类型
+     * @param tileJson 瓦片json数据
+     * @return 瓦片类型
+     */
+    engine::component::TileType getTileType(const nlohmann::json& tileJson);
+
+    /**
+     * @brief 根据（单一图片）图块集中的id获取瓦片类型
+     * @param tileSetJson 图块集json数据
+     * @param localId 图块集中的id
+     * @return 瓦片类型
+     */
+    engine::component::TileType getTileTypeById(const nlohmann::json& tileSetJson, int localId);
+
+    /**
+     * @brief 根据全局 ID 获取瓦片信息。
+     * @param gid 全局 ID。
+     * @return engine::component::TileInfo 瓦片信息。
+     */
+    engine::component::TileInfo getTileInfoByGid(int gid);
+
+    /**
      * @brief 根据全局 ID 获取瓦片json对象 (用于对象层获取瓦片信息)
      * @param gid 全局 ID
      * @return 瓦片json对象
      */
     std::optional<nlohmann::json> getTileJsonByGid(int gid) const;
+
+    /**
+     * @brief 加载 Tiled tileset 文件 (.tsj)。
+     * @param tileSetPath Tileset 文件路径。
+     * @param firstGid 此 tileset 的第一个全局 ID。
+     */
+    void loadTileset(const std::string& tileSetPath, int firstGid);
+
+    /**
+     * @brief 解析图片路径，合并文件路径和相对路径。例如：
+     * 1. 文件路径："assets/maps/level1.tmj"
+     * 2. 相对路径："../textures/Layers/back.png"
+     * 3. 最终路径："assets/textures/Layers/back.png"
+     * @param relativePath 相对路径（相对于文件）
+     * @param filePath 文件路径
+     * @return std::string 解析后的完整路径。
+     */
+    std::string resolvePath(const std::string& relativePath, const std::string& filePath);
 
     ///< @brief 地图路径（拼接路径时需要）
     std::string m_mapPath;

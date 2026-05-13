@@ -42,8 +42,12 @@ void GameScene::init()
         }
     }
 
-    // 创建 testObject
-    createTestObject();
+    // 获取玩家对象
+    m_player = findGameObjectByName("player");
+    if (!m_player) {
+        spdlog::error("未找到玩家对象。");
+        return;
+    }
 
     SceneBase::init();
     spdlog::trace("GameScene 初始化完成。");
@@ -63,50 +67,13 @@ void GameScene::handleInput()
 {
     SceneBase::handleInput();
 
-    testObject();
+    testPlayer();
     testCollisionPairs();
 }
 
 void GameScene::clean()
 {
     SceneBase::clean();
-}
-
-void GameScene::createTestObject()
-{
-    spdlog::trace("在 GameScene 中创建 testObject...");
-
-    // 物体1：受重力的箱子（AABB）
-    auto testObject = std::make_unique<engine::object::GameObject>("testObject");
-    m_testObject = testObject.get();
-
-    // 添加组件
-    testObject->addComponent<engine::component::TransformComponent>(glm::vec2{ 100.0f, 100.0f });
-    testObject
-        ->addComponent<engine::component::SpriteComponent>("assets/textures/Props/big-crate.png",
-                                                           context().resourceManager());
-    testObject->addComponent<engine::component::PhysicsComponent>(&context().physicsEngine());
-    testObject->addComponent<engine::component::ColliderComponent>(
-        std::make_unique<engine::physics::AabbCollider>(glm::vec2{ 32.0f, 32.0f }));
-
-    // 将创建好的 GameObject 添加到场景中 （一定要用std::move，否则传递的是左值）
-    addGameObject(std::move(testObject));
-
-    spdlog::trace("testObject 创建并添加到 GameScene 中。");
-
-    // 物体2：静止的箱子（Circle）
-    auto testObject2 = std::make_unique<engine::object::GameObject>("testObject2");
-    testObject2->addComponent<engine::component::TransformComponent>(glm::vec2{ 50.0f, 250.0f });
-    testObject2
-        ->addComponent<engine::component::SpriteComponent>("assets/textures/Props/big-crate.png",
-                                                           context().resourceManager());
-    testObject2->addComponent<engine::component::PhysicsComponent>(&context().physicsEngine(),
-                                                                   1.0f,
-                                                                   false);
-    testObject2->addComponent<engine::component::ColliderComponent>(
-        std::make_unique<engine::physics::CircleCollider>(16.0f));
-    addGameObject(std::move(testObject2));
-    spdlog::trace("testObject2 创建并添加到 GameScene 中。");
 }
 
 void GameScene::testCamera()
@@ -127,14 +94,14 @@ void GameScene::testCamera()
     }
 }
 
-void GameScene::testObject()
+void GameScene::testPlayer()
 {
-    if (!m_testObject) {
+    if (!m_player) {
         return;
     }
 
     auto& inputManager = context().inputManager();
-    auto* physicsComponent = m_testObject->getComponent<engine::component::PhysicsComponent>();
+    auto* physicsComponent = m_player->getComponent<engine::component::PhysicsComponent>();
     if (!physicsComponent) {
         return;
     }

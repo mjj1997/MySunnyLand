@@ -111,8 +111,15 @@ void PhysicsEngine::checkObjectCollisions()
 
             // 通过保护性测试后，正式执行逻辑
             if (collision::checkCollision(*colliderComponentA, *colliderComponentB)) {
-                // 记录碰撞对
-                m_collisionPairs.emplace_back(gameObjectA, gameObjectB);
+                // 如果是可移动物体与 Solid 物体碰撞，则直接处理位置变化，不用记录碰撞对
+                if (gameObjectA->tag() != "solid" && gameObjectB->tag() == "solid") {
+                    resolveSolidCollisions(gameObjectA, gameObjectB);
+                } else if (gameObjectA->tag() == "solid" && gameObjectB->tag() != "solid") {
+                    resolveSolidCollisions(gameObjectB, gameObjectA);
+                } else {
+                    // 记录碰撞对
+                    m_collisionPairs.emplace_back(gameObjectA, gameObjectB);
+                }
             }
         }
     }
@@ -243,8 +250,71 @@ void PhysicsEngine::resolveTileCollisions(engine::component::PhysicsComponent* c
         }
     }
     // 更新物体位置，并限制最大速度
-    transformComponent->setPosition(newObjectPosition);
+    transformComponent->translate(newObjectPosition - objectPosition);
     component->setVelocity(glm::clamp(component->velocity(), -m_maxSpeed, m_maxSpeed));
+}
+
+void PhysicsEngine::resolveSolidCollisions(engine::object::GameObject* movingObject,
+                                           engine::object::GameObject* solidObject)
+{
+    // 进入此函数前，已经检查了各个组件的有效性，因此直接进行计算
+    auto* movingTransformComponent = movingObject
+                                         ->getComponent<engine::component::TransformComponent>();
+    auto* movingPhysicsComponent = movingObject->getComponent<engine::component::PhysicsComponent>();
+    auto* movingColliderComponent = movingObject
+                                        ->getComponent<engine::component::ColliderComponent>();
+    auto* solidColliderComponent = solidObject->getComponent<engine::component::ColliderComponent>();
+
+    // 这里只能获取期望位置，无法获取当前帧初始位置
+    // 因为该方法调用时，已经在 resolveTileCollisions() 中重新计算了物体的位置，因此无法进行轴分离碰撞检测
+    /* 未来可以进行重构，让这里可以获取初始位置。但是我们展示另外一种处理方法 */
+    auto movingAabb = movingColliderComponent->worldAabb();
+    auto solidAabb = solidColliderComponent->worldAabb();
+
+    // --- 使用最小平移向量解决碰撞问题 ---
+    auto movingCenter = movingAabb.position + movingAabb.size / 2.0f;
+    auto solidCenter = solidAabb.position + solidAabb.size / 2.0f;
+    // 计算两个包围盒的重叠部分
+    auto overlap = glm::vec2{ movingAabb.size / 2.0f + solidAabb.size / 2.0f }
+                   - glm::abs(movingCenter - solidCenter);
+    // 如果重叠部分太小，则认为没有碰撞
+    if (overlap.x < 0.1f && overlap.y < 0.1f) {
+        return;
+    }
+    // 如果重叠部分在x方向上更小，则认为碰撞发生在x方向上（推出x方向平移向量最小）
+    if (overlap.x < overlap.y) {
+        // 移动物体在左边，让它贴着右边 Solid 物体（相当于向左移出重叠部分），y方向正常移动
+        if (movingCenter.x < solidCenter.x) {
+            // 设置位置
+            movingTransformComponent->translate(glm::vec2{ -overlap.x, 0.0f });
+            // 设置速度, 如果速度为正(向右移动)，则归零
+            if (movingPhysicsComponent->velocity().x > 0.0f) {
+                movingPhysicsComponent->setVelocity(
+                    glm::vec2{ 0.0f, movingPhysicsComponent->velocity().y });
+            }
+        } else { // 移动物体在右边，让它贴着左边 Solid 物体（相当于向右移出重叠部分），y方向正常移动
+            movingTransformComponent->translate(glm::vec2{ overlap.x, 0.0f });
+            if (movingPhysicsComponent->velocity().x < 0.0f) {
+                movingPhysicsComponent->setVelocity(
+                    glm::vec2{ 0.0f, movingPhysicsComponent->velocity().y });
+            }
+        }
+    } else { // 重叠部分在y方向上更小，则认为碰撞发生在y方向上（推出y方向平移向量最小）
+        // 移动物体在上面，让它贴着下面 Solid 物体（相当于向上移出重叠部分），x方向正常移动
+        if (movingCenter.y < solidCenter.y) {
+            movingTransformComponent->translate(glm::vec2{ 0.0f, -overlap.y });
+            if (movingPhysicsComponent->velocity().y > 0.0f) {
+                movingPhysicsComponent->setVelocity(
+                    glm::vec2{ movingPhysicsComponent->velocity().x, 0.0f });
+            }
+        } else { // 移动物体在下面，让它贴着上面 Solid 物体（相当于向下移出重叠部分），x方向正常移动
+            movingTransformComponent->translate(glm::vec2{ 0.0f, overlap.y });
+            if (movingPhysicsComponent->velocity().y < 0.0f) {
+                movingPhysicsComponent->setVelocity(
+                    glm::vec2{ 0.0f, movingPhysicsComponent->velocity().y });
+            }
+        }
+    }
 }
 
 } // namespace engine::physics

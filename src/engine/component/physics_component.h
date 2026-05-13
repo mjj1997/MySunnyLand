@@ -26,12 +26,12 @@ public:
      * @brief 构造函数  
      * 
      * @param physicsEngine 指向 PhysicsEngine 的指针，不能为 nullptr
-     * @param mass 物体质量，默认1.0
      * @param isGravityEnabled 物体是否受重力影响，默认 true
+     * @param mass 物体质量，默认1.0
      */
     explicit PhysicsComponent(engine::physics::PhysicsEngine* physicsEngine,
-                              float mass = 1.0f,
-                              bool isGravityEnabled = true);
+                              bool isGravityEnabled = true,
+                              float mass = 1.0f);
     ~PhysicsComponent() override = default;
 
     // 删除复制/移动操作

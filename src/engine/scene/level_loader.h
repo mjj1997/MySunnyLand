@@ -1,9 +1,12 @@
 #pragma once
 
+#include "../utils/math.h"
+
 #include <glm/vec2.hpp>
-#include <nlohmann/json_fwd.hpp>
+#include <nlohmann/json.hpp>
 
 #include <map>
+#include <optional>
 #include <string>
 
 namespace engine::component {
@@ -50,6 +53,45 @@ private:
     engine::component::TileInfo tileInfoByGid(int gid);
     engine::component::TileType tileTypeById(const nlohmann::json& tileSetJson, int localId);
     engine::component::TileType getTileType(const nlohmann::json& tileJson);
+
+    /**
+     * @brief 获取瓦片属性
+     * @tparam T 属性类型
+     * @param tileJson 瓦片json数据
+     * @param propertyName 属性名称
+     * @return 属性值，如果属性不存在则返回 std::nullopt
+     */
+    template<typename T>
+    std::optional<T> getTileProperty(const nlohmann::json& tileJson, const std::string& propertyName)
+    {
+        if (!tileJson.contains("properties")) {
+            return std::nullopt;
+        }
+
+        for (const auto& property : tileJson["properties"]) {
+            if (property.contains("name") && property["name"] == propertyName) {
+                if (property.contains("value")) {
+                    return property["value"].get<T>();
+                }
+            }
+        }
+
+        return std::nullopt;
+    }
+
+    /**
+     * @brief 获取瓦片碰撞器矩形
+     * @param tileJson 瓦片json数据
+     * @return 碰撞器矩形，如果碰撞器不存在则返回 std::nullopt
+     */
+    std::optional<engine::utils::Rect> getColliderRect(const nlohmann::json& tileJson);
+
+    /**
+     * @brief 根据全局 ID 获取瓦片json对象 (用于对象层获取瓦片信息)
+     * @param gid 全局 ID
+     * @return 瓦片json对象
+     */
+    std::optional<nlohmann::json> getTileJsonByGid(int gid) const;
 
     ///< @brief 地图路径（拼接路径时需要）
     std::string m_mapPath;

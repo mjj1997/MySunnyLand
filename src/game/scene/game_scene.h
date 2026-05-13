@@ -23,12 +23,12 @@ public:
 
 private:
     // 测试函数
-    void createTestObject();
     void testCamera();
-    void testObject();
+    void testPlayer();
     void testCollisionPairs();
 
-    engine::object::GameObject* m_testObject{ nullptr };
+    /// @brief 保存玩家对象指针
+    engine::object::GameObject* m_player{ nullptr };
 };
 
 } // namespace game::scene

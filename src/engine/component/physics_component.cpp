@@ -8,11 +8,11 @@
 namespace engine::component {
 
 PhysicsComponent::PhysicsComponent(engine::physics::PhysicsEngine* physicsEngine,
-                                   float mass,
-                                   bool isGravityEnabled)
+                                   bool isGravityEnabled,
+                                   float mass)
     : m_physicsEngine{ physicsEngine }
-    , m_mass{ mass >= 0.0f ? mass : 1.0f }
     , m_isGravityEnabled{ isGravityEnabled }
+    , m_mass{ mass >= 0.0f ? mass : 1.0f }
 {
     if (!physicsEngine) {
         spdlog::error("PhysicsComponent构造函数中，PhysicsEngine指针不能为nullptr！");

@@ -1,5 +1,7 @@
 #include "level_loader.h"
+#include "../component/collider_component.h"
 #include "../component/parallax_component.h"
+#include "../component/physics_component.h"
 #include "../component/sprite_component.h"
 #include "../component/tilelayer_component.h"
 #include "../component/transform_component.h"
@@ -199,6 +201,58 @@ void LevelLoader::loadObjectLayer(const nlohmann::json& layerJson, SceneBase& sc
                                                                          scene.context()
                                                                              .resourceManager());
 
+            // 获取瓦片json信息
+            // 1. 必然存在，因为getTileInfoByGid(gid)函数已经顺利执行
+            // 2. 这里再获取json，实际上检索了两次，未来可以优化
+            auto tileJson = getTileJsonByGid(gid);
+
+            // 获取碰撞器信息：如果是Solid类型，则添加物理组件，且图片源矩形区域就是碰撞盒大小
+            if (tileInfo.type == engine::component::TileType::Solid) {
+                auto collider = std::make_unique<engine::physics::AabbCollider>(srcRectSize);
+                gameObject->addComponent<engine::component::ColliderComponent>(std::move(collider));
+                // 物理组件不受重力影响
+                gameObject->addComponent<engine::component::PhysicsComponent>(&scene.context()
+                                                                                   .physicsEngine(),
+                                                                              false);
+                // 设置标签方便物理引擎检索
+                gameObject->setTag("solid");
+            }
+            // 如果非Solid类型，检查自定义碰撞盒是否存在
+            else if (auto rect = getColliderRect(tileJson); rect) {
+                // 如果有，添加碰撞组件
+                auto collider = std::make_unique<engine::physics::AabbCollider>(rect->size);
+                auto* colliderComponent = gameObject
+                                              ->addComponent<engine::component::ColliderComponent>(
+                                                  std::move(collider));
+                // 自定义碰撞盒的坐标是相对于图片坐标，也就是针对 TransformComponent 的偏移量
+                colliderComponent->setOffset(rect->position);
+                // 和物理组件（默认不受重力影响）
+                gameObject->addComponent<engine::component::PhysicsComponent>(&scene.context()
+                                                                                   .physicsEngine(),
+                                                                              false);
+            }
+
+            // 获取标签信息并设置
+            auto tag = getTileProperty<std::string>(tileJson, "tag");
+            if (tag) {
+                gameObject->setTag(tag.value());
+            }
+
+            // 获取重力信息并设置
+            auto gravity = getTileProperty<bool>(tileJson, "gravity");
+            if (gravity) {
+                auto physicsComponent = gameObject
+                                            ->getComponent<engine::component::PhysicsComponent>();
+                if (physicsComponent) {
+                    physicsComponent->setGravityEnabled(gravity.value());
+                } else {
+                    spdlog::warn("对象 '{}' 在设置重力信息时没有物理组件，请检查地图设置。",
+                                 objectName);
+                    gameObject->addComponent<engine::component::PhysicsComponent>(
+                        &scene.context().physicsEngine(), gravity.value());
+                }
+            }
+
             // 5. 添加到场景中
             scene.addGameObject(std::move(gameObject));
             spdlog::info("加载对象: '{}' 完成", objectName);
@@ -345,6 +399,63 @@ engine::component::TileType LevelLoader::getTileType(const nlohmann::json& tileJ
     }
 
     return engine::component::TileType::Normal;
+}
+
+std::optional<engine::utils::Rect> LevelLoader::getColliderRect(const nlohmann::json& tileJson)
+{
+    if (!tileJson.contains("objectgroup")) {
+        return std::nullopt;
+    }
+
+    const auto& objectGroup = tileJson["objectgroup"];
+    if (!objectGroup.contains("objects")) {
+        return std::nullopt;
+    }
+
+    // 一个图片只支持一个碰撞器。如果有多个，就返回第一个不为空的碰撞器
+    for (const auto& object : objectGroup["objects"]) {
+        auto rect = engine::utils::Rect{
+            glm::vec2{ object.value("x", 0.0f), object.value("y", 0.0f) },
+            glm::vec2{ object.value("width", 0.0f), object.value("height", 0.0f) }
+        };
+        if (rect.size.x > 0.0f && rect.size.y > 0.0f) {
+            return rect;
+        }
+    }
+
+    // 如果没有找到不为空的碰撞器，就返回空
+    return std::nullopt;
+}
+
+std::optional<nlohmann::json> LevelLoader::getTileJsonByGid(int gid) const
+{
+    // 1. 查找 tileSets 中键大于 gid 的第一个元素，返回迭代器
+    auto it = m_tileSets.upper_bound(gid);
+    if (it == m_tileSets.begin()) {
+        spdlog::error("gid为 {} 的瓦片未找到图块集。", gid);
+        return std::nullopt;
+    }
+    --it; // 前移一个位置，这样就得到不大于gid的最近一个元素（我们需要的）
+
+    // 2. 获取图块集 json 对象
+    const auto& tileSetData = it->second;
+    const auto& tileSetFirstGid = it->first;
+    if (!tileSetData.contains("tiles")) {
+        // 没有tiles字段的话不符合数据格式要求，直接返回空
+        spdlog::error("Tileset 文件 '{}' 缺少 'tiles' 属性。", tileSetFirstGid);
+        return std::nullopt;
+    }
+
+    // 3. 遍历tiles数组，根据id查找对应的瓦片并返回瓦片 json 对象
+    auto localId = gid - tileSetFirstGid; // 计算瓦片在图块集中的局部ID
+    for (const auto& tile : tileSetData["tiles"]) {
+        auto tileId = tile.value("id", 0);
+        if (tileId == localId) {
+            return std::make_optional(tile);
+        }
+    }
+
+    return std::nullopt;
 }
 
 } // namespace engine::scene

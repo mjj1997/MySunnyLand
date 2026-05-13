@@ -133,7 +133,7 @@ void LevelLoader::loadTileLayer(const nlohmann::json& layerJson, SceneBase& scen
     std::transform(layerJson["data"].begin(),
                    layerJson["data"].end(),
                    std::back_inserter(tiles),
-                   [this](const auto& gid) { return tileInfoByGid(gid); });
+                   [this](const auto& gid) { return getTileInfoByGid(gid); });
 
     // 获取图层名称
     const std::string& layerName{ layerJson.value("name", "Unnamed") };
@@ -163,7 +163,7 @@ void LevelLoader::loadObjectLayer(const nlohmann::json& layerJson, SceneBase& sc
             // TODO: Handle shapes
         } else {
             // 如果gid存在，则代表这是一个带图像的对象
-            auto tileInfo = tileInfoByGid(gid);
+            auto tileInfo = getTileInfoByGid(gid);
             if (tileInfo.sprite.textureId().empty()) {
                 spdlog::error("gid为 {} 的瓦片没有图像纹理。", gid);
                 continue;
@@ -292,7 +292,7 @@ void LevelLoader::loadTileset(const std::string& tileSetPath, int firstGid)
     m_tileSets[firstGid] = std::move(tileSetData);
 }
 
-engine::component::TileInfo LevelLoader::tileInfoByGid(int gid)
+engine::component::TileInfo LevelLoader::getTileInfoByGid(int gid)
 {
     if (gid == 0) {
         return engine::component::TileInfo{};
@@ -328,7 +328,7 @@ engine::component::TileInfo LevelLoader::tileInfoByGid(int gid)
                            static_cast<float>(m_tileSize.x),
                            static_cast<float>(m_tileSize.y) };
         engine::render::Sprite sprite{ textureId, srcRect };
-        auto tileType = tileTypeById(tileSetData, localId);
+        auto tileType = getTileTypeById(tileSetData, localId);
         return engine::component::TileInfo{ sprite, tileType };
     } else { // 这是多图片的情况
         if (!tileSetData.contains("tiles")) {
@@ -374,7 +374,8 @@ engine::component::TileInfo LevelLoader::tileInfoByGid(int gid)
     return engine::component::TileInfo{};
 }
 
-engine::component::TileType LevelLoader::tileTypeById(const nlohmann::json& tileSetJson, int localId)
+engine::component::TileType LevelLoader::getTileTypeById(const nlohmann::json& tileSetJson,
+                                                         int localId)
 {
     if (tileSetJson.contains("tiles")) {
         for (const auto& tile : tileSetJson["tiles"]) {

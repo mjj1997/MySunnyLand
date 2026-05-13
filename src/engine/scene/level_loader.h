@@ -50,8 +50,8 @@ private:
     std::string resolvePath(const std::string& relativePath, const std::string& filePath);
 
     void loadTileset(const std::string& tileSetPath, int firstGid);
-    engine::component::TileInfo tileInfoByGid(int gid);
-    engine::component::TileType tileTypeById(const nlohmann::json& tileSetJson, int localId);
+    engine::component::TileInfo getTileInfoByGid(int gid);
+    engine::component::TileType getTileTypeById(const nlohmann::json& tileSetJson, int localId);
     engine::component::TileType getTileType(const nlohmann::json& tileJson);
 
     /**

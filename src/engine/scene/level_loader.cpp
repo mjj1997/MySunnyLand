@@ -22,30 +22,30 @@ namespace engine::scene {
 
 bool LevelLoader::loadLevel(const std::string& mapPath, SceneBase& scene)
 {
-    // 1. 加载 JSON 文件
+    // 1. 加载关卡地图 JSON 文件
     std::ifstream file{ mapPath };
     if (!file.is_open()) {
-        spdlog::error("无法打开关卡文件: {}", mapPath);
+        spdlog::error("无法打开关卡地图文件: {}", mapPath);
         return false;
     }
 
-    // 2. 解析 JSON 数据
-    nlohmann::json jsonData;
+    // 2. 解析关卡地图 JSON 数据
+    nlohmann::json mapJson;
     try {
-        file >> jsonData;
+        file >> mapJson;
     } catch (const nlohmann::json::parse_error& e) {
-        spdlog::error("解析 JSON 数据失败: {}", e.what());
+        spdlog::error("解析关卡地图 JSON 数据失败: {}", e.what());
         return false;
     }
 
     // 3. 获取基本地图信息（地图路径、地图尺寸、瓦片尺寸）
     m_mapPath = mapPath;
-    m_mapSize = glm::ivec2{ jsonData.value("width", 0), jsonData.value("height", 0) };
-    m_tileSize = glm::ivec2{ jsonData.value("tilewidth", 0), jsonData.value("tileheight", 0) };
+    m_mapSize = glm::ivec2{ mapJson.value("width", 0), mapJson.value("height", 0) };
+    m_tileSize = glm::ivec2{ mapJson.value("tilewidth", 0), mapJson.value("tileheight", 0) };
 
     // 4. 加载瓦片集数据
-    if (jsonData.contains("tilesets") && jsonData["tilesets"].is_array()) {
-        for (const auto& tileset : jsonData["tilesets"]) {
+    if (mapJson.contains("tilesets") && mapJson["tilesets"].is_array()) {
+        for (const auto& tileset : mapJson["tilesets"]) {
             auto tilesetPath = resolvePath(tileset["source"].get<std::string>(), m_mapPath);
             auto firstGid = tileset["firstgid"].get<int>();
             loadTileset(tilesetPath, firstGid);
@@ -53,13 +53,13 @@ bool LevelLoader::loadLevel(const std::string& mapPath, SceneBase& scene)
     }
 
     // 5. 加载图层数据
-    if (!jsonData.contains("layers") || !jsonData["layers"].is_array()) {
+    if (!mapJson.contains("layers") || !mapJson["layers"].is_array()) {
         // 地图文件中必须有 layers 数组
         spdlog::error("地图文件 '{}' 中缺少或无效的 'layers' 数组。", mapPath);
         return false;
     }
 
-    for (const auto& layer : jsonData["layers"]) {
+    for (const auto& layer : mapJson["layers"]) {
         // 获取各图层对象中的类型（type）字段
         std::string type{ layer.value("type", "none") };
         if (!layer.value("visible", true)) {
@@ -300,11 +300,11 @@ engine::component::TileType LevelLoader::getTileType(const nlohmann::json& tileJ
     return engine::component::TileType::Normal;
 }
 
-engine::component::TileType LevelLoader::getTileTypeById(const nlohmann::json& tileSetJson,
+engine::component::TileType LevelLoader::getTileTypeById(const nlohmann::json& tilesetJson,
                                                          int localId)
 {
-    if (tileSetJson.contains("tiles")) {
-        for (const auto& tile : tileSetJson["tiles"]) {
+    if (tilesetJson.contains("tiles")) {
+        for (const auto& tile : tilesetJson["tiles"]) {
             if (tile.value("id", -1) == localId) {
                 return getTileType(tile);
             }
@@ -320,53 +320,53 @@ engine::component::TileInfo LevelLoader::getTileInfoByGid(int gid)
         return engine::component::TileInfo{};
     }
 
-    // upper_bound：查找 tileSets 中键大于 gid 的第一个元素，返回迭代器
-    auto it = m_tileSets.upper_bound(gid);
-    if (it == m_tileSets.begin()) {
+    // upper_bound：查找 tilesets 中键大于 gid 的第一个元素，返回迭代器
+    auto it = m_tilesets.upper_bound(gid);
+    if (it == m_tilesets.begin()) {
         spdlog::error("gid为 {} 的瓦片未找到图块集。", gid);
         return engine::component::TileInfo{};
     }
     --it; // 前移一个位置，这样就得到不大于gid的最近一个元素（我们需要的）
 
-    const auto& tileSetData = it->second;
-    const auto& tileSetFirstGid = it->first;
-    const std::string filePath = tileSetData.value("filePath", ""); // 获取图块集文件路径
+    const auto& tilesetJson = it->second;
+    const auto& tilesetFirstGid = it->first;
+    const std::string filePath = tilesetJson.value("filePath", ""); // 获取图块集文件路径
     if (filePath.empty()) {
-        spdlog::error("Tileset 文件 '{}' 缺少 'filePath' 属性。", tileSetFirstGid);
+        spdlog::error("Tileset 文件 '{}' 缺少 'filePath' 属性。", tilesetFirstGid);
         return engine::component::TileInfo{};
     }
 
-    auto localId = gid - tileSetFirstGid; // 计算瓦片在图块集中的局部ID
+    auto localId = gid - tilesetFirstGid; // 计算瓦片在图块集中的局部ID
     // 图块集分为两种情况，需要分别考虑
-    if (tileSetData.contains("image")) { // 这是单一图片的情况
+    if (tilesetJson.contains("image")) { // 这是单一图片的情况
         // 获取图片路径
-        auto textureId = resolvePath(tileSetData["image"].get<std::string>(), filePath);
+        auto textureId = resolvePath(tilesetJson["image"].get<std::string>(), filePath);
         // 计算瓦片在图片网格中的坐标
-        auto coordinateX = localId % tileSetData["columns"].get<int>();
-        auto coordinateY = localId / tileSetData["columns"].get<int>();
+        auto coordinateX = localId % tilesetJson["columns"].get<int>();
+        auto coordinateY = localId / tilesetJson["columns"].get<int>();
         // 根据坐标确定源矩形
         SDL_FRect srcRect{ static_cast<float>(coordinateX * m_tileSize.x),
                            static_cast<float>(coordinateY * m_tileSize.y),
                            static_cast<float>(m_tileSize.x),
                            static_cast<float>(m_tileSize.y) };
         engine::render::Sprite sprite{ textureId, srcRect };
-        auto tileType = getTileTypeById(tileSetData, localId);
+        auto tileType = getTileTypeById(tilesetJson, localId);
         return engine::component::TileInfo{ sprite, tileType };
     } else { // 这是多图片的情况
-        if (!tileSetData.contains("tiles")) {
+        if (!tilesetJson.contains("tiles")) {
             // 没有tiles字段的话不符合数据格式要求，直接返回空的瓦片信息
-            spdlog::error("Tileset 文件 '{}' 缺少 'tiles' 属性。", tileSetFirstGid);
+            spdlog::error("Tileset 文件 '{}' 缺少 'tiles' 属性。", tilesetFirstGid);
             return engine::component::TileInfo{};
         }
 
         // 遍历tiles数组，根据id查找对应的瓦片
-        for (const auto& tile : tileSetData["tiles"]) {
+        for (const auto& tile : tilesetJson["tiles"]) {
             auto tileId = tile.value("id", 0);
             if (tileId == localId) { // 找到对应的瓦片，进行后续操作
                 if (!tile.contains("image")) {
                     // 没有image字段的话不符合数据格式要求，直接返回空的瓦片信息
                     spdlog::error("Tileset 文件 '{}' 中瓦片 {} 缺少 'image' 属性。",
-                                  tileSetFirstGid,
+                                  tilesetFirstGid,
                                   tileId);
                     return engine::component::TileInfo{};
                 }
@@ -392,32 +392,32 @@ engine::component::TileInfo LevelLoader::getTileInfoByGid(int gid)
     }
 
     // 如果能走到这里，说明查找失败，返回空的瓦片信息
-    spdlog::error("Tileset 文件 '{}' 中未找到gid为 {} 的瓦片。", tileSetFirstGid, gid);
+    spdlog::error("Tileset 文件 '{}' 中未找到gid为 {} 的瓦片。", tilesetFirstGid, gid);
     return engine::component::TileInfo{};
 }
 
 std::optional<nlohmann::json> LevelLoader::getTileJsonByGid(int gid) const
 {
-    // 1. 查找 tileSets 中键大于 gid 的第一个元素，返回迭代器
-    auto it = m_tileSets.upper_bound(gid);
-    if (it == m_tileSets.begin()) {
+    // 1. 查找 tilesets 中键大于 gid 的第一个元素，返回迭代器
+    auto it = m_tilesets.upper_bound(gid);
+    if (it == m_tilesets.begin()) {
         spdlog::error("gid为 {} 的瓦片未找到图块集。", gid);
         return std::nullopt;
     }
     --it; // 前移一个位置，这样就得到不大于gid的最近一个元素（我们需要的）
 
     // 2. 获取图块集 json 对象
-    const auto& tileSetData = it->second;
-    const auto& tileSetFirstGid = it->first;
-    if (!tileSetData.contains("tiles")) {
+    const auto& tilesetJson = it->second;
+    const auto& tilesetFirstGid = it->first;
+    if (!tilesetJson.contains("tiles")) {
         // 没有tiles字段的话不符合数据格式要求，直接返回空
-        spdlog::error("Tileset 文件 '{}' 缺少 'tiles' 属性。", tileSetFirstGid);
+        spdlog::error("Tileset 文件 '{}' 缺少 'tiles' 属性。", tilesetFirstGid);
         return std::nullopt;
     }
 
     // 3. 遍历tiles数组，根据id查找对应的瓦片并返回瓦片 json 对象
-    auto localId = gid - tileSetFirstGid; // 计算瓦片在图块集中的局部ID
-    for (const auto& tile : tileSetData["tiles"]) {
+    auto localId = gid - tilesetFirstGid; // 计算瓦片在图块集中的局部ID
+    for (const auto& tile : tilesetJson["tiles"]) {
         auto tileId = tile.value("id", 0);
         if (tileId == localId) {
             return std::make_optional(tile);
@@ -427,21 +427,21 @@ std::optional<nlohmann::json> LevelLoader::getTileJsonByGid(int gid) const
     return std::nullopt;
 }
 
-void LevelLoader::loadTileset(const std::string& tileSetPath, int firstGid)
+void LevelLoader::loadTileset(const std::string& tilesetPath, int firstGid)
 {
-    std::ifstream file{ tileSetPath };
+    std::ifstream file{ tilesetPath };
     if (!file.is_open()) {
-        spdlog::error("无法打开瓦片集文件: {}", tileSetPath);
+        spdlog::error("无法打开瓦片集文件: {}", tilesetPath);
         return;
     }
 
-    nlohmann::json tileSetData;
-    file >> tileSetData;
+    nlohmann::json tilesetJson;
+    file >> tilesetJson;
 
     // 注入瓦片集文件路径，方便后续加载瓦片时解析相对路径
-    tileSetData["filePath"] = tileSetPath;
+    tilesetJson["filePath"] = tilesetPath;
 
-    m_tileSets[firstGid] = std::move(tileSetData);
+    m_tilesets[firstGid] = std::move(tilesetJson);
 }
 
 std::string LevelLoader::resolvePath(const std::string& relativePath, const std::string& filePath)

@@ -220,7 +220,9 @@ void PhysicsEngine::resolveTileCollisions(engine::component::PhysicsComponent* c
             auto tileTypeBottomRight = tileLayer->tileTypeAt(glm::ivec2{ tileXRight, tileYBottom });
 
             if (tileTypeBottomLeft == engine::component::TileType::Solid
-                || tileTypeBottomRight == engine::component::TileType::Solid) {
+                || tileTypeBottomRight == engine::component::TileType::Solid
+                || tileTypeBottomLeft == engine::component::TileType::Unisolid
+                || tileTypeBottomRight == engine::component::TileType::Unisolid) {
                 // 到达地面！速度归零，y方向移动到贴着地面的位置
                 newObjectPosition.y = tileYBottom * tileSize.y - objectSize.y;
                 component->setVelocity({ component->velocity().x, 0.0f });

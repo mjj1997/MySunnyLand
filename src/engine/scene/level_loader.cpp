@@ -299,6 +299,9 @@ engine::component::TileType LevelLoader::getTileType(const nlohmann::json& tileJ
             if (property.value("name", "") == "solid") {
                 return property.value("value", false) ? engine::component::TileType::Solid
                                                       : engine::component::TileType::Normal;
+            } else if (property.value("name", "") == "unisolid") {
+                return property.value("value", false) ? engine::component::TileType::Unisolid
+                                                      : engine::component::TileType::Normal;
             }
         }
     }

@@ -16,9 +16,10 @@ namespace engine::component {
  * @brief 定义瓦片的类型，用于游戏逻辑（例如碰撞）。
  */
 enum class TileType {
-    Empty,  ///< @brief 空白瓦片
-    Normal, ///< @brief 普通瓦片
-    Solid,  ///< @brief 静止可碰撞瓦片
+    Empty,    ///< @brief 空白瓦片
+    Normal,   ///< @brief 普通瓦片
+    Solid,    ///< @brief 静止可碰撞瓦片
+    Unisolid, ///< @brief 单向静止可碰撞瓦片
     // 未来补充其它类型
 };
 

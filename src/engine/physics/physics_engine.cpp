@@ -178,6 +178,18 @@ void PhysicsEngine::resolveTileCollisions(engine::component::PhysicsComponent* c
                 // 撞墙了！速度归零，x方向移动到贴着墙的位置
                 newObjectPosition.x = tileXRight * tileSize.x - objectSize.x;
                 component->setVelocity({ 0.0f, component->velocity().y });
+            } else {
+                // 处理右下角与斜坡的碰撞，根据瓦片中的斜坡高度调整物体位置
+                auto widthRight = newObjectPosition.x + objectSize.x - tileXRight * tileSize.x;
+                auto heightRight = getTileHeightAtWidth(widthRight, tileTypeBottomRight, tileSize);
+                if (heightRight > 0.0f) {
+                    // 如果有碰撞（右下角的世界 Y 坐标 > 斜坡高度的 Y 坐标），就让物体贴着斜坡表面
+                    if (newObjectPosition.y + objectSize.y
+                        > (tileYBottom + 1) * tileSize.y - heightRight) {
+                        newObjectPosition.y = (tileYBottom + 1) * tileSize.y - heightRight
+                                              - objectSize.y;
+                    }
+                }
             }
         } else if (displacement.x < 0.0f) { // 检查左侧碰撞，需要分别测试左上和左下角
             // 获取瓦片坐标的 X 方向分量。两块瓦片的 X 坐标相同
@@ -200,6 +212,18 @@ void PhysicsEngine::resolveTileCollisions(engine::component::PhysicsComponent* c
                 // 向左撞墙是贴在瓦片的右侧, 所以要 +1
                 newObjectPosition.x = (tileXLeft + 1) * tileSize.x;
                 component->setVelocity(glm::vec2{ 0.0f, component->velocity().y });
+            } else {
+                // 处理左下角与斜坡的碰撞
+                auto widthLeft = newObjectPosition.x - tileXLeft * tileSize.x;
+                auto heightLeft = getTileHeightAtWidth(widthLeft, tileTypeBottomLeft, tileSize);
+                if (heightLeft > 0.0f) {
+                    // 如果有碰撞（左下角的世界 Y 坐标 > 斜坡高度的 Y 坐标），就让物体贴着斜坡表面
+                    if (newObjectPosition.y + objectSize.y
+                        > (tileYBottom + 1) * tileSize.y - heightLeft) {
+                        newObjectPosition.y = (tileYBottom + 1) * tileSize.y - heightLeft
+                                              - objectSize.y;
+                    }
+                }
             }
         }
         // 轴分离碰撞检测：再检查Y方向是否有碰撞 (x方向使用初始值 objectPosition.x)
@@ -226,6 +250,23 @@ void PhysicsEngine::resolveTileCollisions(engine::component::PhysicsComponent* c
                 // 到达地面！速度归零，y方向移动到贴着地面的位置
                 newObjectPosition.y = tileYBottom * tileSize.y - objectSize.y;
                 component->setVelocity({ component->velocity().x, 0.0f });
+            } else {
+                // 处理左下角、右下角与斜坡的碰撞
+                auto widthLeft = objectPosition.x - tileXLeft * tileSize.x;
+                auto heightLeft = getTileHeightAtWidth(widthLeft, tileTypeBottomLeft, tileSize);
+                auto widthRight = objectPosition.x + objectSize.x - tileXRight * tileSize.x;
+                auto heightRight = getTileHeightAtWidth(widthRight, tileTypeBottomRight, tileSize);
+                auto height = glm::max(heightLeft, heightRight); // 取左右下角的最高高度进行检测
+                if (height > 0.0f) {                             // 说明至少有一个角点处于斜坡瓦片上
+                    // 如果有碰撞（角点的世界 Y 坐标 > 斜坡高度的 Y 坐标），就让物体贴着斜坡表面
+                    if (newObjectPosition.y + objectSize.y
+                        > (tileYBottom + 1) * tileSize.y - height) {
+                        newObjectPosition.y = (tileYBottom + 1) * tileSize.y - height
+                                              - objectSize.y;
+                        // 到达地面！速度归零，y方向移动到贴着地面的位置
+                        component->setVelocity({ component->velocity().x, 0.0f });
+                    }
+                }
             }
         } else if (displacement.y < 0.0f) {
             // 检查顶部碰撞，需要分别测试左上和右上角
@@ -316,6 +357,29 @@ void PhysicsEngine::resolveSolidCollisions(engine::object::GameObject* movingObj
                     glm::vec2{ 0.0f, movingPhysicsComponent->velocity().y });
             }
         }
+    }
+}
+
+float PhysicsEngine::getTileHeightAtWidth(float width,
+                                          engine::component::TileType type,
+                                          glm::vec2 tileSize)
+{
+    auto ratio = glm::clamp(width / tileSize.x, 0.0f, 1.0f);
+    switch (type) {
+    case engine::component::TileType::Slope_0_1: // 左0   右1
+        return ratio * tileSize.y;
+    case engine::component::TileType::Slope_0_2: // 左0   右1/2
+        return ratio * tileSize.y * 0.5f;
+    case engine::component::TileType::Slope_2_1: // 左1/2 右1
+        return ratio * tileSize.y * 0.5f + tileSize.y * 0.5f;
+    case engine::component::TileType::Slope_1_0: // 左1   右0
+        return (1.0f - ratio) * tileSize.y;
+    case engine::component::TileType::Slope_2_0: // 左1/2 右0
+        return (1.0f - ratio) * tileSize.y * 0.5f;
+    case engine::component::TileType::Slope_1_2: // 左1   右1/2
+        return (1.0f - ratio) * tileSize.y * 0.5f + tileSize.y * 0.5f;
+    default:
+        return 0.0f; // 默认返回0，表示没有斜坡
     }
 }
 

@@ -7,6 +7,7 @@
 namespace engine::component {
 class PhysicsComponent;
 class TileLayerComponent;
+enum class TileType;
 } // namespace engine::component
 
 namespace engine::object {
@@ -58,6 +59,15 @@ private:
     /// @brief 处理可移动物体与 Solid 物体的碰撞。
     void resolveSolidCollisions(engine::object::GameObject* movingObject,
                                 engine::object::GameObject* solidObject);
+
+    /**
+     * @brief 根据瓦片类型和指定宽度 x 坐标，计算瓦片上对应高度 y 坐标。
+     * @param width 从瓦片左侧起算的宽度。
+     * @param type 瓦片类型。
+     * @param tileSize 瓦片尺寸。
+     * @return 瓦片上对应高度（从瓦片下侧起算）。
+     */
+    float getTileHeightAtWidth(float width, engine::component::TileType type, glm::vec2 tileSize);
 
     ///< @brief 注册的物理组件容器，非拥有指针
     std::vector<engine::component::PhysicsComponent*> m_components;

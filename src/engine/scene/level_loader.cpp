@@ -302,6 +302,24 @@ engine::component::TileType LevelLoader::getTileType(const nlohmann::json& tileJ
             } else if (property.value("name", "") == "unisolid") {
                 return property.value("value", false) ? engine::component::TileType::Unisolid
                                                       : engine::component::TileType::Normal;
+            } else if (property.value("name", "") == "slope") {
+                auto slopeType = property.value("value", "");
+                if (slopeType == "0_1") {
+                    return engine::component::TileType::Slope_0_1;
+                } else if (slopeType == "1_0") {
+                    return engine::component::TileType::Slope_1_0;
+                } else if (slopeType == "0_2") {
+                    return engine::component::TileType::Slope_0_2;
+                } else if (slopeType == "2_1") {
+                    return engine::component::TileType::Slope_2_1;
+                } else if (slopeType == "1_2") {
+                    return engine::component::TileType::Slope_1_2;
+                } else if (slopeType == "2_0") {
+                    return engine::component::TileType::Slope_2_0;
+                } else {
+                    spdlog::error("未知的斜坡类型: {}", slopeType);
+                    return engine::component::TileType::Normal;
+                }
             }
         }
     }

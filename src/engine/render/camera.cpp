@@ -44,7 +44,7 @@ glm::vec2 Camera::screenToWorld(const glm::vec2& screenPos) const
     return screenPos + m_position;
 }
 
-glm::vec2 Camera::viewportSize() const
+const glm::vec2& Camera::viewportSize() const
 {
     return m_viewportSize;
 }
@@ -54,7 +54,7 @@ const glm::vec2& Camera::position() const
     return m_position;
 }
 
-std::optional<engine::utils::Rect> Camera::limitBounds() const
+const std::optional<engine::utils::Rect>& Camera::limitBounds() const
 {
     return m_limitBounds;
 }

@@ -40,14 +40,24 @@ public:
     PhysicsComponent(PhysicsComponent&&) = delete;
     PhysicsComponent& operator=(PhysicsComponent&&) = delete;
 
-    // PhysicsEngine使用的物理方法
+    // --- PhysicsEngine使用的物理方法 ---
     ///< @brief 添加力
     void addForce(const glm::vec2& force)
     {
         if (m_enabled)
             m_force += force;
     }
-    void clearForce() { m_force = { 0.0f, 0.0f }; } ///< @brief 清除力
+    ///< @brief 清除力
+    void clearForce() { m_force = { 0.0f, 0.0f }; }
+
+    ///< @brief 重置所有碰撞标志 (在物理更新开始时调用)
+    void resetCollisionFlags()
+    {
+        m_isCollidedBelow = false;
+        m_isCollidedAbove = false;
+        m_isCollidedLeft = false;
+        m_isCollidedRight = false;
+    }
 
     // 设置器/获取器
     ///< @brief 获取TransformComponent指针

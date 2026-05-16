@@ -49,6 +49,12 @@ void GameScene::init()
         return;
     }
 
+    // 设置世界边界
+    auto worldSize = layerObjectMain->getComponent<engine::component::TileLayerComponent>()
+                         ->worldSize();
+    context().physicsEngine().setWorldBounds(
+        engine::utils::Rect{ glm::vec2{ 0.0f, 0.0f }, worldSize });
+
     SceneBase::init();
     spdlog::trace("GameScene 初始化完成。");
 }

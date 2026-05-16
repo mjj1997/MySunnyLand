@@ -55,6 +55,15 @@ void GameScene::init()
     context().physicsEngine().setWorldBounds(
         engine::utils::Rect{ glm::vec2{ 0.0f, 0.0f }, worldSize });
 
+    // 设置相机跟随玩家
+    auto playerTransformComponent = m_player->getComponent<engine::component::TransformComponent>();
+    if (playerTransformComponent != nullptr) {
+        context().camera().setTarget(playerTransformComponent);
+    }
+
+    // 设置相机边界
+    context().camera().setLimitBounds(engine::utils::Rect{ glm::vec2{ 0.0f, 0.0f }, worldSize });
+
     SceneBase::init();
     spdlog::trace("GameScene 初始化完成。");
 }

@@ -1,7 +1,10 @@
 #pragma once
 
+#include "../utils/math.h"
+
 #include <glm/vec2.hpp>
 
+#include <optional>
 #include <vector>
 
 namespace engine::component {
@@ -50,6 +53,10 @@ public:
     const glm::vec2& gravity() const { return m_gravity; } ///< @brief 获取当前的全局重力加速度
     void setMaxSpeed(float max_speed) { m_maxSpeed = max_speed; } ///< @brief 设置最大速度
     float maxSpeed() const { return m_maxSpeed; }                 ///< @brief 获取当前的最大速度
+    ///< @brief 设置世界边界
+    void setWorldBounds(const engine::utils::Rect& worldBounds) { m_worldBounds = worldBounds; }
+    ///< @brief 获取世界边界
+    const std::optional<engine::utils::Rect>& worldBounds() const { return m_worldBounds; }
 
 private:
     ///< @brief 检测并处理对象之间的碰撞，并记录需要游戏逻辑处理的碰撞对。
@@ -81,6 +88,8 @@ private:
     glm::vec2 m_gravity{ 0.0f, 980.0f };
     ///< @brief 最大速度 (像素/秒)
     float m_maxSpeed{ 500.0f };
+    ///< @brief 世界边界，用于限制物体移动范围
+    std::optional<engine::utils::Rect> m_worldBounds{ std::nullopt };
 };
 
 } // namespace engine::physics

@@ -59,6 +59,11 @@ const std::optional<engine::utils::Rect>& Camera::limitBounds() const
     return m_limitBounds;
 }
 
+const engine::component::TransformComponent* Camera::target() const
+{
+    return m_target;
+}
+
 void Camera::setPosition(const glm::vec2& position)
 {
     m_position = position;
@@ -69,6 +74,11 @@ void Camera::setLimitBounds(const engine::utils::Rect& bounds)
 {
     m_limitBounds = bounds;
     clampPosition();
+}
+
+void Camera::setTarget(engine::component::TransformComponent* target)
+{
+    m_target = target;
 }
 
 void Camera::clampPosition()

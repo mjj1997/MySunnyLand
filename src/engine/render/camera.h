@@ -4,6 +4,10 @@
 
 #include <optional>
 
+namespace engine::component {
+class TransformComponent;
+}
+
 namespace engine::render {
 
 /**
@@ -36,9 +40,13 @@ public:
     const glm::vec2& viewportSize() const;                         ///< @brief 获取视口大小
     const glm::vec2& position() const;                             ///< @brief 获取相机位置
     const std::optional<engine::utils::Rect>& limitBounds() const; ///< @brief 获取限制相机的移动范围
+    ///< @brief 获取相机跟随目标的变换组件
+    const engine::component::TransformComponent* target() const;
 
     void setPosition(const glm::vec2& position);            ///< @brief 设置相机位置
     void setLimitBounds(const engine::utils::Rect& bounds); ///< @brief 设置限制相机的移动范围
+    ///< @brief 设置相机跟随目标的变换组件
+    void setTarget(engine::component::TransformComponent* target);
 
 private:
     void clampPosition(); ///< @brief 限制相机位置在边界内
@@ -48,6 +56,9 @@ private:
     glm::vec2 m_position;     ///< @brief 相机左上角的世界坐标
     ///< @brief 限制相机的移动范围，空值表示不限制
     std::optional<engine::utils::Rect> m_limitBounds{ std::nullopt };
+    float m_smoothSpeed{ 5.0f }; ///< @brief 相机移动的平滑速度
+    ///< @brief 相机跟随目标的变换组件，空值表示不跟随
+    engine::component::TransformComponent* m_target{ nullptr };
 };
 
 } // namespace engine::render

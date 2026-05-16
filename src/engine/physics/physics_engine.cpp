@@ -360,6 +360,40 @@ void PhysicsEngine::resolveSolidCollisions(engine::object::GameObject* movingObj
     }
 }
 
+void PhysicsEngine::applyWorldBounds(engine::component::PhysicsComponent* physicsComponent)
+{
+    if (!physicsComponent || !m_worldBounds) {
+        return;
+    }
+
+    // 只限定左、上、右边界，不限定下边界，以碰撞盒作为判断依据
+    auto* gameObject = physicsComponent->owner();
+    auto* colliderComponent = gameObject->getComponent<engine::component::ColliderComponent>();
+    auto* transformComponent = gameObject->getComponent<engine::component::TransformComponent>();
+    auto worldAabb = colliderComponent->worldAabb();
+    auto objectPosition = worldAabb.position;
+    auto objectSize = worldAabb.size;
+
+    // 检查左边界
+    if (objectPosition.x < m_worldBounds->position.x) {
+        physicsComponent->setVelocity(glm::vec2{ 0.0f, physicsComponent->velocity().y });
+        objectPosition.x = m_worldBounds->position.x;
+    }
+    // 检查上边界
+    if (objectPosition.y < m_worldBounds->position.y) {
+        physicsComponent->setVelocity(glm::vec2{ physicsComponent->velocity().x, 0.0f });
+        objectPosition.y = m_worldBounds->position.y;
+    }
+    // 检查右边界
+    if (objectPosition.x + objectSize.x > m_worldBounds->position.x + m_worldBounds->size.x) {
+        physicsComponent->setVelocity(glm::vec2{ 0.0f, physicsComponent->velocity().y });
+        objectPosition.x = m_worldBounds->position.x + m_worldBounds->size.x - objectSize.x;
+    }
+
+    // 更新物体位置(使用translate方法，新位置 - 旧位置)
+    transformComponent->translate(objectPosition - worldAabb.position);
+}
+
 float PhysicsEngine::getTileHeightAtWidth(float width,
                                           engine::component::TileType type,
                                           glm::vec2 tileSize)

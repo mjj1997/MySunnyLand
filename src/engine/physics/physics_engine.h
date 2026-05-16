@@ -66,6 +66,8 @@ private:
     /// @brief 处理可移动物体与 Solid 物体的碰撞。
     void resolveSolidCollisions(engine::object::GameObject* movingObject,
                                 engine::object::GameObject* solidObject);
+    ///< @brief 应用世界边界，限制物体移动范围
+    void applyWorldBounds(engine::component::PhysicsComponent* physicsComponent);
 
     /**
      * @brief 根据瓦片类型和指定宽度 x 坐标，计算瓦片上对应高度 y 坐标。

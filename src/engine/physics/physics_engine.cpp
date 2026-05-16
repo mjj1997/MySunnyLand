@@ -369,7 +369,7 @@ void PhysicsEngine::resolveSolidCollisions(engine::object::GameObject* movingObj
             movingTransformComponent->translate(glm::vec2{ 0.0f, overlap.y });
             if (movingPhysicsComponent->velocity().y < 0.0f) {
                 movingPhysicsComponent->setVelocity(
-                    glm::vec2{ 0.0f, movingPhysicsComponent->velocity().y });
+                    glm::vec2{ movingPhysicsComponent->velocity().x, 0.0f });
                 movingPhysicsComponent->setCollidedAbove(true);
             }
         }

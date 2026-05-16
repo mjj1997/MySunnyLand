@@ -1,4 +1,5 @@
 #include "camera.h"
+#include "../component/transform_component.h"
 
 #include <spdlog/spdlog.h>
 
@@ -16,7 +17,27 @@ Camera::Camera(const glm::vec2& viewportSize,
 
 void Camera::update(float deltaTime)
 {
-    // TODO: 自动跟随目标
+    if (m_target == nullptr) {
+        return;
+    }
+
+    glm::vec2 targetPosition{ m_target->position() };
+    // 计算想要的相机位置，使目标在视口中心
+    glm::vec2 desiredCameraPosition{ targetPosition - m_viewportSize / 2.0f };
+
+    // 计算相机当前位置和想要的相机位置之间的距离
+    auto distance = glm::distance(m_position, desiredCameraPosition);
+    constexpr float threshold{ 1.0f }; // 距离阈值
+    if (distance < threshold) {
+        // 如果相机当前位置和想要的相机位置之间的距离小于阈值，直接设置为想要的相机位置
+        m_position = desiredCameraPosition;
+    } else {
+        // 否则，使用线性插值平滑移动到想要的相机位置
+        m_position = glm::mix(m_position, desiredCameraPosition, deltaTime * m_smoothSpeed);
+        m_position = glm::round(m_position); // 四舍五入到最近的整数, 省略的话会出现画面撕裂
+    }
+
+    clampPosition();
 }
 
 void Camera::move(const glm::vec2& offset)
@@ -44,7 +65,7 @@ glm::vec2 Camera::screenToWorld(const glm::vec2& screenPos) const
     return screenPos + m_position;
 }
 
-glm::vec2 Camera::viewportSize() const
+const glm::vec2& Camera::viewportSize() const
 {
     return m_viewportSize;
 }
@@ -54,9 +75,14 @@ const glm::vec2& Camera::position() const
     return m_position;
 }
 
-std::optional<engine::utils::Rect> Camera::limitBounds() const
+const std::optional<engine::utils::Rect>& Camera::limitBounds() const
 {
     return m_limitBounds;
+}
+
+const engine::component::TransformComponent* Camera::target() const
+{
+    return m_target;
 }
 
 void Camera::setPosition(const glm::vec2& position)
@@ -69,6 +95,11 @@ void Camera::setLimitBounds(const engine::utils::Rect& bounds)
 {
     m_limitBounds = bounds;
     clampPosition();
+}
+
+void Camera::setTarget(engine::component::TransformComponent* target)
+{
+    m_target = target;
 }
 
 void Camera::clampPosition()

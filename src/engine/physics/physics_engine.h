@@ -1,12 +1,16 @@
 #pragma once
 
+#include "../utils/math.h"
+
 #include <glm/vec2.hpp>
 
+#include <optional>
 #include <vector>
 
 namespace engine::component {
 class PhysicsComponent;
 class TileLayerComponent;
+enum class TileType;
 } // namespace engine::component
 
 namespace engine::object {
@@ -49,6 +53,10 @@ public:
     const glm::vec2& gravity() const { return m_gravity; } ///< @brief 获取当前的全局重力加速度
     void setMaxSpeed(float max_speed) { m_maxSpeed = max_speed; } ///< @brief 设置最大速度
     float maxSpeed() const { return m_maxSpeed; }                 ///< @brief 获取当前的最大速度
+    ///< @brief 设置世界边界
+    void setWorldBounds(const engine::utils::Rect& worldBounds) { m_worldBounds = worldBounds; }
+    ///< @brief 获取世界边界
+    const std::optional<engine::utils::Rect>& worldBounds() const { return m_worldBounds; }
 
 private:
     ///< @brief 检测并处理对象之间的碰撞，并记录需要游戏逻辑处理的碰撞对。
@@ -58,6 +66,17 @@ private:
     /// @brief 处理可移动物体与 Solid 物体的碰撞。
     void resolveSolidCollisions(engine::object::GameObject* movingObject,
                                 engine::object::GameObject* solidObject);
+    ///< @brief 应用世界边界，限制物体移动范围
+    void applyWorldBounds(engine::component::PhysicsComponent* physicsComponent);
+
+    /**
+     * @brief 根据瓦片类型和指定宽度 x 坐标，计算瓦片上对应高度 y 坐标。
+     * @param width 从瓦片左侧起算的宽度。
+     * @param type 瓦片类型。
+     * @param tileSize 瓦片尺寸。
+     * @return 瓦片上对应高度（从瓦片下侧起算）。
+     */
+    float getTileHeightAtWidth(float width, engine::component::TileType type, glm::vec2 tileSize);
 
     ///< @brief 注册的物理组件容器，非拥有指针
     std::vector<engine::component::PhysicsComponent*> m_components;
@@ -71,6 +90,8 @@ private:
     glm::vec2 m_gravity{ 0.0f, 980.0f };
     ///< @brief 最大速度 (像素/秒)
     float m_maxSpeed{ 500.0f };
+    ///< @brief 世界边界，用于限制物体移动范围
+    std::optional<engine::utils::Rect> m_worldBounds{ std::nullopt };
 };
 
 } // namespace engine::physics

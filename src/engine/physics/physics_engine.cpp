@@ -68,6 +68,9 @@ void PhysicsEngine::update(float deltaTime)
 
         // 处理瓦片层碰撞（速度和位置的更新移入 resolveTileCollisions()）
         resolveTileCollisions(physicsComponent, deltaTime);
+
+        // 应用世界边界限制
+        applyWorldBounds(physicsComponent);
     }
 
     // 执行碰撞检测

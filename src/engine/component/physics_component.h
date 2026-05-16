@@ -55,8 +55,12 @@ public:
     const glm::vec2& velocity() const { return m_velocity; }     ///< @brief 获取当前速度
     const glm::vec2& force() const { return m_force; }           ///< @brief 获取当前力
     float mass() const { return m_mass; }                        ///< @brief 获取质量
-    bool isGravityEnabled() const { return m_isGravityEnabled; } ///< @brief 获取组件是否受重力影响
-    bool isEnabled() const { return m_enabled; }                 ///< @brief 获取组件是否启用
+    bool isGravityEnabled() const { return m_isGravityEnabled; } ///< @brief 检测组件是否受重力影响
+    bool isEnabled() const { return m_enabled; }                 ///< @brief 检测组件是否启用
+    bool isCollidedBelow() const { return m_isCollidedBelow; }   ///< @brief 检测组件是否与下方碰撞
+    bool isCollidedAbove() const { return m_isCollidedAbove; }   ///< @brief 检测组件是否与上方碰撞
+    bool isCollidedLeft() const { return m_isCollidedLeft; }     ///< @brief 检测组件是否与左侧碰撞
+    bool isCollidedRight() const { return m_isCollidedRight; }   ///< @brief 检测组件是否与右侧碰撞
 
     void setVelocity(const glm::vec2& velocity) { m_velocity = velocity; } ///< @brief 设置速度
     ///< @brief 设置质量，质量不能为负
@@ -64,6 +68,14 @@ public:
     ///< @brief 设置组件是否受重力影响
     void setGravityEnabled(bool isGravityEnabled) { m_isGravityEnabled = isGravityEnabled; }
     void setEnabled(bool enabled) { m_enabled = enabled; } ///< @brief 设置组件是否启用
+    ///< @brief 设置组件与下方碰撞标志
+    void setCollidedBelow(bool collided) { m_isCollidedBelow = collided; }
+    ///< @brief 设置组件与上方碰撞标志
+    void setCollidedAbove(bool collided) { m_isCollidedAbove = collided; }
+    ///< @brief 设置组件与左侧碰撞标志
+    void setCollidedLeft(bool collided) { m_isCollidedLeft = collided; }
+    ///< @brief 设置组件与右侧碰撞标志
+    void setCollidedRight(bool collided) { m_isCollidedRight = collided; }
 
 protected:
     // 核心循环方法
@@ -80,6 +92,12 @@ private:
     float m_mass{ 1.0f };               ///< @brief 物体质量（默认1.0）
     bool m_isGravityEnabled{ true };    ///< @brief 物体是否受重力影响
     bool m_enabled{ true };             ///< @brief 组件是否激活
+
+    // -- 碰撞状态标志 --
+    bool m_isCollidedBelow{ false }; ///< @brief 组件与下方碰撞标志
+    bool m_isCollidedAbove{ false }; ///< @brief 组件与上方碰撞标志
+    bool m_isCollidedLeft{ false };  ///< @brief 组件与左侧碰撞标志
+    bool m_isCollidedRight{ false }; ///< @brief 组件与右侧碰撞标志
 };
 
 } // namespace engine::component

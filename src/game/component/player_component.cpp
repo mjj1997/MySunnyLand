@@ -57,10 +57,26 @@ void PlayerComponent::init()
 
 void PlayerComponent::handleInput(engine::core::Context& context)
 {
+    if (!m_currentState) {
+        return;
+    }
+
+    auto nextState = m_currentState->handleInput(context);
+    if (nextState) {
+        setState(std::move(nextState));
+    }
 }
 
 void PlayerComponent::update(float deltaTime, engine::core::Context& context)
 {
+    if (!m_currentState) {
+        return;
+    }
+
+    auto nextState = m_currentState->update(deltaTime, context);
+    if (nextState) {
+        setState(std::move(nextState));
+    }
 }
 
 } // namespace game::component

@@ -2,6 +2,16 @@
 
 #include "../../engine/component/component_base.h"
 
+namespace engine::component {
+class TransformComponent;
+class PhysicsComponent;
+class SpriteComponent;
+} // namespace engine::component
+
+namespace game::component::state {
+class PlayerStateBase;
+}
+
 namespace game::component {
 
 /**
@@ -22,11 +32,51 @@ public:
     PlayerComponent(PlayerComponent&&) = delete;
     PlayerComponent& operator=(PlayerComponent&&) = delete;
 
+    // --- setters and getters ---
+    engine::component::TransformComponent* transformComponent() const
+    {
+        return m_transformComponent;
+    }
+    engine::component::SpriteComponent* spriteComponent() const { return m_spriteComponent; }
+    engine::component::PhysicsComponent* physicsComponent() const { return m_physicsComponent; }
+
+    void setAlive(bool isAlive) { m_isAlive = isAlive; }            ///< @brief 设置玩家是否存活
+    bool isAlive() const { return m_isAlive; }                      ///< @brief 获取玩家是否存活
+    void setMoveForce(float moveForce) { m_moveForce = moveForce; } ///< @brief 设置水平移动力
+    float moveForce() const { return m_moveForce; }                 ///< @brief 获取水平移动力
+    void setMaxSpeed(float maxSpeed) { m_maxSpeed = maxSpeed; }     ///< @brief 设置最大移动速度
+    float maxSpeed() const { return m_maxSpeed; }                   ///< @brief 获取最大移动速度
+    ///< @brief 设置摩擦系数
+    void setFrictionFactor(float frictionFactor) { m_frictionFactor = frictionFactor; }
+    float frictionFactor() const { return m_frictionFactor; }       ///< @brief 获取摩擦系数
+    void setJumpForce(float jumpForce) { m_jumpForce = jumpForce; } ///< @brief 设置跳跃力
+    float jumpForce() const { return m_jumpForce; }                 ///< @brief 获取跳跃力
+
+    ///< @brief 切换玩家状态
+    void setState(std::unique_ptr<state::PlayerStateBase> newState);
+
 protected:
     // 核心循环函数
     void init() override;
     void handleInput(engine::core::Context& context) override;
     void update(float deltaTime, engine::core::Context& context) override;
+
+private:
+    ///< @brief 指向 TransformComponent 的非拥有指针
+    engine::component::TransformComponent* m_transformComponent{ nullptr };
+    ///< @brief 指向 SpriteComponent 的非拥有指针
+    engine::component::SpriteComponent* m_spriteComponent{ nullptr };
+    ///< @brief 指向 PhysicsComponent 的非拥有指针
+    engine::component::PhysicsComponent* m_physicsComponent{ nullptr };
+
+    std::unique_ptr<state::PlayerStateBase> m_currentState;
+    bool m_isAlive{ true };
+
+    // --- 移动相关参数
+    float m_moveForce{ 200.0f };     ///< @brief 水平移动力
+    float m_maxSpeed{ 120.0f };      ///< @brief 最大移动速度 (像素/秒)
+    float m_frictionFactor{ 0.85f }; ///< @brief 摩擦系数 (Idle时缓冲效果，每帧乘以此系数)
+    float m_jumpForce{ 350.0f };     ///< @brief 跳跃力 (按下"jump"键给的瞬间向上的力)
 };
 
 } // namespace game::component

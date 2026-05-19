@@ -27,7 +27,11 @@ target_sources(
           engine/physics/physics_engine.cpp
           engine/component/collider_component.cpp
           engine/physics/collision.cpp
-          game/component/player_component.cpp)
+          game/component/player_component.cpp
+          game/component/state/idle_state.cpp
+          game/component/state/walk_state.cpp
+          game/component/state/jump_state.cpp
+          game/component/state/fall_state.cpp)
 
 target_link_libraries(
   SunnyLand

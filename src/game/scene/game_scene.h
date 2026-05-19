@@ -22,10 +22,10 @@ public:
     void clean() override;
 
 private:
-    // 测试函数
-    void testCamera();
-    void testPlayer();
-    void testCollisionPairs();
+    ///< @brief 初始化关卡
+    [[nodiscard]] bool initLevel();
+    ///< @brief 初始化玩家
+    [[nodiscard]] bool initPlayer();
 
     /// @brief 保存玩家对象指针
     engine::object::GameObject* m_player{ nullptr };

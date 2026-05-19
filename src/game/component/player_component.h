@@ -1,16 +1,15 @@
 #pragma once
 
 #include "../../engine/component/component_base.h"
+#include "state/player_state_base.h"
+
+#include <memory>
 
 namespace engine::component {
 class TransformComponent;
 class PhysicsComponent;
 class SpriteComponent;
 } // namespace engine::component
-
-namespace game::component::state {
-class PlayerStateBase;
-}
 
 namespace game::component {
 

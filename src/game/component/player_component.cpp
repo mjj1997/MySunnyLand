@@ -3,8 +3,7 @@
 #include "../../engine/component/sprite_component.h"
 #include "../../engine/component/transform_component.h"
 #include "../../engine/object/game_object.h"
-#include "state/player_state_base.h"
-// #include "state/idle_state.h"
+#include "state/idle_state.h"
 
 #include <spdlog/spdlog.h>
 
@@ -45,7 +44,7 @@ void PlayerComponent::init()
     }
 
     // 初始化状态机
-    // m_currentState = std::make_unique<state::IdleState>(this);
+    m_currentState = std::make_unique<state::IdleState>(this);
     if (m_currentState) {
         setState(std::move(m_currentState));
     } else {

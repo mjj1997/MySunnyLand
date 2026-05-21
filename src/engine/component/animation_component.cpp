@@ -77,4 +77,31 @@ void AnimationComponent::init()
     }
 }
 
+void AnimationComponent::update(float deltaTime, engine::core::Context& context)
+{
+    // 如果没有正在播放的动画，或者没有当前动画，或者没有精灵组件，或者当前动画没有帧，则直接返回
+    if (!m_isPlaying || !m_currentAnimation || !m_spriteComponent || m_currentAnimation->isEmpty()) {
+        spdlog::trace("AnimationComponent 更新时没有正在播放的动画或精灵组件为空。");
+        return;
+    }
+
+    // 推进计时器
+    m_animationTimer += deltaTime;
+
+    // 根据时间获取当前帧
+    const auto& currentFrame = m_currentAnimation->frameAt(m_animationTimer);
+
+    // 更新精灵组件的源矩形 (使用 SpriteComponent 的新方法)
+    m_spriteComponent->setSourceRect(currentFrame.sourceRect);
+
+    // 检查非循环动画是否已结束
+    if (!m_currentAnimation->isLoop() && m_animationTimer >= m_currentAnimation->totalDuration()) {
+        m_isPlaying = false;
+        m_animationTimer = m_currentAnimation->totalDuration(); // 将时间限制在结束点
+        if (m_isOneShotRemoval) { // 如果 isOneShotRemoval 为 true，则删除整个 GameObject
+            m_owner->setShouldRemove(true);
+        }
+    }
+}
+
 } // namespace engine::component

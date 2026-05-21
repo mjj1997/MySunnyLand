@@ -1,10 +1,22 @@
 #include "animation_component.h"
 #include "../object/game_object.h"
+#include "../render/animation.h"
 #include "sprite_component.h"
 
 #include <spdlog/spdlog.h>
 
 namespace engine::component {
+
+void AnimationComponent::addAnimation(std::unique_ptr<engine::render::Animation> animation)
+{
+    if (!animation) {
+        return;
+    }
+
+    std::string name{ animation->name() }; // 获取名称
+    m_animations[name] = std::move(animation);
+    spdlog::debug("已将动画 '{}' 添加到 GameObject '{}'", name, m_owner ? m_owner->name() : "未知");
+}
 
 std::string AnimationComponent::currentAnimationName() const
 {

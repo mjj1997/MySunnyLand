@@ -35,6 +35,8 @@ public:
     AnimationComponent(AnimationComponent&&) = delete;
     AnimationComponent& operator=(AnimationComponent&&) = delete;
 
+    ///< @brief 向 m_animations map容器中添加一个动画。
+    void addAnimation(std::unique_ptr<engine::render::Animation> animation);
     // --- Getters and Setters ---
     std::string currentAnimationName() const;
     bool isPlaying() const { return m_isPlaying; }

@@ -18,6 +18,31 @@ void AnimationComponent::addAnimation(std::unique_ptr<engine::render::Animation>
     spdlog::debug("已将动画 '{}' 添加到 GameObject '{}'", name, m_owner ? m_owner->name() : "未知");
 }
 
+void AnimationComponent::playAnimation(const std::string& name)
+{
+    auto it = m_animations.find(name);
+    if (it == m_animations.end() || !it->second) {
+        spdlog::warn("未找到 GameObject '{}' 的动画 '{}'", name, m_owner ? m_owner->name() : "未知");
+        return;
+    }
+
+    // 如果已经在播放相同的动画，不重新开始（注释这一段则重新开始播放）
+    if (m_currentAnimation == it->second.get() && m_isPlaying) {
+        return;
+    }
+
+    m_currentAnimation = it->second.get();
+    m_animationTimer = 0.0f;
+    m_isPlaying = true;
+
+    // 立即将精灵更新到第一帧
+    if (m_spriteComponent && !m_currentAnimation->isEmpty()) {
+        const auto& firstFrame = m_currentAnimation->frameAt(0.0f);
+        m_spriteComponent->setSourceRect(firstFrame.sourceRect);
+        spdlog::debug("GameObject '{}' 播放动画 '{}'", m_owner ? m_owner->name() : "未知", name);
+    }
+}
+
 std::string AnimationComponent::currentAnimationName() const
 {
     if (m_currentAnimation) {

@@ -31,7 +31,7 @@ public:
      * @param name 动画的名称。
      * @param isLoop 动画是否应该循环播放。
      */
-    Animation(const std::string& name = "default", bool isLoop = true);
+    explicit Animation(const std::string& name = "default", bool isLoop = true);
     ~Animation() = default;
 
     // 禁止拷贝和移动，因为 Animation 通常由管理器持有，不应随意拷贝

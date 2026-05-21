@@ -9,6 +9,7 @@ namespace engine::component {
 class TransformComponent;
 class PhysicsComponent;
 class SpriteComponent;
+class AnimationComponent;
 } // namespace engine::component
 
 namespace game::component {
@@ -38,6 +39,10 @@ public:
     }
     engine::component::SpriteComponent* spriteComponent() const { return m_spriteComponent; }
     engine::component::PhysicsComponent* physicsComponent() const { return m_physicsComponent; }
+    engine::component::AnimationComponent* animationComponent() const
+    {
+        return m_animationComponent;
+    }
 
     void setAlive(bool isAlive) { m_isAlive = isAlive; }            ///< @brief 设置玩家是否存活
     bool isAlive() const { return m_isAlive; }                      ///< @brief 获取玩家是否存活
@@ -67,6 +72,8 @@ private:
     engine::component::SpriteComponent* m_spriteComponent{ nullptr };
     ///< @brief 指向 PhysicsComponent 的非拥有指针
     engine::component::PhysicsComponent* m_physicsComponent{ nullptr };
+    ///< @brief 指向 AnimationComponent 的非拥有指针
+    engine::component::AnimationComponent* m_animationComponent{ nullptr };
 
     std::unique_ptr<state::PlayerStateBase> m_currentState;
     bool m_isAlive{ true };

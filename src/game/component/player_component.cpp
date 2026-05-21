@@ -1,4 +1,5 @@
 #include "player_component.h"
+#include "../../engine/component/animation_component.h"
 #include "../../engine/component/physics_component.h"
 #include "../../engine/component/sprite_component.h"
 #include "../../engine/component/transform_component.h"
@@ -36,9 +37,11 @@ void PlayerComponent::init()
     m_transformComponent = m_owner->getComponent<engine::component::TransformComponent>();
     m_physicsComponent = m_owner->getComponent<engine::component::PhysicsComponent>();
     m_spriteComponent = m_owner->getComponent<engine::component::SpriteComponent>();
+    m_animationComponent = m_owner->getComponent<engine::component::AnimationComponent>();
 
     // 检查必要组件是否存在
-    if (!m_transformComponent || !m_physicsComponent || !m_spriteComponent) {
+    if (!m_transformComponent || !m_physicsComponent || !m_spriteComponent
+        || !m_animationComponent) {
         spdlog::error("Player 对象缺少必要组件！");
         return;
     }

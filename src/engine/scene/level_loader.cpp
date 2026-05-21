@@ -261,6 +261,24 @@ void LevelLoader::loadObjectLayer(const nlohmann::json& layerJson, SceneBase& sc
                 }
             }
 
+            // 获取动画信息并设置
+            auto animation = getTileProperty<std::string>(tileJson, "animation");
+            if (animation) {
+                // 解析 string 到 JSON 对象
+                nlohmann::json animationJson;
+                try {
+                    animationJson = nlohmann::json::parse(animation.value());
+                } catch (const nlohmann::json::parse_error& e) {
+                    spdlog::error("解析动画 JSON 字符串失败：{}", e.what());
+                    continue; // 跳过当前对象，继续处理下一个对象
+                }
+                // 添加组件到 GameObject
+                auto* animationComponent
+                    = gameObject->addComponent<engine::component::AnimationComponent>();
+                // 添加动画到组件
+                addAnimation(animationJson, animationComponent, srcRectSize);
+            }
+
             // -- 添加 GameObject 到场景中 --
             scene.addGameObject(std::move(gameObject));
             spdlog::info("加载对象: '{}' 完成", objectName);

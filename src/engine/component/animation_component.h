@@ -2,6 +2,18 @@
 
 #include "component_base.h"
 
+#include <memory>
+#include <string>
+#include <unordered_map>
+
+namespace engine::render {
+class Animation;
+}
+
+namespace engine::component {
+class SpriteComponent;
+}
+
 namespace engine::component {
 
 /**
@@ -23,9 +35,27 @@ public:
     AnimationComponent(AnimationComponent&&) = delete;
     AnimationComponent& operator=(AnimationComponent&&) = delete;
 
+    // --- Getters and Setters ---
+    std::string currentAnimationName() const;
+    bool isPlaying() const { return m_isPlaying; }
+    bool isAnimationFinished() const;
+    bool isOneShotRemoval() const { return m_isOneShotRemoval; }
+    void setOneShotRemoval(bool isOneShotRemoval) { m_isOneShotRemoval = isOneShotRemoval; }
+
 protected:
     // 核心循环方法
     void update(float deltaTime, engine::core::Context& context) override;
+
+private:
+    /// @brief 动画名称到 Animation 对象的映射。
+    std::unordered_map<std::string, std::unique_ptr<engine::render::Animation>> m_animations;
+    SpriteComponent* m_spriteComponent{ nullptr }; ///< @brief 指向必需的 SpriteComponent 的指针
+
+    engine::render::Animation* m_currentAnimation{ nullptr }; ///< @brief 指向当前播放动画的原始指针
+    float m_animationTimer{ 0.0f };                           ///< @brief 动画播放中的计时器
+
+    bool m_isPlaying{ false };        ///< @brief 当前是否有动画正在播放
+    bool m_isOneShotRemoval{ false }; ///< @brief 是否在动画结束后删除整个GameObject
 };
 
 } // namespace engine::component

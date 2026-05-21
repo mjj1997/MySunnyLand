@@ -32,7 +32,8 @@ target_sources(
           game/component/state/walk_state.cpp
           game/component/state/jump_state.cpp
           game/component/state/fall_state.cpp
-          engine/render/animation.cpp)
+          engine/render/animation.cpp
+          engine/component/animation_component.cpp)
 
 target_link_libraries(
   SunnyLand

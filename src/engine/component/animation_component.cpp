@@ -1,4 +1,8 @@
 #include "animation_component.h"
+#include "../object/game_object.h"
+#include "sprite_component.h"
+
+#include <spdlog/spdlog.h>
 
 namespace engine::component {
 
@@ -19,6 +23,21 @@ bool AnimationComponent::isAnimationFinished() const
     }
 
     return m_animationTimer >= m_currentAnimation->totalDuration();
+}
+
+void AnimationComponent::init()
+{
+    if (m_owner == nullptr) {
+        spdlog::error("AnimationComponent 没有所有者 GameObject!");
+        return;
+    }
+
+    m_spriteComponent = m_owner->getComponent<SpriteComponent>();
+    if (m_spriteComponent == nullptr) {
+        spdlog::error("GameObject '{}' 的 AnimationComponent 需要 SpriteComponent，但没有找到!",
+                      m_owner->name());
+        return;
+    }
 }
 
 } // namespace engine::component

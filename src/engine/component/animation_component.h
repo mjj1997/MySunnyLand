@@ -44,6 +44,7 @@ public:
 
 protected:
     // 核心循环方法
+    void init() override;
     void update(float deltaTime, engine::core::Context& context) override;
 
 private:

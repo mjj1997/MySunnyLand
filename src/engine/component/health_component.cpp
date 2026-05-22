@@ -84,6 +84,16 @@ void HealthComponent::setInvincible(float duration)
     }
 }
 
-void HealthComponent::update(float deltaTime, engine::core::Context& context) {}
+void HealthComponent::update(float deltaTime, engine::core::Context& context)
+{
+    // 更新无敌状态计时器
+    if (m_isInvincible) {
+        m_invincibilityTimer -= deltaTime;
+        if (m_invincibilityTimer <= 0.0f) {
+            m_isInvincible = false;
+            m_invincibilityTimer = 0.0f;
+        }
+    }
+}
 
 } // namespace engine::component

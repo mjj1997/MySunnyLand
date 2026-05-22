@@ -131,11 +131,11 @@ void PhysicsEngine::checkObjectCollisions()
     }
 }
 
-void PhysicsEngine::resolveTileCollisions(engine::component::PhysicsComponent* component,
+void PhysicsEngine::resolveTileCollisions(engine::component::PhysicsComponent* physicsComponent,
                                           float deltaTime)
 {
     // -- 检查组件是否有效 --
-    auto* gameObject = component->owner();
+    auto* gameObject = physicsComponent->owner();
     if (!gameObject) {
         return;
     }
@@ -155,14 +155,15 @@ void PhysicsEngine::resolveTileCollisions(engine::component::PhysicsComponent* c
     }
     // -- 检查结束，正式开始处理 --
 
-    auto displacement = component->velocity() * deltaTime;  // 计算物体在 deltaTime 内的位移
-    auto newObjectPosition = objectPosition + displacement; // 计算物体在 deltaTime 后的新位置
+    auto displacement = physicsComponent->velocity() * deltaTime; // 计算物体在 deltaTime 内的位移
+    auto newObjectPosition = objectPosition + displacement;       // 计算物体在 deltaTime 后的新位置
     auto epsilon = 1.0f; // 检查右边缘和下边缘时，需要减1像素，否则会检查到下一行/列的瓦片
 
     // 如果碰撞器未激活，直接让物体正常移动，然后返回。
     if (!colliderComponent->isActive()) {
         transformComponent->translate(displacement);
-        component->setVelocity(glm::clamp(component->velocity(), -m_maxSpeed, m_maxSpeed));
+        physicsComponent->setVelocity(
+            glm::clamp(physicsComponent->velocity(), -m_maxSpeed, m_maxSpeed));
 
         return;
     }
@@ -190,8 +191,8 @@ void PhysicsEngine::resolveTileCollisions(engine::component::PhysicsComponent* c
                 || tileTypeBottomRight == engine::component::TileType::Solid) {
                 // 撞墙了！速度归零，x方向移动到贴着墙的位置
                 newObjectPosition.x = tileXRight * tileSize.x - objectSize.x;
-                component->setVelocity({ 0.0f, component->velocity().y });
-                component->setCollidedRight(true);
+                physicsComponent->setVelocity({ 0.0f, physicsComponent->velocity().y });
+                physicsComponent->setCollidedRight(true);
             } else {
                 // 处理右下角与斜坡的碰撞，根据瓦片中的斜坡高度调整物体位置
                 auto widthRight = newObjectPosition.x + objectSize.x - tileXRight * tileSize.x;
@@ -202,7 +203,7 @@ void PhysicsEngine::resolveTileCollisions(engine::component::PhysicsComponent* c
                         > (tileYBottom + 1) * tileSize.y - heightRight) {
                         newObjectPosition.y = (tileYBottom + 1) * tileSize.y - heightRight
                                               - objectSize.y;
-                        component->setCollidedBelow(true);
+                        physicsComponent->setCollidedBelow(true);
                     }
                 }
             }
@@ -226,8 +227,8 @@ void PhysicsEngine::resolveTileCollisions(engine::component::PhysicsComponent* c
                 // 撞墙了！速度归零，x方向移动到贴着墙的位置
                 // 向左撞墙是贴在瓦片的右侧, 所以要 +1
                 newObjectPosition.x = (tileXLeft + 1) * tileSize.x;
-                component->setVelocity(glm::vec2{ 0.0f, component->velocity().y });
-                component->setCollidedLeft(true);
+                physicsComponent->setVelocity(glm::vec2{ 0.0f, physicsComponent->velocity().y });
+                physicsComponent->setCollidedLeft(true);
             } else {
                 // 处理左下角与斜坡的碰撞
                 auto widthLeft = newObjectPosition.x - tileXLeft * tileSize.x;
@@ -238,7 +239,7 @@ void PhysicsEngine::resolveTileCollisions(engine::component::PhysicsComponent* c
                         > (tileYBottom + 1) * tileSize.y - heightLeft) {
                         newObjectPosition.y = (tileYBottom + 1) * tileSize.y - heightLeft
                                               - objectSize.y;
-                        component->setCollidedBelow(true);
+                        physicsComponent->setCollidedBelow(true);
                     }
                 }
             }
@@ -266,8 +267,8 @@ void PhysicsEngine::resolveTileCollisions(engine::component::PhysicsComponent* c
                 || tileTypeBottomRight == engine::component::TileType::Unisolid) {
                 // 到达地面！速度归零，y方向移动到贴着地面的位置
                 newObjectPosition.y = tileYBottom * tileSize.y - objectSize.y;
-                component->setVelocity({ component->velocity().x, 0.0f });
-                component->setCollidedBelow(true);
+                physicsComponent->setVelocity({ physicsComponent->velocity().x, 0.0f });
+                physicsComponent->setCollidedBelow(true);
             } else {
                 // 处理左下角、右下角与斜坡的碰撞
                 auto widthLeft = objectPosition.x - tileXLeft * tileSize.x;
@@ -282,8 +283,8 @@ void PhysicsEngine::resolveTileCollisions(engine::component::PhysicsComponent* c
                         newObjectPosition.y = (tileYBottom + 1) * tileSize.y - height
                                               - objectSize.y;
                         // 到达地面！速度归零，y方向移动到贴着地面的位置
-                        component->setVelocity({ component->velocity().x, 0.0f });
-                        component->setCollidedBelow(true);
+                        physicsComponent->setVelocity({ physicsComponent->velocity().x, 0.0f });
+                        physicsComponent->setCollidedBelow(true);
                     }
                 }
             }
@@ -307,14 +308,14 @@ void PhysicsEngine::resolveTileCollisions(engine::component::PhysicsComponent* c
                 // 撞到天花板！速度归零，y方向移动到贴着天花板的位置
                 // 向上撞墙是贴在瓦片的底部, 所以要 +1
                 newObjectPosition.y = (tileYTop + 1) * tileSize.y;
-                component->setVelocity({ component->velocity().x, 0.0f });
-                component->setCollidedAbove(true);
+                physicsComponent->setVelocity({ physicsComponent->velocity().x, 0.0f });
+                physicsComponent->setCollidedAbove(true);
             }
         }
     }
     // 更新物体位置，并限制最大速度
     transformComponent->translate(newObjectPosition - objectPosition);
-    component->setVelocity(glm::clamp(component->velocity(), -m_maxSpeed, m_maxSpeed));
+    physicsComponent->setVelocity(glm::clamp(physicsComponent->velocity(), -m_maxSpeed, m_maxSpeed));
 }
 
 void PhysicsEngine::resolveSolidCollisions(engine::object::GameObject* movingObject,

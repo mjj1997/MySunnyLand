@@ -29,6 +29,9 @@ private:
     ///< @brief 初始化敌人和道具
     [[nodiscard]] bool initEnemyAndItem();
 
+    // 测试函数
+    void testHealth(); ///< @brief 测试生命值组件
+
     /// @brief 保存玩家对象指针
     engine::object::GameObject* m_player{ nullptr };
 };

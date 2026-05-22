@@ -50,6 +50,12 @@ void GameScene::init()
         return;
     }
 
+    if (!initEnemyAndItem()) {
+        spdlog::error("初始化敌人和物品失败，无法继续。");
+        m_context.inputManager().setShouldQuit(true);
+        return;
+    }
+
     SceneBase::init();
     spdlog::trace("GameScene 初始化完成。");
 }

@@ -34,7 +34,8 @@ target_sources(
           game/component/state/fall_state.cpp
           engine/render/animation.cpp
           engine/component/animation_component.cpp
-          game/component/state/player_state_base.cpp)
+          game/component/state/player_state_base.cpp
+          engine/component/health_component.cpp)
 
 target_link_libraries(
   SunnyLand

@@ -22,7 +22,7 @@ void AnimationComponent::playAnimation(const std::string& name)
 {
     auto it = m_animations.find(name);
     if (it == m_animations.end() || !it->second) {
-        spdlog::warn("未找到 GameObject '{}' 的动画 '{}'", name, m_owner ? m_owner->name() : "未知");
+        spdlog::warn("未找到 GameObject '{}' 的动画 '{}'", m_owner ? m_owner->name() : "未知", name);
         return;
     }
 

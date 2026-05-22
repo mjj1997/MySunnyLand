@@ -14,6 +14,8 @@ namespace game::component::state {
 
 void JumpState::enter()
 {
+    playAnimation("jump"); // 播放跳跃动画
+
     auto physicsComponent = m_playerComponent->physicsComponent();
     auto newVelocity = glm::vec2{ physicsComponent->velocity().x, -m_playerComponent->jumpForce() };
     physicsComponent->setVelocity(newVelocity);

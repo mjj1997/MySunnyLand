@@ -29,6 +29,8 @@ public:
         , m_rotation{ rotation }
     {}
 
+    ~TransformComponent() override = default;
+
     // 禁止拷贝和移动
     TransformComponent(const TransformComponent&) = delete;
     TransformComponent& operator=(const TransformComponent&) = delete;

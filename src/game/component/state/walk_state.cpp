@@ -13,7 +13,10 @@
 
 namespace game::component::state {
 
-void WalkState::enter() {}
+void WalkState::enter()
+{
+    playAnimation("walk"); // 播放行走动画
+}
 
 std::unique_ptr<PlayerStateBase> WalkState::handleInput(engine::core::Context& context)
 {

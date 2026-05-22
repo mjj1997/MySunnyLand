@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <string>
 
 namespace engine::core {
 class Context;
@@ -30,6 +31,9 @@ public:
     PlayerStateBase& operator=(const PlayerStateBase&) = delete;
     PlayerStateBase(PlayerStateBase&&) = delete;
     PlayerStateBase& operator=(PlayerStateBase&&) = delete;
+
+    ///< @brief 播放指定名称的动画，使用 AnimationComponent 的方法
+    void playAnimation(const std::string& animationName);
 
 protected:
     // --- 核心状态方法 ---

@@ -12,7 +12,10 @@
 
 namespace game::component::state {
 
-void FallState::enter() {}
+void FallState::enter()
+{
+    playAnimation("fall"); // 播放下落动画
+}
 
 std::unique_ptr<PlayerStateBase> FallState::handleInput(engine::core::Context& context)
 {

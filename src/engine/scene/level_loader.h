@@ -12,6 +12,7 @@
 namespace engine::component {
 struct TileInfo;
 enum class TileType;
+class AnimationComponent;
 } // namespace engine::component
 
 namespace engine::scene {
@@ -28,7 +29,7 @@ public:
      * @param scene 要加载数据的目标 Scene 对象。
      * @return bool 是否加载成功。
      */
-    bool loadLevel(const std::string& mapPath, SceneBase& scene);
+    [[nodiscard]] bool loadLevel(const std::string& mapPath, SceneBase& scene);
 
 private:
     ///< @brief 加载图片图层
@@ -37,6 +38,16 @@ private:
     void loadTileLayer(const nlohmann::json& layerJson, SceneBase& scene);
     ///< @brief 加载对象图层
     void loadObjectLayer(const nlohmann::json& layerJson, SceneBase& scene);
+
+    /**
+     * @brief 添加动画到指定的 AnimationComponent。
+     * @param animationJson 动画 JSON 数据（自定义）
+     * @param animationComponent 动画组件指针（动画添加到此组件）
+     * @param spriteSize 每一帧动画的尺寸
+     */
+    void addAnimation(const nlohmann::json& animationJson,
+                      engine::component::AnimationComponent* animationComponent,
+                      const glm::vec2& spriteSize);
 
     /**
      * @brief 获取瓦片属性

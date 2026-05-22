@@ -1,4 +1,5 @@
 #include "level_loader.h"
+#include "../component/animation_component.h"
 #include "../component/collider_component.h"
 #include "../component/parallax_component.h"
 #include "../component/physics_component.h"
@@ -7,6 +8,7 @@
 #include "../component/transform_component.h"
 #include "../core/context.h"
 #include "../object/game_object.h"
+#include "../render/animation.h"
 #include "../render/sprite.h"
 #include "../scene/scene_base.h"
 
@@ -259,10 +261,81 @@ void LevelLoader::loadObjectLayer(const nlohmann::json& layerJson, SceneBase& sc
                 }
             }
 
+            // 获取动画信息并设置
+            auto animation = getTileProperty<std::string>(tileJson, "animation");
+            if (animation) {
+                // 解析 string 到 JSON 对象
+                nlohmann::json animationJson;
+                try {
+                    animationJson = nlohmann::json::parse(animation.value());
+                } catch (const nlohmann::json::parse_error& e) {
+                    spdlog::error("解析动画 JSON 字符串失败：{}", e.what());
+                    continue; // 跳过当前对象，继续处理下一个对象
+                }
+                // 添加组件到 GameObject
+                auto* animationComponent
+                    = gameObject->addComponent<engine::component::AnimationComponent>();
+                // 添加动画到组件
+                addAnimation(animationJson, animationComponent, srcRectSize);
+            }
+
             // -- 添加 GameObject 到场景中 --
             scene.addGameObject(std::move(gameObject));
             spdlog::info("加载对象: '{}' 完成", objectName);
         }
+    }
+}
+
+void LevelLoader::addAnimation(const nlohmann::json& animationJson,
+                               engine::component::AnimationComponent* animationComponent,
+                               const glm::vec2& spriteSize)
+{
+    // 检查 animationJson 必须是一个对象，并且 animationComponent 不能为 nullptr
+    if (!animationJson.is_object() || !animationComponent) {
+        spdlog::error("无效的动画 JSON 或 AnimationComponent 指针。");
+        return;
+    }
+
+    // 遍历动画 JSON 对象中的每个键值对（动画名称 : 动画信息）
+    for (const auto& anime : animationJson.items()) {
+        const std::string& animeName{ anime.key() };
+        const auto& animeInfo = anime.value();
+        if (!animeInfo.is_object()) {
+            spdlog::warn("动画 '{}' 的信息无效或为空。", animeName);
+            continue;
+        }
+
+        // 1. 获取可能存在的动画帧信息
+        auto duration_ms = animeInfo.value("duration", 100);       // 默认持续时间为100毫秒
+        auto duration = static_cast<float>(duration_ms) / 1000.0f; // 转换为秒
+        auto row = animeInfo.value("row", 0);                      // 默认行数为0
+        // 2. 帧信息（数组）是必须存在的
+        if (!animeInfo.contains("frames") || !animeInfo["frames"].is_array()) {
+            spdlog::warn("动画 '{}' 缺少 'frames' 数组。", animeName);
+            continue;
+        }
+
+        // 3. 创建一个Animation对象 (默认为循环播放)
+        auto animation = std::make_unique<engine::render::Animation>(animeName);
+
+        // 4. 遍历数组并进行添加帧信息到animation对象
+        for (const auto& frame : animeInfo["frames"]) {
+            if (!frame.is_number_integer()) {
+                spdlog::warn("动画 {} 中 frames 数组格式错误！", animeName);
+                continue;
+            }
+
+            auto column = frame.get<int>();
+            // 计算源矩形
+            SDL_FRect srcRect{
+                column * spriteSize.x, row * spriteSize.y, spriteSize.x, spriteSize.y
+            };
+            // 添加动画帧到 Animation
+            animation->addFrame(srcRect, duration);
+        }
+
+        // 5. 将 Animation 对象添加到 AnimationComponent 中
+        animationComponent->addAnimation(std::move(animation));
     }
 }
 
@@ -331,10 +404,13 @@ engine::component::TileType LevelLoader::getTileTypeById(const nlohmann::json& t
                                                          int localId)
 {
     if (tilesetJson.contains("tiles")) {
-        for (const auto& tile : tilesetJson["tiles"]) {
-            if (tile.value("id", -1) == localId) {
-                return getTileType(tile);
-            }
+        const auto& tiles = tilesetJson["tiles"];
+        auto it = std::find_if(tiles.begin(), tiles.end(), [localId](const auto& tile) {
+            return tile.value("id", -1) == localId;
+        });
+
+        if (it != tiles.end()) {
+            return getTileType(*it);
         }
     }
 

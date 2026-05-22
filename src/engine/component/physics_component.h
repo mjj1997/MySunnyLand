@@ -34,7 +34,7 @@ public:
                               float mass = 1.0f);
     ~PhysicsComponent() override = default;
 
-    // 删除复制/移动操作
+    // 禁止拷贝和移动
     PhysicsComponent(const PhysicsComponent&) = delete;
     PhysicsComponent& operator=(const PhysicsComponent&) = delete;
     PhysicsComponent(PhysicsComponent&&) = delete;
@@ -99,8 +99,8 @@ private:
 
     glm::vec2 m_velocity{ 0.0f, 0.0f }; ///< @brief 物体的速度
     glm::vec2 m_force{ 0.0f, 0.0f };    ///< @brief 当前帧受到的力
-    float m_mass{ 1.0f };               ///< @brief 物体质量（默认1.0）
     bool m_isGravityEnabled{ true };    ///< @brief 物体是否受重力影响
+    float m_mass{ 1.0f };               ///< @brief 物体质量（默认1.0）
     bool m_enabled{ true };             ///< @brief 组件是否激活
 
     // -- 碰撞状态标志 --

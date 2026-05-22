@@ -10,7 +10,10 @@
 
 namespace game::component::state {
 
-void IdleState::enter() {}
+void IdleState::enter()
+{
+    playAnimation("idle"); // 播放待机动画
+}
 
 std::unique_ptr<PlayerStateBase> IdleState::handleInput(engine::core::Context& context)
 {

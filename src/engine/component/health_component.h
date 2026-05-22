@@ -12,6 +12,12 @@ class HealthComponent final : public ComponentBase
     friend class engine::object::GameObject;
 
 public:
+    /**
+     * @brief 构造函数
+     * @param maxHealth 最大生命值，默认为 1
+     * @param invincibilityDuration 无敌状态持续时间，默认为 2.0 秒
+     */
+    explicit HealthComponent(int maxHealth = 1, float invincibilityDuration = 2.0f);
     ~HealthComponent() override = default;
 
     // 禁止拷贝和移动

@@ -6,6 +6,12 @@
 
 namespace engine::component {
 
+HealthComponent::HealthComponent(int maxHealth, float invincibilityDuration)
+    : m_maxHealth{ glm::max(1, maxHealth) } // 确保最大生命值至少为 1
+    , m_currentHealth{ m_maxHealth }        // 初始化当前生命值为最大生命值
+    , m_invincibilityDuration{ invincibilityDuration }
+{}
+
 void HealthComponent::setCurrentHealth(int currentHealth)
 {
     // 确保生命值在 0 到最大生命值之间

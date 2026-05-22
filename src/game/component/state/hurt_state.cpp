@@ -32,6 +32,7 @@ std::unique_ptr<PlayerStateBase> HurtState::handleInput(engine::core::Context& c
 
 std::unique_ptr<PlayerStateBase> HurtState::update(float deltaTime, engine::core::Context& context)
 {
+    m_stunnedTimer += deltaTime;
     return nullptr;
 }
 

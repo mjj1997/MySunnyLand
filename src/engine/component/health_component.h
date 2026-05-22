@@ -35,6 +35,9 @@ public:
      */
     bool takeDamage(int damageAmount);
 
+    ///< @brief 治疗 GameObject，增加当前生命值（不超过最大生命值）。
+    void heal(int healAmount);
+
     // --- Getters and Setters ---
     ///< @brief 检查 GameObject 是否存活（当前生命值大于 0）。
     bool isAlive() const { return m_currentHealth > 0; }

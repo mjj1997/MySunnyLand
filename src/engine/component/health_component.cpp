@@ -41,6 +41,21 @@ bool HealthComponent::takeDamage(int damageAmount)
     return true;
 }
 
+void HealthComponent::heal(int healAmount)
+{
+    if (healAmount <= 0 || !isAlive()) {
+        return; // 无效治疗或对象已死亡，不造成治疗
+    }
+
+    auto health = m_currentHealth + healAmount;
+    setCurrentHealth(health);
+    spdlog::debug("游戏对象 {} 治疗了 {} 点生命值，当前生命值：{}/{}",
+                  m_owner ? m_owner->name() : "未知",
+                  healAmount,
+                  m_currentHealth,
+                  m_maxHealth);
+}
+
 void HealthComponent::setCurrentHealth(int currentHealth)
 {
     // 确保生命值在 0 到最大生命值之间

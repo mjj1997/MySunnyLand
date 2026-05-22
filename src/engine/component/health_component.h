@@ -20,10 +20,32 @@ public:
     HealthComponent(HealthComponent&&) = delete;
     HealthComponent& operator=(HealthComponent&&) = delete;
 
+    // --- Getters and Setters ---
+    ///< @brief 检查 GameObject 是否存活（当前生命值大于 0）。
+    bool isAlive() const { return m_currentHealth > 0; }
+    ///< @brief 检查 GameObject 是否处于无敌状态。
+    bool isInvincible() const { return m_isInvincible; }
+    int currentHealth() const { return m_currentHealth; } ///< @brief 获取当前生命值。
+    int maxHealth() const { return m_maxHealth; }         ///< @brief 获取最大生命值。
+
+    void setCurrentHealth(int currentHealth); ///< @brief 设置当前生命值 (确保不超过最大生命值)。
+    void setMaxHealth(int maxHealth);         ///< @brief 设置最大生命值 (确保不小于 1)。
+    ///< @brief 设置 GameObject 进入无敌状态，持续时间为 duration 秒。
+    void setInvincible(float duration);
+    ///< @brief 设置无敌状态持续时间。
+    void setInvincibilityDuration(float duration) { m_invincibilityDuration = duration; }
+
 protected:
     // 核心循环函数
     void update(float deltaTime, engine::core::Context& context) override;
 
+private:
+    int m_maxHealth{ 1 };                  ///< @brief 最大生命值
+    int m_currentHealth{ 1 };              ///< @brief 当前生命值
+    bool m_isInvincible{ false };          ///< @brief 是否处于无敌状态
+    float m_invincibilityDuration{ 2.0f }; ///< @brief 受伤后无敌的总时长（秒）
+
+    float m_invincibilityTimer{ 0.0f }; ///< @brief 无敌时间计时器（秒）
 };
 
 } // namespace engine::component

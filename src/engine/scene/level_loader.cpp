@@ -404,10 +404,13 @@ engine::component::TileType LevelLoader::getTileTypeById(const nlohmann::json& t
                                                          int localId)
 {
     if (tilesetJson.contains("tiles")) {
-        for (const auto& tile : tilesetJson["tiles"]) {
-            if (tile.value("id", -1) == localId) {
-                return getTileType(tile);
-            }
+        const auto& tiles = tilesetJson["tiles"];
+        auto it = std::find_if(tiles.begin(), tiles.end(), [localId](const auto& tile) {
+            return tile.value("id", -1) == localId;
+        });
+
+        if (it != tiles.end()) {
+            return getTileType(*it);
         }
     }
 

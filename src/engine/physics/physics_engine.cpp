@@ -142,8 +142,7 @@ void PhysicsEngine::resolveTileCollisions(engine::component::PhysicsComponent* c
 
     auto* transformComponent = gameObject->getComponent<engine::component::TransformComponent>();
     auto* colliderComponent = gameObject->getComponent<engine::component::ColliderComponent>();
-    if (!transformComponent || !colliderComponent || !colliderComponent->isActive()
-        || colliderComponent->isTrigger()) {
+    if (!transformComponent || !colliderComponent || colliderComponent->isTrigger()) {
         return;
     }
 
@@ -159,6 +158,14 @@ void PhysicsEngine::resolveTileCollisions(engine::component::PhysicsComponent* c
     auto displacement = component->velocity() * deltaTime;  // 计算物体在 deltaTime 内的位移
     auto newObjectPosition = objectPosition + displacement; // 计算物体在 deltaTime 后的新位置
     auto epsilon = 1.0f; // 检查右边缘和下边缘时，需要减1像素，否则会检查到下一行/列的瓦片
+
+    // 如果碰撞器未激活，直接让物体正常移动，然后返回。
+    if (!colliderComponent->isActive()) {
+        transformComponent->translate(displacement);
+        component->setVelocity(glm::clamp(component->velocity(), -m_maxSpeed, m_maxSpeed));
+
+        return;
+    }
 
     for (auto* tileLayer : m_collisionTileLayers) {
         auto tileSize = tileLayer->tileSize();

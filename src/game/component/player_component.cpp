@@ -1,15 +1,48 @@
 #include "player_component.h"
+#include "state/dead_state.h"
+#include "state/hurt_state.h"
+#include "state/idle_state.h"
+
 #include "../../engine/component/animation_component.h"
 #include "../../engine/component/health_component.h"
 #include "../../engine/component/physics_component.h"
 #include "../../engine/component/sprite_component.h"
 #include "../../engine/component/transform_component.h"
 #include "../../engine/object/game_object.h"
-#include "state/idle_state.h"
 
 #include <spdlog/spdlog.h>
 
 namespace game::component {
+
+bool PlayerComponent::takeDamage(int damageAmount)
+{
+    if (!m_isAlive || !m_healthComponent || damageAmount <= 0) {
+        spdlog::warn("玩家已死亡或缺少必要组件，并未造成伤害。");
+        return false;
+    }
+
+    bool success{ m_healthComponent->takeDamage(damageAmount) };
+    if (!success) {
+        return false;
+    }
+
+    // --- 成功造成伤害了，根据是否存活决定状态切换 ---
+    if (m_healthComponent->isAlive()) {
+        spdlog::debug("玩家受到了 {} 点伤害，当前生命值: {}/{}。",
+                      damageAmount,
+                      m_healthComponent->currentHealth(),
+                      m_healthComponent->maxHealth());
+        // 切换到受伤状态
+        setState(std::make_unique<state::HurtState>(this));
+    } else {
+        spdlog::debug("玩家死亡。");
+        m_isAlive = false;
+        // 切换到死亡状态
+        setState(std::make_unique<state::DeadState>(this));
+    }
+
+    return true;
+}
 
 void PlayerComponent::setState(std::unique_ptr<state::PlayerStateBase> newState)
 {

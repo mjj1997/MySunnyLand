@@ -33,6 +33,8 @@ public:
     PlayerComponent(PlayerComponent&&) = delete;
     PlayerComponent& operator=(PlayerComponent&&) = delete;
 
+    bool takeDamage(int damageAmount); ///< @brief 试图造成伤害，返回是否成功
+
     // --- setters and getters ---
     engine::component::TransformComponent* transformComponent() const
     {

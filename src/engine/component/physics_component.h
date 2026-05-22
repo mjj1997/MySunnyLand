@@ -34,7 +34,7 @@ public:
                               float mass = 1.0f);
     ~PhysicsComponent() override = default;
 
-    // 删除复制/移动操作
+    // 禁止拷贝和移动
     PhysicsComponent(const PhysicsComponent&) = delete;
     PhysicsComponent& operator=(const PhysicsComponent&) = delete;
     PhysicsComponent(PhysicsComponent&&) = delete;

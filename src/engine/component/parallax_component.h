@@ -30,6 +30,13 @@ public:
     ParallaxComponent(const std::string& textureId,
                       const glm::vec2& scrollFactor,
                       const glm::bvec2& repeat);
+    ~ParallaxComponent() override = default;
+
+    // 禁止拷贝和移动
+    ParallaxComponent(const ParallaxComponent&) = delete;
+    ParallaxComponent& operator=(const ParallaxComponent&) = delete;
+    ParallaxComponent(ParallaxComponent&&) = delete;
+    ParallaxComponent& operator=(ParallaxComponent&&) = delete;
 
     // --- getters & setters ---
     ///< @brief 设置精灵对象

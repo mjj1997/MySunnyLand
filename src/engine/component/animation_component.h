@@ -28,8 +28,9 @@ class AnimationComponent final : public ComponentBase
 
 public:
     AnimationComponent() = default;
+    ~AnimationComponent() override = default;
 
-    // 删除复制/移动操作
+    // 禁止拷贝和移动
     AnimationComponent(const AnimationComponent&) = delete;
     AnimationComponent& operator=(const AnimationComponent&) = delete;
     AnimationComponent(AnimationComponent&&) = delete;

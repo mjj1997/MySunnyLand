@@ -65,6 +65,14 @@ public:
      */
     TileLayerComponent(glm::ivec2 tileSize, glm::ivec2 mapSize, std::vector<TileInfo>&& tiles);
 
+    ~TileLayerComponent() override = default;
+
+    // 禁止拷贝和移动
+    TileLayerComponent(const TileLayerComponent&) = delete;
+    TileLayerComponent& operator=(const TileLayerComponent&) = delete;
+    TileLayerComponent(TileLayerComponent&&) = delete;
+    TileLayerComponent& operator=(TileLayerComponent&&) = delete;
+
     /**
      * @brief 根据瓦片坐标获取瓦片信息
      * @param pos 瓦片坐标 (0 <= x < m_mapSize.x, 0 <= y < m_mapSize.y)

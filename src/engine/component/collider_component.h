@@ -31,6 +31,13 @@ public:
                                engine::utils::Alignment alignment = engine::utils::Alignment::None,
                                bool isTrigger = false,
                                bool isActive = true);
+    ~ColliderComponent() override = default;
+
+    // 禁止拷贝和移动
+    ColliderComponent(const ColliderComponent&) = delete;
+    ColliderComponent& operator=(const ColliderComponent&) = delete;
+    ColliderComponent(ColliderComponent&&) = delete;
+    ColliderComponent& operator=(ColliderComponent&&) = delete;
 
     /**
      * @brief 根据当前的 alignment 和 collider 尺寸计算 offset。

@@ -1,5 +1,9 @@
 #include "hurt_state.h"
 #include "../player_component.h"
+#include "fall_state.h"
+#include "idle_state.h"
+#include "walk_state.h"
+
 #include "../../../engine/component/physics_component.h"
 #include "../../../engine/component/sprite_component.h"
 
@@ -33,6 +37,23 @@ std::unique_ptr<PlayerStateBase> HurtState::handleInput(engine::core::Context& c
 std::unique_ptr<PlayerStateBase> HurtState::update(float deltaTime, engine::core::Context& context)
 {
     m_stunnedTimer += deltaTime;
+
+    // --- 两种情况离开受伤（硬直）状态 ---
+    auto physicsComponent = m_playerComponent->physicsComponent();
+    // 1. 落地
+    if (physicsComponent->isCollidedBelow()) {
+        if (glm::abs(physicsComponent->velocity().x) < 1.0f) {
+            return std::make_unique<IdleState>(m_playerComponent);
+        } else {
+            return std::make_unique<WalkState>(m_playerComponent);
+        }
+    }
+    // 2. 硬直时间结束（能走到这里，说明没有落地，直接切换到 FallState）
+    if (m_stunnedTimer > m_playerComponent->stunnedDuration()) {
+        m_stunnedTimer = 0.0f; // 重置硬直计时器
+        return std::make_unique<FallState>(m_playerComponent);
+    }
+
     return nullptr;
 }
 

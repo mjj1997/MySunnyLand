@@ -26,6 +26,8 @@ private:
     [[nodiscard]] bool initLevel();
     ///< @brief 初始化玩家
     [[nodiscard]] bool initPlayer();
+    ///< @brief 初始化敌人和道具
+    [[nodiscard]] bool initEnemyAndItem();
 
     /// @brief 保存玩家对象指针
     engine::object::GameObject* m_player{ nullptr };

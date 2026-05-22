@@ -12,6 +12,35 @@ HealthComponent::HealthComponent(int maxHealth, float invincibilityDuration)
     , m_invincibilityDuration{ invincibilityDuration }
 {}
 
+bool HealthComponent::takeDamage(int damageAmount)
+{
+    if (damageAmount <= 0 || !isAlive()) {
+        return false; // 无效伤害或对象已死亡，不造成伤害
+    }
+
+    if (m_isInvincible) {
+        spdlog::debug("游戏对象 {} 处于无敌状态，免疫了 {} 伤害。",
+                      m_owner ? m_owner->name() : "未知",
+                      damageAmount);
+        return false; // 无敌状态，不造成伤害
+    }
+
+    // --- 确实造成伤害了 ---
+    auto health = m_currentHealth - damageAmount;
+    setCurrentHealth(health);
+    // 如果对象存活且设置了无敌时长，则触发无敌帧
+    if (isAlive() && m_invincibilityDuration > 0.0f) {
+        setInvincible(m_invincibilityDuration);
+    }
+    spdlog::debug("游戏对象 {} 收到了 {} 点伤害，当前生命值：{}/{}",
+                  m_owner ? m_owner->name() : "未知",
+                  damageAmount,
+                  m_currentHealth,
+                  m_maxHealth);
+
+    return true;
+}
+
 void HealthComponent::setCurrentHealth(int currentHealth)
 {
     // 确保生命值在 0 到最大生命值之间

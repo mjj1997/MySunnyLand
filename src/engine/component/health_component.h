@@ -26,6 +26,15 @@ public:
     HealthComponent(HealthComponent&&) = delete;
     HealthComponent& operator=(HealthComponent&&) = delete;
 
+    /**
+     * @brief 对 GameObject 施加伤害。
+     *        如果当前处于无敌状态，则伤害无效。
+     *        如果成功造成伤害且设置了无敌时长，则会触发无敌帧。
+     * @param damageAmount 造成的伤害量（应为正数）。
+     * @return bool 如果成功造成伤害，则返回 true，否则返回 false。
+     */
+    bool takeDamage(int damageAmount);
+
     // --- Getters and Setters ---
     ///< @brief 检查 GameObject 是否存活（当前生命值大于 0）。
     bool isAlive() const { return m_currentHealth > 0; }

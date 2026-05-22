@@ -12,8 +12,8 @@ namespace game::component::state {
 void DeadState::enter()
 {
     spdlog::debug("玩家进入死亡状态。");
-    // 播放死亡动画
-    playAnimation("dead");
+    // 播放死亡（受伤）动画
+    playAnimation("hurt");
 
     // 造成向上击退效果
     auto physicsComponent = m_playerComponent->physicsComponent();

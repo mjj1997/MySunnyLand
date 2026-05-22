@@ -10,6 +10,7 @@ class TransformComponent;
 class PhysicsComponent;
 class SpriteComponent;
 class AnimationComponent;
+class HealthComponent;
 } // namespace engine::component
 
 namespace game::component {
@@ -32,6 +33,8 @@ public:
     PlayerComponent(PlayerComponent&&) = delete;
     PlayerComponent& operator=(PlayerComponent&&) = delete;
 
+    bool takeDamage(int damageAmount); ///< @brief 试图造成伤害，返回是否成功
+
     // --- setters and getters ---
     engine::component::TransformComponent* transformComponent() const
     {
@@ -43,6 +46,7 @@ public:
     {
         return m_animationComponent;
     }
+    engine::component::HealthComponent* healthComponent() const { return m_healthComponent; }
 
     void setAlive(bool isAlive) { m_isAlive = isAlive; }            ///< @brief 设置玩家是否存活
     bool isAlive() const { return m_isAlive; }                      ///< @brief 获取玩家是否存活
@@ -55,6 +59,9 @@ public:
     float frictionFactor() const { return m_frictionFactor; }       ///< @brief 获取摩擦系数
     void setJumpForce(float jumpForce) { m_jumpForce = jumpForce; } ///< @brief 设置跳跃力
     float jumpForce() const { return m_jumpForce; }                 ///< @brief 获取跳跃力
+    ///< @brief 设置硬直时间
+    void setStunnedDuration(float duration) { m_stunnedDuration = duration; }
+    float stunnedDuration() const { return m_stunnedDuration; } ///< @brief 获取硬直时间
 
     ///< @brief 切换玩家状态
     void setState(std::unique_ptr<state::PlayerStateBase> newState);
@@ -74,15 +81,20 @@ private:
     engine::component::PhysicsComponent* m_physicsComponent{ nullptr };
     ///< @brief 指向 AnimationComponent 的非拥有指针
     engine::component::AnimationComponent* m_animationComponent{ nullptr };
+    ///< @brief 指向 HealthComponent 的非拥有指针
+    engine::component::HealthComponent* m_healthComponent{ nullptr };
 
     std::unique_ptr<state::PlayerStateBase> m_currentState;
     bool m_isAlive{ true };
 
-    // --- 移动相关参数
+    // --- 移动相关参数 ---
     float m_moveForce{ 200.0f };     ///< @brief 水平移动力
     float m_maxSpeed{ 120.0f };      ///< @brief 最大移动速度 (像素/秒)
     float m_frictionFactor{ 0.85f }; ///< @brief 摩擦系数 (Idle时缓冲效果，每帧乘以此系数)
     float m_jumpForce{ 350.0f };     ///< @brief 跳跃力 (按下"jump"键给的瞬间向上的力)
+
+    // --- 属性相关参数 ---
+    float m_stunnedDuration{ 0.4f }; ///< @brief 玩家被击中后的硬直时间（单位：秒）
 };
 
 } // namespace game::component

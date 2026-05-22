@@ -62,7 +62,8 @@ private:
     ///< @brief 检测并处理对象之间的碰撞，并记录需要游戏逻辑处理的碰撞对。
     void checkObjectCollisions();
     /// @brief 检测并处理游戏对象和瓦片层之间的碰撞。
-    void resolveTileCollisions(engine::component::PhysicsComponent* component, float deltaTime);
+    void resolveTileCollisions(engine::component::PhysicsComponent* physicsComponent,
+                               float deltaTime);
     /// @brief 处理可移动物体与 Solid 物体的碰撞。
     void resolveSolidCollisions(engine::object::GameObject* movingObject,
                                 engine::object::GameObject* solidObject);

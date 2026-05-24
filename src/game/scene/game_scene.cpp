@@ -256,6 +256,12 @@ void GameScene::handlePlayerVsEnemyCollision(engine::object::GameObject* player,
 void GameScene::handlePlayerVsItemCollision(engine::object::GameObject* player,
                                             engine::object::GameObject* item)
 {
+    if (item->name() == "fruit") {
+        player->getComponent<engine::component::HealthComponent>()->heal(1); // 加血
+    } else if (item->name() == "gem") {
+        //TODO: 加分
+    }
+    item->setShouldRemove(true); // 标记道具为待删除状态
 }
 
 } // namespace game::scene

@@ -73,7 +73,6 @@ void GameScene::render()
 void GameScene::handleInput()
 {
     SceneBase::handleInput();
-    testHealth();
 }
 
 void GameScene::clean()
@@ -195,12 +194,38 @@ bool GameScene::initEnemyAndItem()
     return success;
 }
 
-void GameScene::testHealth()
+void GameScene::handleObjectCollisions()
 {
-    auto inputManager = m_context.inputManager();
-    if (inputManager.isActionPressed("attack")) {
-        m_player->getComponent<game::component::PlayerComponent>()->takeDamage(1);
+    // 从物理引擎获取碰撞对列表
+    auto collisionPairs = m_context.physicsEngine().collisionPairs();
+    // 遍历碰撞对列表
+    for (auto& pair : collisionPairs) {
+        auto* obj1 = pair.first;
+        auto* obj2 = pair.second;
+
+        // 处理玩家与敌人的碰撞
+        if (obj1->name() == "player" && obj2->tag() == "enemy") {
+            handlePlayerVsEnemyCollision(obj1, obj2);
+        } else if (obj2->name() == "player" && obj1->tag() == "enemy") {
+            handlePlayerVsEnemyCollision(obj2, obj1);
+        }
+        // 处理玩家与道具的碰撞
+        else if (obj1->name() == "player" && obj2->tag() == "item") {
+            handlePlayerVsItemCollision(obj1, obj2);
+        } else if (obj2->name() == "player" && obj1->tag() == "item") {
+            handlePlayerVsItemCollision(obj2, obj1);
+        }
     }
+}
+
+void GameScene::handlePlayerVsEnemyCollision(engine::object::GameObject* player,
+                                             engine::object::GameObject* enemy)
+{
+}
+
+void GameScene::handlePlayerVsItemCollision(engine::object::GameObject* player,
+                                            engine::object::GameObject* item)
+{
 }
 
 } // namespace game::scene

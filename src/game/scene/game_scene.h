@@ -29,8 +29,14 @@ private:
     ///< @brief 初始化敌人和道具
     [[nodiscard]] bool initEnemyAndItem();
 
-    // 测试函数
-    void testHealth(); ///< @brief 测试生命值组件
+    ///< @brief 总入口：处理游戏对象间的碰撞逻辑（从PhysicsEngine获取信息，分发给具体处理函数处理）
+    void handleObjectCollisions();
+    ///< @brief 分支：处理玩家与敌人之间的碰撞
+    void handlePlayerVsEnemyCollision(engine::object::GameObject* player,
+                                      engine::object::GameObject* enemy);
+    ///< @brief 分支：处理玩家与道具之间的碰撞
+    void handlePlayerVsItemCollision(engine::object::GameObject* player,
+                                     engine::object::GameObject* item);
 
     /// @brief 保存玩家对象指针
     engine::object::GameObject* m_player{ nullptr };

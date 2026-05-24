@@ -244,6 +244,18 @@ void GameScene::handlePlayerVsEnemyCollision(engine::object::GameObject* player,
             return;
         }
         enemyHealth->takeDamage(1); // 造成1点伤害
+
+        // 播放敌人死亡效果
+        if (!enemyHealth->isAlive()) {
+            spdlog::info("敌人 {} 被踩踏后死亡", enemy->name());
+            enemy->setShouldRemove(true);            // 标记敌人为待删除状态
+            createEffect(enemyCenter, enemy->tag()); // 创建（死亡）特效
+        }
+
+        // 播放玩家跳起效果
+        auto playerPhysicsComponent = player->getComponent<engine::component::PhysicsComponent>();
+        playerPhysicsComponent->setVelocity(
+            glm::vec2{ playerPhysicsComponent->velocity().x, -300.0f }); // 向上跳起
     }
     // 踩踏判断失败，玩家受伤
     else {

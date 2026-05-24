@@ -275,6 +275,11 @@ void GameScene::handlePlayerVsItemCollision(engine::object::GameObject* player,
         //TODO: 加分
     }
     item->setShouldRemove(true); // 标记道具为待删除状态
+
+    // 播放道具反馈特效
+    auto itemAabb = item->getComponent<engine::component::ColliderComponent>()->worldAabb();
+    auto itemCenter = itemAabb.position + itemAabb.size / 2.0f;
+    createEffect(itemCenter, item->tag()); // 创建特效
 }
 
 void GameScene::createEffect(const glm::vec2& center, const std::string& tag)

@@ -2,6 +2,8 @@
 
 #include "../../engine/scene/scene_base.h"
 
+#include <glm/vec2.hpp>
+
 namespace game::scene {
 
 /**
@@ -37,6 +39,13 @@ private:
     ///< @brief 分支：处理玩家与道具之间的碰撞
     void handlePlayerVsItemCollision(engine::object::GameObject* player,
                                      engine::object::GameObject* item);
+
+    /**
+     * @brief 创建一个特效对象（一次性）。
+     * @param center 特效中心位置
+     * @param tag 特效标签（决定特效类型,例如"enemy","item"）
+     */
+    void createEffect(const glm::vec2& center, const std::string& tag);
 
     /// @brief 保存玩家对象指针
     engine::object::GameObject* m_player{ nullptr };

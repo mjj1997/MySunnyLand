@@ -13,6 +13,7 @@
 #include "../../engine/object/game_object.h"
 #include "../../engine/physics/collider.h"
 #include "../../engine/physics/physics_engine.h"
+#include "../../engine/render/animation.h"
 #include "../../engine/render/camera.h"
 #include "../../engine/scene/level_loader.h"
 
@@ -262,6 +263,52 @@ void GameScene::handlePlayerVsItemCollision(engine::object::GameObject* player,
         //TODO: 加分
     }
     item->setShouldRemove(true); // 标记道具为待删除状态
+}
+
+void GameScene::createEffect(const glm::vec2& center, const std::string& tag)
+{
+    // --- 创建游戏对象和变换组件 ---
+    auto effectObj = std::make_unique<engine::object::GameObject>("effect_" + tag);
+    effectObj->addComponent<engine::component::TransformComponent>(center);
+
+    // --- 根据标签创建不同的精灵组件和动画---
+    auto animation = std::make_unique<engine::render::Animation>("effect", false);
+    SDL_FRect srcRect{};
+    float duration{ 0.1f };
+
+    if (tag == "enemy") {
+        effectObj->addComponent<engine::component::SpriteComponent>(
+            "assets/textures/FX/enemy-deadth.png",
+            m_context.resourceManager(),
+            engine::utils::Alignment::Center);
+
+        for (int i{ 0 }; i < 5; ++i) {
+            srcRect = SDL_FRect{ static_cast<float>(i * 40), 0.0f, 40.0f, 41.0f };
+            animation->addFrame(srcRect, duration);
+        }
+    } else if (tag == "item") {
+        effectObj->addComponent<engine::component::SpriteComponent>(
+            "assets/textures/FX/item-feedback.png",
+            m_context.resourceManager(),
+            engine::utils::Alignment::Center);
+
+        for (int i{ 0 }; i < 4; ++i) {
+            srcRect = SDL_FRect{ static_cast<float>(i * 32), 0.0f, 32.0f, 32.0f };
+            animation->addFrame(srcRect, duration);
+        }
+    } else {
+        spdlog::warn("未知特效类型: {}", tag);
+        return;
+    }
+
+    // --- 根据创建的动画，添加动画组件，并设置为单次播放 ---
+    auto* animationComponent = effectObj->addComponent<engine::component::AnimationComponent>();
+    animationComponent->addAnimation(std::move(animation));
+    animationComponent->setOneShotRemoval(true);
+    animationComponent->playAnimation("effect");
+
+    safeAddGameObject(std::move(effectObj)); // 安全添加特效对象
+    spdlog::debug("创建特效: {}", tag);
 }
 
 } // namespace game::scene

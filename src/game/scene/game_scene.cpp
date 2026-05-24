@@ -3,6 +3,7 @@
 
 #include "../../engine/component/animation_component.h"
 #include "../../engine/component/collider_component.h"
+#include "../../engine/component/health_component.h"
 #include "../../engine/component/physics_component.h"
 #include "../../engine/component/sprite_component.h"
 #include "../../engine/component/tilelayer_component.h"
@@ -221,6 +222,35 @@ void GameScene::handleObjectCollisions()
 void GameScene::handlePlayerVsEnemyCollision(engine::object::GameObject* player,
                                              engine::object::GameObject* enemy)
 {
+    /** --- 踩踏判断逻辑 ---
+     * 1. 玩家中心点在敌人上方
+     * 2. 重叠区域：overlap.x > overlap.y
+     */
+    auto playerAabb = player->getComponent<engine::component::ColliderComponent>()->worldAabb();
+    auto enemyAabb = enemy->getComponent<engine::component::ColliderComponent>()->worldAabb();
+    auto playerCenter = playerAabb.position + playerAabb.size / 2.0f;
+    auto enemyCenter = enemyAabb.position + enemyAabb.size / 2.0f;
+    auto overlap = glm::vec2{ playerAabb.size / 2.0f + enemyAabb.size / 2.0f }
+                   - glm::abs(playerCenter - enemyCenter);
+
+    // 踩踏判断成功，敌人受伤
+    if (overlap.x > overlap.y && playerCenter.y < enemyCenter.y) {
+        spdlog::info("玩家 {} 踩踏了敌人 {}", player->name(), enemy->name());
+        // 处理敌人受伤逻辑
+        auto enemyHealth = enemy->getComponent<engine::component::HealthComponent>();
+        if (!enemyHealth) {
+            spdlog::error("敌人 {} 没有 HealthComponent 组件，无法处理踩踏伤害", enemy->name());
+            return;
+        }
+        enemyHealth->takeDamage(1); // 造成1点伤害
+    }
+    // 踩踏判断失败，玩家受伤
+    else {
+        spdlog::info("敌人 {} 对玩家 {} 造成伤害", enemy->name(), player->name());
+        // 处理玩家受伤逻辑
+        player->getComponent<game::component::PlayerComponent>()->takeDamage(1);
+        // TODO: 其他受伤逻辑
+    }
 }
 
 void GameScene::handlePlayerVsItemCollision(engine::object::GameObject* player,

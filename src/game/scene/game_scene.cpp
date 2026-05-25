@@ -290,6 +290,23 @@ void GameScene::handlePlayerVsItemCollision(engine::object::GameObject* player,
     createEffect(itemCenter, item->tag()); // 创建特效
 }
 
+void GameScene::handleTileTriggers()
+{
+    const auto& tileTriggersEvents = m_context.physicsEngine().tileTriggerEvents();
+    for (const auto& event : tileTriggersEvents) {
+        auto* obj = event.first;
+        auto tileType = event.second;
+        if (tileType == engine::component::TileType::Hazard) {
+            // 玩家与危险瓦片碰撞，玩家受伤
+            if (obj->name() == "player") {
+                obj->getComponent<game::component::PlayerComponent>()->takeDamage(1);
+                spdlog::debug("玩家 {} 收到了 Hazard 对象伤害", obj->name());
+            }
+            // TODO: 其他对象与危险瓦片碰撞的处理，目前让敌人无视危险瓦片
+        }
+    }
+}
+
 void GameScene::createEffect(const glm::vec2& center, const std::string& tag)
 {
     // --- 创建游戏对象和变换组件 ---

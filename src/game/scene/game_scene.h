@@ -40,6 +40,9 @@ private:
     void handlePlayerVsItemCollision(engine::object::GameObject* player,
                                      engine::object::GameObject* item);
 
+    ///< @brief 处理瓦片触发事件
+    void handleTileTriggers();
+
     /**
      * @brief 创建一个特效对象（一次性）。
      * @param center 特效中心位置

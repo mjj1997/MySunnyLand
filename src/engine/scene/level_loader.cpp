@@ -245,6 +245,9 @@ void LevelLoader::loadObjectLayer(const nlohmann::json& layerJson, SceneBase& sc
             auto tag = getTileProperty<std::string>(tileJson, "tag");
             if (tag) {
                 gameObject->setTag(tag.value());
+            } else if (tileInfo.type == engine::component::TileType::Hazard) {
+                // 如果是危险瓦片，且没有手动设置标签，则自动设置标签为 "hazard"
+                gameObject->setTag("hazard");
             }
 
             // 获取重力信息并设置

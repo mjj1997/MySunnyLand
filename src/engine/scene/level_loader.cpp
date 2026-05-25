@@ -400,6 +400,9 @@ engine::component::TileType LevelLoader::getTileType(const nlohmann::json& tileJ
                     spdlog::error("未知的斜坡类型: {}", slopeType);
                     return engine::component::TileType::Normal;
                 }
+            } else if (property.value("name", "") == "hazard") {
+                return property.value("value", false) ? engine::component::TileType::Hazard
+                                                      : engine::component::TileType::Normal;
             }
         }
     }

@@ -163,7 +163,7 @@ void PhysicsEngine::resolveTileCollisions(engine::component::PhysicsComponent* p
 
     auto displacement = physicsComponent->velocity() * deltaTime; // 计算物体在 deltaTime 内的位移
     auto newObjectPosition = objectPosition + displacement;       // 计算物体在 deltaTime 后的新位置
-    auto epsilon = 1.0f; // 检查右边缘和下边缘时，需要减1像素，否则会检查到下一行/列的瓦片
+    constexpr float epsilon{ 1.0f }; // 检查右边缘和下边缘时，需要减1像素，否则会检查到下一行/列的瓦片
 
     // 如果碰撞器未激活，直接让物体正常移动，然后返回。
     if (!colliderComponent->isActive()) {

@@ -82,6 +82,11 @@ private:
      */
     float getTileHeightAtWidth(float width, engine::component::TileType type, glm::vec2 tileSize);
 
+    /**
+     * @brief 检测所有游戏对象与瓦片层的触发器类型瓦片碰撞，并记录触发事件。(位移处理完毕后再调用)
+     */
+    void checkTileTriggers();
+
     ///< @brief 注册的物理组件容器，非拥有指针
     std::vector<engine::component::PhysicsComponent*> m_components;
     ///< @brief 注册的碰撞瓦片图层容器

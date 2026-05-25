@@ -46,8 +46,9 @@ void PhysicsEngine::unregisterCollisionLayer(engine::component::TileLayerCompone
 
 void PhysicsEngine::update(float deltaTime)
 {
-    // 每帧开始时，清空上一帧的碰撞记录
+    // 每帧开始时，清空上一帧的碰撞记录和瓦片触发事件记录
     m_collisionPairs.clear();
+    m_tileTriggerEvents.clear();
 
     // 遍历所有注册的物理组件
     for (auto* physicsComponent : m_components) {
@@ -80,6 +81,9 @@ void PhysicsEngine::update(float deltaTime)
 
     // 执行碰撞检测
     checkObjectCollisions();
+
+    // 执行瓦片触发事件检测
+    checkTileTriggers();
 }
 
 void PhysicsEngine::checkObjectCollisions()

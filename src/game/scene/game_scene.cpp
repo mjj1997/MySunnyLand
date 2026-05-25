@@ -65,6 +65,8 @@ void GameScene::init()
 void GameScene::update(float deltaTime)
 {
     SceneBase::update(deltaTime);
+    handleObjectCollisions();
+    handleTileTriggers();
 }
 
 void GameScene::render()

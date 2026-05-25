@@ -26,6 +26,7 @@ enum class TileType {
     Slope_2_1, ///< @brief 斜坡瓦片，高度:左1/2 右1
     Slope_1_2, ///< @brief 斜坡瓦片，高度:左1   右1/2
     Slope_2_0, ///< @brief 斜坡瓦片，高度:左1/2 右0
+    Hazard,    ///< @brief 危险瓦片（例如火焰、尖刺等）
     // 未来补充其它类型
 };
 

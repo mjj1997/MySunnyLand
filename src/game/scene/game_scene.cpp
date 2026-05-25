@@ -217,6 +217,14 @@ void GameScene::handleObjectCollisions()
         } else if (obj2->name() == "player" && obj1->tag() == "item") {
             handlePlayerVsItemCollision(obj2, obj1);
         }
+        // 处理玩家与标签为“hazard”的对象的碰撞
+        else if (obj1->name() == "player" && obj2->tag() == "hazard") {
+            obj1->getComponent<game::component::PlayerComponent>()->takeDamage(1);
+            spdlog::debug("玩家 {} 收到了 Hazard 对象伤害", obj1->name());
+        } else if (obj2->name() == "player" && obj1->tag() == "hazard") {
+            obj2->getComponent<game::component::PlayerComponent>()->takeDamage(1);
+            spdlog::debug("玩家 {} 收到了 Hazard 对象伤害", obj2->name());
+        }
     }
 }
 

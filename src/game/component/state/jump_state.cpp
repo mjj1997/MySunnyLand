@@ -17,7 +17,8 @@ void JumpState::enter()
     playAnimation("jump"); // 播放跳跃动画
 
     auto physicsComponent = m_playerComponent->physicsComponent();
-    auto newVelocity = glm::vec2{ physicsComponent->velocity().x, -m_playerComponent->jumpForce() };
+    auto newVelocity = glm::vec2{ physicsComponent->velocity().x,
+                                  -m_playerComponent->jumpVelocity() }; // 向上跳跃
     physicsComponent->setVelocity(newVelocity);
 
     spdlog::debug("PlayerComponent 进入 JumpState， 设置初始垂直速度为：{}",

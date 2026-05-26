@@ -1,5 +1,6 @@
 #include "game_scene.h"
 #include "../component/ai/patrol_behavior.h"
+#include "../component/ai/updown_behavior.h"
 #include "../component/ai_component.h"
 #include "../component/player_component.h"
 
@@ -156,13 +157,14 @@ bool GameScene::initEnemyAndItem()
     bool success{ true };
     for (auto& gameObject : m_gameObjects) {
         if (gameObject->name() == "eagle") {
-            if (auto* animationComponent
-                = gameObject->getComponent<engine::component::AnimationComponent>();
-                animationComponent) {
-                animationComponent->playAnimation("fly");
-            } else {
-                spdlog::error("Eagle 对象缺少 AnimationComponent，无法播放动画。");
-                success = false;
+            if (auto* aiComponent = gameObject->addComponent<game::component::AiComponent>();
+                aiComponent) {
+                auto maxY = gameObject->getComponent<engine::component::TransformComponent>()
+                                ->position()
+                                .y;
+                auto minY = maxY - 80.0f; // 鹰的飞行范围（当前位置 ~ 上方 80px 的区域）
+                aiComponent->setBehavior(
+                    std::make_unique<game::component::ai::UpDownBehavior>(minY, maxY));
             }
         }
         if (gameObject->name() == "frog") {

@@ -1,4 +1,10 @@
 #include "jump_behavior.h"
+#include "../ai_component.h"
+
+#include "../../../engine/component/animation_component.h"
+#include "../../../engine/component/physics_component.h"
+#include "../../../engine/component/sprite_component.h"
+#include "../../../engine/component/transform_component.h"
 
 #include <spdlog/spdlog.h>
 
@@ -29,3 +35,37 @@ JumpBehavior::JumpBehavior(float minX, float maxX, glm::vec2 jumpVelocity, float
     }
 }
 
+void JumpBehavior::update(float deltaTime, AiComponent& aiComponent)
+{
+    // 获取必要的组件
+    auto* physicsComponent = aiComponent.physicsComponent();
+    auto* transformComponent = aiComponent.transformComponent();
+    auto* spriteComponent = aiComponent.spriteComponent();
+    auto* animationComponent = aiComponent.animationComponent();
+    if (!physicsComponent || !transformComponent || !spriteComponent || !animationComponent) {
+        spdlog::error("JumpBehavior：缺少必要的组件，无法执行跳跃行为。");
+        return;
+    }
+
+    // 着地标志
+    auto isOnGround = physicsComponent->isCollidedBelow();
+    if (isOnGround) { // 如果在地面上
+        // 增加跳跃计时器
+        m_jumpTimer += deltaTime;
+        // 停止水平移动（否则会有惯性）
+        glm::vec2 newVelocity{ 0.0f, physicsComponent->velocity().y };
+        physicsComponent->setVelocity(newVelocity);
+
+        // --- 检查是否需要跳跃 ---
+
+    } else { // 如果在空中
+        // --- 根据垂直速度判断是上升(jump)还是下落(fall) ---
+        if (physicsComponent->velocity().y < 0) {
+            animationComponent->playAnimation("jump");
+        } else {
+            animationComponent->playAnimation("fall");
+        }
+    }
+}
+
+} // namespace game::component::ai

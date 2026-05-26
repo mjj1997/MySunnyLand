@@ -1,4 +1,6 @@
 #include "game_scene.h"
+#include "../component/ai/patrol_behavior.h"
+#include "../component/ai_component.h"
 #include "../component/player_component.h"
 
 #include "../../engine/component/animation_component.h"
@@ -174,13 +176,14 @@ bool GameScene::initEnemyAndItem()
             }
         }
         if (gameObject->name() == "opossum") {
-            if (auto* animationComponent
-                = gameObject->getComponent<engine::component::AnimationComponent>();
-                animationComponent) {
-                animationComponent->playAnimation("walk");
-            } else {
-                spdlog::error("Opossum 对象缺少 AnimationComponent，无法播放动画。");
-                success = false;
+            if (auto* aiComponent = gameObject->addComponent<game::component::AiComponent>();
+                aiComponent) {
+                auto maxX = gameObject->getComponent<engine::component::TransformComponent>()
+                                ->position()
+                                .x;
+                auto minX = maxX - 200.0f;
+                aiComponent->setBehavior(
+                    std::make_unique<game::component::ai::PatrolBehavior>(minX, maxX));
             }
         }
         if (gameObject->tag() == "item") {

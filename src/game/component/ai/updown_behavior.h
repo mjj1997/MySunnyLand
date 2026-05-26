@@ -14,6 +14,13 @@ class UpDownBehavior final : public AiBehaviorBase
     friend class game::component::AiComponent;
 
 public:
+    /**
+     * @brief 构造函数。
+     * @param minY 巡逻范围的最小 y 坐标。
+     * @param maxY 巡逻范围的最大 y 坐标。
+     * @param speed 移动速度。
+     */
+    UpDownBehavior(float minY, float maxY, float speed = 50.0f);
     ~UpDownBehavior() override = default;
 
     // 禁止拷贝和移动

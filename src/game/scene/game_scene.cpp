@@ -1,4 +1,8 @@
 #include "game_scene.h"
+#include "../component/ai/jump_behavior.h"
+#include "../component/ai/patrol_behavior.h"
+#include "../component/ai/updown_behavior.h"
+#include "../component/ai_component.h"
 #include "../component/player_component.h"
 
 #include "../../engine/component/animation_component.h"
@@ -154,33 +158,36 @@ bool GameScene::initEnemyAndItem()
     bool success{ true };
     for (auto& gameObject : m_gameObjects) {
         if (gameObject->name() == "eagle") {
-            if (auto* animationComponent
-                = gameObject->getComponent<engine::component::AnimationComponent>();
-                animationComponent) {
-                animationComponent->playAnimation("fly");
-            } else {
-                spdlog::error("Eagle 对象缺少 AnimationComponent，无法播放动画。");
-                success = false;
+            if (auto* aiComponent = gameObject->addComponent<game::component::AiComponent>();
+                aiComponent) {
+                auto maxY = gameObject->getComponent<engine::component::TransformComponent>()
+                                ->position()
+                                .y;
+                auto minY = maxY - 80.0f; // 鹰的飞行范围（当前位置 ~ 上方 80px 的区域）
+                aiComponent->setBehavior(
+                    std::make_unique<game::component::ai::UpDownBehavior>(minY, maxY));
             }
         }
         if (gameObject->name() == "frog") {
-            if (auto* animationComponent
-                = gameObject->getComponent<engine::component::AnimationComponent>();
-                animationComponent) {
-                animationComponent->playAnimation("idle");
-            } else {
-                spdlog::error("Frog 对象缺少 AnimationComponent，无法播放动画。");
-                success = false;
+            if (auto* aiComponent = gameObject->addComponent<game::component::AiComponent>();
+                aiComponent) {
+                auto maxX
+                    = gameObject->getComponent<engine::component::TransformComponent>()->position().x
+                      - 10.0f;            // 这里减去 10px 是为了增加青蛙跳跃的稳定性
+                auto minX = maxX - 90.0f; // 青蛙的跳跃范围（当前位置 ~ 左方 90px 的区域）
+                aiComponent->setBehavior(
+                    std::make_unique<game::component::ai::JumpBehavior>(minX, maxX));
             }
         }
         if (gameObject->name() == "opossum") {
-            if (auto* animationComponent
-                = gameObject->getComponent<engine::component::AnimationComponent>();
-                animationComponent) {
-                animationComponent->playAnimation("walk");
-            } else {
-                spdlog::error("Opossum 对象缺少 AnimationComponent，无法播放动画。");
-                success = false;
+            if (auto* aiComponent = gameObject->addComponent<game::component::AiComponent>();
+                aiComponent) {
+                auto maxX = gameObject->getComponent<engine::component::TransformComponent>()
+                                ->position()
+                                .x;
+                auto minX = maxX - 200.0f;
+                aiComponent->setBehavior(
+                    std::make_unique<game::component::ai::PatrolBehavior>(minX, maxX));
             }
         }
         if (gameObject->tag() == "item") {

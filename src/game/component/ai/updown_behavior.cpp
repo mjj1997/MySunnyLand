@@ -45,12 +45,12 @@ void UpDownBehavior::update(float deltaTime, AiComponent& aiComponent)
 
     // 检查是否碰撞和是否到达巡逻范围
     auto currentY = transformComponent->position().y;
-    if (physicsComponent->isCollidedAbove() || currentY >= m_patrolMaxY) {
+    if (physicsComponent->isCollidedAbove() || currentY <= m_patrolMinY) {
         // 如果撞上障碍物或到达巡逻范围上边界，就转向下
         glm::vec2 newVelocity{ physicsComponent->velocity().x, m_moveSpeed };
         physicsComponent->setVelocity(newVelocity);
         m_movingDown = true;
-    } else if (physicsComponent->isCollidedBelow() || currentY <= m_patrolMinY) {
+    } else if (physicsComponent->isCollidedBelow() || currentY >= m_patrolMaxY) {
         // 如果撞下障碍物或到达巡逻范围下边界，就转向上
         glm::vec2 newVelocity{ physicsComponent->velocity().x, -m_moveSpeed };
         physicsComponent->setVelocity(newVelocity);

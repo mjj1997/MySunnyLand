@@ -37,6 +37,8 @@ private:
     float m_patrolMinX{ 0.0f }; ///< @brief 巡逻范围的左边界
     float m_patrolMaxX{ 0.0f }; ///< @brief 巡逻范围的右边界
     float m_moveSpeed{ 50.0f }; ///< @brief 移动速度 (像素/秒)
+
+    bool m_movingRight{ false }; ///< @brief 当前是否向右移动
 };
 
 } // namespace game::component::ai

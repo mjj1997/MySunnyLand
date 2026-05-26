@@ -46,6 +46,7 @@ private:
     float m_jumpInterval{ 2.0f };                ///< @brief 跳跃间隔时间 (秒)
 
     float m_jumpTimer{ 0.0f };    ///< @brief 距离下次跳跃的计时器
+    bool m_jumpingRight{ false }; ///< @brief 当前是否向右跳跃
 };
 
 } // namespace game::component::ai

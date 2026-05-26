@@ -57,7 +57,32 @@ void JumpBehavior::update(float deltaTime, AiComponent& aiComponent)
         physicsComponent->setVelocity(newVelocity);
 
         // --- 检查是否需要跳跃 ---
+        if (m_jumpTimer >= m_jumpInterval) { // 时间到，准备跳跃
+            // 重置计时器
+            m_jumpTimer = 0.0f;
 
+            // --- 检查是否需要更新跳跃方向 ---
+            auto currentX = transformComponent->position().x;
+            if (m_jumpingRight
+                && (physicsComponent->isCollidedRight() || currentX >= m_patrolMaxX)) {
+                // 如果右边超限或者撞墙，向左跳
+                m_jumpingRight = false;
+            } else if (!m_jumpingRight
+                       && (physicsComponent->isCollidedLeft() || currentX <= m_patrolMinX)) {
+                // 如果左边超限或者撞墙，向右跳
+                m_jumpingRight = true;
+            }
+
+            // 根据跳跃方向标志，确定水平跳跃方向，设置速度
+            auto jumpVelocityX = m_jumpingRight ? m_jumpVelocity.x : -m_jumpVelocity.x;
+            physicsComponent->setVelocity(glm::vec2{ jumpVelocityX, m_jumpVelocity.y });
+            // 播放跳跃动画
+            animationComponent->playAnimation("jump");
+            // 更新精灵翻转
+            spriteComponent->setFlipped(m_jumpingRight);
+        } else { // 还在地面等待
+            animationComponent->playAnimation("idle");
+        }
     } else { // 如果在空中
         // --- 根据垂直速度判断是上升(jump)还是下落(fall) ---
         if (physicsComponent->velocity().y < 0) {

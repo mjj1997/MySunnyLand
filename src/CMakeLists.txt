@@ -38,7 +38,8 @@ target_sources(
           engine/component/health_component.cpp
           game/component/state/hurt_state.cpp
           game/component/state/dead_state.cpp
-          game/component/ai_component.cpp)
+          game/component/ai_component.cpp
+          game/component/ai/patrol_behavior.cpp)
 
 target_link_libraries(
   SunnyLand

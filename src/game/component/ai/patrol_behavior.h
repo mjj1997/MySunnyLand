@@ -14,6 +14,13 @@ class PatrolBehavior final : public AiBehaviorBase
     friend class game::component::AiComponent;
 
 public:
+    /**
+     * @brief 构造函数。
+     * @param minX 巡逻范围的最小 x 坐标。
+     * @param maxX 巡逻范围的最大 x 坐标。
+     * @param speed 移动速度。
+     */
+    PatrolBehavior(float minX, float maxX, float speed = 50.0f);
     ~PatrolBehavior() override = default;
 
     // 禁止拷贝和移动

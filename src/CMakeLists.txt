@@ -40,7 +40,8 @@ target_sources(
           game/component/state/dead_state.cpp
           game/component/ai_component.cpp
           game/component/ai/patrol_behavior.cpp
-          game/component/ai/updown_behavior.cpp)
+          game/component/ai/updown_behavior.cpp
+          game/component/ai/jump_behavior.cpp)
 
 target_link_libraries(
   SunnyLand

@@ -17,6 +17,17 @@ class JumpBehavior final : public AiBehaviorBase
     friend class game::component::AiComponent;
 
 public:
+    /**
+     * @brief 构造函数。
+     * @param minX 巡逻范围的最小 x 坐标。
+     * @param maxX 巡逻范围的最大 x 坐标。
+     * @param jumpVelocity 跳跃速度向量 (水平, 垂直)。
+     * @param jumpInterval 两次跳跃之间的间隔时间。
+     */
+    JumpBehavior(float minX,
+                 float maxX,
+                 glm::vec2 jumpVelocity = glm::vec2{ 100.0f, -300.0f },
+                 float jumpInterval = 2.0f);
     ~JumpBehavior() override = default;
 
     // 禁止拷贝和移动

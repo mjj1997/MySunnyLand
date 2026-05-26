@@ -1,6 +1,7 @@
 #include "patrol_behavior.h"
 #include "../ai_component.h"
 
+#include "../../../engine/component/animation_component.h"
 #include "../../../engine/component/physics_component.h"
 #include "../../../engine/component/sprite_component.h"
 #include "../../../engine/component/transform_component.h"
@@ -17,6 +18,14 @@ PatrolBehavior::PatrolBehavior(float minX, float maxX, float speed)
     if (m_patrolMinX > m_patrolMaxX) {
         spdlog::error("PatrolBehavior: minX ({}) 应小于 maxX ({})。行为可能不正确。", minX, maxX);
         m_patrolMinX = m_patrolMaxX; // 修正为相等，避免逻辑错误
+    }
+}
+
+void PatrolBehavior::enter(AiComponent& aiComponent)
+{
+    // 播放动画（进行 patrol 行为的对象应该有 walk 动画）
+    if (auto* animationComponent = aiComponent.animationComponent(); animationComponent) {
+        animationComponent->playAnimation("walk");
     }
 }
 

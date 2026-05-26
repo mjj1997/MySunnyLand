@@ -12,6 +12,18 @@
 
 namespace game::component {
 
+bool AiComponent::takeDamage(int damageAmount)
+{
+    bool success{ false };
+    if (auto* healthComponent = m_owner->getComponent<engine::component::HealthComponent>();
+        healthComponent) {
+        success = healthComponent->takeDamage(damageAmount);
+        // TODO: 可以设置受伤、死亡后的行为
+    }
+
+    return success;
+}
+
 bool AiComponent::isAlive() const
 {
     if (auto* healthComponent = m_owner->getComponent<engine::component::HealthComponent>();

@@ -37,6 +37,8 @@ public:
     AiComponent(AiComponent&&) = delete;
     AiComponent& operator=(AiComponent&&) = delete;
 
+    bool takeDamage(int damageAmount); ///< @brief 处理伤害逻辑，返回是否造成伤害
+
     // --- Setters and Getters ---
     engine::component::TransformComponent* transformComponent() const
     {

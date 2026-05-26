@@ -37,6 +37,8 @@ private:
     float m_patrolMinY{ 0.0f }; ///< @brief 巡逻范围的上边界 (Y 坐标较小值)
     float m_patrolMaxY{ 0.0f }; ///< @brief 巡逻范围的下边界 (Y 坐标较大值)
     float m_moveSpeed{ 50.0f }; ///< @brief 移动速度 (像素/秒)
+
+    bool m_movingDown{ false }; ///< @brief 当前是否向下移动
 };
 
 } // namespace game::component::ai

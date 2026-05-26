@@ -1,6 +1,7 @@
 #include "updown_behavior.h"
 #include "../ai_component.h"
 
+#include "../../../engine/component/animation_component.h"
 #include "../../../engine/component/physics_component.h"
 #include "../../../engine/component/transform_component.h"
 
@@ -16,6 +17,19 @@ UpDownBehavior::UpDownBehavior(float minY, float maxY, float speed)
     if (m_patrolMinY > m_patrolMaxY) {
         spdlog::error("UpDownBehavior: minY ({}) 应小于 maxY ({})。行为可能不正确。", minY, maxY);
         m_patrolMinY = m_patrolMaxY; // 修正为相等，避免逻辑错误
+    }
+}
+
+void UpDownBehavior::enter(AiComponent& aiComponent)
+{
+    // 播放动画 (进行 UpDown 行为的对象应该有 fly 动画)
+    if (auto* animationComponent = aiComponent.animationComponent(); animationComponent) {
+        animationComponent->playAnimation("fly");
+    }
+
+    // 禁用重力
+    if (auto* physicsComponent = aiComponent.physicsComponent(); physicsComponent) {
+        physicsComponent->setGravityEnabled(false);
     }
 }
 

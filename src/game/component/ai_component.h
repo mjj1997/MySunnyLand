@@ -2,6 +2,12 @@
 
 #include "../../engine/component/component_base.h"
 
+#include <memory>
+
+namespace game::component::ai {
+class AiBehaviorBase;
+}
+
 namespace engine::component {
 class TransformComponent;
 class PhysicsComponent;
@@ -49,6 +55,10 @@ protected:
     void update(float deltaTime, engine::core::Context& context) override;
 
 private:
+    ///< @brief 当前 AI 行为策略
+    std::unique_ptr<ai::AiBehaviorBase> m_currentBehavior{ nullptr };
+    /* 未来可添加一些敌人属性 */
+
     // --- 缓存组件指针 ---
     engine::component::TransformComponent* m_transformComponent{ nullptr };
     engine::component::PhysicsComponent* m_physicsComponent{ nullptr };

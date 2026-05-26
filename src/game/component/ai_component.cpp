@@ -1,4 +1,5 @@
 #include "ai_component.h"
+#include "ai/ai_behavior_base.h"
 
 #include "../../engine/component/animation_component.h"
 #include "../../engine/component/physics_component.h"
@@ -9,6 +10,16 @@
 #include <spdlog/spdlog.h>
 
 namespace game::component {
+
+void AiComponent::setBehavior(std::unique_ptr<ai::AiBehaviorBase> behavior)
+{
+    m_currentBehavior = std::move(behavior);
+    spdlog::debug("GameObject '{}' 上的 AiComponent 设置了新的行为。",
+                  m_owner ? m_owner->name() : "未知");
+    if (m_currentBehavior) {
+        m_currentBehavior->enter(*this); // 调用新行为的 enter 方法
+    }
+}
 
 void AiComponent::init()
 {

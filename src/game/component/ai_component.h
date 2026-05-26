@@ -49,6 +49,9 @@ public:
         return m_animationComponent;
     }
 
+    ///< @brief 设置当前 AI 行为策略
+    void setBehavior(std::unique_ptr<ai::AiBehaviorBase> behavior);
+
 protected:
     // 核心循环方法
     void init() override;

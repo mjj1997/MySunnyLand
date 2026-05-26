@@ -37,7 +37,8 @@ target_sources(
           game/component/state/player_state_base.cpp
           engine/component/health_component.cpp
           game/component/state/hurt_state.cpp
-          game/component/state/dead_state.cpp)
+          game/component/state/dead_state.cpp
+          game/component/ai_component.cpp)
 
 target_link_libraries(
   SunnyLand

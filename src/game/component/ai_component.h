@@ -2,6 +2,13 @@
 
 #include "../../engine/component/component_base.h"
 
+namespace engine::component {
+class TransformComponent;
+class PhysicsComponent;
+class SpriteComponent;
+class AnimationComponent;
+} // namespace engine::component
+
 namespace game::component {
 
 /**
@@ -24,10 +31,29 @@ public:
     AiComponent(AiComponent&&) = delete;
     AiComponent& operator=(AiComponent&&) = delete;
 
+    // --- Setters and Getters ---
+    engine::component::TransformComponent* transformComponent() const
+    {
+        return m_transformComponent;
+    }
+    engine::component::PhysicsComponent* physicsComponent() const { return m_physicsComponent; }
+    engine::component::SpriteComponent* spriteComponent() const { return m_spriteComponent; }
+    engine::component::AnimationComponent* animationComponent() const
+    {
+        return m_animationComponent;
+    }
+
 protected:
     // 核心循环方法
     void init() override;
     void update(float deltaTime, engine::core::Context& context) override;
+
+private:
+    // --- 缓存组件指针 ---
+    engine::component::TransformComponent* m_transformComponent{ nullptr };
+    engine::component::PhysicsComponent* m_physicsComponent{ nullptr };
+    engine::component::SpriteComponent* m_spriteComponent{ nullptr };
+    engine::component::AnimationComponent* m_animationComponent{ nullptr };
 };
 
 } // namespace game::component

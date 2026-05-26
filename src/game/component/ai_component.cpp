@@ -2,6 +2,7 @@
 #include "ai/ai_behavior_base.h"
 
 #include "../../engine/component/animation_component.h"
+#include "../../engine/component/health_component.h"
 #include "../../engine/component/physics_component.h"
 #include "../../engine/component/sprite_component.h"
 #include "../../engine/component/transform_component.h"
@@ -10,6 +11,16 @@
 #include <spdlog/spdlog.h>
 
 namespace game::component {
+
+bool AiComponent::isAlive() const
+{
+    if (auto* healthComponent = m_owner->getComponent<engine::component::HealthComponent>();
+        healthComponent) {
+        return healthComponent->isAlive();
+    }
+
+    return true; // 如果没有生命组件，默认认为是活着的
+}
 
 void AiComponent::setBehavior(std::unique_ptr<ai::AiBehaviorBase> behavior)
 {

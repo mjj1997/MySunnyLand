@@ -48,6 +48,8 @@ public:
     {
         return m_animationComponent;
     }
+    ///< @brief 检查对象是否存活
+    bool isAlive() const;
 
     ///< @brief 设置当前 AI 行为策略
     void setBehavior(std::unique_ptr<ai::AiBehaviorBase> behavior);

@@ -48,6 +48,9 @@ public:
     // 设置器/获取器
     ///< @brief 获取本帧发生的碰撞对 vector
     const auto& collisionPairs() const { return m_collisionPairs; }
+    ///< @brief 获取本帧发生的瓦片触发事件 vector
+    const auto& tileTriggerEvents() const { return m_tileTriggerEvents; }
+
     ///< @brief 设置全局重力加速度
     void setGravity(const glm::vec2& gravity) { m_gravity = gravity; }
     const glm::vec2& gravity() const { return m_gravity; } ///< @brief 获取当前的全局重力加速度
@@ -79,6 +82,11 @@ private:
      */
     float getTileHeightAtWidth(float width, engine::component::TileType type, glm::vec2 tileSize);
 
+    /**
+     * @brief 检测所有游戏对象与瓦片层的触发器类型瓦片碰撞，并记录触发事件。(位移处理完毕后再调用)
+     */
+    void checkTileTriggers();
+
     ///< @brief 注册的物理组件容器，非拥有指针
     std::vector<engine::component::PhysicsComponent*> m_components;
     ///< @brief 注册的碰撞瓦片图层容器
@@ -86,6 +94,9 @@ private:
 
     ///< @brief 存储本帧发生的碰撞对
     std::vector<std::pair<engine::object::GameObject*, engine::object::GameObject*>> m_collisionPairs;
+    /// @brief 存储本帧发生的瓦片触发事件
+    std::vector<std::pair<engine::object::GameObject*, engine::component::TileType>>
+        m_tileTriggerEvents;
 
     ///< @brief 默认重力值 (像素/秒^2, 相当于 100像素 对应现实 1m)
     glm::vec2 m_gravity{ 0.0f, 980.0f };

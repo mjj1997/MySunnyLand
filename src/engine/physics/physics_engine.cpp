@@ -499,8 +499,11 @@ void PhysicsEngine::checkTileTriggers()
                     auto tileType = layer->tileTypeAt(glm::ivec2{ x, y });
                     if (tileType == engine::component::TileType::Hazard) {
                         triggers.insert(tileType); // 记录触发事件，set 保证每个瓦片类型只记录一次
+                    } else if (tileType == engine::component::TileType::Ladder) {
+                        // 梯子类型不必记录到事件容器，物理引擎自己处理
+                        physicsComponent->setCollidedLadder(true);
                     }
-                    // TODO: 未来可以添加更多触发器类型的瓦片，目前只有 Hazard 类型
+                    // TODO: 未来可以添加更多触发器类型的瓦片
                 }
             }
 

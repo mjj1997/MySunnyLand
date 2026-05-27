@@ -57,6 +57,7 @@ public:
         m_isCollidedAbove = false;
         m_isCollidedLeft = false;
         m_isCollidedRight = false;
+        m_isCollidedLadder = false;
     }
 
     // 设置器/获取器

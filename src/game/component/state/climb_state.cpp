@@ -3,6 +3,7 @@
 #include "fall_state.h"
 #include "idle_state.h"
 
+#include "../../../engine/component/animation_component.h"
 #include "../../../engine/component/physics_component.h"
 #include "../../../engine/core/context.h"
 #include "../../../engine/input/input_manager.h"
@@ -37,6 +38,12 @@ std::unique_ptr<PlayerStateBase> ClimbState::handleInput(engine::core::Context& 
     newVelocity.y = isUp ? -speed : isDown ? speed : 0.0f;
     newVelocity.x = isLeft ? -speed : isRight ? speed : 0.0f;
     physicsComponent->setVelocity(newVelocity);
+
+    // 根据按键标志，决定是否播放动画。
+    auto animationComponent = m_playerComponent->animationComponent();
+    (isUp || isDown || isLeft || isRight)
+        ? animationComponent->resumeAnimation() // 有按键则恢复动画播放
+        : animationComponent->stopAnimation();  // 无按键则停止动画播放
 
     return nullptr;
 }

@@ -1,5 +1,6 @@
 #include "idle_state.h"
 #include "../player_component.h"
+#include "climb_state.h"
 #include "fall_state.h"
 #include "jump_state.h"
 #include "walk_state.h"
@@ -18,6 +19,12 @@ void IdleState::enter()
 std::unique_ptr<PlayerStateBase> IdleState::handleInput(engine::core::Context& context)
 {
     auto inputManager = context.inputManager();
+    auto physicsComponent = m_playerComponent->physicsComponent();
+
+    // 如果按下了"moveUp"键，且与梯子重合，切换到 ClimbState
+    if (inputManager.isActionDown("moveUp") && physicsComponent->isCollidedLadder()) {
+        return std::make_unique<ClimbState>(m_playerComponent);
+    }
 
     // 如果按下了左、右移动键，切换到 WalkState
     if (inputManager.isActionDown("moveLeft") || inputManager.isActionDown("moveRight")) {

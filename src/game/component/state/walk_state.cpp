@@ -1,5 +1,6 @@
 #include "walk_state.h"
 #include "../player_component.h"
+#include "climb_state.h"
 #include "fall_state.h"
 #include "idle_state.h"
 #include "jump_state.h"
@@ -23,6 +24,11 @@ std::unique_ptr<PlayerStateBase> WalkState::handleInput(engine::core::Context& c
     auto inputManager = context.inputManager();
     auto physicsComponent = m_playerComponent->physicsComponent();
     auto spriteComponent = m_playerComponent->spriteComponent();
+
+    // 如果按下了"moveUp"键，且与梯子重合，切换到 ClimbState
+    if (inputManager.isActionDown("moveUp") && physicsComponent->isCollidedLadder()) {
+        return std::make_unique<ClimbState>(m_playerComponent);
+    }
 
     // 如果按下“jump”则切换到 JumpState
     if (inputManager.isActionPressed("jump")) {

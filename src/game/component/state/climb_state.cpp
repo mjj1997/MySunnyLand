@@ -4,6 +4,8 @@
 #include "idle_state.h"
 
 #include "../../../engine/component/physics_component.h"
+#include "../../../engine/core/context.h"
+#include "../../../engine/input/input_manager.h"
 
 #include <spdlog/spdlog.h>
 
@@ -17,6 +19,26 @@ void ClimbState::enter()
     if (auto* physicsComponent = m_playerComponent->physicsComponent(); physicsComponent) {
         physicsComponent->setGravityEnabled(false); // 爬梯时禁用重力
     }
+}
+
+std::unique_ptr<PlayerStateBase> ClimbState::handleInput(engine::core::Context& context)
+{
+    // 记录攀爬状态下的按键输入标志
+    auto inputManager = context.inputManager();
+    auto isUp = inputManager.isActionDown("moveUp");
+    auto isDown = inputManager.isActionDown("moveDown");
+    auto isLeft = inputManager.isActionDown("moveLeft");
+    auto isRight = inputManager.isActionDown("moveRight");
+
+    // 根据按键标志，更新速度。按键则移动，不按键则静止。
+    auto physicsComponent = m_playerComponent->physicsComponent();
+    auto speed = m_playerComponent->climbVelocity();
+    glm::vec2 newVelocity{};
+    newVelocity.y = isUp ? -speed : isDown ? speed : 0.0f;
+    newVelocity.x = isLeft ? -speed : isRight ? speed : 0.0f;
+    physicsComponent->setVelocity(newVelocity);
+
+    return nullptr;
 }
 
 std::unique_ptr<PlayerStateBase> ClimbState::update(float deltaTime, engine::core::Context& context)

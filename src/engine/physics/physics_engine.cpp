@@ -275,6 +275,27 @@ void PhysicsEngine::resolveTileCollisions(engine::component::PhysicsComponent* p
                 newObjectPosition.y = tileYBottom * tileSize.y - objectSize.y;
                 physicsComponent->setVelocity({ physicsComponent->velocity().x, 0.0f });
                 physicsComponent->setCollidedBelow(true);
+            } else if (tileTypeBottomLeft == engine::component::TileType::Ladder
+                       && tileTypeBottomRight == engine::component::TileType::Ladder) {
+                // 查找左角点上方一格的瓦片类型
+                auto tileTypeLeftAbove = tileLayer->tileTypeAt(
+                    glm::ivec2{ tileXLeft, tileYBottom - 1 });
+                // 查找右角点上方一格的瓦片类型
+                auto tileTypeRightAbove = tileLayer->tileTypeAt(
+                    glm::ivec2{ tileXRight, tileYBottom - 1 });
+
+                // 如果左右角点上方一格的瓦片类型都不是梯子，证明处在梯子顶层
+                if (tileTypeRightAbove != engine::component::TileType::Ladder
+                    && tileTypeLeftAbove != engine::component::TileType::Ladder) {
+                    // 通过是否使用重力来区分是否处于攀爬状态。
+                    if (physicsComponent->isGravityEnabled()) { // 非攀爬状态
+                        // 让物体贴着梯子顶层位置(与 Solid 情况相同)
+                        newObjectPosition.y = tileYBottom * tileSize.y - objectSize.y;
+                        physicsComponent->setVelocity({ physicsComponent->velocity().x, 0.0f });
+                        physicsComponent->setCollidedBelow(true);
+                    } else { // 攀爬状态，不做任何处理
+                    }
+                }
             } else {
                 // 处理左下角、右下角与斜坡的碰撞
                 auto widthLeft = objectPosition.x - tileXLeft * tileSize.x;

@@ -2,6 +2,7 @@
 #include "../player_component.h"
 #include "fall_state.h"
 #include "idle_state.h"
+#include "jump_state.h"
 
 #include "../../../engine/component/animation_component.h"
 #include "../../../engine/component/physics_component.h"
@@ -44,6 +45,11 @@ std::unique_ptr<PlayerStateBase> ClimbState::handleInput(engine::core::Context& 
     (isUp || isDown || isLeft || isRight)
         ? animationComponent->resumeAnimation() // 有按键则恢复动画播放
         : animationComponent->stopAnimation();  // 无按键则停止动画播放
+
+    // 攀爬状态下，按下 Jump 键切换到 Jump 状态
+    if (inputManager.isActionPressed("jump")) {
+        return std::make_unique<JumpState>(m_playerComponent);
+    }
 
     return nullptr;
 }

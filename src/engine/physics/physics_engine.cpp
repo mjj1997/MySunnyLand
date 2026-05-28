@@ -293,6 +293,8 @@ void PhysicsEngine::resolveTileCollisions(engine::component::PhysicsComponent* p
                         newObjectPosition.y = tileYBottom * tileSize.y - objectSize.y;
                         physicsComponent->setVelocity({ physicsComponent->velocity().x, 0.0f });
                         physicsComponent->setCollidedBelow(true);
+                        // 设置在梯子顶层标志
+                        physicsComponent->setOnLadderTop(true);
                     } else { // 攀爬状态，不做任何处理
                     }
                 }

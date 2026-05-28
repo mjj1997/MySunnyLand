@@ -82,4 +82,12 @@ bool AudioPlayer::playMusic(const std::string& musicPath, int loops, int fadeInT
     return result;
 }
 
+void AudioPlayer::stopMusic(int fadeOutTime)
+{
+    Sint64 fadeFrames{ (fadeOutTime > 0) ? MIX_TrackMSToFrames(m_musicTrack, fadeOutTime) : 0 };
+    MIX_StopTrack(m_musicTrack, fadeFrames);
+    m_currentMusic.clear();
+    spdlog::trace("AudioPlayer: 停止音乐。");
+}
+
 } // namespace engine::audio

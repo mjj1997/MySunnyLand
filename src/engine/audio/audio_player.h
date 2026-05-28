@@ -51,6 +51,12 @@ public:
      */
     bool playMusic(const std::string& musicPath, int loops = -1, int fadeInTime = 0);
 
+    /**
+     * @brief 停止当前正在播放的背景音乐。
+     * @param fadeOutTime 淡出时间（毫秒）（0 表示立即停止）。默认为 0。
+     */
+    void stopMusic(int fadeOutTime = 0);
+
 private:
     ///< @brief 指向 ResourceManager 的非拥有指针，用于加载和管理音频资源。
     engine::resource::ResourceManager* m_resourceManager;

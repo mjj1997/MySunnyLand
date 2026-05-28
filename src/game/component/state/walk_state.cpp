@@ -77,8 +77,8 @@ std::unique_ptr<PlayerStateBase> WalkState::update(float deltaTime, engine::core
     glm::vec2 newVelocity{ velocityX, physicsComponent->velocity().y };
     physicsComponent->setVelocity(newVelocity);
 
-    // 如果下方没有碰撞，则切换到 FallState
-    if (!physicsComponent->isCollidedBelow()) {
+    // 如果离地，切换到 FallState
+    if (!m_playerComponent->isOnGround()) {
         return std::make_unique<FallState>(m_playerComponent);
     }
 

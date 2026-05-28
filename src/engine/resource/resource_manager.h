@@ -64,6 +64,8 @@ public:
     MIX_Audio* getMusic(const std::string& filePath);
     void unloadMusic(const std::string& filePath); ///< @brief 卸载指定的音乐资源
     void clearMusics();                            ///< @brief 清空所有音乐资源
+    // - Mixer -
+    MIX_Mixer* mixer() const; ///< @brief 获取 SDL_mixer 混音器指针
 
     // -- Fonts --
     TTF_Font* loadFont(const std::string& filePath, int pointSize); ///< @brief 载入字体资源

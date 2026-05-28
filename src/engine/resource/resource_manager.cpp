@@ -94,6 +94,11 @@ void ResourceManager::clearMusics()
     m_audioManager->clearMusics();
 }
 
+MIX_Mixer* ResourceManager::mixer() const
+{
+    return m_audioManager->mixer();
+}
+
 // --- 字体接口实现 ---
 TTF_Font* ResourceManager::loadFont(const std::string& filePath, int pointSize)
 {

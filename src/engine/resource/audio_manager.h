@@ -16,6 +16,8 @@ namespace engine::resource {
  */
 class AudioManager final
 {
+    friend class ResourceManager;
+
 public:
     /**
      * @brief 构造函数。初始化 SDL_mixer 并创建音频设备混音器。
@@ -31,14 +33,16 @@ public:
     AudioManager(AudioManager&&) = delete;
     AudioManager& operator=(AudioManager&&) = delete;
 
-    // 仅供 ResourceManager 访问的方法
 private:
+    // --- 仅供 ResourceManager 访问的方法 ---
+    // --- 音效管理 ---
     MIX_Audio* loadSound(const std::string& filePath); ///< @brief 从文件路径加载音效（预解码）
     ///< @brief 尝试获取已加载音效的指针，如果未加载则尝试加载
     MIX_Audio* getSound(const std::string& filePath);
     void unloadSound(const std::string& filePath); ///< @brief 卸载指定的音效资源
     void clearSounds();                            ///< @brief 清空所有音效资源
 
+    // --- 音乐管理 ---
     MIX_Audio* loadMusic(const std::string& filePath); ///< @brief 从文件路径加载音乐（流式解码）
     ///< @brief 尝试获取已加载音乐的指针，如果未加载则尝试加载
     MIX_Audio* getMusic(const std::string& filePath);
@@ -47,8 +51,8 @@ private:
 
     void clearAudio(); ///< @brief 清空所有音频资源
 
-private:
-    friend class ResourceManager;
+    // --- getter ---
+    MIX_Mixer* mixer() const { return m_mixer; }; ///< @brief 获取 SDL_mixer 混音器指针
 
     // MIX_Audio 的自定义删除器
     struct SDLMixAudioDeletor

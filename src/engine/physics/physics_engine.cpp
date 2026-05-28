@@ -275,6 +275,29 @@ void PhysicsEngine::resolveTileCollisions(engine::component::PhysicsComponent* p
                 newObjectPosition.y = tileYBottom * tileSize.y - objectSize.y;
                 physicsComponent->setVelocity({ physicsComponent->velocity().x, 0.0f });
                 physicsComponent->setCollidedBelow(true);
+            } else if (tileTypeBottomLeft == engine::component::TileType::Ladder
+                       && tileTypeBottomRight == engine::component::TileType::Ladder) {
+                // 查找左角点上方一格的瓦片类型
+                auto tileTypeLeftAbove = tileLayer->tileTypeAt(
+                    glm::ivec2{ tileXLeft, tileYBottom - 1 });
+                // 查找右角点上方一格的瓦片类型
+                auto tileTypeRightAbove = tileLayer->tileTypeAt(
+                    glm::ivec2{ tileXRight, tileYBottom - 1 });
+
+                // 如果左右角点上方一格的瓦片类型都不是梯子，证明处在梯子顶层
+                if (tileTypeRightAbove != engine::component::TileType::Ladder
+                    && tileTypeLeftAbove != engine::component::TileType::Ladder) {
+                    // 通过是否使用重力来区分是否处于攀爬状态。
+                    if (physicsComponent->isGravityEnabled()) { // 非攀爬状态
+                        // 让物体贴着梯子顶层位置(与 Solid 情况相同)
+                        newObjectPosition.y = tileYBottom * tileSize.y - objectSize.y;
+                        physicsComponent->setVelocity({ physicsComponent->velocity().x, 0.0f });
+                        physicsComponent->setCollidedBelow(true);
+                        // 设置在梯子顶层标志
+                        physicsComponent->setOnLadderTop(true);
+                    } else { // 攀爬状态，不做任何处理
+                    }
+                }
             } else {
                 // 处理左下角、右下角与斜坡的碰撞
                 auto widthLeft = objectPosition.x - tileXLeft * tileSize.x;
@@ -499,8 +522,11 @@ void PhysicsEngine::checkTileTriggers()
                     auto tileType = layer->tileTypeAt(glm::ivec2{ x, y });
                     if (tileType == engine::component::TileType::Hazard) {
                         triggers.insert(tileType); // 记录触发事件，set 保证每个瓦片类型只记录一次
+                    } else if (tileType == engine::component::TileType::Ladder) {
+                        // 梯子类型不必记录到事件容器，物理引擎自己处理
+                        physicsComponent->setCollidedLadder(true);
                     }
-                    // TODO: 未来可以添加更多触发器类型的瓦片，目前只有 Hazard 类型
+                    // TODO: 未来可以添加更多触发器类型的瓦片
                 }
             }
 

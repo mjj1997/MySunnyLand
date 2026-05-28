@@ -406,7 +406,11 @@ engine::component::TileType LevelLoader::getTileType(const nlohmann::json& tileJ
             } else if (property.value("name", "") == "hazard") {
                 return property.value("value", false) ? engine::component::TileType::Hazard
                                                       : engine::component::TileType::Normal;
+            } else if (property.value("name", "") == "ladder") {
+                return property.value("value", false) ? engine::component::TileType::Ladder
+                                                      : engine::component::TileType::Normal;
             }
+            // TODO: 可以在这里添加更多的自定义属性处理逻辑
         }
     }
 

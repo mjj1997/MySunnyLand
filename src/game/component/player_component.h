@@ -60,6 +60,9 @@ public:
     ///< @brief 设置跳跃速度
     void setJumpVelocity(float jumpVelocity) { m_jumpVelocity = jumpVelocity; }
     float jumpVelocity() const { return m_jumpVelocity; } ///< @brief 获取跳跃速度
+    ///< @brief 设置爬梯速度
+    void setClimbVelocity(float climbVelocity) { m_climbVelocity = climbVelocity; }
+    float climbVelocity() const { return m_climbVelocity; } ///< @brief 获取爬梯速度
     ///< @brief 设置硬直时间
     void setStunnedDuration(float duration) { m_stunnedDuration = duration; }
     float stunnedDuration() const { return m_stunnedDuration; } ///< @brief 获取硬直时间
@@ -93,6 +96,7 @@ private:
     float m_maxSpeed{ 120.0f };      ///< @brief 最大移动速度 (像素/秒)
     float m_frictionFactor{ 0.85f }; ///< @brief 摩擦系数 (Idle时缓冲效果，每帧乘以此系数)
     float m_jumpVelocity{ 350.0f };  ///< @brief 跳跃速度 (按下"jump"键给的瞬间向上的速度)
+    float m_climbVelocity{ 100.0f }; ///< @brief 爬梯速度 (像素/秒)
 
     // --- 属性相关参数 ---
     float m_stunnedDuration{ 0.4f }; ///< @brief 玩家被击中后的硬直时间（单位：秒）

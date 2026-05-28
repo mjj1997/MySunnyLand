@@ -57,6 +57,8 @@ public:
         m_isCollidedAbove = false;
         m_isCollidedLeft = false;
         m_isCollidedRight = false;
+        m_isCollidedLadder = false;
+        m_isOnLadderTop = false;
     }
 
     // 设置器/获取器
@@ -71,6 +73,8 @@ public:
     bool isCollidedAbove() const { return m_isCollidedAbove; }   ///< @brief 检测组件是否与上方碰撞
     bool isCollidedLeft() const { return m_isCollidedLeft; }     ///< @brief 检测组件是否与左侧碰撞
     bool isCollidedRight() const { return m_isCollidedRight; }   ///< @brief 检测组件是否与右侧碰撞
+    bool isCollidedLadder() const { return m_isCollidedLadder; } ///< @brief 检测组件是否与梯子碰撞
+    bool isOnLadderTop() const { return m_isOnLadderTop; }       ///< @brief 检测组件是否在梯子顶部
 
     void setVelocity(const glm::vec2& velocity) { m_velocity = velocity; } ///< @brief 设置速度
     ///< @brief 设置质量，质量不能为负
@@ -86,6 +90,10 @@ public:
     void setCollidedLeft(bool collided) { m_isCollidedLeft = collided; }
     ///< @brief 设置组件与右侧碰撞标志
     void setCollidedRight(bool collided) { m_isCollidedRight = collided; }
+    ///< @brief 设置组件与梯子碰撞标志
+    void setCollidedLadder(bool collided) { m_isCollidedLadder = collided; }
+    ///< @brief 设置组件是否在梯子顶部标志
+    void setOnLadderTop(bool onTop) { m_isOnLadderTop = onTop; }
 
 protected:
     // 核心循环方法
@@ -104,10 +112,12 @@ private:
     bool m_enabled{ true };             ///< @brief 组件是否激活
 
     // -- 碰撞状态标志 --
-    bool m_isCollidedBelow{ false }; ///< @brief 组件与下方碰撞标志
-    bool m_isCollidedAbove{ false }; ///< @brief 组件与上方碰撞标志
-    bool m_isCollidedLeft{ false };  ///< @brief 组件与左侧碰撞标志
-    bool m_isCollidedRight{ false }; ///< @brief 组件与右侧碰撞标志
+    bool m_isCollidedBelow{ false };  ///< @brief 组件与下方碰撞标志
+    bool m_isCollidedAbove{ false };  ///< @brief 组件与上方碰撞标志
+    bool m_isCollidedLeft{ false };   ///< @brief 组件与左侧碰撞标志
+    bool m_isCollidedRight{ false };  ///< @brief 组件与右侧碰撞标志
+    bool m_isCollidedLadder{ false }; ///< @brief 组件与梯子碰撞标志
+    bool m_isOnLadderTop{ false };    ///< @brief 组件是否在梯子顶部标志
 };
 
 } // namespace engine::component

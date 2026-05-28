@@ -6,6 +6,7 @@
 #include "walk_state.h"
 
 #include "../../../engine/component/physics_component.h"
+#include "../../../engine/component/transform_component.h"
 #include "../../../engine/core/context.h"
 #include "../../../engine/input/input_manager.h"
 
@@ -28,6 +29,8 @@ std::unique_ptr<PlayerStateBase> IdleState::handleInput(engine::core::Context& c
 
     // 如果按下了"moveDown"键，且位于梯子顶端，切换到 ClimbState
     if (inputManager.isActionDown("moveDown") && physicsComponent->isOnLadderTop()) {
+        // 需要向下移动一点，确保下一帧能与梯子碰撞（否则会切换回FallState）
+        m_playerComponent->transformComponent()->translate(glm::vec2{ 0.0f, 2.0f });
         return std::make_unique<ClimbState>(m_playerComponent);
     }
 

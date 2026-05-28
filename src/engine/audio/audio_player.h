@@ -41,6 +41,16 @@ public:
      */
     int playSound(const std::string& soundPath);
 
+    /**
+     * @brief 播放背景音乐。如果正在播放，则淡出之前的音乐。
+     * 如果尚未缓存，则通过 ResourceManager 加载音乐。
+     * @param musicPath 音乐文件的路径。
+     * @param loops 循环次数（-1 无限循环，0 播放一次，1 播放两次，以此类推）。默认为 -1。
+     * @param fadeInTime 音乐淡入的时间（毫秒）（0 表示不淡入）。默认为 0。
+     * @return 成功返回 true，出错返回 false。
+     */
+    bool playMusic(const std::string& musicPath, int loops = -1, int fadeInTime = 0);
+
 private:
     ///< @brief 指向 ResourceManager 的非拥有指针，用于加载和管理音频资源。
     engine::resource::ResourceManager* m_resourceManager;

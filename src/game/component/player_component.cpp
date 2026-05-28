@@ -44,6 +44,11 @@ bool PlayerComponent::takeDamage(int damageAmount)
     return true;
 }
 
+bool PlayerComponent::isOnGround() const
+{
+    return m_coyoteTimer <= m_coyoteTime || m_physicsComponent->isCollidedBelow();
+}
+
 void PlayerComponent::setState(std::unique_ptr<state::PlayerStateBase> newState)
 {
     if (!newState) {

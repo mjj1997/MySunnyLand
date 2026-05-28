@@ -67,6 +67,8 @@ public:
     void setStunnedDuration(float duration) { m_stunnedDuration = duration; }
     float stunnedDuration() const { return m_stunnedDuration; } ///< @brief 获取硬直时间
 
+    ///< @brief 检查玩家是否在地面上（考虑土狼时间）
+    bool isOnGround() const;
     ///< @brief 切换玩家状态
     void setState(std::unique_ptr<state::PlayerStateBase> newState);
 

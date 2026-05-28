@@ -102,4 +102,18 @@ void AudioPlayer::resumeMusic()
     spdlog::trace("AudioPlayer: 恢复音乐。");
 }
 
+void AudioPlayer::setSoundVolume(float volume)
+{
+    // 通过混音器整体的增益控制音效音量（0.0-1.0）
+    MIX_SetMixerGain(m_mixer, volume);
+    spdlog::trace("AudioPlayer: 设置音效音量为 {:.2f}。", volume);
+}
+
+void AudioPlayer::setMusicVolume(float volume)
+{
+    // 通过音乐轨道的增益控制音乐音量（0.0-1.0）
+    MIX_SetTrackGain(m_musicTrack, volume);
+    spdlog::trace("AudioPlayer: 设置音乐音量为 {:.2f}。", volume);
+}
+
 } // namespace engine::audio

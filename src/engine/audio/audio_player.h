@@ -67,6 +67,18 @@ public:
      */
     void resumeMusic();
 
+    /**
+     * @brief 设置音效通道的音量。
+     * @param volume 音量级别（0.0-1.0）。
+     */
+    void setSoundVolume(float volume);
+
+    /**
+     * @brief 设置音乐通道的音量。
+     * @param volume 音量级别（0.0-1.0）。
+     */
+    void setMusicVolume(float volume);
+
 private:
     ///< @brief 指向 ResourceManager 的非拥有指针，用于加载和管理音频资源。
     engine::resource::ResourceManager* m_resourceManager;

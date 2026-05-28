@@ -284,7 +284,8 @@ bool GameApp::initContext()
                                                             *m_renderer,
                                                             *m_camera,
                                                             *m_resourceManager,
-                                                            *m_physicsEngine);
+                                                            *m_physicsEngine,
+                                                            *m_audioPlayer);
     } catch (const std::exception& e) {
         spdlog::error("初始化上下文失败: {}", e.what());
         return false;

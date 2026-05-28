@@ -1,4 +1,5 @@
 #include "context.h"
+#include "../audio/audio_player.h"
 #include "../input/input_manager.h"
 #include "../physics/physics_engine.h"
 #include "../render/camera.h"
@@ -13,14 +14,17 @@ Context::Context(engine::input::InputManager& inputManager,
                  engine::render::Renderer& renderer,
                  engine::render::Camera& camera,
                  engine::resource::ResourceManager& resourceManager,
-                 engine::physics::PhysicsEngine& physicsEngine)
+                 engine::physics::PhysicsEngine& physicsEngine,
+                 engine::audio::AudioPlayer& audioPlayer)
     : m_inputManager{ inputManager }
     , m_renderer{ renderer }
     , m_camera{ camera }
     , m_resourceManager{ resourceManager }
     , m_physicsEngine{ physicsEngine }
+    , m_audioPlayer{ audioPlayer }
 {
-    spdlog::trace("上下文已创建并初始化，包含输入管理器、渲染器、相机、资源引擎和物理引擎。");
+    spdlog::trace(
+        "上下文已创建并初始化，包含输入管理器、渲染器、相机、资源引擎、物理引擎和音频播放器。");
 }
 
 } // namespace engine::core

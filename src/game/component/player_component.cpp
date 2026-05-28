@@ -122,6 +122,22 @@ void PlayerComponent::update(float deltaTime, engine::core::Context& context)
         m_coyoteTimer = 0.0f;
     }
 
+    // 如果处于无敌状态，就进行闪烁
+    if (m_healthComponent->isInvincible()) {
+        m_flashTimer += deltaTime;
+        if (m_flashTimer >= 2 * m_flashInterval) {
+            m_flashTimer = 0.0f;
+        }
+        // 一半时间可见，一半时间不可见
+        if (m_flashTimer < m_flashInterval) {
+            m_spriteComponent->setHidden(true);
+        } else {
+            m_spriteComponent->setHidden(false);
+        }
+    } else if (m_spriteComponent->isHidden()) { // 非无敌状态时，确保玩家可见
+        m_spriteComponent->setHidden(false);
+    }
+
     // 更新当前状态
     auto nextState = m_currentState->update(deltaTime, context);
     if (nextState) {

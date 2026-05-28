@@ -116,4 +116,14 @@ void AudioPlayer::setMusicVolume(float volume)
     spdlog::trace("AudioPlayer: 设置音乐音量为 {:.2f}。", volume);
 }
 
+float AudioPlayer::musicVolume() const
+{
+    return MIX_GetTrackGain(m_musicTrack);
+}
+
+float AudioPlayer::soundVolume() const
+{
+    return MIX_GetMixerGain(m_mixer);
+}
+
 } // namespace engine::audio

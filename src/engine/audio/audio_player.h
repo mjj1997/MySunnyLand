@@ -79,6 +79,18 @@ public:
      */
     void setMusicVolume(float volume);
 
+    /**
+     * @brief 获取当前音乐音量。
+     * @return 音量级别（0.0-1.0）。
+     */
+    float musicVolume() const;
+
+    /**
+     * @brief 获取当前音效音量。
+     * @return 音量级别（0.0-1.0）。
+     */
+    float soundVolume() const;
+
 private:
     ///< @brief 指向 ResourceManager 的非拥有指针，用于加载和管理音频资源。
     engine::resource::ResourceManager* m_resourceManager;

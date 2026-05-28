@@ -90,4 +90,16 @@ void AudioPlayer::stopMusic(int fadeOutTime)
     spdlog::trace("AudioPlayer: 停止音乐。");
 }
 
+void AudioPlayer::pauseMusic()
+{
+    MIX_PauseTrack(m_musicTrack);
+    spdlog::trace("AudioPlayer: 暂停音乐。");
+}
+
+void AudioPlayer::resumeMusic()
+{
+    MIX_ResumeTrack(m_musicTrack);
+    spdlog::trace("AudioPlayer: 恢复音乐。");
+}
+
 } // namespace engine::audio

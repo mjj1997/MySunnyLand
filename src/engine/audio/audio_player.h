@@ -57,6 +57,16 @@ public:
      */
     void stopMusic(int fadeOutTime = 0);
 
+    /**
+     * @brief 暂停当前正在播放的背景音乐。
+     */
+    void pauseMusic();
+
+    /**
+     * @brief 恢复已暂停的背景音乐。
+     */
+    void resumeMusic();
+
 private:
     ///< @brief 指向 ResourceManager 的非拥有指针，用于加载和管理音频资源。
     engine::resource::ResourceManager* m_resourceManager;

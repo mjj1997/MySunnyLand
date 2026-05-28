@@ -26,6 +26,11 @@ std::unique_ptr<PlayerStateBase> IdleState::handleInput(engine::core::Context& c
         return std::make_unique<ClimbState>(m_playerComponent);
     }
 
+    // 如果按下了"moveDown"键，且位于梯子顶端，切换到 ClimbState
+    if (inputManager.isActionDown("moveDown") && physicsComponent->isOnLadderTop()) {
+        return std::make_unique<ClimbState>(m_playerComponent);
+    }
+
     // 如果按下了左、右移动键，切换到 WalkState
     if (inputManager.isActionDown("moveLeft") || inputManager.isActionDown("moveRight")) {
         return std::make_unique<WalkState>(m_playerComponent);

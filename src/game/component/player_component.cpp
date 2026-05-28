@@ -110,6 +110,14 @@ void PlayerComponent::update(float deltaTime, engine::core::Context& context)
         return;
     }
 
+    // 一旦离地，开始计时土狼时间
+    if (!m_physicsComponent->isCollidedBelow()) {
+        m_coyoteTimer += deltaTime;
+    } else { // 一旦落地，重置土狼时间
+        m_coyoteTimer = 0.0f;
+    }
+
+    // 更新当前状态
     auto nextState = m_currentState->update(deltaTime, context);
     if (nextState) {
         setState(std::move(nextState));

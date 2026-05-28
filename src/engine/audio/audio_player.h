@@ -32,6 +32,15 @@ public:
     AudioPlayer(AudioPlayer&&) = delete;
     AudioPlayer& operator=(AudioPlayer&&) = delete;
 
+    // --- 播放控制方法 ---
+    /**
+     * @brief 播放音效。
+     * 如果尚未缓存，则通过 ResourceManager 加载音效。
+     * @param soundPath 音效文件的路径。
+     * @return 成功时返回 0，出错时返回 -1。
+     */
+    int playSound(const std::string& soundPath);
+
 private:
     ///< @brief 指向 ResourceManager 的非拥有指针，用于加载和管理音频资源。
     engine::resource::ResourceManager* m_resourceManager;

@@ -29,4 +29,21 @@ AudioPlayer::~AudioPlayer()
     }
 }
 
+int AudioPlayer::playSound(const std::string& soundPath)
+{
+    MIX_Audio* sound{ m_resourceManager->getSound(soundPath) };
+    if (!sound) {
+        spdlog::error("AudioPlayer: 无法获取音效 '{}' 播放。", soundPath);
+        return -1;
+    }
+
+    if (!MIX_PlayAudio(m_mixer, sound)) {
+        spdlog::error("AudioPlayer: 无法播放音效 '{}': {}", soundPath, SDL_GetError());
+        return -1;
+    }
+
+    spdlog::trace("AudioPlayer: 播放音效 '{}'。", soundPath);
+    return 0;
+}
+
 } // namespace engine::audio

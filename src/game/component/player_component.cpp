@@ -44,6 +44,11 @@ bool PlayerComponent::takeDamage(int damageAmount)
     return true;
 }
 
+bool PlayerComponent::isOnGround() const
+{
+    return m_coyoteTimer <= m_coyoteTime || m_physicsComponent->isCollidedBelow();
+}
+
 void PlayerComponent::setState(std::unique_ptr<state::PlayerStateBase> newState)
 {
     if (!newState) {
@@ -110,6 +115,30 @@ void PlayerComponent::update(float deltaTime, engine::core::Context& context)
         return;
     }
 
+    // 一旦离地，开始计时土狼时间
+    if (!m_physicsComponent->isCollidedBelow()) {
+        m_coyoteTimer += deltaTime;
+    } else { // 一旦落地，重置土狼时间
+        m_coyoteTimer = 0.0f;
+    }
+
+    // 如果处于无敌状态，就进行闪烁
+    if (m_healthComponent->isInvincible()) {
+        m_flashTimer += deltaTime;
+        if (m_flashTimer >= 2 * m_flashInterval) {
+            m_flashTimer = 0.0f;
+        }
+        // 一半时间可见，一半时间不可见
+        if (m_flashTimer < m_flashInterval) {
+            m_spriteComponent->setHidden(true);
+        } else {
+            m_spriteComponent->setHidden(false);
+        }
+    } else if (m_spriteComponent->isHidden()) { // 非无敌状态时，确保玩家可见
+        m_spriteComponent->setHidden(false);
+    }
+
+    // 更新当前状态
     auto nextState = m_currentState->update(deltaTime, context);
     if (nextState) {
         setState(std::move(nextState));

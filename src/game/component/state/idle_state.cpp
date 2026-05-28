@@ -56,8 +56,8 @@ std::unique_ptr<PlayerStateBase> IdleState::update(float deltaTime, engine::core
                                    physicsComponent->velocity().y };
     physicsComponent->setVelocity(newVeclocity);
 
-    // 如果下方没有碰撞，切换到 FallState
-    if (!physicsComponent->isCollidedBelow()) {
+    // 如果离地，切换到 FallState
+    if (!m_playerComponent->isOnGround()) {
         return std::make_unique<FallState>(m_playerComponent);
     }
 

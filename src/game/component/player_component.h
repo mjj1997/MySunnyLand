@@ -100,6 +100,10 @@ private:
 
     // --- 属性相关参数 ---
     float m_stunnedDuration{ 0.4f }; ///< @brief 玩家被击中后的硬直时间（单位：秒）
+
+    // 土狼时间（Coyote Time）：允许玩家在离地后，短暂时间内仍然可以跳跃
+    static constexpr float m_coyoteTime{ 0.1f }; ///< @brief 土狼时间（单位：秒）
+    float m_coyoteTimer{ 0.0f };                 ///< @brief 土狼时间计时器（单位：秒）
 };
 
 } // namespace game::component

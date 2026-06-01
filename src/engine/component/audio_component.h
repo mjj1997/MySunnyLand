@@ -29,6 +29,12 @@ public:
     AudioComponent& operator=(AudioComponent&&) = delete;
 
     /**
+     * @brief 播放音效。
+     * @param soundId 音效文件的id (或路径)。
+     */
+    void playSound(const std::string& soundId);
+
+    /**
      * @brief 添加音效到映射表。
      * @param soundId 音效的标识符（针对本组件唯一即可）。
      * @param soundPath 音效文件的路径。

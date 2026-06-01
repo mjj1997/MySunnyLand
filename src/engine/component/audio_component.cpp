@@ -13,6 +13,14 @@ AudioComponent::AudioComponent(engine::audio::AudioPlayer* audioPlayer)
     }
 }
 
+void AudioComponent::playSound(const std::string& soundId)
+{
+    auto soundPath = m_soundIdToPath.find(soundId) != m_soundIdToPath.end()
+                         ? m_soundIdToPath[soundId]
+                         : soundId;
+    m_audioPlayer->playSound(soundPath);
+}
+
 void AudioComponent::addSound(const std::string& soundId, const std::string& soundPath)
 {
     if (m_soundIdToPath.find(soundId) != m_soundIdToPath.end()) {

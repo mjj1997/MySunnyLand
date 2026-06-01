@@ -13,4 +13,12 @@ AudioComponent::AudioComponent(engine::audio::AudioPlayer* audioPlayer)
     }
 }
 
+void AudioComponent::init()
+{
+    if (m_owner == nullptr) {
+        spdlog::error("AudioComponent 没有所有者 GameObject!");
+        return;
+    }
+}
+
 } // namespace engine::component

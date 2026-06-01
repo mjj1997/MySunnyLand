@@ -9,6 +9,7 @@
 struct SDL_Renderer;
 struct SDL_Texture;
 struct MIX_Audio;
+struct MIX_Mixer;
 struct TTF_Font;
 
 namespace engine::resource {

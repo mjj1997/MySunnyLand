@@ -2,6 +2,9 @@
 
 #include "component_base.h"
 
+#include <string>
+#include <unordered_map>
+
 namespace engine::audio {
 class AudioPlayer;
 }
@@ -32,6 +35,7 @@ protected:
 
 private:
     engine::audio::AudioPlayer* m_audioPlayer; ///< @brief 音频播放器的非拥有指针
+    std::unordered_map<std::string, std::string> m_soundIdToPath; ///< @brief 音效id 到路径的映射表
 };
 
 } // namespace engine::component

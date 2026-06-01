@@ -2,6 +2,10 @@
 
 #include "component_base.h"
 
+namespace engine::audio {
+class AudioPlayer;
+}
+
 namespace engine::component {
 
 /**
@@ -12,6 +16,7 @@ class AudioComponent final : public ComponentBase
     friend class engine::object::GameObject;
 
 public:
+    AudioComponent(engine::audio::AudioPlayer* audioPlayer);
     ~AudioComponent() override = default;
 
     // 禁止拷贝和移动
@@ -24,6 +29,9 @@ protected:
     // 核心循环方法
     void init() override;
     void update(float deltaTime, engine::core::Context& context) override {}
+
+private:
+    engine::audio::AudioPlayer* m_audioPlayer; ///< @brief 音频播放器的非拥有指针
 };
 
 } // namespace engine::component

@@ -13,6 +13,16 @@ AudioComponent::AudioComponent(engine::audio::AudioPlayer* audioPlayer)
     }
 }
 
+void AudioComponent::addSound(const std::string& soundId, const std::string& soundPath)
+{
+    if (m_soundIdToPath.find(soundId) != m_soundIdToPath.end()) {
+        spdlog::warn("AudioComponent:addSound: 音效id '{}' 已存在，覆盖旧路径。", soundId);
+    }
+
+    m_soundIdToPath[soundId] = soundPath;
+    spdlog::debug("AudioComponent:addSound: 音效id '{}' 已添加，路径为 '{}。", soundId, soundPath);
+}
+
 void AudioComponent::init()
 {
     if (m_owner == nullptr) {

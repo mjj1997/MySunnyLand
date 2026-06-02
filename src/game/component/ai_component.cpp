@@ -2,6 +2,7 @@
 #include "ai/ai_behavior_base.h"
 
 #include "../../engine/component/animation_component.h"
+#include "../../engine/component/audio_component.h"
 #include "../../engine/component/health_component.h"
 #include "../../engine/component/physics_component.h"
 #include "../../engine/component/sprite_component.h"
@@ -56,8 +57,9 @@ void AiComponent::init()
     m_physicsComponent = m_owner->getComponent<engine::component::PhysicsComponent>();
     m_spriteComponent = m_owner->getComponent<engine::component::SpriteComponent>();
     m_animationComponent = m_owner->getComponent<engine::component::AnimationComponent>();
+    m_audioComponent = m_owner->getComponent<engine::component::AudioComponent>();
 
-    // 检查所有必需组件是否都存在
+    // 检查所有必需组件是否都存在(音效组件并非必须存在)
     if (m_transformComponent == nullptr || m_physicsComponent == nullptr
         || m_spriteComponent == nullptr || m_animationComponent == nullptr) {
         spdlog::error("GameObject {} 上的 AiComponent 缺少必需组件！", m_owner->name());

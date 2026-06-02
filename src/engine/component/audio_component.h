@@ -24,7 +24,7 @@ class AudioComponent final : public ComponentBase
     friend class engine::object::GameObject;
 
 public:
-    AudioComponent(engine::audio::AudioPlayer* audioPlayer);
+    AudioComponent(engine::audio::AudioPlayer* audioPlayer, engine::render::Camera* camera);
     ~AudioComponent() override = default;
 
     // 禁止拷贝和移动

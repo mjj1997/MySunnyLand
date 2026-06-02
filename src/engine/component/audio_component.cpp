@@ -5,11 +5,13 @@
 
 namespace engine::component {
 
-AudioComponent::AudioComponent(engine::audio::AudioPlayer* audioPlayer)
+AudioComponent::AudioComponent(engine::audio::AudioPlayer* audioPlayer,
+                               engine::render::Camera* camera)
     : m_audioPlayer{ audioPlayer }
+    , m_camera{ camera }
 {
-    if (m_audioPlayer == nullptr) {
-        spdlog::error("AudioComponent 初始化失败，音频播放器为空");
+    if (m_audioPlayer == nullptr || m_camera == nullptr) {
+        spdlog::error("AudioComponent 初始化失败，音频播放器或相机为空");
     }
 }
 

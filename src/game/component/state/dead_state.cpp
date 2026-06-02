@@ -1,6 +1,7 @@
 #include "dead_state.h"
 #include "../player_component.h"
 
+#include "../../../engine/component/audio_component.h"
 #include "../../../engine/component/collider_component.h"
 #include "../../../engine/component/physics_component.h"
 #include "../../../engine/object/game_object.h"
@@ -24,6 +25,10 @@ void DeadState::enter()
                                  ->getComponent<engine::component::ColliderComponent>();
     if (colliderComponent) {
         colliderComponent->setActive(false);
+    }
+
+    if (auto* audioComponent = m_playerComponent->audioComponent(); audioComponent) {
+        audioComponent->playSound("dead"); // 播放死亡音效
     }
 }
 

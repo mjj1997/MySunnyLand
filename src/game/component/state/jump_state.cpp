@@ -3,6 +3,7 @@
 #include "climb_state.h"
 #include "fall_state.h"
 
+#include "../../../engine/component/audio_component.h"
 #include "../../../engine/component/physics_component.h"
 #include "../../../engine/component/sprite_component.h"
 #include "../../../engine/core/context.h"
@@ -21,6 +22,10 @@ void JumpState::enter()
     auto newVelocity = glm::vec2{ physicsComponent->velocity().x,
                                   -m_playerComponent->jumpVelocity() }; // 向上跳跃
     physicsComponent->setVelocity(newVelocity);
+
+    if (auto* audioComponent = m_playerComponent->audioComponent(); audioComponent) {
+        audioComponent->playSound("jump"); // 播放跳跃音效
+    }
 
     spdlog::debug("PlayerComponent 进入 JumpState， 设置初始垂直速度为：{}",
                   physicsComponent->velocity().y);

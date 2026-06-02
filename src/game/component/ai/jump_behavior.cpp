@@ -2,6 +2,7 @@
 #include "../ai_component.h"
 
 #include "../../../engine/component/animation_component.h"
+#include "../../../engine/component/audio_component.h"
 #include "../../../engine/component/physics_component.h"
 #include "../../../engine/component/sprite_component.h"
 #include "../../../engine/component/transform_component.h"
@@ -42,6 +43,7 @@ void JumpBehavior::update(float deltaTime, AiComponent& aiComponent)
     auto* transformComponent = aiComponent.transformComponent();
     auto* spriteComponent = aiComponent.spriteComponent();
     auto* animationComponent = aiComponent.animationComponent();
+    auto* audioComponent = aiComponent.audioComponent();
     if (!physicsComponent || !transformComponent || !spriteComponent || !animationComponent) {
         spdlog::error("JumpBehavior：缺少必要的组件，无法执行跳跃行为。");
         return;
@@ -50,6 +52,10 @@ void JumpBehavior::update(float deltaTime, AiComponent& aiComponent)
     // 着地标志
     auto isOnGround = physicsComponent->isCollidedBelow();
     if (isOnGround) { // 如果在地面上
+        // 刚刚落地时（进入 Idle 状态），如果有音频组件，播放音效
+        if (audioComponent && m_jumpTimer < 0.001f) {
+            audioComponent->playSound("cry", true); // 使用空间定位播放音效
+        }
         // 增加跳跃计时器
         m_jumpTimer += deltaTime;
         // 停止水平移动（否则会有惯性）

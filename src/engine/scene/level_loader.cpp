@@ -1,5 +1,6 @@
 #include "level_loader.h"
 #include "../component/animation_component.h"
+#include "../component/audio_component.h"
 #include "../component/collider_component.h"
 #include "../component/health_component.h"
 #include "../component/parallax_component.h"
@@ -346,6 +347,28 @@ void LevelLoader::addAnimation(const nlohmann::json& animationJson,
 
         // 5. 将 Animation 对象添加到 AnimationComponent 中
         animationComponent->addAnimation(std::move(animation));
+    }
+}
+
+void LevelLoader::addSound(const nlohmann::json& soundJson,
+                           engine::component::AudioComponent* audioComponent)
+{
+    // 检查 soundJson 必须是一个对象，并且 audioComponent 不能为 nullptr
+    if (!soundJson.is_object() || !audioComponent) {
+        spdlog::error("无效的音效 JSON 或 AudioComponent 指针。");
+        return;
+    }
+
+    // 遍历音效 JSON 对象中的每个键值对（音效 ID : 音效路径）
+    for (const auto& sound : soundJson.items()) {
+        const std::string& soundId{ sound.key() };
+        const std::string& soundPath{ sound.value() };
+        if (soundId.empty() || soundPath.empty()) {
+            spdlog::warn("音效 '{}' 缺少必要信息。", soundId);
+            continue;
+        }
+        // 添加音效到 AudioComponent
+        audioComponent->addSound(soundId, soundPath);
     }
 }
 

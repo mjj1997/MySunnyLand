@@ -13,6 +13,7 @@ namespace engine::component {
 struct TileInfo;
 enum class TileType;
 class AnimationComponent;
+class AudioComponent;
 } // namespace engine::component
 
 namespace engine::scene {
@@ -48,6 +49,14 @@ private:
     void addAnimation(const nlohmann::json& animationJson,
                       engine::component::AnimationComponent* animationComponent,
                       const glm::vec2& spriteSize);
+
+    /**
+     * @brief 添加音效到指定的 AudioComponent。
+     * @param soundJson 音效 JSON 数据（自定义）
+     * @param audioComponent 音效组件指针（音效添加到此组件）
+     */
+    void addSound(const nlohmann::json& soundJson,
+                  engine::component::AudioComponent* audioComponent);
 
     /**
      * @brief 获取瓦片属性

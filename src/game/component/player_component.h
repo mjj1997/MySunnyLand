@@ -11,6 +11,7 @@ class PhysicsComponent;
 class SpriteComponent;
 class AnimationComponent;
 class HealthComponent;
+class AudioComponent;
 } // namespace engine::component
 
 namespace game::component {
@@ -47,6 +48,7 @@ public:
         return m_animationComponent;
     }
     engine::component::HealthComponent* healthComponent() const { return m_healthComponent; }
+    engine::component::AudioComponent* audioComponent() const { return m_audioComponent; }
 
     void setAlive(bool isAlive) { m_isAlive = isAlive; }            ///< @brief 设置玩家是否存活
     bool isAlive() const { return m_isAlive; }                      ///< @brief 获取玩家是否存活
@@ -89,6 +91,8 @@ private:
     engine::component::AnimationComponent* m_animationComponent{ nullptr };
     ///< @brief 指向 HealthComponent 的非拥有指针
     engine::component::HealthComponent* m_healthComponent{ nullptr };
+    ///< @brief 指向 AudioComponent 的非拥有指针
+    engine::component::AudioComponent* m_audioComponent{ nullptr };
 
     std::unique_ptr<state::PlayerStateBase> m_currentState;
     bool m_isAlive{ true };

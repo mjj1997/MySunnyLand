@@ -61,6 +61,8 @@ public:
     engine::resource::ResourceManager& resourceManager() const { return m_resourceManager; }
     ///< @brief 获取物理引擎
     engine::physics::PhysicsEngine& physicsEngine() const { return m_physicsEngine; }
+    ///< @brief 获取音频播放器
+    engine::audio::AudioPlayer& audioPlayer() const { return m_audioPlayer; }
 
 private:
     // 使用引用，确保每个模块都有效，使用时不需要检查指针是否为空。

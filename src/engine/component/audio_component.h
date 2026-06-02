@@ -9,7 +9,12 @@ namespace engine::audio {
 class AudioPlayer;
 }
 
+namespace engine::render {
+class Camera;
+}
+
 namespace engine::component {
+class TransformComponent;
 
 /**
  * @brief 音频组件，用于处理音频播放和管理。
@@ -48,6 +53,9 @@ protected:
 
 private:
     engine::audio::AudioPlayer* m_audioPlayer; ///< @brief 音频播放器的非拥有指针
+    engine::render::Camera* m_camera;          ///< @brief 相机的非拥有指针，用于音频空间定位
+    engine::component::TransformComponent* m_transformComponent{ nullptr }; ///< @brief 缓存变换组件
+
     std::unordered_map<std::string, std::string> m_soundIdToPath; ///< @brief 音效id 到路径的映射表
 };
 

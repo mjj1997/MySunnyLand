@@ -284,6 +284,23 @@ void LevelLoader::loadObjectLayer(const nlohmann::json& layerJson, SceneBase& sc
                 addAnimation(animationJson, animationComponent, srcRectSize);
             }
 
+            // 获取音效信息并设置
+            auto sound = getTileProperty<std::string>(tileJson, "sound");
+            if (sound) {
+                // 解析 string 到 JSON 对象
+                nlohmann::json soundJson;
+                try {
+                    soundJson = nlohmann::json::parse(sound.value());
+                } catch (const nlohmann::json::parse_error& e) {
+                    spdlog::error("解析音效 JSON 字符串失败：{}", e.what());
+                    continue; // 跳过当前对象，继续处理下一个对象
+                }
+                // 添加组件到 GameObject
+                auto* audioComponent = gameObject->addComponent<engine::component::AudioComponent>();
+                // 添加音效到组件
+                addSound(soundJson, audioComponent);
+            }
+
             // 获取生命值信息并设置
             auto health = getTileProperty<int>(tileJson, "health");
             if (health) {

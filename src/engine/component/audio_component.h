@@ -36,8 +36,9 @@ public:
     /**
      * @brief 播放音效。
      * @param soundId 音效文件的id (或路径)。
+     * @param useSpatial 是否使用空间定位。
      */
-    void playSound(const std::string& soundId);
+    void playSound(const std::string& soundId, bool useSpatial = false);
 
     /**
      * @brief 添加音效到映射表。

@@ -1,6 +1,7 @@
 #include "audio_component.h"
 #include "../audio/audio_player.h"
 #include "../object/game_object.h"
+#include "../render/camera.h"
 #include "transform_component.h"
 
 #include <spdlog/spdlog.h>
@@ -17,11 +18,25 @@ AudioComponent::AudioComponent(engine::audio::AudioPlayer* audioPlayer,
     }
 }
 
-void AudioComponent::playSound(const std::string& soundId)
+void AudioComponent::playSound(const std::string& soundId, bool useSpatial)
 {
+    // 如果 音效 ID 在映射表中，使用映射表中的路径；否则，直接使用 ID 作为路径
     auto soundPath = m_soundIdToPath.find(soundId) != m_soundIdToPath.end()
                          ? m_soundIdToPath[soundId]
                          : soundId;
+
+    if (useSpatial && m_transformComponent != nullptr) {
+        // TODO: 正式版 SDL3_Mixer 已经支持空间定位，但这里不展开
+        // 这里给一个简单的功能：150像素范围内播放，否则不播放
+        auto cameraCenter = m_camera->position() + m_camera->viewportSize() / 2.0f;
+        auto objectPosition = m_transformComponent->position();
+        float distance{ glm::length(cameraCenter - objectPosition) };
+        if (distance > 150.0f) {
+            spdlog::debug("AudioComponent:playSound: 音效 '{}' 距离相机太远，不播放。", soundId);
+            return;
+        }
+    }
+
     m_audioPlayer->playSound(soundPath);
 }
 

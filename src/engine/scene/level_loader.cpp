@@ -296,7 +296,8 @@ void LevelLoader::loadObjectLayer(const nlohmann::json& layerJson, SceneBase& sc
                     continue; // 跳过当前对象，继续处理下一个对象
                 }
                 // 添加组件到 GameObject
-                auto* audioComponent = gameObject->addComponent<engine::component::AudioComponent>();
+                auto* audioComponent = gameObject->addComponent<engine::component::AudioComponent>(
+                    &scene.context().audioPlayer(), &scene.context().camera());
                 // 添加音效到组件
                 addSound(soundJson, audioComponent);
             }

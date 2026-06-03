@@ -1,5 +1,6 @@
 {
   "dependencies": [
+    "glm",
     "nlohmann-json",
     "sdl3",
     {
@@ -8,9 +9,13 @@
         "png"
       ]
     },
-    "sdl3-mixer",
+    {
+      "name": "sdl3-mixer",
+      "features": [
+        "mpg123"
+      ]
+    },
     "sdl3-ttf",
-    "spdlog",
-    "glm"
+    "spdlog"
   ]
 }

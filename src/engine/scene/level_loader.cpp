@@ -380,7 +380,7 @@ void LevelLoader::addSound(const nlohmann::json& soundJson,
     // 遍历音效 JSON 对象中的每个键值对（音效 ID : 音效路径）
     for (const auto& sound : soundJson.items()) {
         const std::string& soundId{ sound.key() };
-        const std::string& soundPath{ sound.value() };
+        const std::string& soundPath{ sound.value().get<std::string>() };
         if (soundId.empty() || soundPath.empty()) {
             spdlog::warn("音效 '{}' 缺少必要信息。", soundId);
             continue;

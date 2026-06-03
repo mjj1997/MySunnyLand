@@ -280,6 +280,8 @@ void GameScene::handlePlayerVsEnemyCollision(engine::object::GameObject* player,
         auto playerPhysicsComponent = player->getComponent<engine::component::PhysicsComponent>();
         playerPhysicsComponent->setVelocity(
             glm::vec2{ playerPhysicsComponent->velocity().x, -300.0f }); // 向上跳起
+        // 播放玩家跳起音效（此音效完全可以放在玩家的音频组件中，这里示例另一种用法：直接用 AudioPlayer 播放，传入文件路径）
+        m_context.audioPlayer().playSound("assets/audio/punch2a.mp3");
     }
     // 踩踏判断失败，玩家受伤
     else {
@@ -304,6 +306,8 @@ void GameScene::handlePlayerVsItemCollision(engine::object::GameObject* player,
     auto itemAabb = item->getComponent<engine::component::ColliderComponent>()->worldAabb();
     auto itemCenter = itemAabb.position + itemAabb.size / 2.0f;
     createEffect(itemCenter, item->tag()); // 创建特效
+    // 播放道具反馈音效（此音效完全可以放在道具的音频组件中，这里示例另一种用法：直接用 AudioPlayer 播放，传入文件路径）
+    m_context.audioPlayer().playSound("assets/audio/poka01.mp3");
 }
 
 void GameScene::handleTileTriggers()

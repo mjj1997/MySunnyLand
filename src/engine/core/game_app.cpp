@@ -79,13 +79,13 @@ bool GameApp::init()
     if (!initPhysicsEngine()) {
         return false;
     }
+    if (!initAudioPlayer()) {
+        return false;
+    }
     if (!initContext()) {
         return false;
     }
     if (!initSceneManager()) {
-        return false;
-    }
-    if (!initAudioPlayer()) {
         return false;
     }
 

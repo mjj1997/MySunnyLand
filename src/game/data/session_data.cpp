@@ -1,7 +1,10 @@
 #include "session_data.h"
 
 #include <glm/common.hpp>
+#include <nlohmann/json.hpp>
 #include <spdlog/spdlog.h>
+
+#include <fstream>
 
 namespace game::data {
 
@@ -45,6 +48,36 @@ void SessionData::setNextLevel(const std::string& mapPath)
     m_mapPath = mapPath;
     m_levelHealth = m_currentHealth;
     m_levelScore = m_currentScore;
+}
+
+bool SessionData::saveToFile(const std::string& fileName) const
+{
+    nlohmann::json json;
+    try {
+        // 将成员变量序列化到 JSON 对象中
+        json["levelScore"] = m_levelScore;
+        json["levelHealth"] = m_levelHealth;
+        json["maxHealth"] = m_maxHealth;
+        json["highestScore"] = m_highestScore;
+        json["mapPath"] = m_mapPath;
+
+        // 打开文件进行写入
+        std::ofstream file{ fileName };
+        if (!file.is_open()) {
+            spdlog::error("无法打开存档文件进行写入: {}", fileName);
+            return false;
+        }
+
+        // 将 JSON 对象写入文件（使用 4 个空格缩进美化格式）
+        file << json.dump(4);
+        file.close();
+
+        spdlog::info("游戏数据已成功保存到文件: {}", fileName);
+        return true;
+    } catch (const std::exception& e) {
+        spdlog::error("存档时出现错误 {}: {}", fileName, e.what());
+        return false;
+    }
 }
 
 } // namespace game::data

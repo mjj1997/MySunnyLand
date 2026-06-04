@@ -44,6 +44,8 @@ public:
     void reset();
     ///< @brief 设置下一个场景信息（地图、关卡开始时的得分生命）
     void setNextLevel(const std::string& mapPath);
+    ///< @brief 将当前游戏数据保存到 JSON 文件（存档）
+    bool saveToFile(const std::string& fileName) const;
 
 private:
     int m_currentHealth{ 3 };

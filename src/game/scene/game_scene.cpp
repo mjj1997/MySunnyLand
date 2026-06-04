@@ -21,6 +21,7 @@
 #include "../../engine/render/animation.h"
 #include "../../engine/render/camera.h"
 #include "../../engine/scene/level_loader.h"
+#include "../../engine/scene/scene_manager.h"
 
 #include <nlohmann/json.hpp>
 #include <spdlog/spdlog.h>
@@ -325,6 +326,13 @@ void GameScene::handleTileTriggers()
             // TODO: 其他对象与危险瓦片碰撞的处理，目前让敌人无视危险瓦片
         }
     }
+}
+
+void GameScene::goToNextLevel(engine::object::GameObject* trigger)
+{
+    auto sceneName = trigger->name();
+    auto nextScene = std::make_unique<game::scene::GameScene>(sceneName, m_context, m_sceneManager);
+    m_sceneManager.requestReplaceScene(std::move(nextScene));
 }
 
 void GameScene::createEffect(const glm::vec2& center, const std::string& tag)

@@ -43,6 +43,9 @@ private:
     ///< @brief 处理瓦片触发事件
     void handleTileTriggers();
 
+    ///< @brief 进入下一个关卡
+    void goToNextLevel(engine::object::GameObject* trigger);
+
     /**
      * @brief 创建一个特效对象（一次性）。
      * @param center 特效中心位置

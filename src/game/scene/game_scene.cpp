@@ -100,7 +100,8 @@ bool GameScene::initLevel()
 {
     // 加载关卡（level_loader通常加载完成后即可销毁，因此不存为成员变量）
     engine::scene::LevelLoader levelLoader;
-    if (!levelLoader.loadLevel("assets/maps/level1.tmj", *this)) {
+    const std::string& mapPath{ levelNameToPath(m_sceneName) };
+    if (!levelLoader.loadLevel(mapPath, *this)) {
         spdlog::error("加载关卡失败。");
         return false;
     }

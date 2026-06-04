@@ -242,6 +242,12 @@ void GameScene::handleObjectCollisions()
             obj2->getComponent<game::component::PlayerComponent>()->takeDamage(1);
             spdlog::debug("玩家 {} 收到了 Hazard 对象伤害", obj2->name());
         }
+        // 处理玩家与标签为“nextLevel”的关底触发器对象的碰撞
+        else if (obj1->name() == "player" && obj2->tag() == "nextLevel") {
+            goToNextLevel(obj2);
+        } else if (obj2->name() == "player" && obj1->tag() == "nextLevel") {
+            goToNextLevel(obj1);
+        }
     }
 }
 

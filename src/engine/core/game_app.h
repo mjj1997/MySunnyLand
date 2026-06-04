@@ -26,6 +26,10 @@ namespace engine::scene {
 class SceneManager;
 }
 
+namespace engine::audio {
+class AudioPlayer;
+}
+
 namespace engine::core { // 命名空间的最佳实践：与文件路径一致
 
 class FrameTimeController;
@@ -70,6 +74,7 @@ private:
     [[nodiscard]] bool initPhysicsEngine();
     [[nodiscard]] bool initContext();
     [[nodiscard]] bool initSceneManager();
+    [[nodiscard]] bool initAudioPlayer();
 
 private:
     SDL_Window* m_window{ nullptr };
@@ -86,6 +91,7 @@ private:
     std::unique_ptr<engine::physics::PhysicsEngine> m_physicsEngine;
     std::unique_ptr<engine::core::Context> m_context;
     std::unique_ptr<engine::scene::SceneManager> m_sceneManager;
+    std::unique_ptr<engine::audio::AudioPlayer> m_audioPlayer;
 };
 
 } // namespace engine::core

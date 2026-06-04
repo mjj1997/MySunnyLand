@@ -4,6 +4,7 @@
 #include "idle_state.h"
 #include "walk_state.h"
 
+#include "../../../engine/component/audio_component.h"
 #include "../../../engine/component/physics_component.h"
 #include "../../../engine/component/sprite_component.h"
 
@@ -26,6 +27,10 @@ void HurtState::enter()
     }
     // 设置击退速度
     physicsComponent->setVelocity(knockbackVelocity);
+
+    if (auto* audioComponent = m_playerComponent->audioComponent(); audioComponent) {
+        audioComponent->playSound("hurt"); // 播放受伤音效
+    }
 }
 
 std::unique_ptr<PlayerStateBase> HurtState::handleInput(engine::core::Context& context)

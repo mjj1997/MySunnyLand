@@ -13,6 +13,7 @@ class TransformComponent;
 class PhysicsComponent;
 class SpriteComponent;
 class AnimationComponent;
+class AudioComponent;
 } // namespace engine::component
 
 namespace game::component {
@@ -50,6 +51,7 @@ public:
     {
         return m_animationComponent;
     }
+    engine::component::AudioComponent* audioComponent() const { return m_audioComponent; }
     ///< @brief 检查对象是否存活
     bool isAlive() const;
 
@@ -71,6 +73,7 @@ private:
     engine::component::PhysicsComponent* m_physicsComponent{ nullptr };
     engine::component::SpriteComponent* m_spriteComponent{ nullptr };
     engine::component::AnimationComponent* m_animationComponent{ nullptr };
+    engine::component::AudioComponent* m_audioComponent{ nullptr };
 };
 
 } // namespace game::component

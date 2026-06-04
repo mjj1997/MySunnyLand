@@ -1,5 +1,6 @@
 #include "level_loader.h"
 #include "../component/animation_component.h"
+#include "../component/audio_component.h"
 #include "../component/collider_component.h"
 #include "../component/health_component.h"
 #include "../component/parallax_component.h"
@@ -283,6 +284,24 @@ void LevelLoader::loadObjectLayer(const nlohmann::json& layerJson, SceneBase& sc
                 addAnimation(animationJson, animationComponent, srcRectSize);
             }
 
+            // 获取音效信息并设置
+            auto sound = getTileProperty<std::string>(tileJson, "sound");
+            if (sound) {
+                // 解析 string 到 JSON 对象
+                nlohmann::json soundJson;
+                try {
+                    soundJson = nlohmann::json::parse(sound.value());
+                } catch (const nlohmann::json::parse_error& e) {
+                    spdlog::error("解析音效 JSON 字符串失败：{}", e.what());
+                    continue; // 跳过当前对象，继续处理下一个对象
+                }
+                // 添加组件到 GameObject
+                auto* audioComponent = gameObject->addComponent<engine::component::AudioComponent>(
+                    &scene.context().audioPlayer(), &scene.context().camera());
+                // 添加音效到组件
+                addSound(soundJson, audioComponent);
+            }
+
             // 获取生命值信息并设置
             auto health = getTileProperty<int>(tileJson, "health");
             if (health) {
@@ -346,6 +365,28 @@ void LevelLoader::addAnimation(const nlohmann::json& animationJson,
 
         // 5. 将 Animation 对象添加到 AnimationComponent 中
         animationComponent->addAnimation(std::move(animation));
+    }
+}
+
+void LevelLoader::addSound(const nlohmann::json& soundJson,
+                           engine::component::AudioComponent* audioComponent)
+{
+    // 检查 soundJson 必须是一个对象，并且 audioComponent 不能为 nullptr
+    if (!soundJson.is_object() || !audioComponent) {
+        spdlog::error("无效的音效 JSON 或 AudioComponent 指针。");
+        return;
+    }
+
+    // 遍历音效 JSON 对象中的每个键值对（音效 ID : 音效路径）
+    for (const auto& sound : soundJson.items()) {
+        const std::string& soundId{ sound.key() };
+        const std::string& soundPath{ sound.value().get<std::string>() };
+        if (soundId.empty() || soundPath.empty()) {
+            spdlog::warn("音效 '{}' 缺少必要信息。", soundId);
+            continue;
+        }
+        // 添加音效到 AudioComponent
+        audioComponent->addSound(soundId, soundPath);
     }
 }
 

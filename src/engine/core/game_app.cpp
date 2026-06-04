@@ -1,5 +1,6 @@
 #include "game_app.h"
 #include "../../game/scene/game_scene.h"
+#include "../audio/audio_player.h"
 #include "../component/sprite_component.h"
 #include "../component/transform_component.h"
 #include "../input/input_manager.h"
@@ -76,6 +77,9 @@ bool GameApp::init()
         return false;
     }
     if (!initPhysicsEngine()) {
+        return false;
+    }
+    if (!initAudioPlayer()) {
         return false;
     }
     if (!initContext()) {
@@ -280,7 +284,8 @@ bool GameApp::initContext()
                                                             *m_renderer,
                                                             *m_camera,
                                                             *m_resourceManager,
-                                                            *m_physicsEngine);
+                                                            *m_physicsEngine,
+                                                            *m_audioPlayer);
     } catch (const std::exception& e) {
         spdlog::error("初始化上下文失败: {}", e.what());
         return false;
@@ -298,6 +303,18 @@ bool GameApp::initSceneManager()
         return false;
     }
     spdlog::trace("场景管理器初始化成功。");
+    return true;
+}
+
+bool GameApp::initAudioPlayer()
+{
+    try {
+        m_audioPlayer = std::make_unique<engine::audio::AudioPlayer>(m_resourceManager.get());
+    } catch (const std::exception& e) {
+        spdlog::error("初始化音频播放器失败: {}", e.what());
+        return false;
+    }
+    spdlog::trace("音频播放器初始化成功。");
     return true;
 }
 

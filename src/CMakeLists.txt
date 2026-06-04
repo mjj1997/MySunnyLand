@@ -42,7 +42,9 @@ target_sources(
           game/component/ai/patrol_behavior.cpp
           game/component/ai/updown_behavior.cpp
           game/component/ai/jump_behavior.cpp
-          game/component/state/climb_state.cpp)
+          game/component/state/climb_state.cpp
+          engine/audio/audio_player.cpp
+          engine/component/audio_component.cpp)
 
 target_link_libraries(
   SunnyLand

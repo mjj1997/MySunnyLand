@@ -29,4 +29,15 @@ void SessionData::addScore(int scoreToAdd)
     setHighestScore(glm::max(m_highestScore, m_currentScore));
 }
 
+void SessionData::reset()
+{
+    m_currentHealth = m_maxHealth;
+    m_currentScore = 0;
+    m_levelHealth = 3;
+    m_levelScore = 0;
+    m_mapPath = "assets/maps/level1.tmj";
+
+    spdlog::info("游戏数据重置完成。");
+}
+
 } // namespace game::data

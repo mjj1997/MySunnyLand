@@ -40,6 +40,9 @@ public:
     void setLevelScore(int levelScore) { m_levelScore = levelScore; }
     void setMapPath(const std::string& mapPath) { m_mapPath = mapPath; }
 
+    ///< @brief 重置游戏数据以准备开始新游戏（保留最高分）
+    void reset();
+
 private:
     int m_currentHealth{ 3 };
     int m_maxHealth{ 3 };

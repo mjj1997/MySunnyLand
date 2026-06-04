@@ -42,6 +42,8 @@ public:
 
     ///< @brief 重置游戏数据以准备开始新游戏（保留最高分）
     void reset();
+    ///< @brief 设置下一个场景信息（地图、关卡开始时的得分生命）
+    void setNextLevel(const std::string& mapPath);
 
 private:
     int m_currentHealth{ 3 };

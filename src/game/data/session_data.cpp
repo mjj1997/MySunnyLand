@@ -40,4 +40,11 @@ void SessionData::reset()
     spdlog::info("游戏数据重置完成。");
 }
 
+void SessionData::setNextLevel(const std::string& mapPath)
+{
+    m_mapPath = mapPath;
+    m_levelHealth = m_currentHealth;
+    m_levelScore = m_currentScore;
+}
+
 } // namespace game::data

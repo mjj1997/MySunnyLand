@@ -46,6 +46,8 @@ public:
     void setNextLevel(const std::string& mapPath);
     ///< @brief 将当前游戏数据保存到 JSON 文件（存档）
     bool saveToFile(const std::string& fileName) const;
+    ///< @brief 从 JSON 文件中读取游戏数据（读档）
+    bool loadFromFile(const std::string& fileName);
 
 private:
     int m_currentHealth{ 3 };

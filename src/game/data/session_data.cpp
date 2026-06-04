@@ -80,4 +80,36 @@ bool SessionData::saveToFile(const std::string& fileName) const
     }
 }
 
+bool SessionData::loadFromFile(const std::string& fileName)
+{
+    try {
+        // 打开文件进行读取
+        std::ifstream file{ fileName };
+        if (!file.is_open()) {
+            // 如果存档文件不存在，不一定是错误，所以只报警告
+            spdlog::warn("读档时找不到文件: {}", fileName);
+            return false;
+        }
+
+        // 从文件解析 JSON 数据
+        nlohmann::json json;
+        file >> json;
+        file.close();
+
+        m_currentScore = m_levelScore = json.value("levelScore", 0);
+        m_currentHealth = m_levelHealth = json.value("levelHealth", 3);
+        m_maxHealth = json.value("maxHealth", 3); // 使用合理的默认值作为最大生命值
+        m_highestScore = json.value("highestScore", 0);
+        m_mapPath = json.value("mapPath", "assets/maps/level1.tmj"); // 默认起始地图
+
+        spdlog::info("游戏数据已成功从文件加载: {}", fileName);
+        return true;
+    } catch (const std::exception& e) {
+        spdlog::error("读档时出现错误 {}: {}", fileName, e.what());
+        // 如果读取文件时出错，重置游戏数据
+        reset();
+        return false;
+    }
+}
+
 } // namespace game::data

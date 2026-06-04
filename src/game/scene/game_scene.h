@@ -43,6 +43,15 @@ private:
     ///< @brief 处理瓦片触发事件
     void handleTileTriggers();
 
+    ///< @brief 根据关卡名称获取对应的地图文件路径
+    std::string levelNameToPath(const std::string& levelName) const
+    {
+        return "assets/maps/" + levelName + ".tmj";
+    }
+
+    ///< @brief 进入下一个关卡
+    void goToNextLevel(engine::object::GameObject* trigger);
+
     /**
      * @brief 创建一个特效对象（一次性）。
      * @param center 特效中心位置

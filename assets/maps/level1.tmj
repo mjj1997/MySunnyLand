@@ -126,7 +126,7 @@
                  "type":"",
                  "visible":true,
                  "width":32,
-                 "x":32,
+                 "x":1330,
                  "y":160
                 }, 
                 {
@@ -298,15 +298,21 @@
                  "y":297
                 }, 
                 {
-                 "height":29,
+                 "height":100,
                  "id":17,
-                 "name":"",
+                 "name":"level2",
+                 "properties":[
+                     {
+                      "name":"tag",
+                      "type":"string",
+                      "value":"nextLevel"
+                     }],
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":29,
-                 "x":19,
-                 "y":25
+                 "width":21,
+                 "x":1434,
+                 "y":59
                 }, 
                 {
                  "height":0,

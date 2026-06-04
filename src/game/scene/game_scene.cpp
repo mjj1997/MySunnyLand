@@ -21,6 +21,7 @@
 #include "../../engine/render/animation.h"
 #include "../../engine/render/camera.h"
 #include "../../engine/scene/level_loader.h"
+#include "../../engine/scene/scene_manager.h"
 
 #include <nlohmann/json.hpp>
 #include <spdlog/spdlog.h>
@@ -99,7 +100,8 @@ bool GameScene::initLevel()
 {
     // 加载关卡（level_loader通常加载完成后即可销毁，因此不存为成员变量）
     engine::scene::LevelLoader levelLoader;
-    if (!levelLoader.loadLevel("assets/maps/level1.tmj", *this)) {
+    const std::string& mapPath{ levelNameToPath(m_sceneName) };
+    if (!levelLoader.loadLevel(mapPath, *this)) {
         spdlog::error("加载关卡失败。");
         return false;
     }
@@ -241,6 +243,12 @@ void GameScene::handleObjectCollisions()
             obj2->getComponent<game::component::PlayerComponent>()->takeDamage(1);
             spdlog::debug("玩家 {} 收到了 Hazard 对象伤害", obj2->name());
         }
+        // 处理玩家与标签为“nextLevel”的关底触发器对象的碰撞
+        else if (obj1->name() == "player" && obj2->tag() == "nextLevel") {
+            goToNextLevel(obj2);
+        } else if (obj2->name() == "player" && obj1->tag() == "nextLevel") {
+            goToNextLevel(obj1);
+        }
     }
 }
 
@@ -325,6 +333,13 @@ void GameScene::handleTileTriggers()
             // TODO: 其他对象与危险瓦片碰撞的处理，目前让敌人无视危险瓦片
         }
     }
+}
+
+void GameScene::goToNextLevel(engine::object::GameObject* trigger)
+{
+    auto sceneName = trigger->name();
+    auto nextScene = std::make_unique<game::scene::GameScene>(sceneName, m_context, m_sceneManager);
+    m_sceneManager.requestReplaceScene(std::move(nextScene));
 }
 
 void GameScene::createEffect(const glm::vec2& center, const std::string& tag)

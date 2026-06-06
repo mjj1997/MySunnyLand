@@ -12,6 +12,8 @@ class ResourceManager;
 }
 
 namespace engine::render {
+class Camera;
+
 /**
  * @brief 使用 SDL_ttf 和 TTF_Text 对象处理文本渲染。
  *
@@ -56,6 +58,23 @@ public:
                     int fontSize,
                     const glm::vec2& position,
                     const SDL_FColor& color = { 1.0f, 1.0f, 1.0f, 1.0f });
+
+    /**
+     * @brief 绘制地图上的字符串。
+     *        
+     * @param camera 相机
+     * @param text UTF-8 字符串内容。
+     * @param fontId 字体 ID。
+     * @param fontSize 字体大小。
+     * @param position 左上角屏幕位置。
+     * @param color 文本颜色。
+     */
+    void drawText(const Camera& camera,
+                  const std::string& text,
+                  const std::string& fontId,
+                  int fontSize,
+                  const glm::vec2& position,
+                  const SDL_FColor& color = { 1.0f, 1.0f, 1.0f, 1.0f });
 
 private:
     ///< @brief 持有渲染器的非拥有指针

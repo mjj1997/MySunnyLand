@@ -1,5 +1,6 @@
 #include "text_renderer.h"
 #include "../resource/resource_manager.h"
+#include "camera.h"
 
 #include <SDL3_ttf/SDL_ttf.h>
 #include <spdlog/spdlog.h>
@@ -83,6 +84,20 @@ void TextRenderer::drawUiText(const std::string& text,
 
     // 销毁临时 TTF_Text 对象
     TTF_DestroyText(tempTextObject);
+}
+
+void TextRenderer::drawText(const Camera& camera,
+                            const std::string& text,
+                            const std::string& fontId,
+                            int fontSize,
+                            const glm::vec2& position,
+                            const SDL_FColor& color)
+{
+    // 应用相机变换
+    glm::vec2 screenPos = camera.worldToScreen(position);
+
+    // 用新坐标调用 drawUiText() 即可
+    drawUiText(text, fontId, fontSize, screenPos, color);
 }
 
 } // namespace engine::render

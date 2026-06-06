@@ -76,6 +76,7 @@ private:
     [[nodiscard]] bool initContext();
     [[nodiscard]] bool initSceneManager();
     [[nodiscard]] bool initAudioPlayer();
+    [[nodiscard]] bool initTextRenderer();
 
 private:
     SDL_Window* m_window{ nullptr };

@@ -1,4 +1,5 @@
 #include "text_renderer.h"
+#include "../resource/resource_manager.h"
 
 #include <SDL3_ttf/SDL_ttf.h>
 #include <spdlog/spdlog.h>
@@ -44,6 +45,44 @@ void TextRenderer::close()
     }
 
     TTF_Quit();
+}
+
+void TextRenderer::drawUiText(const std::string& text,
+                              const std::string& fontId,
+                              int fontSize,
+                              const glm::vec2& position,
+                              const SDL_FColor& color)
+{
+    /* 构造函数已经保证了必要指针不会为空，这里不需要再检查 */
+
+    // 获取字体
+    TTF_Font* font{ m_resourceManager->getFont(fontId, fontSize) };
+    if (font == nullptr) {
+        spdlog::warn("drawUiText 获取字体失败: {} 大小 {}", fontId, fontSize);
+        return;
+    }
+
+    // 创建临时 TTF_Text 对象(目前效率不高，未来可以考虑使用缓存优化)
+    TTF_Text* tempTextObject{ TTF_CreateText(m_textEngine, font, text.c_str(), 0) };
+    if (tempTextObject == nullptr) {
+        spdlog::error("drawUiText 创建临时 TTF_Text 失败: {}", SDL_GetError());
+        return;
+    }
+
+    // 先渲染一次黑色文字模拟阴影(偏移 2 像素)
+    TTF_SetTextColorFloat(tempTextObject, 0.0f, 0.0f, 0.0f, 1.0f);
+    if (TTF_DrawRendererText(tempTextObject, position.x + 2, position.y + 2) == false) {
+        spdlog::error("drawUiText 绘制临时 TTF_Text 失败: {}", SDL_GetError());
+    }
+
+    // 然后正常绘制
+    TTF_SetTextColorFloat(tempTextObject, color.r, color.g, color.b, color.a);
+    if (TTF_DrawRendererText(tempTextObject, position.x, position.y) == false) {
+        spdlog::error("drawUiText 绘制临时 TTF_Text 失败: {}", SDL_GetError());
+    }
+
+    // 销毁临时 TTF_Text 对象
+    TTF_DestroyText(tempTextObject);
 }
 
 } // namespace engine::render

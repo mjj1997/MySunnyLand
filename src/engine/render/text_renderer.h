@@ -1,7 +1,10 @@
 #pragma once
 
+#include <SDL3/SDL_render.h>
+#include <glm/vec2.hpp>
 
-struct SDL_Renderer;
+#include <string>
+
 struct TTF_TextEngine;
 
 namespace engine::resource {
@@ -38,6 +41,21 @@ public:
 
     ///< @brief 显式关闭。清理 TTF_TextEngine 并关闭SDL_ttf。
     void close();
+
+    /**
+     * @brief 绘制UI上的字符串。
+     *        
+     * @param text UTF-8 字符串内容。
+     * @param fontId 字体 ID。
+     * @param fontSize 字体大小。
+     * @param position 左上角屏幕位置。
+     * @param color 文本颜色。(默认为白色)
+     */
+    void drawUiText(const std::string& text,
+                    const std::string& fontId,
+                    int fontSize,
+                    const glm::vec2& position,
+                    const SDL_FColor& color = { 1.0f, 1.0f, 1.0f, 1.0f });
 
 private:
     ///< @brief 持有渲染器的非拥有指针

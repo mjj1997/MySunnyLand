@@ -4,6 +4,7 @@
 #include "../component/ai/updown_behavior.h"
 #include "../component/ai_component.h"
 #include "../component/player_component.h"
+#include "../data/session_data.h"
 
 #include "../../engine/audio/audio_player.h"
 #include "../../engine/component/animation_component.h"
@@ -29,11 +30,17 @@
 namespace game::scene {
 
 // 构造函数: 调用基类构造函数
-GameScene::GameScene(std::string name,
-                     engine::core::Context& context,
-                     engine::scene::SceneManager& sceneManager)
-    : SceneBase{ name, context, sceneManager }
+GameScene::GameScene(engine::core::Context& context,
+                     engine::scene::SceneManager& sceneManager,
+                     std::shared_ptr<game::data::SessionData> gameSessionData)
+    : SceneBase{ "GameScene", context, sceneManager }
+    , m_gameSessionData{ std::move(gameSessionData) }
 {
+    if (m_gameSessionData == nullptr) {
+        // 如果没有传入 SessionData，创建一个默认的
+        m_gameSessionData = std::make_shared<game::data::SessionData>();
+        spdlog::info("未提供 SessionData，使用默认值。");
+    }
     spdlog::trace("GameScene 构造完成。");
 }
 

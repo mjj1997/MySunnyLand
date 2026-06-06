@@ -18,9 +18,9 @@ namespace game::scene {
 class GameScene final : public engine::scene::SceneBase
 {
 public:
-    GameScene(std::string name,
-              engine::core::Context& context,
-              engine::scene::SceneManager& sceneManager);
+    GameScene(engine::core::Context& context,
+              engine::scene::SceneManager& sceneManager,
+              std::shared_ptr<game::data::SessionData> gameSessionData = nullptr);
 
     // 覆盖场景基类的核心方法
     void init() override;

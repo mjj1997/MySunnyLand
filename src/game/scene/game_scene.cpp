@@ -21,6 +21,7 @@
 #include "../../engine/physics/physics_engine.h"
 #include "../../engine/render/animation.h"
 #include "../../engine/render/camera.h"
+#include "../../engine/render/text_renderer.h"
 #include "../../engine/scene/level_loader.h"
 #include "../../engine/scene/scene_manager.h"
 
@@ -91,12 +92,12 @@ void GameScene::update(float deltaTime)
 void GameScene::render()
 {
     SceneBase::render();
+    testTextRenderer();
 }
 
 void GameScene::handleInput()
 {
     SceneBase::handleInput();
-    testSaveAndLoadData();
 }
 
 void GameScene::clean()
@@ -420,17 +421,21 @@ void GameScene::createEffect(const glm::vec2& center, const std::string& tag)
     spdlog::debug("创建特效: {}", tag);
 }
 
-void GameScene::testSaveAndLoadData()
+void GameScene::testTextRenderer()
 {
-    auto inputManager = m_context.inputManager();
-    if (inputManager.isActionPressed("attack")) {
-        m_gameSessionData->saveToFile("assets/save.json");
-    }
-    if (inputManager.isActionPressed("pause")) {
-        m_gameSessionData->loadFromFile("assets/save.json");
-        spdlog::info("当前生命值：{}", m_gameSessionData->currentHealth());
-        spdlog::info("当前得分：{}", m_gameSessionData->currentScore());
-    }
+    auto& textRenderer = m_context.textRenderer();
+    const auto& camera = m_context.camera();
+
+    textRenderer.drawUiText("UI Text",
+                            "assets/fonts/VonwaonBitmap-16px.ttf",
+                            32,
+                            glm::vec2{ 100.0f, 100.0f },
+                            { 0.0f, 1.0f, 0.0f, 1.0f });
+    textRenderer.drawText(camera,
+                          "Map Text",
+                          "assets/fonts/VonwaonBitmap-16px.ttf",
+                          32,
+                          glm::vec2(200.0f));
 }
 
 } // namespace game::scene

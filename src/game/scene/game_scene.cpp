@@ -107,7 +107,7 @@ bool GameScene::initLevel()
 {
     // 加载关卡（level_loader通常加载完成后即可销毁，因此不存为成员变量）
     engine::scene::LevelLoader levelLoader;
-    const std::string& mapPath{ levelNameToPath(m_sceneName) };
+    const std::string& mapPath{ m_gameSessionData->mapPath() };
     if (!levelLoader.loadLevel(mapPath, *this)) {
         spdlog::error("加载关卡失败。");
         return false;
@@ -345,7 +345,12 @@ void GameScene::handleTileTriggers()
 void GameScene::goToNextLevel(engine::object::GameObject* trigger)
 {
     auto sceneName = trigger->name();
-    auto nextScene = std::make_unique<game::scene::GameScene>(sceneName, m_context, m_sceneManager);
+    auto mapPath = levelNameToPath(sceneName);
+    m_gameSessionData->setNextLevel(mapPath);
+
+    auto nextScene = std::make_unique<game::scene::GameScene>(m_context,
+                                                              m_sceneManager,
+                                                              m_gameSessionData);
     m_sceneManager.requestReplaceScene(std::move(nextScene));
 }
 

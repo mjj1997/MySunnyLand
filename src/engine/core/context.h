@@ -7,6 +7,7 @@ class InputManager;
 namespace engine::render {
 class Renderer;
 class Camera;
+class TextRenderer;
 } // namespace engine::render
 
 namespace engine::resource {
@@ -38,13 +39,16 @@ public:
      * @param camera 对 Camera 实例的引用。
      * @param resourceManager 对 ResourceManager 实例的引用。
      * @param physicsEngine 对 PhysicsEngine 实例的引用。
+     * @param audioPlayer 对 AudioPlayer 实例的引用。
+     * @param textRenderer 对 TextRenderer 实例的引用。
      */
     Context(engine::input::InputManager& inputManager,
             engine::render::Renderer& renderer,
             engine::render::Camera& camera,
             engine::resource::ResourceManager& resourceManager,
             engine::physics::PhysicsEngine& physicsEngine,
-            engine::audio::AudioPlayer& audioPlayer);
+            engine::audio::AudioPlayer& audioPlayer,
+            engine::render::TextRenderer& textRenderer);
 
     // 禁止拷贝和移动，Context 对象通常是唯一的或按需创建/传递
     Context(const Context&) = delete;
@@ -72,6 +76,7 @@ private:
     engine::resource::ResourceManager& m_resourceManager; ///< @brief 资源管理器
     engine::physics::PhysicsEngine& m_physicsEngine;      ///< @brief 物理引擎
     engine::audio::AudioPlayer& m_audioPlayer;            ///< @brief 音频播放器
+    engine::render::TextRenderer& m_textRenderer;         ///< @brief 文字渲染引擎
 };
 
 } // namespace engine::core

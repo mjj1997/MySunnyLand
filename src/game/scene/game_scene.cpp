@@ -96,6 +96,7 @@ void GameScene::render()
 void GameScene::handleInput()
 {
     SceneBase::handleInput();
+    testSaveAndLoadData();
 }
 
 void GameScene::clean()
@@ -417,6 +418,19 @@ void GameScene::createEffect(const glm::vec2& center, const std::string& tag)
 
     safeAddGameObject(std::move(effectObj)); // 安全添加特效对象
     spdlog::debug("创建特效: {}", tag);
+}
+
+void GameScene::testSaveAndLoadData()
+{
+    auto inputManager = m_context.inputManager();
+    if (inputManager.isActionPressed("attack")) {
+        m_gameSessionData->saveToFile("assets/save.json");
+    }
+    if (inputManager.isActionPressed("pause")) {
+        m_gameSessionData->loadFromFile("assets/save.json");
+        spdlog::info("当前生命值：{}", m_gameSessionData->currentHealth());
+        spdlog::info("当前得分：{}", m_gameSessionData->currentScore());
+    }
 }
 
 } // namespace game::scene

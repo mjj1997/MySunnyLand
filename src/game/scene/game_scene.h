@@ -67,6 +67,9 @@ private:
      */
     void createEffect(const glm::vec2& center, const std::string& tag);
 
+    // 测试函数
+    void testSaveAndLoadData();
+
     ///< @brief 场景间共享数据
     std::shared_ptr<game::data::SessionData> m_gameSessionData{ nullptr };
     /// @brief 保存玩家对象指针

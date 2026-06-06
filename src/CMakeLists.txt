@@ -44,7 +44,8 @@ target_sources(
           game/component/ai/jump_behavior.cpp
           game/component/state/climb_state.cpp
           engine/audio/audio_player.cpp
-          engine/component/audio_component.cpp)
+          engine/component/audio_component.cpp
+          game/data/session_data.cpp)
 
 target_link_libraries(
   SunnyLand

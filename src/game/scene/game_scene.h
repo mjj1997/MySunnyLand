@@ -4,6 +4,12 @@
 
 #include <glm/vec2.hpp>
 
+#include <memory>
+
+namespace game::data {
+class SessionData;
+}
+
 namespace game::scene {
 
 /**
@@ -12,9 +18,9 @@ namespace game::scene {
 class GameScene final : public engine::scene::SceneBase
 {
 public:
-    GameScene(std::string name,
-              engine::core::Context& context,
-              engine::scene::SceneManager& sceneManager);
+    GameScene(engine::core::Context& context,
+              engine::scene::SceneManager& sceneManager,
+              std::shared_ptr<game::data::SessionData> gameSessionData = nullptr);
 
     // 覆盖场景基类的核心方法
     void init() override;
@@ -39,6 +45,8 @@ private:
     ///< @brief 分支：处理玩家与道具之间的碰撞
     void handlePlayerVsItemCollision(engine::object::GameObject* player,
                                      engine::object::GameObject* item);
+    ///< @brief 处理玩家受伤（更新得分、UI等）
+    void handlePlayerDamage(int damage);
 
     ///< @brief 处理瓦片触发事件
     void handleTileTriggers();
@@ -59,6 +67,11 @@ private:
      */
     void createEffect(const glm::vec2& center, const std::string& tag);
 
+    // 测试函数
+    void testSaveAndLoadData();
+
+    ///< @brief 场景间共享数据
+    std::shared_ptr<game::data::SessionData> m_gameSessionData{ nullptr };
     /// @brief 保存玩家对象指针
     engine::object::GameObject* m_player{ nullptr };
 };

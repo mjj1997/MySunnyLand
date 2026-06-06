@@ -297,6 +297,8 @@ void GameScene::handlePlayerVsEnemyCollision(engine::object::GameObject* player,
             glm::vec2{ playerPhysicsComponent->velocity().x, -300.0f }); // 向上跳起
         // 播放玩家跳起音效（此音效完全可以放在玩家的音频组件中，这里示例另一种用法：直接用 AudioPlayer 播放，传入文件路径）
         m_context.audioPlayer().playSound("assets/audio/punch2a.mp3");
+        // 加分
+        m_gameSessionData->addScore(10);
     }
     // 踩踏判断失败，玩家受伤
     else {
@@ -312,7 +314,8 @@ void GameScene::handlePlayerVsItemCollision(engine::object::GameObject* player,
     if (item->name() == "fruit") {
         player->getComponent<engine::component::HealthComponent>()->heal(1); // 加血
     } else if (item->name() == "gem") {
-        //TODO: 加分
+        // 加分
+        m_gameSessionData->addScore(5);
     }
     item->setShouldRemove(true); // 标记道具为待删除状态
 

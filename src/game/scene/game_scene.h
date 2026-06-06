@@ -45,6 +45,8 @@ private:
     ///< @brief 分支：处理玩家与道具之间的碰撞
     void handlePlayerVsItemCollision(engine::object::GameObject* player,
                                      engine::object::GameObject* item);
+    ///< @brief 处理玩家受伤（更新得分、UI等）
+    void handlePlayerDamage(int damage);
 
     ///< @brief 处理瓦片触发事件
     void handleTileTriggers();

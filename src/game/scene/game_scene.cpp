@@ -325,6 +325,23 @@ void GameScene::handlePlayerVsItemCollision(engine::object::GameObject* player,
     m_context.audioPlayer().playSound("assets/audio/poka01.mp3");
 }
 
+void GameScene::handlePlayerDamage(int damage)
+{
+    auto playerComponent = m_player->getComponent<game::component::PlayerComponent>();
+    if (playerComponent->takeDamage(damage) == false) {
+        // 没有受伤，直接返回
+        return;
+    }
+
+    if (playerComponent->isAlive() == false) {
+        spdlog::info("玩家 '{}' 死亡", m_player->name());
+        // TODO: 可能的死亡逻辑处理
+    }
+
+    // 更新游戏数据（生命值）
+    m_gameSessionData->setCurrentHealth(playerComponent->healthComponent()->currentHealth());
+}
+
 void GameScene::handleTileTriggers()
 {
     const auto& tileTriggersEvents = m_context.physicsEngine().tileTriggerEvents();

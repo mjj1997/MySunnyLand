@@ -76,6 +76,16 @@ public:
                   const glm::vec2& position,
                   const SDL_FColor& color = { 1.0f, 1.0f, 1.0f, 1.0f });
 
+    /**
+     * @brief 获取文本的尺寸。
+     *
+     * @param text 要测量的文本。
+     * @param fontId 字体 ID。
+     * @param fontSize 字体大小。
+     * @return 文本的尺寸。
+     */
+    glm::vec2 getTextSize(const std::string& text, const std::string& fontId, int fontSize);
+
 private:
     ///< @brief 持有渲染器的非拥有指针
     SDL_Renderer* m_sdlRenderer{ nullptr };

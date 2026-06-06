@@ -100,4 +100,33 @@ void TextRenderer::drawText(const Camera& camera,
     drawUiText(text, fontId, fontSize, screenPos, color);
 }
 
+glm::vec2 TextRenderer::getTextSize(const std::string& text, const std::string& fontId, int fontSize)
+{
+    /* 构造函数已经保证了必要指针不会为空，这里不需要再检查 */
+
+    // 获取字体
+    TTF_Font* font{ m_resourceManager->getFont(fontId, fontSize) };
+    if (font == nullptr) {
+        spdlog::warn("getTextSize 获取字体失败: {} 大小 {}", fontId, fontSize);
+        return glm::vec2{ 0.0f, 0.0f };
+    }
+
+    // 创建临时 TTF_Text 对象
+    TTF_Text* tempTextObject{ TTF_CreateText(m_textEngine, font, text.c_str(), 0) };
+    if (tempTextObject == nullptr) {
+        spdlog::error("getTextSize 创建临时 TTF_Text 失败: {}", SDL_GetError());
+        return glm::vec2{ 0.0f, 0.0f };
+    }
+
+    // 获取文本尺寸
+    int width;
+    int height;
+    TTF_GetTextSize(tempTextObject, &width, &height);
+
+    // 销毁临时 TTF_Text 对象
+    TTF_DestroyText(tempTextObject);
+
+    return glm::vec2{ static_cast<float>(width), static_cast<float>(height) };
+}
+
 } // namespace engine::render

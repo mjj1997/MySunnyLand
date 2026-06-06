@@ -302,8 +302,7 @@ void GameScene::handlePlayerVsEnemyCollision(engine::object::GameObject* player,
     else {
         spdlog::info("敌人 {} 对玩家 {} 造成伤害", enemy->name(), player->name());
         // 处理玩家受伤逻辑
-        player->getComponent<game::component::PlayerComponent>()->takeDamage(1);
-        // TODO: 其他受伤逻辑
+        handlePlayerDamage(1);
     }
 }
 
@@ -351,7 +350,7 @@ void GameScene::handleTileTriggers()
         if (tileType == engine::component::TileType::Hazard) {
             // 玩家与危险瓦片碰撞，玩家受伤
             if (obj->name() == "player") {
-                obj->getComponent<game::component::PlayerComponent>()->takeDamage(1);
+                handlePlayerDamage(1);
                 spdlog::debug("玩家 {} 收到了 Hazard 对象伤害", obj->name());
             }
             // TODO: 其他对象与危险瓦片碰撞的处理，目前让敌人无视危险瓦片

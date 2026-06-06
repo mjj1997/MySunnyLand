@@ -4,6 +4,12 @@
 
 #include <glm/vec2.hpp>
 
+#include <memory>
+
+namespace game::data {
+class SessionData;
+}
+
 namespace game::scene {
 
 /**
@@ -59,6 +65,8 @@ private:
      */
     void createEffect(const glm::vec2& center, const std::string& tag);
 
+    ///< @brief 场景间共享数据
+    std::shared_ptr<game::data::SessionData> m_gameSessionData{ nullptr };
     /// @brief 保存玩家对象指针
     engine::object::GameObject* m_player{ nullptr };
 };

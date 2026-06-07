@@ -47,6 +47,22 @@ void UiElementBase::update(float deltaTime, engine::core::Context& context)
     }
 }
 
+void UiElementBase::render(engine::core::Context& context)
+{
+    // 如果元素不可见，直接返回 false
+    if (!m_isVisible) {
+        return;
+    }
+
+    // 遍历子元素，渲染
+    for (auto& child : m_children) {
+        // render() 会在 update() 之后调用，所以这里不需要检查子元素是否应该移除
+        if (child) {
+            child->render(context);
+        }
+    }
+}
+
 void UiElementBase::addChild(std::unique_ptr<UiElementBase> child)
 {
     if (child) {

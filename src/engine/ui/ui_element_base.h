@@ -37,6 +37,9 @@ public:
     void addChild(std::unique_ptr<UiElementBase> child);
     ///< @brief 将指定子元素从列表中移除，并返回其智能指针
     std::unique_ptr<UiElementBase> removeChild(UiElementBase* child);
+    ///< @brief 移除所有子元素
+    void removeAllChildren();
+
     // --- Getters and Setters ---
     ///< @brief 获取元素位置(相对于父元素)
     const glm::vec2& localPosition() const { return m_localPosition; }

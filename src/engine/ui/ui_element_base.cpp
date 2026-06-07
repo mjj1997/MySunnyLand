@@ -33,4 +33,13 @@ std::unique_ptr<UiElementBase> UiElementBase::removeChild(UiElementBase* child)
     return nullptr;
 }
 
+void UiElementBase::removeAllChildren()
+{
+    for (auto& child : m_children) {
+        child->setParent(nullptr); // 清除父指针
+    }
+
+    m_children.clear();
+}
+
 } // namespace engine::ui

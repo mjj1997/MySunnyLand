@@ -96,4 +96,13 @@ void UiElementBase::removeAllChildren()
     m_children.clear();
 }
 
+glm::vec2 UiElementBase::screenPosition() const
+{
+    if (m_parent) {
+        return m_parent->screenPosition() + m_localPosition;
+    }
+
+    return m_localPosition; // 根元素的位置已经是屏幕坐标
+}
+
 } // namespace engine::ui

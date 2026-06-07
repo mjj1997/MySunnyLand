@@ -71,6 +71,9 @@ public:
     void setShouldRemove(bool shouldRemove) { m_shouldRemove = shouldRemove; }
     void setParent(UiElementBase* parent) { m_parent = parent; } ///< @brief 设置父元素
 
+    // --- 辅助方法 ---
+    glm::vec2 screenPosition() const;                 ///< @brief 获取(计算)元素在屏幕上的位置
+
 protected:
     glm::vec2 m_localPosition;    ///< @brief 相对于父元素的局部位置
     glm::vec2 m_size;             ///< @brief 元素大小

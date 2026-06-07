@@ -3,6 +3,10 @@
 #include <memory>
 #include <vector>
 
+namespace engine::core {
+class Context;
+}
+
 namespace engine::ui {
 
 /**
@@ -31,6 +35,9 @@ public:
     UiElementBase& operator=(const UiElementBase&) = delete;
     UiElementBase(UiElementBase&&) = delete;
     UiElementBase& operator=(UiElementBase&&) = delete;
+
+    // --- 核心虚循环方法 --- (没有使用init和clean，注意构造函数和析构函数的使用)
+    virtual bool handleInput(engine::core::Context& context);
 
     // --- 层次结构管理 ---
     ///< @brief 添加子元素

@@ -32,6 +32,9 @@ public:
     UiElementBase(UiElementBase&&) = delete;
     UiElementBase& operator=(UiElementBase&&) = delete;
 
+    // --- 层次结构管理 ---
+    ///< @brief 添加子元素
+    void addChild(std::unique_ptr<UiElementBase> child);
     // --- Getters and Setters ---
     ///< @brief 获取元素位置(相对于父元素)
     const glm::vec2& localPosition() const { return m_localPosition; }

@@ -51,7 +51,7 @@ void TextRenderer::close()
 void TextRenderer::drawUiText(const std::string& text,
                               const std::string& fontId,
                               int fontSize,
-                              const glm::vec2& position,
+                              const glm::vec2& screenPosition,
                               const SDL_FColor& color)
 {
     /* 构造函数已经保证了必要指针不会为空，这里不需要再检查 */
@@ -72,13 +72,13 @@ void TextRenderer::drawUiText(const std::string& text,
 
     // 先渲染一次黑色文字模拟阴影(偏移 2 像素)
     TTF_SetTextColorFloat(tempTextObject, 0.0f, 0.0f, 0.0f, 1.0f);
-    if (TTF_DrawRendererText(tempTextObject, position.x + 2, position.y + 2) == false) {
+    if (TTF_DrawRendererText(tempTextObject, screenPosition.x + 2, screenPosition.y + 2) == false) {
         spdlog::error("drawUiText 绘制临时 TTF_Text 失败: {}", SDL_GetError());
     }
 
     // 然后正常绘制
     TTF_SetTextColorFloat(tempTextObject, color.r, color.g, color.b, color.a);
-    if (TTF_DrawRendererText(tempTextObject, position.x, position.y) == false) {
+    if (TTF_DrawRendererText(tempTextObject, screenPosition.x, screenPosition.y) == false) {
         spdlog::error("drawUiText 绘制临时 TTF_Text 失败: {}", SDL_GetError());
     }
 
@@ -90,11 +90,11 @@ void TextRenderer::drawText(const Camera& camera,
                             const std::string& text,
                             const std::string& fontId,
                             int fontSize,
-                            const glm::vec2& position,
+                            const glm::vec2& worldPosition,
                             const SDL_FColor& color)
 {
     // 应用相机变换
-    glm::vec2 screenPos = camera.worldToScreen(position);
+    glm::vec2 screenPos = camera.worldToScreen(worldPosition);
 
     // 用新坐标调用 drawUiText() 即可
     drawUiText(text, fontId, fontSize, screenPos, color);

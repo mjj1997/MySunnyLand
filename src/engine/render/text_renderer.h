@@ -50,13 +50,13 @@ public:
      * @param text UTF-8 字符串内容。
      * @param fontId 字体 ID。
      * @param fontSize 字体大小。
-     * @param position 左上角屏幕位置。
+     * @param screenPosition 屏幕坐标。
      * @param color 文本颜色。(默认为白色)
      */
     void drawUiText(const std::string& text,
                     const std::string& fontId,
                     int fontSize,
-                    const glm::vec2& position,
+                    const glm::vec2& screenPosition,
                     const SDL_FColor& color = { 1.0f, 1.0f, 1.0f, 1.0f });
 
     /**
@@ -66,14 +66,14 @@ public:
      * @param text UTF-8 字符串内容。
      * @param fontId 字体 ID。
      * @param fontSize 字体大小。
-     * @param position 左上角屏幕位置。
-     * @param color 文本颜色。
+     * @param worldPosition 世界坐标。
+     * @param color 文本颜色。(默认为白色)
      */
     void drawText(const Camera& camera,
                   const std::string& text,
                   const std::string& fontId,
                   int fontSize,
-                  const glm::vec2& position,
+                  const glm::vec2& worldPosition,
                   const SDL_FColor& color = { 1.0f, 1.0f, 1.0f, 1.0f });
 
     /**

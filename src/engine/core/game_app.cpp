@@ -9,6 +9,7 @@
 #include "../render/camera.h"
 #include "../render/renderer.h"
 #include "../render/sprite.h"
+#include "../render/text_renderer.h"
 #include "../resource/resource_manager.h"
 #include "../scene/scene_manager.h"
 #include "configurator.h"
@@ -71,6 +72,9 @@ bool GameApp::init()
         return false;
     }
     if (!initCamera()) {
+        return false;
+    }
+    if (!initTextRenderer()) {
         return false;
     }
     if (!initInputManager()) {
@@ -285,7 +289,8 @@ bool GameApp::initContext()
                                                             *m_camera,
                                                             *m_resourceManager,
                                                             *m_physicsEngine,
-                                                            *m_audioPlayer);
+                                                            *m_audioPlayer,
+                                                            *m_textRenderer);
     } catch (const std::exception& e) {
         spdlog::error("初始化上下文失败: {}", e.what());
         return false;
@@ -315,6 +320,19 @@ bool GameApp::initAudioPlayer()
         return false;
     }
     spdlog::trace("音频播放器初始化成功。");
+    return true;
+}
+
+bool GameApp::initTextRenderer()
+{
+    try {
+        m_textRenderer = std::make_unique<engine::render::TextRenderer>(m_sdlRenderer,
+                                                                        m_resourceManager.get());
+    } catch (const std::exception& e) {
+        spdlog::error("初始化文字渲染引擎失败: {}", e.what());
+        return false;
+    }
+    spdlog::trace("文字渲染引擎初始化成功。");
     return true;
 }
 

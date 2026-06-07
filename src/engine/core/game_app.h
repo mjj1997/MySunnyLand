@@ -12,6 +12,7 @@ class ResourceManager;
 namespace engine::render {
 class Renderer;
 class Camera;
+class TextRenderer;
 } // namespace engine::render
 
 namespace engine::input {
@@ -75,6 +76,7 @@ private:
     [[nodiscard]] bool initContext();
     [[nodiscard]] bool initSceneManager();
     [[nodiscard]] bool initAudioPlayer();
+    [[nodiscard]] bool initTextRenderer();
 
 private:
     SDL_Window* m_window{ nullptr };
@@ -92,6 +94,7 @@ private:
     std::unique_ptr<engine::core::Context> m_context;
     std::unique_ptr<engine::scene::SceneManager> m_sceneManager;
     std::unique_ptr<engine::audio::AudioPlayer> m_audioPlayer;
+    std::unique_ptr<engine::render::TextRenderer> m_textRenderer;
 };
 
 } // namespace engine::core

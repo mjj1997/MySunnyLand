@@ -111,4 +111,12 @@ engine::utils::Rect UiElementBase::bounds() const
     return engine::utils::Rect{ screenPos, m_size };
 }
 
+bool UiElementBase::isPointInside(const glm::vec2& point) const
+{
+    const auto& boundary = bounds();
+    return (point.x >= boundary.position.x && point.x <= (boundary.position.x + boundary.size.x)
+            && point.y >= boundary.position.y
+            && point.y <= (boundary.position.y + boundary.size.y));
+}
+
 } // namespace engine::ui

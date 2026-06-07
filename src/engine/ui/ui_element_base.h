@@ -76,6 +76,7 @@ public:
     // --- 辅助方法 ---
     glm::vec2 screenPosition() const;                 ///< @brief 获取(计算)元素在屏幕上的位置
     engine::utils::Rect bounds() const;               ///< @brief 获取(计算)元素的边界(屏幕坐标)
+    bool isPointInside(const glm::vec2& point) const; ///< @brief 检查给定点是否在元素的边界内
 
 protected:
     glm::vec2 m_localPosition;    ///< @brief 相对于父元素的局部位置

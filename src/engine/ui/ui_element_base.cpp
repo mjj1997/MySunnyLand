@@ -105,4 +105,10 @@ glm::vec2 UiElementBase::screenPosition() const
     return m_localPosition; // 根元素的位置已经是屏幕坐标
 }
 
+engine::utils::Rect UiElementBase::bounds() const
+{
+    const auto& screenPos = screenPosition();
+    return engine::utils::Rect{ screenPos, m_size };
+}
+
 } // namespace engine::ui

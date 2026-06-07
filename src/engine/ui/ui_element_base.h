@@ -1,5 +1,8 @@
 #pragma once
 
+#include <memory>
+#include <vector>
+
 namespace engine::ui {
 
 /**
@@ -34,14 +37,22 @@ public:
     const glm::vec2& localPosition() const { return m_localPosition; }
     ///< @brief 获取元素大小
     const glm::vec2& size() const { return m_size; }
+    ///< @brief 获取父元素
+    UiElementBase* parent() const { return m_parent; }
+    ///< @brief 获取子元素列表
+    const std::vector<std::unique_ptr<UiElementBase>>& children() const { return m_children; }
 
     ///< @brief 设置元素位置(相对于父元素)
     void setLocalPosition(const glm::vec2& localPosition) { m_localPosition = localPosition; }
-    void setSize(const glm::vec2& size) { m_size = size; }   ///< @brief 设置元素大小
+    void setSize(const glm::vec2& size) { m_size = size; }       ///< @brief 设置元素大小
+    void setParent(UiElementBase* parent) { m_parent = parent; } ///< @brief 设置父元素
 
 protected:
     glm::vec2 m_localPosition;    ///< @brief 相对于父元素的局部位置
     glm::vec2 m_size;             ///< @brief 元素大小
+
+    UiElementBase* m_parent{ nullptr };                     ///< @brief 指向父元素的非拥有指针
+    std::vector<std::unique_ptr<UiElementBase>> m_children; ///< @brief 子元素列表(容器)
 };
 
 } // namespace engine::ui

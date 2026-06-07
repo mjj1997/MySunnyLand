@@ -16,20 +16,35 @@ bool UiElementBase::handleInput(engine::core::Context& context)
         return false;
     }
 
-    // 遍历子元素，处理输入。如果子元素应该移除，直接删除。
-    for (auto it = m_children.begin(); it != m_children.end();) {
-        if (*it && (*it)->shouldRemove() == false) {
-            if ((*it)->handleInput(context)) {
+    // 遍历子元素，处理输入
+    for (auto& child : m_children) {
+        if (child && child->shouldRemove() == false) {
+            if (child->handleInput(context)) {
                 return true;
             }
-            ++it;
-        } else {
-            it = m_children.erase(it);
         }
     }
 
     // 如果没有子元素处理输入，说明事件没有被处理，返回 false
     return false;
+}
+
+void UiElementBase::update(float deltaTime, engine::core::Context& context)
+{
+    // 如果元素不可见，直接返回 false
+    if (!m_isVisible) {
+        return;
+    }
+
+    // 遍历子元素，更新。如果子元素应该移除，直接删除。
+    for (auto it = m_children.begin(); it != m_children.end();) {
+        if (*it && (*it)->shouldRemove() == false) {
+            (*it)->update(deltaTime, context);
+            ++it;
+        } else {
+            it = m_children.erase(it);
+        }
+    }
 }
 
 void UiElementBase::addChild(std::unique_ptr<UiElementBase> child)

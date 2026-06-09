@@ -21,4 +21,21 @@ bool UiManager::init(const glm::vec2& windowSize)
     return true;
 }
 
+void UiManager::addElement(std::unique_ptr<UiElementBase> element)
+{
+    if (m_rootElement) {
+        m_rootElement->addChild(std::move(element));
+    } else {
+        spdlog::error("无法添加元素到UI管理器，根元素未初始化。");
+    }
+}
+
+void UiManager::clearElements()
+{
+    if (m_rootElement) {
+        m_rootElement->removeAllChildren();
+        spdlog::trace("所有 UI 元素已从 UI 管理器中清除。");
+    }
+}
+
 } // namespace engine::ui

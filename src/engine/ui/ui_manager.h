@@ -5,6 +5,7 @@
 #include <memory>
 
 namespace engine::ui {
+class UiElementBase;
 class UiPanel; // UiPanel 将作为根元素
 } // namespace engine::ui
 
@@ -31,6 +32,11 @@ public:
 
     ///< @brief 初始化 UI 管理器，设置根元素的大小。
     [[nodiscard]] bool init(const glm::vec2& windowSize);
+
+    // --- element methods ---
+    ///< @brief 添加一个UI元素到根节点的 m_children 容器中。
+    void addElement(std::unique_ptr<UiElementBase> element);
+    void clearElements(); ///< @brief 清除所有UI元素，通常用于重置UI状态。
 
     // --- getter ---
     ///< @brief 获取根 UiPanel 元素的指针。

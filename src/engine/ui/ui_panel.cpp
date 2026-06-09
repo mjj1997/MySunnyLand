@@ -1,4 +1,6 @@
 #include "ui_panel.h"
+#include "../core/context.h"
+#include "../render/renderer.h"
 
 #include <spdlog/spdlog.h>
 
@@ -13,6 +15,18 @@ UiPanel::UiPanel(const glm::vec2& localPosition,
     spdlog::trace("UiPanel 构造完成");
 }
 
+void UiPanel::render(engine::core::Context& context)
+{
+    if (!m_isVisible) {
+        return;
+    }
+
+    if (m_backgroundColor.has_value()) {
+        context.renderer().drawUiFilledRect(bounds(), m_backgroundColor.value());
+    }
+
+    UiElementBase::render(context); // 调用基类方法渲染子元素
+}
 
 void UiPanel::setBackgroundColor(const std::optional<engine::utils::FColor>& backgroundColor)
 {

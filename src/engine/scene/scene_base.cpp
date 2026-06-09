@@ -3,6 +3,7 @@
 #include "../object/game_object.h"
 #include "../physics/physics_engine.h"
 #include "../render/camera.h"
+#include "../ui/ui_manager.h"
 
 #include <spdlog/spdlog.h>
 
@@ -16,6 +17,7 @@ SceneBase::SceneBase(std::string name,
     : m_sceneName{ std::move(name) }
     , m_context{ context }
     , m_sceneManager{ sceneManager }
+    , m_uiManager{ std::make_unique<engine::ui::UiManager>() }
     , m_isInitialized{ false }
 {
     spdlog::trace("场景 '{}' 构造完成。", m_sceneName);

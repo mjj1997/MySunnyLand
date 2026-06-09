@@ -8,6 +8,10 @@ namespace engine::core {
 class Context;
 }
 
+namespace engine::ui {
+class UiManager;
+}
+
 namespace engine::object {
 class GameObject;
 }
@@ -82,9 +86,10 @@ public:
 protected:
     void processPendingAdditions(); ///< @brief 处理待添加的游戏对象。（每轮更新的最后调用）
 
-    std::string m_sceneName;                     ///< @brief 场景名称
-    engine::core::Context& m_context;            ///< @brief 上下文引用（构造时传入）
-    engine::scene::SceneManager& m_sceneManager; ///< @brief 场景管理器引用（构造时传入）
+    std::string m_sceneName;                            ///< @brief 场景名称（构造时传入）
+    engine::core::Context& m_context;                   ///< @brief 上下文引用（构造时传入）
+    engine::scene::SceneManager& m_sceneManager;        ///< @brief 场景管理器引用（构造时传入）
+    std::unique_ptr<engine::ui::UiManager> m_uiManager; ///< @brief UI 管理器（构造时自动创建）
 
     ///< @brief 场景是否已初始化(非当前场景很可能未被删除，因此需要初始化标志避免重复初始化)
     bool m_isInitialized{ false };

@@ -1,5 +1,11 @@
 #pragma once
 
+#include <memory>
+
+namespace engine::ui {
+class UiPanel; // UiPanel 将作为根元素
+} // namespace engine::ui
+
 namespace engine::ui {
 
 /**
@@ -20,6 +26,14 @@ public:
     UiManager& operator=(const UiManager&) = delete;
     UiManager(UiManager&&) = delete;
     UiManager& operator=(UiManager&&) = delete;
+
+    // --- getter ---
+    ///< @brief 获取根 UiPanel 元素的指针。
+    UiPanel* rootElement() const { return m_rootElement.get(); }
+
+private:
+    ///< @brief 一个 UiPanel 作为根节点(UI元素)
+    std::unique_ptr<UiPanel> m_rootElement;
 };
 
 } // namespace engine::ui

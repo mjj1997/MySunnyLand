@@ -74,6 +74,12 @@ void GameScene::init()
         return;
     }
 
+    if (!initUi()) {
+        spdlog::error("初始化 UI 失败，无法继续。");
+        m_context.inputManager().setShouldQuit(true);
+        return;
+    }
+
     // 设置音量
     m_context.audioPlayer().setMusicVolume(0.2f); // 设置背景音乐音量为 20%
     m_context.audioPlayer().setSoundVolume(0.5f); // 设置音效音量为 50%

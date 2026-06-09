@@ -4,6 +4,10 @@
 
 #include <memory>
 
+namespace engine::core {
+class Context;
+}
+
 namespace engine::ui {
 class UiElementBase;
 class UiPanel; // UiPanel 将作为根元素
@@ -32,6 +36,12 @@ public:
 
     ///< @brief 初始化 UI 管理器，设置根元素的大小。
     [[nodiscard]] bool init(const glm::vec2& windowSize);
+
+    // --- 核心循环方法 ---
+    ///< @brief 处理输入事件，如果事件被处理则返回true。
+    bool handleInput(engine::core::Context& context);
+    void update(float deltaTime, engine::core::Context& context);
+    void render(engine::core::Context& context);
 
     // --- element methods ---
     ///< @brief 添加一个UI元素到根节点的 m_children 容器中。

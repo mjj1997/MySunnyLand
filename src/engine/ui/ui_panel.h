@@ -16,6 +16,17 @@ namespace engine::ui {
 class UiPanel final : public UiElementBase
 {
 public:
+    /**
+     * @brief 构造一个 Panel
+     *
+     * @param localPosition Panel 的局部位置  
+     * @param size Panel 的大小
+     * @param backgroundColor 背景色
+     */
+    explicit UiPanel(const glm::vec2& localPosition = { 0.0f, 0.0f },
+                     const glm::vec2& size = { 0.0f, 0.0f },
+                     const std::optional<engine::utils::FColor>& backgroundColor = std::nullopt);
+
     void render(engine::core::Context& context) override;
 
     void setBackgroundColor(const std::optional<engine::utils::FColor>& backgroundColor);

@@ -19,7 +19,7 @@ class UiManager final
 public:
     ///< @brief 构造函数将创建默认的根节点。
     UiManager();
-    ~UiManager() = default;
+    ~UiManager();
 
     // 禁止拷贝和移动构造/赋值
     UiManager(const UiManager&) = delete;

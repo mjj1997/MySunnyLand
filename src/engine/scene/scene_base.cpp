@@ -55,6 +55,9 @@ void SceneBase::update(float deltaTime)
         }
     }
 
+    // 更新 UI 管理器
+    m_uiManager->update(deltaTime, m_context);
+
     processPendingAdditions(); // 处理待添加（延时添加）的游戏对象
 }
 
@@ -69,12 +72,20 @@ void SceneBase::render()
             obj->render(m_context);
         }
     }
+
+    // 渲染 UI 管理器
+    m_uiManager->render(m_context);
 }
 
 void SceneBase::handleInput()
 {
     if (!m_isInitialized)
         return;
+
+    // 处理 UI 管理器的输入
+    if (m_uiManager->handleInput(m_context)) {
+        return; // 如果 UI 管理器处理了输入，就直接返回。不需要继续让游戏对象处理输入
+    }
 
     // 遍历所有游戏对象，略过需要移除的对象
     for (const auto& obj : m_gameObjects) {

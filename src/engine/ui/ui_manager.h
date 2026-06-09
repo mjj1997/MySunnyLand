@@ -1,5 +1,7 @@
 #pragma once
 
+#include <glm/vec2.hpp>
+
 #include <memory>
 
 namespace engine::ui {
@@ -26,6 +28,9 @@ public:
     UiManager& operator=(const UiManager&) = delete;
     UiManager(UiManager&&) = delete;
     UiManager& operator=(UiManager&&) = delete;
+
+    ///< @brief 初始化 UI 管理器，设置根元素的大小。
+    [[nodiscard]] bool init(const glm::vec2& windowSize);
 
     // --- getter ---
     ///< @brief 获取根 UiPanel 元素的指针。

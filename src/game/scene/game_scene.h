@@ -36,6 +36,8 @@ private:
     [[nodiscard]] bool initPlayer();
     ///< @brief 初始化敌人和道具
     [[nodiscard]] bool initEnemyAndItem();
+    ///< @brief 初始化 UI
+    [[nodiscard]] bool initUi();
 
     ///< @brief 总入口：处理游戏对象间的碰撞逻辑（从PhysicsEngine获取信息，分发给具体处理函数处理）
     void handleObjectCollisions();
@@ -66,9 +68,6 @@ private:
      * @param tag 特效标签（决定特效类型,例如"enemy","item"）
      */
     void createEffect(const glm::vec2& center, const std::string& tag);
-
-    // 测试函数
-    void testTextRenderer();
 
     ///< @brief 场景间共享数据
     std::shared_ptr<game::data::SessionData> m_gameSessionData{ nullptr };

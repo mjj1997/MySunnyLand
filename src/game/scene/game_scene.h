@@ -77,6 +77,10 @@ private:
     // --- UI 相关函数 ---
     void createScoreUi();           ///< @brief 创建得分UI
     void createHealthUi();          ///< @brief 创建生命值UI (或最大生命值改变时重设)
+    void addScoreWithUi(int score); ///< @brief 增加得分，同时更新UI
+    void healWithUi(int amount);    ///< @brief 增加生命，同时更新UI
+    void updateHealthWithUi();      ///< @brief 更新生命值UI (只适用最大生命值不变的情况)
+
     ///< @brief 场景间共享数据
     std::shared_ptr<game::data::SessionData> m_gameSessionData{ nullptr };
     /// @brief 保存玩家对象指针

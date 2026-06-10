@@ -495,4 +495,40 @@ void GameScene::createHealthUi()
     m_uiManager->addElement(std::move(healthPanel));
 }
 
+void GameScene::addScoreWithUi(int score)
+{
+    m_gameSessionData->addScore(score);
+    const std::string& scoreText{ "Score: " + std::to_string(m_gameSessionData->currentScore()) };
+    m_scoreLabel->setText(scoreText);
+    spdlog::info("更新得分标签: {}", scoreText);
+}
+
+void GameScene::healWithUi(int amount)
+{
+    m_player->getComponent<engine::component::HealthComponent>()->heal(amount);
+    updateHealthWithUi();
+}
+
+void GameScene::updateHealthWithUi()
+{
+    if (!m_player || !m_healthPanel) {
+        spdlog::error("玩家对象或生命值面板不存在，无法更新生命值 UI");
+        return;
+    }
+
+    // 获取当前生命值并更新游戏数据
+    int currentHealth{
+        m_player->getComponent<engine::component::HealthComponent>()->currentHealth()
+    };
+    m_gameSessionData->setCurrentHealth(currentHealth);
+    int maxHealth{ m_gameSessionData->maxHealth() };
+
+    /** 更新生命值图标可见性
+     *  前景图标在后半部分，因此设置后半段的可见性即可
+     */
+    for (int i{ maxHealth }; i < maxHealth * 2; ++i) {
+        m_healthPanel->children().at(i)->setVisible(i - maxHealth < currentHealth);
+    }
+}
+
 } // namespace game::scene

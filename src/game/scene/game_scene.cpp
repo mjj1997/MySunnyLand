@@ -238,11 +238,8 @@ bool GameScene::initUi()
         return false;
     }
 
-    // 添加一个浅红色透明的方形面板
-    m_uiManager->addElement(
-        std::make_unique<engine::ui::UiPanel>(glm::vec2{ 100.0f, 100.f },
-                                              glm::vec2{ 200.0f, 200.0f },
-                                              engine::utils::FColor{ 0.5f, 0.0f, 0.0f, 0.3f }));
+    createScoreUi();
+    createHealthUi();
 
     return true;
 }

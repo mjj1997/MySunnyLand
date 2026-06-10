@@ -171,6 +171,18 @@ void Renderer::drawUiSprite(const Sprite& sprite,
     }
 }
 
+void Renderer::drawUiFilledRect(const engine::utils::Rect& rect, const engine::utils::FColor& color)
+{
+    setDrawColorFloat(color.r, color.g, color.b, color.a);
+
+    SDL_FRect sdlRect{ rect.position.x, rect.position.y, rect.size.x, rect.size.y };
+    if (!SDL_RenderFillRect(m_renderer, &sdlRect)) {
+        spdlog::error("绘制填充矩形失败：{}", SDL_GetError());
+    }
+
+    setDrawColor(0, 0, 0, 255);
+}
+
 void Renderer::present()
 {
     SDL_RenderPresent(m_renderer);

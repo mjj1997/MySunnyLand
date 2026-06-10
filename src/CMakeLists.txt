@@ -46,7 +46,10 @@ target_sources(
           engine/audio/audio_player.cpp
           engine/component/audio_component.cpp
           game/data/session_data.cpp
-          engine/render/text_renderer.cpp)
+          engine/render/text_renderer.cpp
+          engine/ui/ui_element_base.cpp
+          engine/ui/ui_panel.cpp
+          engine/ui/ui_manager.cpp)
 
 target_link_libraries(
   SunnyLand

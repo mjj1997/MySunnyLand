@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../utils/math.h"
+
 #include <SDL3/SDL_stdinc.h>
 #include <glm/glm.hpp>
 
@@ -81,6 +83,14 @@ public:
     void drawUiSprite(const Sprite& sprite,
                       const glm::vec2& position,
                       const std::optional<glm::vec2>& size = std::nullopt);
+
+    /**
+     * @brief 绘制填充矩形
+     * 
+     * @param rect 矩形区域
+     * @param color 填充颜色
+     */
+    void drawUiFilledRect(const engine::utils::Rect& rect, const engine::utils::FColor& color);
 
     // --- 封装 SDL 渲染函数 ---
     void present();     ///< @brief 更新屏幕，包装 SDL_RenderPresent 函数

@@ -74,6 +74,9 @@ private:
      */
     void createEffect(const glm::vec2& center, const std::string& tag);
 
+    // --- UI 相关函数 ---
+    void createScoreUi();           ///< @brief 创建得分UI
+    void createHealthUi();          ///< @brief 创建生命值UI (或最大生命值改变时重设)
     ///< @brief 场景间共享数据
     std::shared_ptr<game::data::SessionData> m_gameSessionData{ nullptr };
     /// @brief 保存玩家对象指针

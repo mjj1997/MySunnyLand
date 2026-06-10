@@ -24,6 +24,8 @@
 #include "../../engine/render/text_renderer.h"
 #include "../../engine/scene/level_loader.h"
 #include "../../engine/scene/scene_manager.h"
+#include "../../engine/ui/ui_image.h"
+#include "../../engine/ui/ui_label.h"
 #include "../../engine/ui/ui_manager.h"
 #include "../../engine/ui/ui_panel.h"
 
@@ -441,6 +443,59 @@ void GameScene::createEffect(const glm::vec2& center, const std::string& tag)
 
     safeAddGameObject(std::move(effectObj)); // 安全添加特效对象
     spdlog::debug("创建特效: {}", tag);
+}
+
+void GameScene::createScoreUi()
+{
+    // 创建得分标签
+    const std::string& scoreText{ "Score: " + std::to_string(m_gameSessionData->currentScore()) };
+    auto scoreLabel = std::make_unique<engine::ui::UiLabel>(m_context.textRenderer(),
+                                                            scoreText,
+                                                            "assets/fonts/VonwaonBitmap-16px.ttf",
+                                                            16);
+    m_scoreLabel = scoreLabel.get(); // 保存指针，方便后续更新
+
+    // 设置得分标签位置，确保在屏幕顶部右侧
+    auto screenSize = m_uiManager->rootElement()->size();
+    scoreLabel->setLocalPosition(glm::vec2{ screenSize.x - 100.0f, 10.0f });
+
+    // 将得分标签添加到 UI 管理器
+    m_uiManager->addElement(std::move(scoreLabel));
+}
+
+void GameScene::createHealthUi()
+{
+    // 创建一个默认的 UiPanel (不需要背景色，因此大小无所谓，只用于定位)
+    auto healthPanel = std::make_unique<engine::ui::UiPanel>();
+    m_healthPanel = healthPanel.get(); // 保存指针，方便后续更新
+
+    // --- 根据最大生命值，循环创建生命值图标(添加到 UiPanel 中) ---
+    glm::vec2 iconStartPos{ 10.0f, 10.0f };
+    glm::vec2 iconSize{ 20.0f, 18.0f };
+    float spacing{ 5.0f };
+    for (int i{ 0 }; i < m_gameSessionData->maxHealth(); ++i) {
+        glm::vec2 iconPos{ iconStartPos.x + i * (iconSize.x + spacing), iconStartPos.y };
+        // 创建背景图标
+        auto bgIcon = std::make_unique<engine::ui::UiImage>("assets/textures/UI/Heart-bg.png",
+                                                            iconPos,
+                                                            iconSize);
+        // 添加背景图标到生命值面板
+        healthPanel->addChild(std::move(bgIcon));
+
+        // 创建前景图标
+        auto fgIcon = std::make_unique<engine::ui::UiImage>("assets/textures/UI/Heart.png",
+                                                            iconPos,
+                                                            iconSize);
+        // 如果当前生命值不足，设置前景图标不可见
+        if (i >= m_gameSessionData->currentHealth()) {
+            fgIcon->setVisible(false);
+        }
+        // 添加前景图标到生命值面板
+        healthPanel->addChild(std::move(fgIcon));
+    }
+
+    // 将生命值面板添加到 UI 管理器
+    m_uiManager->addElement(std::move(healthPanel));
 }
 
 } // namespace game::scene

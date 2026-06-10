@@ -21,6 +21,23 @@ namespace engine::ui {
 class UiLabel final : public UiElementBase
 {
 public:
+    /**
+     * @brief 构造一个 Label
+     *
+     * @param textRenderer 文本渲染器
+     * @param text 文本内容
+     * @param fontId 字体 ID
+     * @param fontSize 字体大小
+     * @param textColor 文本颜色
+     * @param localPosition Label 的局部位置  
+     */
+    explicit UiLabel(engine::render::TextRenderer& textRenderer,
+                     const std::string& text,
+                     const std::string& fontId,
+                     int fontSize = 16,
+                     const engine::utils::FColor& textColor = { 1.0f, 1.0f, 1.0f, 1.0f },
+                     const glm::vec2& localPosition = { 0.0f, 0.0f });
+
     void render(engine::core::Context& context) override;
 
     // --- Setters & Getters ---

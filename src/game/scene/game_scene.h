@@ -10,6 +10,11 @@ namespace game::data {
 class SessionData;
 }
 
+namespace engine::ui {
+class UiLabel;
+class UiPanel;
+} // namespace engine::ui
+
 namespace game::scene {
 
 /**
@@ -73,6 +78,10 @@ private:
     std::shared_ptr<game::data::SessionData> m_gameSessionData{ nullptr };
     /// @brief 保存玩家对象指针
     engine::object::GameObject* m_player{ nullptr };
+
+    ///< @brief 得分标签（生命周期由 UiManager 管理，因此使用裸指针）
+    engine::ui::UiLabel* m_scoreLabel{ nullptr };
+    engine::ui::UiPanel* m_healthPanel{ nullptr }; ///< @brief 生命值图标面板
 };
 
 } // namespace game::scene

@@ -321,7 +321,7 @@ void GameScene::handlePlayerVsEnemyCollision(engine::object::GameObject* player,
         // 播放玩家跳起音效（此音效完全可以放在玩家的音频组件中，这里示例另一种用法：直接用 AudioPlayer 播放，传入文件路径）
         m_context.audioPlayer().playSound("assets/audio/punch2a.mp3");
         // 加分
-        m_gameSessionData->addScore(10);
+        addScoreWithUi(10);
     }
     // 踩踏判断失败，玩家受伤
     else {
@@ -335,10 +335,10 @@ void GameScene::handlePlayerVsItemCollision(engine::object::GameObject* player,
                                             engine::object::GameObject* item)
 {
     if (item->name() == "fruit") {
-        player->getComponent<engine::component::HealthComponent>()->heal(1); // 加血
+        healWithUi(1); // 加血
     } else if (item->name() == "gem") {
         // 加分
-        m_gameSessionData->addScore(5);
+        addScoreWithUi(5);
     }
     item->setShouldRemove(true); // 标记道具为待删除状态
 
@@ -363,8 +363,8 @@ void GameScene::handlePlayerDamage(int damage)
         // TODO: 可能的死亡逻辑处理
     }
 
-    // 更新游戏数据（生命值）
-    m_gameSessionData->setCurrentHealth(playerComponent->healthComponent()->currentHealth());
+    // 更新生命值以及生命值 UI
+    updateHealthWithUi();
 }
 
 void GameScene::handleTileTriggers()

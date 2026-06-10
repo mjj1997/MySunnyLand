@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../utils/math.h"
+
 #include <SDL3/SDL_render.h>
 #include <glm/vec2.hpp>
 
@@ -57,7 +59,7 @@ public:
                     const std::string& fontId,
                     int fontSize,
                     const glm::vec2& screenPosition,
-                    const SDL_FColor& color = { 1.0f, 1.0f, 1.0f, 1.0f });
+                    const engine::utils::FColor& color = { 1.0f, 1.0f, 1.0f, 1.0f });
 
     /**
      * @brief 绘制地图上的字符串。
@@ -74,7 +76,7 @@ public:
                   const std::string& fontId,
                   int fontSize,
                   const glm::vec2& worldPosition,
-                  const SDL_FColor& color = { 1.0f, 1.0f, 1.0f, 1.0f });
+                  const engine::utils::FColor& color = { 1.0f, 1.0f, 1.0f, 1.0f });
 
     /**
      * @brief 获取文本的尺寸。

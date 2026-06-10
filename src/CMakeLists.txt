@@ -49,7 +49,8 @@ target_sources(
           engine/render/text_renderer.cpp
           engine/ui/ui_element_base.cpp
           engine/ui/ui_panel.cpp
-          engine/ui/ui_manager.cpp)
+          engine/ui/ui_manager.cpp
+          engine/ui/ui_image.cpp)
 
 target_link_libraries(
   SunnyLand

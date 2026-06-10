@@ -3,6 +3,8 @@
 #include "../render/sprite.h"
 #include "ui_element_base.h"
 
+#include <optional>
+
 namespace engine::ui {
 
 /**
@@ -13,6 +15,21 @@ namespace engine::ui {
 class UiImage final : public UiElementBase
 {
 public:
+    /**
+     * @brief 构造一个 Image
+     *
+     * @param textureId 要显示的纹理 ID
+     * @param localPosition Image 的局部位置  
+     * @param size Image 的大小（如果为 {0.0f, 0.0f}，则使用纹理的原始尺寸）
+     * @param sourceRect 可选：要绘制的纹理区域（如果未指定，则绘制整个纹理）
+     * @param isFlipped 是否翻转
+     */
+    explicit UiImage(const std::string& textureId,
+                     const glm::vec2& localPosition = { 0.0f, 0.0f },
+                     const glm::vec2& size = { 0.0f, 0.0f },
+                     const std::optional<SDL_FRect>& sourceRect = std::nullopt,
+                     bool isFlipped = false);
+
     void render(engine::core::Context& context) override;
 
     // --- Setters & Getters ---

@@ -52,7 +52,7 @@ void TextRenderer::drawUiText(const std::string& text,
                               const std::string& fontId,
                               int fontSize,
                               const glm::vec2& screenPosition,
-                              const SDL_FColor& color)
+                              const engine::utils::FColor& color)
 {
     /* 构造函数已经保证了必要指针不会为空，这里不需要再检查 */
 
@@ -91,7 +91,7 @@ void TextRenderer::drawText(const Camera& camera,
                             const std::string& fontId,
                             int fontSize,
                             const glm::vec2& worldPosition,
-                            const SDL_FColor& color)
+                            const engine::utils::FColor& color)
 {
     // 应用相机变换
     glm::vec2 screenPos = camera.worldToScreen(worldPosition);

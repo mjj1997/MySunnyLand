@@ -1,5 +1,11 @@
 #pragma once
 
+#include <memory>
+
+namespace engine::core {
+class Context;
+}
+
 namespace engine::ui {
 class UiInteractiveElementBase;
 }
@@ -33,6 +39,10 @@ public:
     UiStateBase& operator=(UiStateBase&&) = delete;
 
 protected:
+    // --- 核心方法 ---
+    virtual void enter() = 0;
+    virtual std::unique_ptr<UiStateBase> handleInput(engine::core::Context& context) = 0;
+
     engine::ui::UiInteractiveElementBase* m_owner{ nullptr }; ///< @brief 指向状态拥有者
 };
 

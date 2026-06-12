@@ -1,0 +1,23 @@
+#pragma once
+
+namespace engine::ui::state {
+
+/**
+ * @brief 可交互 UI 元素在特定状态下的行为接口。
+ *
+ * 该接口定义了所有具体 UI 状态必须实现的通用操作，
+ * 例如处理输入事件、更新状态逻辑以及确定视觉表现。
+ */
+class UiStateBase
+{
+public:
+    virtual ~UiStateBase() = default;
+
+    // 删除拷贝和移动构造函数/赋值运算符
+    UiStateBase(const UiStateBase&) = delete;
+    UiStateBase& operator=(const UiStateBase&) = delete;
+    UiStateBase(UiStateBase&&) = delete;
+    UiStateBase& operator=(UiStateBase&&) = delete;
+};
+
+} // namespace engine::ui::state

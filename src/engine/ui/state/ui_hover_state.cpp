@@ -3,6 +3,7 @@
 #include "../../input/input_manager.h"
 #include "../ui_interactive_element_base.h"
 #include "ui_normal_state.h"
+#include "ui_pressed_state.h"
 
 namespace engine::ui::state {
 
@@ -20,7 +21,7 @@ std::unique_ptr<UiStateBase> UiHoverState::handleInput(engine::core::Context& co
     }
 
     if (inputManager.isActionPressed("mouseLeftClick")) { // 如果鼠标点击了左键，切换到按下状态
-        // TODO: 切换到按下状态
+        return std::make_unique<UiPressedState>(m_owner);
     }
 
     return nullptr;

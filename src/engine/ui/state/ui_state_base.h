@@ -1,5 +1,9 @@
 #pragma once
 
+namespace engine::ui {
+class UiInteractiveElementBase;
+}
+
 namespace engine::ui::state {
 
 /**
@@ -10,6 +14,8 @@ namespace engine::ui::state {
  */
 class UiStateBase
 {
+    friend class engine::ui::UiInteractiveElementBase;
+
 public:
     virtual ~UiStateBase() = default;
 
@@ -18,6 +24,9 @@ public:
     UiStateBase& operator=(const UiStateBase&) = delete;
     UiStateBase(UiStateBase&&) = delete;
     UiStateBase& operator=(UiStateBase&&) = delete;
+
+protected:
+    engine::ui::UiInteractiveElementBase* m_owner{ nullptr }; ///< @brief 指向状态拥有者
 };
 
 } // namespace engine::ui::state

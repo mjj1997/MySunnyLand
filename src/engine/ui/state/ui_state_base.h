@@ -17,6 +17,13 @@ class UiStateBase
     friend class engine::ui::UiInteractiveElementBase;
 
 public:
+    /**
+     * @brief 构造函数传入状态拥有者指针
+     */
+    UiStateBase(engine::ui::UiInteractiveElementBase* owner)
+        : m_owner{ owner }
+    {}
+
     virtual ~UiStateBase() = default;
 
     // 删除拷贝和移动构造函数/赋值运算符

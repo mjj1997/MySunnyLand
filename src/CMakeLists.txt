@@ -53,7 +53,8 @@ target_sources(
           engine/ui/ui_image.cpp
           engine/ui/ui_label.cpp
           engine/ui/ui_interactive_element_base.cpp
-          engine/ui/state/ui_normal_state.cpp)
+          engine/ui/state/ui_normal_state.cpp
+          engine/ui/state/ui_hover_state.cpp)
 
 target_link_libraries(
   SunnyLand

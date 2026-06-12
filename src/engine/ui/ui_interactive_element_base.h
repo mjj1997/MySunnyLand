@@ -1,0 +1,21 @@
+#pragma once
+
+#include "ui_element_base.h"
+
+namespace engine::ui {
+/**
+ * @brief 可交互 UI 元素的基类，继承自 UiElementBase
+ *
+ * 定义了可交互 UI 元素的通用属性和行为。
+ * 管理 UI 元素状态的切换和交互逻辑。
+ * 提供事件处理、更新和渲染的虚方法。
+ */
+class UiInteractiveElementBase : public UiElementBase
+{
+public:
+    // --- 核心方法 ---
+    bool handleInput(engine::core::Context& context) override;
+    void render(engine::core::Context& context) override;
+};
+
+} // namespace engine::ui

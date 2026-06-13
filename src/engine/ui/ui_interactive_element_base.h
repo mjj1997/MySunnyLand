@@ -22,6 +22,9 @@ public:
     bool handleInput(engine::core::Context& context) override;
     void render(engine::core::Context& context) override;
 
+    void addSprite(const std::string& name,
+                   std::unique_ptr<engine::render::Sprite> sprite);  ///< @brief 添加状态名称-精灵对
+
     // --- Getters and Setters ---
     ///< @brief 设置当前状态
     void setCurrentState(std::unique_ptr<engine::ui::state::UiStateBase> state);

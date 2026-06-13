@@ -15,7 +15,7 @@ void UiNormalState::enter()
 std::unique_ptr<UiStateBase> UiNormalState::handleInput(engine::core::Context& context)
 {
     auto& inputManager = context.inputManager();
-    auto mousePos = inputManager.mousePosition();
+    auto mousePos = inputManager.logicalMousePosition();
     if (m_owner->isPointInside(mousePos)) { // 如果鼠标在 UI 元素内，切换到悬停状态
         // 播放悬停时的音效
         m_owner->playSound("hover");

@@ -48,6 +48,10 @@ public:
 
     void setCurrentSprite(const std::string& name); ///< @brief 通过状态名称，设置当前显示的精灵
 
+    ///< @brief 设置是否可交互
+    void setInteractive(bool interactive) { m_isInteractive = interactive; }
+    bool isInteractive() const { return m_isInteractive; } ///< @brief 获取是否可交互
+
 protected:
     engine::core::Context& m_context; ///< @brief 可交互 UI 元素很可能需要其他引擎组件
 
@@ -58,6 +62,7 @@ protected:
 
     std::unique_ptr<engine::ui::state::UiStateBase> m_currentState; ///< @brief 当前状态
     engine::render::Sprite* m_currentSprite{ nullptr };             ///< @brief 当前显示的精灵
+    bool m_isInteractive{ true };                                   ///< @brief 是否可交互
 };
 
 } // namespace engine::ui

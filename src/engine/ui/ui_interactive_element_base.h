@@ -28,6 +28,14 @@ public:
                              const glm::vec2& localPosition = { 0.0f, 0.0f },
                              const glm::vec2& size = { 0.0f, 0.0f });
 
+    ~UiInteractiveElementBase() override = default;
+
+    // --- 禁用拷贝和移动语义 ---
+    UiInteractiveElementBase(const UiInteractiveElementBase&) = delete;
+    UiInteractiveElementBase& operator=(const UiInteractiveElementBase&) = delete;
+    UiInteractiveElementBase(UiInteractiveElementBase&&) = delete;
+    UiInteractiveElementBase& operator=(UiInteractiveElementBase&&) = delete;
+
     // --- 事件处理方法 ---
     virtual void clicked() {} ///< @brief 如果有点击事件，则重写该方法
 

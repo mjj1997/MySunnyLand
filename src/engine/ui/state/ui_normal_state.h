@@ -14,7 +14,7 @@ class UiNormalState final : public UiStateBase
     friend class engine::ui::UiInteractiveElementBase;
 
 public:
-    UiNormalState(engine::ui::UiInteractiveElementBase* owner)
+    explicit UiNormalState(engine::ui::UiInteractiveElementBase* owner)
         : UiStateBase{ owner }
     {}
 

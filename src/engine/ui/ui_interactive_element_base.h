@@ -24,9 +24,9 @@ public:
      * @param localPosition 初始局部位置
      * @param size 初始大小
      */
-    UiInteractiveElementBase(engine::core::Context& context,
-                             const glm::vec2& localPosition = { 0.0f, 0.0f },
-                             const glm::vec2& size = { 0.0f, 0.0f });
+    explicit UiInteractiveElementBase(engine::core::Context& context,
+                                      const glm::vec2& localPosition = { 0.0f, 0.0f },
+                                      const glm::vec2& size = { 0.0f, 0.0f });
 
     ~UiInteractiveElementBase() override = default;
 

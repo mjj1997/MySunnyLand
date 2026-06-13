@@ -14,7 +14,7 @@ class UiHoverState final : public UiStateBase
     friend class engine::ui::UiInteractiveElementBase;
 
 public:
-    UiHoverState(engine::ui::UiInteractiveElementBase* owner)
+    explicit UiHoverState(engine::ui::UiInteractiveElementBase* owner)
         : UiStateBase{ owner }
     {}
 

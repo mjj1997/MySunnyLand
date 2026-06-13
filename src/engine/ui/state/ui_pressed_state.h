@@ -14,7 +14,7 @@ class UiPressedState final : public UiStateBase
     friend class engine::ui::UiInteractiveElementBase;
 
 public:
-    UiPressedState(engine::ui::UiInteractiveElementBase* owner)
+    explicit UiPressedState(engine::ui::UiInteractiveElementBase* owner)
         : UiStateBase{ owner }
     {}
 

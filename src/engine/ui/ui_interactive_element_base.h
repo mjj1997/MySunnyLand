@@ -34,6 +34,7 @@ public:
 
     void addSprite(const std::string& name,
                    std::unique_ptr<engine::render::Sprite> sprite);  ///< @brief 添加状态名称-精灵对
+    void addSound(const std::string& name, const std::string& path); ///< @brief 添加状态名称-音效对
 
     // --- Getters and Setters ---
     ///< @brief 设置当前状态

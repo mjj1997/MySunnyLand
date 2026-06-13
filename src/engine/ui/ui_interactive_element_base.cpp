@@ -34,6 +34,11 @@ void UiInteractiveElementBase::addSprite(const std::string& name,
     m_sprites[name] = std::move(sprite);
 }
 
+void UiInteractiveElementBase::addSound(const std::string& name, const std::string& path)
+{
+    m_sounds[name] = path;
+}
+
 void UiInteractiveElementBase::setCurrentState(std::unique_ptr<engine::ui::state::UiStateBase> state)
 {
     if (state == nullptr) {

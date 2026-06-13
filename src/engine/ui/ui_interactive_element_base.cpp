@@ -1,6 +1,7 @@
 #include "ui_interactive_element_base.h"
 #include "../audio/audio_player.h"
 #include "../core/context.h"
+#include "../render/renderer.h"
 #include "../resource/resource_manager.h"
 
 #include <spdlog/spdlog.h>
@@ -34,7 +35,18 @@ bool UiInteractiveElementBase::handleInput(engine::core::Context& context)
     return false;
 }
 
-void UiInteractiveElementBase::render(engine::core::Context& context) {}
+void UiInteractiveElementBase::render(engine::core::Context& context)
+{
+    if (!m_isVisible) {
+        return;
+    }
+
+    // 先渲染自身
+    m_context.renderer().drawUiSprite(*m_currentSprite, screenPosition(), m_size);
+
+    // 再渲染子 UI 元素（调用基类的 render 方法）
+    UiElementBase::render(context);
+}
 
 void UiInteractiveElementBase::addSprite(const std::string& name,
                                          std::unique_ptr<engine::render::Sprite> sprite)

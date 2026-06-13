@@ -55,7 +55,8 @@ target_sources(
           engine/ui/ui_interactive_element_base.cpp
           engine/ui/state/ui_normal_state.cpp
           engine/ui/state/ui_hover_state.cpp
-          engine/ui/state/ui_pressed_state.cpp)
+          engine/ui/state/ui_pressed_state.cpp
+          engine/ui/ui_button.cpp)
 
 target_link_libraries(
   SunnyLand

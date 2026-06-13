@@ -9,7 +9,8 @@ namespace engine::ui::state {
 
 void UiHoverState::enter()
 {
-    // TODO: 设置 UI 为悬停状态的精灵
+    // 设置 UI 为悬停状态的精灵
+    m_owner->setCurrentSprite("hover");
 }
 
 std::unique_ptr<UiStateBase> UiHoverState::handleInput(engine::core::Context& context)

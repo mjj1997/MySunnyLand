@@ -9,7 +9,8 @@ namespace engine::ui::state {
 
 void UiPressedState::enter()
 {
-    // TODO: 设置 UI 为按下状态的精灵
+    // 设置 UI 为按下状态的精灵
+    m_owner->setCurrentSprite("pressed");
     // TODO: 播放按下时的音效
 }
 

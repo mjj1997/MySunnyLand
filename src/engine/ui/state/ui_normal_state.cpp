@@ -8,7 +8,8 @@ namespace engine::ui::state {
 
 void UiNormalState::enter()
 {
-    // TODO: 设置 UI 为正常状态的精灵
+    // 设置 UI 为正常状态的精灵
+    m_owner->setCurrentSprite("normal");
 }
 
 std::unique_ptr<UiStateBase> UiNormalState::handleInput(engine::core::Context& context)

@@ -1,5 +1,6 @@
 #include "ui_interactive_element_base.h"
 #include "../core/context.h"
+#include "../resource/resource_manager.h"
 
 #include <spdlog/spdlog.h>
 
@@ -26,7 +27,7 @@ void UiInteractiveElementBase::addSprite(const std::string& name,
 {
     // 可交互 UI 元素必须有一个 size 用于交互检测，因此如果参数列表中没有指定，则用图片大小作为 size
     if (m_size.x == 0.0f && m_size.y == 0.0f) {
-        // TODO: 获取图片大小
+        m_size = m_context.resourceManager().getTextureSize(sprite->textureId());
     }
 
     // 添加精灵

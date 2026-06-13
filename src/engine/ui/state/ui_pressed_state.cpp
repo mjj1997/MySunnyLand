@@ -24,7 +24,8 @@ std::unique_ptr<UiStateBase> UiPressedState::handleInput(engine::core::Context& 
             // 松开鼠标时，如果鼠标不在 UI 元素内，切换到正常状态
             return std::make_unique<UiNormalState>(m_owner);
         } else { // 松开鼠标时，如果鼠标在 UI 元素内，触发点击事件
-            // TODO: 触发点击事件
+            // 触发点击事件
+            m_owner->clicked();
             return std::make_unique<UiHoverState>(m_owner);
         }
     }

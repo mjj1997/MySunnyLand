@@ -28,6 +28,9 @@ public:
                              const glm::vec2& localPosition = { 0.0f, 0.0f },
                              const glm::vec2& size = { 0.0f, 0.0f });
 
+    // --- 事件处理方法 ---
+    virtual void clicked() {} ///< @brief 如果有点击事件，则重写该方法
+
     // --- 核心方法 ---
     bool handleInput(engine::core::Context& context) override;
     void render(engine::core::Context& context) override;

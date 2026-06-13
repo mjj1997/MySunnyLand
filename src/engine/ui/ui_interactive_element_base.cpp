@@ -1,4 +1,5 @@
 #include "ui_interactive_element_base.h"
+#include "../audio/audio_player.h"
 #include "../core/context.h"
 #include "../resource/resource_manager.h"
 
@@ -37,6 +38,15 @@ void UiInteractiveElementBase::addSprite(const std::string& name,
 void UiInteractiveElementBase::addSound(const std::string& name, const std::string& path)
 {
     m_sounds[name] = path;
+}
+
+void UiInteractiveElementBase::playSound(const std::string& name)
+{
+    if (m_sounds.find(name) != m_sounds.end()) {
+        m_context.audioPlayer().playSound(m_sounds[name]);
+    } else {
+        spdlog::warn("Sound '{}' 未找到。", name);
+    }
 }
 
 void UiInteractiveElementBase::setCurrentState(std::unique_ptr<engine::ui::state::UiStateBase> state)

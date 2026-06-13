@@ -41,6 +41,8 @@ public:
     ///< @brief 获取当前状态
     engine::ui::state::UiStateBase* currentState() const { return m_currentState.get(); }
 
+    void setCurrentSprite(const std::string& name); ///< @brief 通过状态名称，设置当前显示的精灵
+
 protected:
     engine::core::Context& m_context; ///< @brief 可交互 UI 元素很可能需要其他引擎组件
 
@@ -48,6 +50,7 @@ protected:
     std::unordered_map<std::string, std::unique_ptr<engine::render::Sprite>> m_sprites;
 
     std::unique_ptr<engine::ui::state::UiStateBase> m_currentState; ///< @brief 当前状态
+    engine::render::Sprite* m_currentSprite{ nullptr };             ///< @brief 当前显示的精灵
 };
 
 } // namespace engine::ui

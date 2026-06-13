@@ -45,4 +45,13 @@ void UiInteractiveElementBase::setCurrentState(std::unique_ptr<engine::ui::state
     m_currentState->enter();
 }
 
+void UiInteractiveElementBase::setCurrentSprite(const std::string& name)
+{
+    if (m_sprites.find(name) != m_sprites.end()) {
+        m_currentSprite = m_sprites[name].get();
+    } else {
+        spdlog::warn("Sprite '{}' 未找到。", name);
+    }
+}
+
 } // namespace engine::ui

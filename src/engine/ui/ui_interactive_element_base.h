@@ -18,6 +18,16 @@ namespace engine::ui {
 class UiInteractiveElementBase : public UiElementBase
 {
 public:
+    /**
+     * @brief 构造 UiInteractiveElementBase
+     * @param context 引擎上下文
+     * @param localPosition 初始局部位置
+     * @param size 初始大小
+     */
+    UiInteractiveElementBase(engine::core::Context& context,
+                             const glm::vec2& localPosition = { 0.0f, 0.0f },
+                             const glm::vec2& size = { 0.0f, 0.0f });
+
     // --- 核心方法 ---
     bool handleInput(engine::core::Context& context) override;
     void render(engine::core::Context& context) override;
@@ -32,6 +42,8 @@ public:
     engine::ui::state::UiStateBase* currentState() const { return m_currentState.get(); }
 
 protected:
+    engine::core::Context& m_context; ///< @brief 可交互 UI 元素很可能需要其他引擎组件
+
     ///< @brief 状态和精灵的映射，key 为状态名称，value 为精灵指针
     std::unordered_map<std::string, std::unique_ptr<engine::render::Sprite>> m_sprites;
 

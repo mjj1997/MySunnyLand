@@ -1,8 +1,18 @@
 #include "ui_interactive_element_base.h"
+#include "../core/context.h"
 
 #include <spdlog/spdlog.h>
 
 namespace engine::ui {
+
+UiInteractiveElementBase::UiInteractiveElementBase(engine::core::Context& context,
+                                                   const glm::vec2& localPosition,
+                                                   const glm::vec2& size)
+    : UiElementBase{ localPosition, size }
+    , m_context{ context }
+{
+    spdlog::trace("UIInteractiveElementBase 构造完成");
+}
 
 bool UiInteractiveElementBase::handleInput(engine::core::Context& context)
 {

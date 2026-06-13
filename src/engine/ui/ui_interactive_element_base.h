@@ -48,6 +48,8 @@ protected:
 
     ///< @brief 状态和精灵的映射，key 为状态名称，value 为精灵指针
     std::unordered_map<std::string, std::unique_ptr<engine::render::Sprite>> m_sprites;
+    ///< @brief 状态和音效的映射，key 为状态名称，value 为音效文件路径
+    std::unordered_map<std::string, std::string> m_sounds;
 
     std::unique_ptr<engine::ui::state::UiStateBase> m_currentState; ///< @brief 当前状态
     engine::render::Sprite* m_currentSprite{ nullptr };             ///< @brief 当前显示的精灵

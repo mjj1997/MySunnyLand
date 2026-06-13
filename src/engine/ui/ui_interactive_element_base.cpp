@@ -18,6 +18,19 @@ UiInteractiveElementBase::UiInteractiveElementBase(engine::core::Context& contex
 
 bool UiInteractiveElementBase::handleInput(engine::core::Context& context)
 {
+    // 先让子 UI 元素处理输入（调用基类的 handleInput 方法）
+    if (UiElementBase::handleInput(context)) {
+        return true;
+    }
+
+    // 子 UI 元素没有处理输入，再自身委托给状态处理输入
+    if (m_currentState != nullptr && m_isInteractive) {
+        if (auto nextState = m_currentState->handleInput(context); nextState) {
+            setCurrentState(std::move(nextState));
+            return true;
+        }
+    }
+
     return false;
 }
 

@@ -4,8 +4,6 @@
 
 #include <glm/vec2.hpp>
 
-#include <memory>
-
 namespace game::data {
 class SessionData;
 }
@@ -23,6 +21,12 @@ namespace game::scene {
 class GameScene final : public engine::scene::SceneBase
 {
 public:
+    /**
+     * @brief 构造函数
+     * @param context 引擎上下文
+     * @param sceneManager 场景管理器
+     * @param gameSessionData 指向游戏玩法状态的共享指针
+     */
     GameScene(engine::core::Context& context,
               engine::scene::SceneManager& sceneManager,
               std::shared_ptr<game::data::SessionData> gameSessionData = nullptr);

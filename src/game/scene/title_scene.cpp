@@ -1,6 +1,11 @@
 #include "title_scene.h"
 #include "../data/session_data.h"
 
+#include "../../engine/audio/audio_player.h"
+#include "../../engine/core/context.h"
+#include "../../engine/input/input_manager.h"
+#include "../../engine/scene/level_loader.h"
+
 #include <spdlog/spdlog.h>
 
 namespace game::scene {
@@ -17,6 +22,34 @@ TitleScene::TitleScene(engine::core::Context& context,
         spdlog::info("未提供 SessionData，使用默认值。");
     }
     spdlog::trace("TitleScene 构造完成。");
+}
+
+void TitleScene::init()
+{
+    if (m_isInitialized) {
+        spdlog::warn("TitleScene 已初始化，重复调用 init()");
+        return;
+    }
+
+    spdlog::trace("TitleScene 初始化开始...");
+
+    // 加载背景
+    engine::scene::LevelLoader levelLoader;
+    if (!levelLoader.loadLevel("assets/maps/level0.tmj", *this)) {
+        spdlog::error("加载背景失败。");
+        return;
+    }
+
+    // TODO: 初始化 UI
+
+    // 设置音量
+    m_context.audioPlayer().setMusicVolume(0.2f); // 设置背景音乐音量为 20%
+    m_context.audioPlayer().setSoundVolume(0.5f); // 设置音效音量为 50%
+    // 播放背景音乐
+    m_context.audioPlayer().playMusic("assets/audio/platformer_level03_loop.ogg");
+
+    SceneBase::init();
+    spdlog::trace("TitleScene 初始化完成。");
 }
 
 } // namespace game::scene

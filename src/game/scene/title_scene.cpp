@@ -4,8 +4,10 @@
 #include "../../engine/audio/audio_player.h"
 #include "../../engine/core/context.h"
 #include "../../engine/input/input_manager.h"
+#include "../../engine/render/camera.h"
 #include "../../engine/scene/level_loader.h"
 
+#include <glm/vec2.hpp>
 #include <spdlog/spdlog.h>
 
 namespace game::scene {
@@ -50,6 +52,14 @@ void TitleScene::init()
 
     SceneBase::init();
     spdlog::trace("TitleScene 初始化完成。");
+}
+
+void TitleScene::update(float deltaTime)
+{
+    SceneBase::update(deltaTime);
+
+    // 相机自动向右移动
+    m_context.camera().move(glm::vec2{ deltaTime * 100.0f, 0.0f });
 }
 
 } // namespace game::scene

@@ -1,5 +1,6 @@
 #include "game_state.h"
 
+#include <SDL3/SDL_render.h>
 #include <SDL3/SDL_video.h>
 #include <spdlog/spdlog.h>
 
@@ -41,6 +42,25 @@ void GameState::setWindowSize(const glm::vec2& newSize)
     // SDL3 设置窗口大小的方法
     SDL_SetWindowSize(m_window, static_cast<int>(newSize.x), static_cast<int>(newSize.y));
     spdlog::debug("窗口大小设置为 {} x {}", newSize.x, newSize.y);
+}
+
+glm::vec2 GameState::logicalSize() const
+{
+    int width;
+    int height;
+    // SDL3 获取逻辑分辨率大小的方法
+    SDL_GetRenderLogicalPresentation(m_sdlRenderer, &width, &height, nullptr);
+    return glm::vec2{ width, height };
+}
+
+void GameState::setLogicalSize(const glm::vec2& newSize)
+{
+    // SDL3 设置逻辑分辨率大小的方法
+    SDL_SetRenderLogicalPresentation(m_sdlRenderer,
+                                     static_cast<int>(newSize.x),
+                                     static_cast<int>(newSize.y),
+                                     SDL_LOGICAL_PRESENTATION_LETTERBOX);
+    spdlog::debug("逻辑分辨率大小设置为 {} x {}", newSize.x, newSize.y);
 }
 
 } // namespace engine::core

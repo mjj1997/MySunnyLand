@@ -41,6 +41,8 @@ public:
     void setCurrentState(State newState);
     glm::vec2 windowSize() const;
     void setWindowSize(const glm::vec2& newSize);
+    glm::vec2 logicalSize() const;
+    void setLogicalSize(const glm::vec2& newSize);
 
     // --- 便捷查询方法 ---
     bool isInTitle() const { return m_currentState == State::InTitle; }

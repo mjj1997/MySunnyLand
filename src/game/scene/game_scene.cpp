@@ -232,7 +232,8 @@ bool GameScene::initEnemyAndItem()
 
 bool GameScene::initUi()
 {
-    if (!m_uiManager->init(glm::vec2{ 640.0f, 360.0f })) {
+    glm::vec2 windowSize{ 640.0f, 360.0f };
+    if (!m_uiManager->init(windowSize)) {
         return false;
     }
 

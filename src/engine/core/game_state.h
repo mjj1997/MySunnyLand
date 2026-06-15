@@ -1,5 +1,7 @@
 #pragma once
 
+struct SDL_Window;
+
 namespace engine::core {
 
 /**
@@ -25,9 +27,10 @@ class GameState final
 public:
     /**
      * @brief 构造函数，初始化游戏状态。
+     * @param window SDL 窗口，必须传入有效值。
      * @param initialState 游戏的初始状态，默认为 InTitle
      */
-    GameState(State initialState = State::InTitle);
+    GameState(SDL_Window* window, State initialState = State::InTitle);
 
     // --- getters & setters ---
     State currentState() const { return m_currentState; }
@@ -40,6 +43,8 @@ public:
     bool isGameOver() const { return m_currentState == State::GameOver; }
 
 private:
+    SDL_Window* m_window{ nullptr };        ///< @brief SDL 窗口，用于获取窗口大小
+
     State m_currentState{ State::InTitle }; ///< @brief 当前游戏状态
 };
 

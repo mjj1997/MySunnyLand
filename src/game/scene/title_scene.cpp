@@ -176,4 +176,11 @@ void TitleScene::loadGame()
     }
 }
 
+void TitleScene::quit()
+{
+    spdlog::debug("退出按钮被点击。");
+
+    m_context.inputManager().setShouldQuit(true);
+}
+
 } // namespace game::scene

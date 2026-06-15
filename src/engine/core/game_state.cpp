@@ -1,5 +1,6 @@
 #include "game_state.h"
 
+#include <SDL3/SDL_video.h>
 #include <spdlog/spdlog.h>
 
 namespace engine::core {
@@ -23,6 +24,22 @@ void GameState::setCurrentState(State newState)
     } else {
         spdlog::debug("尝试设置相同的游戏状态，跳过");
     }
+}
+
+glm::vec2 GameState::windowSize() const
+{
+    int width;
+    int height;
+    // SDL3 获取窗口大小的方法
+    SDL_GetWindowSize(m_window, &width, &height);
+    return glm::vec2{ width, height };
+}
+
+void GameState::setWindowSize(const glm::vec2& newSize)
+{
+    // SDL3 设置窗口大小的方法
+    SDL_SetWindowSize(m_window, static_cast<int>(newSize.x), static_cast<int>(newSize.y));
+    spdlog::debug("窗口大小设置为 {} x {}", newSize.x, newSize.y);
 }
 
 } // namespace engine::core

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <glm/vec2.hpp>
+
 struct SDL_Window;
 
 namespace engine::core {
@@ -35,6 +37,8 @@ public:
     // --- getters & setters ---
     State currentState() const { return m_currentState; }
     void setCurrentState(State newState);
+    glm::vec2 windowSize() const;
+    void setWindowSize(const glm::vec2& newSize);
 
     // --- 便捷查询方法 ---
     bool isInTitle() const { return m_currentState == State::InTitle; }

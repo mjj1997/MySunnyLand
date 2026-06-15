@@ -5,13 +5,14 @@
 
 namespace engine::core {
 
-GameState::GameState(SDL_Window* window, State initialState)
+GameState::GameState(SDL_Window* window, SDL_Renderer* sdlRenderer, State initialState)
     : m_window{ window }
+    , m_sdlRenderer{ sdlRenderer }
     , m_currentState{ initialState }
 {
-    if (m_window == nullptr) {
-        spdlog::error("窗口为空");
-        throw std::runtime_error("窗口不能为空");
+    if (m_window == nullptr || m_sdlRenderer == nullptr) {
+        spdlog::error("窗口或渲染器为空");
+        throw std::runtime_error("窗口或渲染器不能为空");
     }
     spdlog::trace("游戏状态初始化完成");
 }

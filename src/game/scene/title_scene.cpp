@@ -9,6 +9,7 @@
 #include "../../engine/resource/resource_manager.h"
 #include "../../engine/scene/level_loader.h"
 #include "../../engine/scene/scene_manager.h"
+#include "../../engine/ui/ui_button.h"
 #include "../../engine/ui/ui_image.h"
 #include "../../engine/ui/ui_manager.h"
 #include "../../engine/ui/ui_panel.h"
@@ -110,6 +111,21 @@ bool TitleScene::initUi()
 
     auto buttonPanel = std::make_unique<engine::ui::UiPanel>(glm::vec2{ panelX, panelY },
                                                              glm::vec2{ panelWidth, panelHeight });
+
+    // --- 创建按钮并添加到 UiPanel (位置是相对于 UiPanel 左上角的局部位置) ---
+    glm::vec2 currentButtonLocalPos{ 0.0f, 0.0f };
+    glm::vec2 buttonSize{ buttonWidth, buttonHeight };
+
+    // Start Button
+    auto startButton
+        = std::make_unique<engine::ui::UiButton>(m_context,
+                                                 "assets/textures/UI/buttons/Start1.png",
+                                                 "assets/textures/UI/buttons/Start2.png",
+                                                 "assets/textures/UI/buttons/Start3.png",
+                                                 currentButtonLocalPos,
+                                                 buttonSize,
+                                                 [this]() { this->startGame(); });
+    buttonPanel->addChild(std::move(startButton));
 
     // 将 UiPanel 添加到UI管理器
     m_uiManager->addElement(std::move(buttonPanel));

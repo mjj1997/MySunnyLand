@@ -83,9 +83,6 @@ void GameScene::init()
         return;
     }
 
-    // 设置音量
-    m_context.audioPlayer().setMusicVolume(0.2f); // 设置背景音乐音量为 20%
-    m_context.audioPlayer().setSoundVolume(0.5f); // 设置音效音量为 50%
     // 播放背景音乐（循环播放、淡入时间 1 秒）
     m_context.audioPlayer().playMusic("assets/audio/hurry_up_and_run.ogg", -1, 1000);
 

@@ -138,6 +138,17 @@ bool TitleScene::initUi()
                                                              [this]() { this->loadGame(); });
     buttonPanel->addChild(std::move(loadButton));
 
+    // Quit Button
+    currentButtonLocalPos.x += buttonWidth + buttonSpacing;
+    auto quitButton = std::make_unique<engine::ui::UiButton>(m_context,
+                                                             "assets/textures/UI/buttons/Quit1.png",
+                                                             "assets/textures/UI/buttons/Quit2.png",
+                                                             "assets/textures/UI/buttons/Quit3.png",
+                                                             currentButtonLocalPos,
+                                                             buttonSize,
+                                                             [this]() { this->quit(); });
+    buttonPanel->addChild(std::move(quitButton));
+
     // 将 UiPanel 添加到UI管理器
     m_uiManager->addElement(std::move(buttonPanel));
 

@@ -72,6 +72,8 @@ public:
     engine::audio::AudioPlayer& audioPlayer() const { return m_audioPlayer; }
     ///< @brief 获取文字渲染引擎
     engine::render::TextRenderer& textRenderer() const { return m_textRenderer; }
+    ///< @brief 获取游戏状态
+    GameState& gameState() const { return m_gameState; }
 
 private:
     // 使用引用，确保每个模块都有效，使用时不需要检查指针是否为空。

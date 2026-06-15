@@ -14,4 +14,27 @@ enum class State {
     // 可以根据需要添加更多状态，如 Cutscene, SettingsMenu 等
 };
 
+/**
+ * @brief 管理和查询游戏的全局宏观状态。
+ *
+ * 提供一个中心点来确定游戏当前处于哪个主要模式，
+ * 以便其他系统（输入、渲染、更新等）可以相应地调整其行为。
+ */
+class GameState final
+{
+public:
+    /**
+     * @brief 构造函数，初始化游戏状态。
+     * @param initialState 游戏的初始状态，默认为 InTitle
+     */
+    GameState(State initialState = State::InTitle);
+
+    // --- getters & setters ---
+    State currentState() const { return m_currentState; }
+    void setCurrentState(State newState);
+
+private:
+    State m_currentState{ State::InTitle }; ///< @brief 当前游戏状态
+};
+
 } // namespace engine::core

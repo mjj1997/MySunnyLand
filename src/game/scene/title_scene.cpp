@@ -127,6 +127,17 @@ bool TitleScene::initUi()
                                                  [this]() { this->startGame(); });
     buttonPanel->addChild(std::move(startButton));
 
+    // Load Button
+    currentButtonLocalPos.x += buttonWidth + buttonSpacing;
+    auto loadButton = std::make_unique<engine::ui::UiButton>(m_context,
+                                                             "assets/textures/UI/buttons/Load1.png",
+                                                             "assets/textures/UI/buttons/Load2.png",
+                                                             "assets/textures/UI/buttons/Load3.png",
+                                                             currentButtonLocalPos,
+                                                             buttonSize,
+                                                             [this]() { this->loadGame(); });
+    buttonPanel->addChild(std::move(loadButton));
+
     // 将 UiPanel 添加到UI管理器
     m_uiManager->addElement(std::move(buttonPanel));
 

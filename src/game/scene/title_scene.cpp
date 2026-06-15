@@ -1,5 +1,6 @@
 #include "title_scene.h"
 #include "../data/session_data.h"
+#include "game_scene.h"
 
 #include "../../engine/audio/audio_player.h"
 #include "../../engine/core/context.h"
@@ -7,6 +8,7 @@
 #include "../../engine/render/camera.h"
 #include "../../engine/resource/resource_manager.h"
 #include "../../engine/scene/level_loader.h"
+#include "../../engine/scene/scene_manager.h"
 #include "../../engine/ui/ui_image.h"
 #include "../../engine/ui/ui_manager.h"
 #include "../../engine/ui/ui_panel.h"
@@ -113,6 +115,20 @@ bool TitleScene::initUi()
     m_uiManager->addElement(std::move(buttonPanel));
 
     spdlog::trace("TitleScene UI 创建完成.");
+}
+
+void TitleScene::startGame()
+{
+    spdlog::debug("开始游戏按钮被点击。");
+
+    // 开始新游戏会重置游戏会话数据
+    if (m_gameSessionData != nullptr) {
+        m_gameSessionData->reset();
+    }
+
+    // 替换为游戏场景
+    m_sceneManager.requestReplaceScene(
+        std::make_unique<GameScene>(m_context, m_sceneManager, m_gameSessionData));
 }
 
 } // namespace game::scene

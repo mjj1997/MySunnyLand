@@ -32,6 +32,8 @@ private:
     ///< @brief 初始化 UI
     [[nodiscard]] bool initUi();
 
+    // --- 按钮回调函数 ---
+    void startGame();
     ///< @brief 场景间共享数据
     std::shared_ptr<game::data::SessionData> m_gameSessionData{ nullptr };
 };

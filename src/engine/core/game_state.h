@@ -33,6 +33,12 @@ public:
     State currentState() const { return m_currentState; }
     void setCurrentState(State newState);
 
+    // --- 便捷查询方法 ---
+    bool isInTitle() const { return m_currentState == State::InTitle; }
+    bool isPlaying() const { return m_currentState == State::Playing; }
+    bool isPaused() const { return m_currentState == State::Paused; }
+    bool isGameOver() const { return m_currentState == State::GameOver; }
+
 private:
     State m_currentState{ State::InTitle }; ///< @brief 当前游戏状态
 };

@@ -147,4 +147,22 @@ void TitleScene::startGame()
         std::make_unique<GameScene>(m_context, m_sceneManager, m_gameSessionData));
 }
 
+void TitleScene::loadGame()
+{
+    spdlog::debug("加载游戏按钮被点击。");
+
+    if (m_gameSessionData == nullptr) {
+        spdlog::error("游戏状态为空，无法加载。");
+        return;
+    }
+
+    if (m_gameSessionData->loadFromFile("assets/save.json")) {
+        spdlog::debug("加载存档成功。开始游戏...");
+        m_sceneManager.requestReplaceScene(
+            std::make_unique<GameScene>(m_context, m_sceneManager, m_gameSessionData));
+    } else {
+        spdlog::warn("加载存档失败。");
+    }
+}
+
 } // namespace game::scene

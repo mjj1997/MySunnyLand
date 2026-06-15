@@ -34,6 +34,7 @@ private:
 
     // --- 按钮回调函数 ---
     void startGame();
+    void loadGame();
     ///< @brief 场景间共享数据
     std::shared_ptr<game::data::SessionData> m_gameSessionData{ nullptr };
 };

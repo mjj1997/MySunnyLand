@@ -139,6 +139,18 @@ bool TitleScene::initUi()
                                                              [this]() { this->loadGame(); });
     buttonPanel->addChild(std::move(loadButton));
 
+    // Help Button
+    currentButtonLocalPos.x += buttonWidth + buttonSpacing;
+    auto helpButton
+        = std::make_unique<engine::ui::UiButton>(m_context,
+                                                 "assets/textures/UI/buttons/Helps1.png",
+                                                 "assets/textures/UI/buttons/Helps2.png",
+                                                 "assets/textures/UI/buttons/Helps3.png",
+                                                 currentButtonLocalPos,
+                                                 buttonSize,
+                                                 [this]() { this->help(); });
+    buttonPanel->addChild(std::move(helpButton));
+
     // Quit Button
     currentButtonLocalPos.x += buttonWidth + buttonSpacing;
     auto quitButton = std::make_unique<engine::ui::UiButton>(m_context,

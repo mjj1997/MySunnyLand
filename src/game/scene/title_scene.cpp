@@ -5,7 +5,10 @@
 #include "../../engine/core/context.h"
 #include "../../engine/input/input_manager.h"
 #include "../../engine/render/camera.h"
+#include "../../engine/resource/resource_manager.h"
 #include "../../engine/scene/level_loader.h"
+#include "../../engine/ui/ui_image.h"
+#include "../../engine/ui/ui_manager.h"
 
 #include <glm/vec2.hpp>
 #include <spdlog/spdlog.h>
@@ -42,7 +45,11 @@ void TitleScene::init()
         return;
     }
 
-    // TODO: 初始化 UI
+    if (!initUi()) {
+        spdlog::error("初始化 UI 失败，无法继续。");
+        m_context.inputManager().setShouldQuit(true);
+        return;
+    }
 
     // 设置音量
     m_context.audioPlayer().setMusicVolume(0.2f); // 设置背景音乐音量为 20%
@@ -60,6 +67,31 @@ void TitleScene::update(float deltaTime)
 
     // 相机自动向右移动
     m_context.camera().move(glm::vec2{ deltaTime * 100.0f, 0.0f });
+}
+
+bool TitleScene::initUi()
+{
+    spdlog::trace("创建 TitleScene UI...");
+    glm::vec2 windowSize{ 640.0f, 360.0f };
+
+    if (!m_uiManager->init(windowSize)) {
+        spdlog::error("初始化 UiManager 失败!");
+        return false;
+    }
+
+    // --- 创建标题图片 (假设不知道大小) ---
+    auto titleImage = std::make_unique<engine::ui::UiImage>("assets/textures/UI/title-screen.png");
+    auto size = m_context.resourceManager().getTextureSize(titleImage->textureId());
+    titleImage->setSize(size * 2.0f); // 放大为2倍
+
+    // 水平居中
+    auto titleLocalPos = (windowSize - titleImage->size()) / 2.0f - glm::vec2{ 0.0f, 50.0f };
+    titleImage->setLocalPosition(titleLocalPos);
+
+    // 将标题图片添加到UI管理器
+    m_uiManager->addElement(std::move(titleImage));
+
+    spdlog::trace("TitleScene UI 创建完成.");
 }
 
 } // namespace game::scene

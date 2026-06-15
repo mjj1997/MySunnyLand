@@ -12,6 +12,7 @@
 #include "../../engine/scene/scene_manager.h"
 #include "../../engine/ui/ui_button.h"
 #include "../../engine/ui/ui_image.h"
+#include "../../engine/ui/ui_label.h"
 #include "../../engine/ui/ui_manager.h"
 #include "../../engine/ui/ui_panel.h"
 
@@ -164,6 +165,19 @@ bool TitleScene::initUi()
 
     // 将 UiPanel 添加到UI管理器
     m_uiManager->addElement(std::move(buttonPanel));
+
+    // --- 创建 Credit 标签 ---
+    auto creditLabel = std::make_unique<engine::ui::UiLabel>(m_context.textRenderer(),
+                                                             "SunnyLand Credits: XXX - 2026",
+                                                             "assets/fonts/VonwaonBitmap-16px.ttf",
+                                                             16,
+                                                             engine::utils::FColor{
+                                                                 0.8f, 0.8f, 0.8f, 1.0f });
+    // 设置 Credit 标签位置，使其居中并靠下
+    creditLabel->setLocalPosition(glm::vec2{ (windowSize.x - creditLabel->size().x) / 2.0f,
+                                             windowSize.y - creditLabel->size().y - 10.0f });
+    // 将 Credit 标签添加到UI管理器
+    m_uiManager->addElement(std::move(creditLabel));
 
     spdlog::trace("TitleScene UI 创建完成.");
 }

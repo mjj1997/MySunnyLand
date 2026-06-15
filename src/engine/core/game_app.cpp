@@ -1,5 +1,4 @@
 #include "game_app.h"
-#include "../../game/scene/game_scene.h"
 #include "../audio/audio_player.h"
 #include "../component/sprite_component.h"
 #include "../component/transform_component.h"
@@ -15,6 +14,8 @@
 #include "configurator.h"
 #include "context.h"
 #include "frame_time_controller.h"
+
+#include "../../game/scene/title_scene.h"
 
 #include <SDL3/SDL.h>
 #include <spdlog/spdlog.h>
@@ -94,7 +95,7 @@ bool GameApp::init()
     }
 
     // 创建第一个场景并压入场景栈
-    auto scene = std::make_unique<game::scene::GameScene>(*m_context, *m_sceneManager);
+    auto scene = std::make_unique<game::scene::TitleScene>(*m_context, *m_sceneManager);
     m_sceneManager->requestPushScene(std::move(scene));
 
     m_isRunning = true;

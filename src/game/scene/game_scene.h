@@ -4,8 +4,6 @@
 
 #include <glm/vec2.hpp>
 
-#include <memory>
-
 namespace game::data {
 class SessionData;
 }
@@ -23,6 +21,12 @@ namespace game::scene {
 class GameScene final : public engine::scene::SceneBase
 {
 public:
+    /**
+     * @brief 构造函数
+     * @param context 引擎上下文
+     * @param sceneManager 场景管理器
+     * @param gameSessionData 指向游戏玩法状态的共享指针
+     */
     GameScene(engine::core::Context& context,
               engine::scene::SceneManager& sceneManager,
               std::shared_ptr<game::data::SessionData> gameSessionData = nullptr);
@@ -80,10 +84,6 @@ private:
     void addScoreWithUi(int score); ///< @brief 增加得分，同时更新UI
     void healWithUi(int amount);    ///< @brief 增加生命，同时更新UI
     void updateHealthWithUi();      ///< @brief 更新生命值UI (只适用最大生命值不变的情况)
-
-    // --- 测试函数 ---
-    void createTestButton();  ///< @brief 创建测试按钮
-    void testButtonClicked(); ///< @brief 测试按钮点击事件
 
     ///< @brief 场景间共享数据
     std::shared_ptr<game::data::SessionData> m_gameSessionData{ nullptr };

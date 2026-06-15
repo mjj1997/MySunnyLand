@@ -83,9 +83,6 @@ void GameScene::init()
         return;
     }
 
-    // 设置音量
-    m_context.audioPlayer().setMusicVolume(0.2f); // 设置背景音乐音量为 20%
-    m_context.audioPlayer().setSoundVolume(0.5f); // 设置音效音量为 50%
     // 播放背景音乐（循环播放、淡入时间 1 秒）
     m_context.audioPlayer().playMusic("assets/audio/hurry_up_and_run.ogg", -1, 1000);
 
@@ -148,6 +145,8 @@ bool GameScene::initLevel()
 
     // 设置相机边界
     m_context.camera().setLimitBounds(engine::utils::Rect{ glm::vec2{ 0.0f, 0.0f }, worldSize });
+    // 开始时重置相机位置，以免切换场景时晃动
+    m_context.camera().setPosition(glm::vec2{ 0.0f, 0.0f });
 
     spdlog::trace("关卡初始化完成。");
     return true;
@@ -235,13 +234,13 @@ bool GameScene::initEnemyAndItem()
 
 bool GameScene::initUi()
 {
-    if (!m_uiManager->init(glm::vec2{ 640.0f, 360.0f })) {
+    glm::vec2 windowSize{ 640.0f, 360.0f };
+    if (!m_uiManager->init(windowSize)) {
         return false;
     }
 
     createScoreUi();
     createHealthUi();
-    createTestButton();
 
     return true;
 }
@@ -531,24 +530,6 @@ void GameScene::updateHealthWithUi()
     for (int i{ maxHealth }; i < maxHealth * 2; ++i) {
         m_healthPanel->children().at(i)->setVisible(i - maxHealth < currentHealth);
     }
-}
-
-void GameScene::createTestButton()
-{
-    auto testButton
-        = std::make_unique<engine::ui::UiButton>(m_context,
-                                                 "assets/textures/UI/buttons/Start1.png",
-                                                 "assets/textures/UI/buttons/Start2.png",
-                                                 "assets/textures/UI/buttons/Start3.png",
-                                                 glm::vec2{ 100.0f, 100.0f },
-                                                 glm::vec2{ 0.0f, 0.0f }, // 采用图片大小
-                                                 [this]() { this->testButtonClicked(); });
-    m_uiManager->addElement(std::move(testButton));
-}
-
-void GameScene::testButtonClicked()
-{
-    spdlog::info("测试按钮被点击");
 }
 
 } // namespace game::scene

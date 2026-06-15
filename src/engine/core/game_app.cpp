@@ -14,6 +14,7 @@
 #include "configurator.h"
 #include "context.h"
 #include "frame_time_controller.h"
+#include "game_state.h"
 
 #include "../../game/scene/title_scene.h"
 
@@ -85,6 +86,9 @@ bool GameApp::init()
         return false;
     }
     if (!initAudioPlayer()) {
+        return false;
+    }
+    if (!initGameState()) {
         return false;
     }
     if (!initContext()) {
@@ -282,6 +286,20 @@ bool GameApp::initPhysicsEngine()
         return false;
     }
     spdlog::trace("物理引擎初始化成功。");
+    return true;
+}
+
+bool GameApp::initGameState()
+{
+    try {
+        m_gameState = std::make_unique<engine::core::GameState>(m_window,
+                                                                m_sdlRenderer,
+                                                                State::Playing);
+    } catch (const std::exception& e) {
+        spdlog::error("初始化游戏状态失败: {}", e.what());
+        return false;
+    }
+    spdlog::trace("游戏状态初始化成功。");
     return true;
 }
 

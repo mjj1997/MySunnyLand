@@ -36,6 +36,7 @@ namespace engine::core { // 命名空间的最佳实践：与文件路径一致
 class FrameTimeController;
 class Configurator;
 class Context;
+class GameState;
 
 /**
  * @brief 主游戏应用程序类，初始化SDL，管理游戏循环。
@@ -73,6 +74,7 @@ private:
     [[nodiscard]] bool initConfigurator();
     [[nodiscard]] bool initInputManager();
     [[nodiscard]] bool initPhysicsEngine();
+    [[nodiscard]] bool initGameState();
     [[nodiscard]] bool initContext();
     [[nodiscard]] bool initSceneManager();
     [[nodiscard]] bool initAudioPlayer();
@@ -95,6 +97,7 @@ private:
     std::unique_ptr<engine::scene::SceneManager> m_sceneManager;
     std::unique_ptr<engine::audio::AudioPlayer> m_audioPlayer;
     std::unique_ptr<engine::render::TextRenderer> m_textRenderer;
+    std::unique_ptr<engine::core::GameState> m_gameState;
 };
 
 } // namespace engine::core

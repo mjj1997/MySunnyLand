@@ -9,6 +9,7 @@
 #include "../../engine/scene/level_loader.h"
 #include "../../engine/ui/ui_image.h"
 #include "../../engine/ui/ui_manager.h"
+#include "../../engine/ui/ui_panel.h"
 
 #include <glm/vec2.hpp>
 #include <spdlog/spdlog.h>
@@ -90,6 +91,26 @@ bool TitleScene::initUi()
 
     // 将标题图片添加到UI管理器
     m_uiManager->addElement(std::move(titleImage));
+
+    // --- 创建按钮面板并居中 --- (4个按钮，设定好大小、间距)
+    float buttonWidth{ 96.0f };
+    float buttonHeight{ 32.0f };
+    float buttonSpacing{ 20.0f };
+    int buttonNums{ 4 };
+
+    // 计算面板总宽度
+    float panelWidth{ buttonNums * buttonWidth + (buttonNums - 1) * buttonSpacing };
+    float panelHeight{ buttonHeight };
+
+    // 计算面板位置使其居中
+    float panelX{ (windowSize.x - panelWidth) / 2.0f };
+    float panelY{ windowSize.y * 0.65f }; // 垂直位置中间靠下
+
+    auto buttonPanel = std::make_unique<engine::ui::UiPanel>(glm::vec2{ panelX, panelY },
+                                                             glm::vec2{ panelWidth, panelHeight });
+
+    // 将 UiPanel 添加到UI管理器
+    m_uiManager->addElement(std::move(buttonPanel));
 
     spdlog::trace("TitleScene UI 创建完成.");
 }

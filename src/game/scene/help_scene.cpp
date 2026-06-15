@@ -1,5 +1,8 @@
 #include "help_scene.h"
 
+#include "../../engine/core/context.h"
+#include "../../engine/input/input_manager.h"
+#include "../../engine/scene/scene_manager.h"
 #include "../../engine/ui/ui_image.h"
 #include "../../engine/ui/ui_manager.h"
 
@@ -31,6 +34,19 @@ void HelpScene::init()
 
     SceneBase::init();
     spdlog::trace("HelpScene 初始化完成。");
+}
+
+void HelpScene::handleInput()
+{
+    if (!m_isInitialized) {
+        return;
+    }
+
+    // 检测是否点击了鼠标左键
+    if (m_context.inputManager().isActionPressed("mouseLeftClick")) {
+        spdlog::debug("点击鼠标左键，退出帮助场景。");
+        m_sceneManager.requestPopScene();
+    }
 }
 
 } // namespace game::scene

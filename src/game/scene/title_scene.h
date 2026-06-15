@@ -35,6 +35,7 @@ private:
     // --- 按钮回调函数 ---
     void startGame();
     void loadGame();
+    void help();
     void quit();
 
     ///< @brief 场景间共享数据

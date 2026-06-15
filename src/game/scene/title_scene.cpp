@@ -1,6 +1,7 @@
 #include "title_scene.h"
 #include "../data/session_data.h"
 #include "game_scene.h"
+#include "help_scene.h"
 
 #include "../../engine/audio/audio_player.h"
 #include "../../engine/core/context.h"
@@ -185,6 +186,13 @@ void TitleScene::loadGame()
     } else {
         spdlog::warn("加载存档失败。");
     }
+}
+
+void TitleScene::help()
+{
+    spdlog::debug("帮助按钮被点击。");
+
+    m_sceneManager.requestPushScene(std::make_unique<HelpScene>(m_context, m_sceneManager));
 }
 
 void TitleScene::quit()

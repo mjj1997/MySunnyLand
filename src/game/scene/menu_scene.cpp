@@ -128,6 +128,17 @@ bool MenuScene::initUi()
                                                              [this]() { this->back(); });
     m_uiManager->addElement(std::move(backButton));
 
+    // Quit Button
+    currentButtonLocalPos.y += buttonHeight + buttonSpacing;
+    auto quitButton = std::make_unique<engine::ui::UiButton>(m_context,
+                                                             "assets/textures/UI/buttons/Quit1.png",
+                                                             "assets/textures/UI/buttons/Quit2.png",
+                                                             "assets/textures/UI/buttons/Quit3.png",
+                                                             currentButtonLocalPos,
+                                                             buttonSize,
+                                                             [this]() { this->quit(); });
+    m_uiManager->addElement(std::move(quitButton));
+
     spdlog::trace("MenuScene UI 创建完成.");
     return true;
 }

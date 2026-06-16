@@ -81,7 +81,7 @@ void TitleScene::update(float deltaTime)
 bool TitleScene::initUi()
 {
     spdlog::trace("创建 TitleScene UI...");
-    glm::vec2 windowSize{ 640.0f, 360.0f };
+    glm::vec2 windowSize{ m_context.gameState().logicalSize() };
 
     if (!m_uiManager->init(windowSize)) {
         spdlog::error("初始化 UiManager 失败!");

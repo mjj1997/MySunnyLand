@@ -157,4 +157,10 @@ void MenuScene::back()
         std::make_unique<TitleScene>(m_context, m_sceneManager, m_gameSessionData));
 }
 
+void MenuScene::quit()
+{
+    spdlog::debug("退出按钮被点击。请求应用程序退出。");
+    m_context.inputManager().setShouldQuit(true); // 输入管理器设置退出标志
+}
+
 } // namespace game::scene

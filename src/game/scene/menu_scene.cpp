@@ -1,5 +1,6 @@
 #include "menu_scene.h"
 #include "../data/session_data.h"
+#include "title_scene.h"
 
 #include "../../engine/core/context.h"
 #include "../../engine/core/game_state.h"
@@ -135,6 +136,14 @@ void MenuScene::save()
     } else {
         spdlog::error("菜单场景中保存游戏数据失败。");
     }
+}
+
+void MenuScene::back()
+{
+    spdlog::debug("返回按钮被点击。弹出菜单场景和游戏场景，返回标题界面。");
+    // 直接替换为TitleScene
+    m_sceneManager.requestReplaceScene(
+        std::make_unique<TitleScene>(m_context, m_sceneManager, m_gameSessionData));
 }
 
 } // namespace game::scene

@@ -5,6 +5,7 @@
 
 #include "../../engine/audio/audio_player.h"
 #include "../../engine/core/context.h"
+#include "../../engine/core/game_state.h"
 #include "../../engine/input/input_manager.h"
 #include "../../engine/render/camera.h"
 #include "../../engine/resource/resource_manager.h"
@@ -44,6 +45,8 @@ void TitleScene::init()
 
     spdlog::trace("TitleScene 初始化开始...");
 
+    m_context.gameState().setCurrentState(engine::core::State::InTitle);
+
     // 加载背景
     engine::scene::LevelLoader levelLoader;
     if (!levelLoader.loadLevel("assets/maps/level0.tmj", *this)) {
@@ -78,10 +81,10 @@ void TitleScene::update(float deltaTime)
 bool TitleScene::initUi()
 {
     spdlog::trace("创建 TitleScene UI...");
-    glm::vec2 windowSize{ 640.0f, 360.0f };
+    glm::vec2 windowSize{ m_context.gameState().logicalSize() };
 
     if (!m_uiManager->init(windowSize)) {
-        spdlog::error("初始化 UiManager 失败!");
+        spdlog::error("TitleScene 中初始化 UiManager 失败!");
         return false;
     }
 
@@ -180,6 +183,7 @@ bool TitleScene::initUi()
     m_uiManager->addElement(std::move(creditLabel));
 
     spdlog::trace("TitleScene UI 创建完成.");
+    return true;
 }
 
 void TitleScene::startGame()

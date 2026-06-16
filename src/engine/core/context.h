@@ -23,6 +23,7 @@ class AudioPlayer;
 }
 
 namespace engine::core {
+class GameState;
 
 /**
  * @brief 持有对核心引擎模块引用的上下文对象。
@@ -41,14 +42,16 @@ public:
      * @param physicsEngine 对 PhysicsEngine 实例的引用。
      * @param audioPlayer 对 AudioPlayer 实例的引用。
      * @param textRenderer 对 TextRenderer 实例的引用。
-     */
+     * @param gameState 对 GameState 实例的引用。
+     * */
     Context(engine::input::InputManager& inputManager,
             engine::render::Renderer& renderer,
             engine::render::Camera& camera,
             engine::resource::ResourceManager& resourceManager,
             engine::physics::PhysicsEngine& physicsEngine,
             engine::audio::AudioPlayer& audioPlayer,
-            engine::render::TextRenderer& textRenderer);
+            engine::render::TextRenderer& textRenderer,
+            GameState& gameState);
 
     // 禁止拷贝和移动，Context 对象通常是唯一的或按需创建/传递
     Context(const Context&) = delete;
@@ -69,6 +72,8 @@ public:
     engine::audio::AudioPlayer& audioPlayer() const { return m_audioPlayer; }
     ///< @brief 获取文字渲染引擎
     engine::render::TextRenderer& textRenderer() const { return m_textRenderer; }
+    ///< @brief 获取游戏状态
+    GameState& gameState() const { return m_gameState; }
 
 private:
     // 使用引用，确保每个模块都有效，使用时不需要检查指针是否为空。
@@ -79,6 +84,7 @@ private:
     engine::physics::PhysicsEngine& m_physicsEngine;      ///< @brief 物理引擎
     engine::audio::AudioPlayer& m_audioPlayer;            ///< @brief 音频播放器
     engine::render::TextRenderer& m_textRenderer;         ///< @brief 文字渲染引擎
+    GameState& m_gameState;                               ///< @brief 游戏状态
 };
 
 } // namespace engine::core

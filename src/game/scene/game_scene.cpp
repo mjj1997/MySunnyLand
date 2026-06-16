@@ -5,6 +5,7 @@
 #include "../component/ai_component.h"
 #include "../component/player_component.h"
 #include "../data/session_data.h"
+#include "menu_scene.h"
 
 #include "../../engine/audio/audio_player.h"
 #include "../../engine/component/animation_component.h"
@@ -15,6 +16,7 @@
 #include "../../engine/component/tilelayer_component.h"
 #include "../../engine/component/transform_component.h"
 #include "../../engine/core/context.h"
+#include "../../engine/core/game_state.h"
 #include "../../engine/input/input_manager.h"
 #include "../../engine/object/game_object.h"
 #include "../../engine/physics/collider.h"
@@ -58,6 +60,8 @@ void GameScene::init()
     }
 
     spdlog::trace("GameScene 初始化开始...");
+
+    m_context.gameState().setCurrentState(engine::core::State::Playing);
 
     if (!initLevel()) {
         spdlog::error("初始化关卡失败，无法继续。");
@@ -105,6 +109,13 @@ void GameScene::render()
 void GameScene::handleInput()
 {
     SceneBase::handleInput();
+
+    // 检查暂停键
+    if (m_context.inputManager().isActionPressed("pause")) {
+        spdlog::debug("在 GameScene 中检测到暂停动作，正在推送 MenuScene。");
+        m_sceneManager.requestPushScene(
+            std::make_unique<MenuScene>(m_context, m_sceneManager, m_gameSessionData));
+    }
 }
 
 void GameScene::clean()
@@ -234,8 +245,8 @@ bool GameScene::initEnemyAndItem()
 
 bool GameScene::initUi()
 {
-    glm::vec2 windowSize{ 640.0f, 360.0f };
-    if (!m_uiManager->init(windowSize)) {
+    if (!m_uiManager->init(m_context.gameState().logicalSize())) {
+        spdlog::error("GameScene 中初始化 UiManager 失败!");
         return false;
     }
 
@@ -525,10 +536,11 @@ void GameScene::updateHealthWithUi()
     int maxHealth{ m_gameSessionData->maxHealth() };
 
     /** 更新生命值图标可见性
-     *  前景图标在后半部分，因此设置后半段的可见性即可
+     *  前景图标在奇数索引位置（1, 3, 5, ...），需要根据当前生命值设置可见性
      */
-    for (int i{ maxHealth }; i < maxHealth * 2; ++i) {
-        m_healthPanel->children().at(i)->setVisible(i - maxHealth < currentHealth);
+    for (int i{ 0 }; i < maxHealth; ++i) {
+        // 前景图标的索引是 i * 2 + 1（奇数位置）
+        m_healthPanel->children().at(i * 2 + 1)->setVisible(i < currentHealth);
     }
 }
 

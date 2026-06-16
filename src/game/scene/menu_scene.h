@@ -9,33 +9,34 @@ class SessionData;
 namespace game::scene {
 
 /**
- * @brief 标题场景类，提供4个按钮：开始游戏、加载游戏、帮助、退出
+ * @brief 游戏暂停时显示的菜单场景，提供继续、保存、返回、退出等选项。
+ * 该场景通常被推送到 GameScene 之上。
  */
-class TitleScene final : public engine::scene::SceneBase
+class MenuScene final : public engine::scene::SceneBase
 {
 public:
     /**
-     * @brief TitleScene 的构造函数
+     * @brief MenuScene 的构造函数
      * @param context 引擎上下文的引用
      * @param sceneManager 场景管理器的引用
      * @param gameSessionData 场景间传递的游戏数据
      */
-    TitleScene(engine::core::Context& context,
-               engine::scene::SceneManager& sceneManager,
-               std::shared_ptr<game::data::SessionData> gameSessionData = nullptr);
+    MenuScene(engine::core::Context& context,
+              engine::scene::SceneManager& sceneManager,
+              std::shared_ptr<game::data::SessionData> gameSessionData = nullptr);
 
-    // --- 核心方法 --- //
+    // --- 核心方法 ---
     void init() override;
-    void update(float deltaTime) override;
+    void handleInput() override;
 
 private:
     ///< @brief 初始化 UI
     [[nodiscard]] bool initUi();
 
     // --- 按钮回调函数 ---
-    void startGame();
-    void loadGame();
-    void help();
+    void resume();
+    void save();
+    void back();
     void quit();
 
     ///< @brief 场景间共享数据

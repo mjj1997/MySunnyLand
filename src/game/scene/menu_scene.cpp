@@ -116,4 +116,14 @@ void MenuScene::resume()
     m_context.gameState().setCurrentState(engine::core::State::Playing);
 }
 
+void MenuScene::save()
+{
+    spdlog::debug("保存游戏按钮被点击。");
+    if (m_gameSessionData != nullptr && m_gameSessionData->saveToFile("assets/save.json")) {
+        spdlog::debug("菜单场景中成功保存游戏数据。");
+    } else {
+        spdlog::error("菜单场景中保存游戏数据失败。");
+    }
+}
+
 } // namespace game::scene

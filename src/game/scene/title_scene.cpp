@@ -183,6 +183,7 @@ bool TitleScene::initUi()
     m_uiManager->addElement(std::move(creditLabel));
 
     spdlog::trace("TitleScene UI 创建完成.");
+    return true;
 }
 
 void TitleScene::startGame()

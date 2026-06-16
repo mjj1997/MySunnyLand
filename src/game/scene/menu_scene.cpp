@@ -83,7 +83,7 @@ bool MenuScene::initUi()
     m_uiManager->addElement(std::move(pauseLabel));
 
     spdlog::trace("MenuScene UI 创建完成.");
-    return false;
+    return true;
 }
 
 } // namespace game::scene

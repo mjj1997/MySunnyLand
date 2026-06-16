@@ -5,6 +5,7 @@
 #include "../component/ai_component.h"
 #include "../component/player_component.h"
 #include "../data/session_data.h"
+#include "end_scene.h"
 #include "menu_scene.h"
 
 #include "../../engine/audio/audio_player.h"
@@ -406,6 +407,16 @@ void GameScene::goToNextLevel(engine::object::GameObject* trigger)
                                                               m_sceneManager,
                                                               m_gameSessionData);
     m_sceneManager.requestReplaceScene(std::move(nextScene));
+}
+
+void GameScene::showEndScene(bool isWin)
+{
+    spdlog::debug("显示结束场景，游戏 {}", isWin ? "胜利" : "失败");
+    m_gameSessionData->setIsWin(isWin);
+    auto endScene = std::make_unique<game::scene::EndScene>(m_context,
+                                                            m_sceneManager,
+                                                            m_gameSessionData);
+    m_sceneManager.requestPushScene(std::move(endScene));
 }
 
 void GameScene::createEffect(const glm::vec2& center, const std::string& tag)

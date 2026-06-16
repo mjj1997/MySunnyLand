@@ -105,6 +105,17 @@ bool MenuScene::initUi()
                                                  [this]() { this->resume(); });
     m_uiManager->addElement(std::move(resumeButton));
 
+    // Save Button
+    currentButtonLocalPos.y += buttonHeight + buttonSpacing;
+    auto saveButton = std::make_unique<engine::ui::UiButton>(m_context,
+                                                             "assets/textures/UI/buttons/Save1.png",
+                                                             "assets/textures/UI/buttons/Save2.png",
+                                                             "assets/textures/UI/buttons/Save3.png",
+                                                             currentButtonLocalPos,
+                                                             buttonSize,
+                                                             [this]() { this->save(); });
+    m_uiManager->addElement(std::move(saveButton));
+
     spdlog::trace("MenuScene UI 创建完成.");
     return true;
 }

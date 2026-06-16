@@ -21,9 +21,7 @@ MenuScene::MenuScene(engine::core::Context& context,
     , m_gameSessionData{ std::move(gameSessionData) }
 {
     if (m_gameSessionData == nullptr) {
-        // 如果没有传入 SessionData，创建一个默认的
-        m_gameSessionData = std::make_shared<game::data::SessionData>();
-        spdlog::info("未提供 SessionData，使用默认值。");
+        spdlog::error("错误：菜单场景收到了空的游戏数据！");
     }
     spdlog::trace("MenuScene 构造完成。");
 }

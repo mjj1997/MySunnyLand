@@ -3,6 +3,8 @@
 
 #include "../../engine/core/context.h"
 #include "../../engine/core/game_state.h"
+#include "../../engine/input/input_manager.h"
+#include "../../engine/scene/scene_manager.h"
 
 #include <spdlog/spdlog.h>
 
@@ -37,6 +39,19 @@ void MenuScene::init()
 
     SceneBase::init();
     spdlog::trace("MenuScene 初始化完成。");
+}
+
+void MenuScene::handleInput()
+{
+    // 先让 UiManager 处理交互
+    SceneBase::handleInput();
+
+    // 检查暂停键，允许按暂停键恢复游戏
+    if (m_context.inputManager().isActionPressed("pause")) {
+        spdlog::debug("在菜单场景中按下暂停键，正在恢复游戏...");
+        m_sceneManager.requestPopScene(); // 弹出自身以恢复底层的 GameScene
+        m_context.gameState().setCurrentState(engine::core::State::Playing);
+    }
 }
 
 } // namespace game::scene

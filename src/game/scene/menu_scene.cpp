@@ -5,6 +5,8 @@
 #include "../../engine/core/game_state.h"
 #include "../../engine/input/input_manager.h"
 #include "../../engine/scene/scene_manager.h"
+#include "../../engine/ui/ui_label.h"
+#include "../../engine/ui/ui_manager.h"
 
 #include <spdlog/spdlog.h>
 
@@ -35,7 +37,11 @@ void MenuScene::init()
 
     m_context.gameState().setCurrentState(engine::core::State::Paused);
 
-    // TODO: 初始化 UI
+    if (!initUi()) {
+        spdlog::error("初始化 UI 失败，无法继续。");
+        m_context.inputManager().setShouldQuit(true);
+        return;
+    }
 
     SceneBase::init();
     spdlog::trace("MenuScene 初始化完成。");
@@ -52,6 +58,32 @@ void MenuScene::handleInput()
         m_sceneManager.requestPopScene(); // 弹出自身以恢复底层的 GameScene
         m_context.gameState().setCurrentState(engine::core::State::Playing);
     }
+}
+
+bool MenuScene::initUi()
+{
+    spdlog::trace("创建 MenuScene UI...");
+    glm::vec2 windowSize{ m_context.gameState().logicalSize() };
+
+    if (!m_uiManager->init(windowSize)) {
+        spdlog::error("MenuScene 中初始化 UiManager 失败!");
+        return false;
+    }
+
+    // --- 创建 PAUSE 标签 ---
+    auto pauseLabel = std::make_unique<engine::ui::UiLabel>(m_context.textRenderer(),
+                                                            "PAUSE",
+                                                            "assets/fonts/VonwaonBitmap-16px.ttf",
+                                                            32);
+    // 设置 PAUSE 标签位置，使其居中并靠上
+    auto labelLocalPosY{ windowSize.y * 0.2f };
+    pauseLabel->setLocalPosition(
+        glm::vec2{ (windowSize.x - pauseLabel->size().x) / 2.0f, labelLocalPosY });
+    // 将 PAUSE 标签添加到 UI 管理器
+    m_uiManager->addElement(std::move(pauseLabel));
+
+    spdlog::trace("MenuScene UI 创建完成.");
+    return false;
 }
 
 } // namespace game::scene

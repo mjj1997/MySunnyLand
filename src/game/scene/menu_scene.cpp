@@ -86,4 +86,11 @@ bool MenuScene::initUi()
     return true;
 }
 
+void MenuScene::resume()
+{
+    spdlog::debug("继续游戏按钮被点击。");
+    m_sceneManager.requestPopScene(); // 弹出当前场景
+    m_context.gameState().setCurrentState(engine::core::State::Playing);
+}
+
 } // namespace game::scene

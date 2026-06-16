@@ -59,7 +59,8 @@ target_sources(
           engine/ui/ui_button.cpp
           game/scene/title_scene.cpp
           game/scene/help_scene.cpp
-          engine/core/game_state.cpp)
+          engine/core/game_state.cpp
+          game/scene/menu_scene.cpp)
 
 target_link_libraries(
   SunnyLand

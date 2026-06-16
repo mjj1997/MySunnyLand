@@ -22,10 +22,10 @@ class GameScene final : public engine::scene::SceneBase
 {
 public:
     /**
-     * @brief 构造函数
-     * @param context 引擎上下文
-     * @param sceneManager 场景管理器
-     * @param gameSessionData 指向游戏玩法状态的共享指针
+     * @brief GameScene 的构造函数
+     * @param context 引擎上下文的引用
+     * @param sceneManager 场景管理器的引用
+     * @param gameSessionData 场景间传递的游戏数据
      */
     GameScene(engine::core::Context& context,
               engine::scene::SceneManager& sceneManager,

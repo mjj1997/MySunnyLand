@@ -13,9 +13,9 @@ class HelpScene final : public engine::scene::SceneBase
 {
 public:
     /**
-     * @brief 构造函数。
-     * @param context 引擎上下文引用。
-     * @param sceneManager 场景管理器引用。
+     * @brief HelpScene 的构造函数。
+     * @param context 引擎上下文的引用。
+     * @param sceneManager 场景管理器的引用。
      */
     HelpScene(engine::core::Context& context, engine::scene::SceneManager& sceneManager);
 

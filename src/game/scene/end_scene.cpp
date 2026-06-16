@@ -1,6 +1,9 @@
 #include "end_scene.h"
 #include "../data/session_data.h"
 
+#include "../../engine/core/context.h"
+#include "../../engine/core/game_state.h"
+
 #include <spdlog/spdlog.h>
 
 namespace game::scene {
@@ -15,6 +18,23 @@ EndScene::EndScene(engine::core::Context& context,
         spdlog::error("错误：结束场景收到了空的游戏数据！");
     }
     spdlog::trace("EndScene (胜利：{}) 构造完成。", m_gameSessionData->isWin() ? "是" : "否");
+}
+
+void EndScene::init()
+{
+    if (m_isInitialized) {
+        spdlog::warn("EndScene 已初始化，重复调用 init()");
+        return;
+    }
+
+    spdlog::trace("EndScene 初始化开始...");
+
+    m_context.gameState().setCurrentState(engine::core::State::GameOver);
+
+    // TODO: 初始化 UI
+
+    SceneBase::init();
+    spdlog::trace("EndScene 初始化完成。");
 }
 
 } // namespace game::scene

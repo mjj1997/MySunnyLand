@@ -5,6 +5,7 @@
 #include "../component/ai_component.h"
 #include "../component/player_component.h"
 #include "../data/session_data.h"
+#include "menu_scene.h"
 
 #include "../../engine/audio/audio_player.h"
 #include "../../engine/component/animation_component.h"
@@ -108,6 +109,13 @@ void GameScene::render()
 void GameScene::handleInput()
 {
     SceneBase::handleInput();
+
+    // 检查暂停键
+    if (m_context.inputManager().isActionPressed("pause")) {
+        spdlog::debug("在 GameScene 中检测到暂停动作，正在推送 MenuScene。");
+        m_sceneManager.requestPushScene(
+            std::make_unique<MenuScene>(m_context, m_sceneManager, m_gameSessionData));
+    }
 }
 
 void GameScene::clean()

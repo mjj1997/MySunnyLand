@@ -15,6 +15,7 @@
 #include "../../engine/component/tilelayer_component.h"
 #include "../../engine/component/transform_component.h"
 #include "../../engine/core/context.h"
+#include "../../engine/core/game_state.h"
 #include "../../engine/input/input_manager.h"
 #include "../../engine/object/game_object.h"
 #include "../../engine/physics/collider.h"
@@ -58,6 +59,8 @@ void GameScene::init()
     }
 
     spdlog::trace("GameScene 初始化开始...");
+
+    m_context.gameState().setCurrentState(engine::core::State::Playing);
 
     if (!initLevel()) {
         spdlog::error("初始化关卡失败，无法继续。");

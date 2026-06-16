@@ -5,6 +5,7 @@
 
 #include "../../engine/audio/audio_player.h"
 #include "../../engine/core/context.h"
+#include "../../engine/core/game_state.h"
 #include "../../engine/input/input_manager.h"
 #include "../../engine/render/camera.h"
 #include "../../engine/resource/resource_manager.h"
@@ -43,6 +44,8 @@ void TitleScene::init()
     }
 
     spdlog::trace("TitleScene 初始化开始...");
+
+    m_context.gameState().setCurrentState(engine::core::State::InTitle);
 
     // 加载背景
     engine::scene::LevelLoader levelLoader;

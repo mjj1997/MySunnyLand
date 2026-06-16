@@ -5,6 +5,7 @@
 #include "../../engine/core/game_state.h"
 #include "../../engine/input/input_manager.h"
 #include "../../engine/scene/scene_manager.h"
+#include "../../engine/ui/ui_button.h"
 #include "../../engine/ui/ui_label.h"
 #include "../../engine/ui/ui_manager.h"
 
@@ -81,6 +82,28 @@ bool MenuScene::initUi()
         glm::vec2{ (windowSize.x - pauseLabel->size().x) / 2.0f, labelLocalPosY });
     // 将 PAUSE 标签添加到 UI 管理器
     m_uiManager->addElement(std::move(pauseLabel));
+
+    // --- 创建 4 个按钮 --- (4个按钮，设定好大小、间距)
+    float buttonWidth{ 96.0f };
+    float buttonHeight{ 32.0f };
+    float buttonSpacing{ 10.0f };
+
+    glm::vec2 currentButtonLocalPos{
+        (windowSize.x - buttonWidth) / 2.0f, // 按钮水平居中位置
+        labelLocalPosY + 80.0f               // 从标签下方开始，增加间距
+    };
+    glm::vec2 buttonSize{ buttonWidth, buttonHeight };
+
+    // Resume Button
+    auto resumeButton
+        = std::make_unique<engine::ui::UiButton>(m_context,
+                                                 "assets/textures/UI/buttons/Resume1.png",
+                                                 "assets/textures/UI/buttons/Resume2.png",
+                                                 "assets/textures/UI/buttons/Resume3.png",
+                                                 currentButtonLocalPos,
+                                                 buttonSize,
+                                                 [this]() { this->resume(); });
+    m_uiManager->addElement(std::move(resumeButton));
 
     spdlog::trace("MenuScene UI 创建完成.");
     return true;

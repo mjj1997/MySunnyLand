@@ -84,7 +84,7 @@ bool TitleScene::initUi()
     glm::vec2 windowSize{ m_context.gameState().logicalSize() };
 
     if (!m_uiManager->init(windowSize)) {
-        spdlog::error("初始化 UiManager 失败!");
+        spdlog::error("TitleScene 中初始化 UiManager 失败!");
         return false;
     }
 

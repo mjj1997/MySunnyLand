@@ -238,6 +238,7 @@ bool GameScene::initEnemyAndItem()
 bool GameScene::initUi()
 {
     if (!m_uiManager->init(m_context.gameState().logicalSize())) {
+        spdlog::error("GameScene 中初始化 UiManager 失败!");
         return false;
     }
 

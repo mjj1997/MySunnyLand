@@ -536,10 +536,11 @@ void GameScene::updateHealthWithUi()
     int maxHealth{ m_gameSessionData->maxHealth() };
 
     /** 更新生命值图标可见性
-     *  前景图标在后半部分，因此设置后半段的可见性即可
+     *  前景图标在奇数索引位置（1, 3, 5, ...），需要根据当前生命值设置可见性
      */
-    for (int i{ maxHealth }; i < maxHealth * 2; ++i) {
-        m_healthPanel->children().at(i)->setVisible(i - maxHealth < currentHealth);
+    for (int i{ 0 }; i < maxHealth; ++i) {
+        // 前景图标的索引是 i * 2 + 1（奇数位置）
+        m_healthPanel->children().at(i * 2 + 1)->setVisible(i < currentHealth);
     }
 }
 

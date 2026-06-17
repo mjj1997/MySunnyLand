@@ -69,13 +69,12 @@ public:
     const glm::vec2& offset() const { return m_offset; }                  ///< @brief 获取偏移量
 
     // Setters
-    void setSpriteById(
-        const std::string& textureId,
-        const std::optional<SDL_FRect>& sourceRect = std::nullopt); ///< @brief 设置精灵对象
-    void setSourceRect(const std::optional<SDL_FRect>& sourceRect); ///< @brief 设置源矩形
-    void setFlipped(bool flipped) { m_sprite.setFlipped(flipped); } ///< @brief 设置是否翻转
-    void setAlignment(engine::utils::Alignment anchor);             ///< @brief 设置对齐方式
-    void setHidden(bool hidden) { m_isHidden = hidden; }            ///< @brief 设置是否隐藏
+    void setSpriteById(const std::string& textureId,
+                       std::optional<SDL_FRect> sourceRect = std::nullopt); ///< @brief 设置精灵对象
+    void setSourceRect(std::optional<SDL_FRect> sourceRect);                ///< @brief 设置源矩形
+    void setFlipped(bool flipped) { m_sprite.setFlipped(flipped); }         ///< @brief 设置是否翻转
+    void setAlignment(engine::utils::Alignment anchor);                     ///< @brief 设置对齐方式
+    void setHidden(bool hidden) { m_isHidden = hidden; }                    ///< @brief 设置是否隐藏
 
     ///< @brief 辅助函数，更新偏移量（根据当前的 m_alignment 和 m_spriteSize 计算 m_offset）。
     void updateOffset();

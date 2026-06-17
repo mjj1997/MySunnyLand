@@ -449,11 +449,11 @@ void GameScene::showEndScene(bool isWin)
     m_sceneManager.requestPushScene(std::move(endScene));
 }
 
-void GameScene::createEffect(const glm::vec2& center, const std::string& tag)
+void GameScene::createEffect(glm::vec2 center, const std::string& tag)
 {
     // --- 创建游戏对象和变换组件 ---
     auto effectObj = std::make_unique<engine::object::GameObject>("effect_" + tag);
-    effectObj->addComponent<engine::component::TransformComponent>(center);
+    effectObj->addComponent<engine::component::TransformComponent>(std::move(center));
 
     // --- 根据标签创建不同的精灵组件和动画---
     auto animation = std::make_unique<engine::render::Animation>("effect", false);

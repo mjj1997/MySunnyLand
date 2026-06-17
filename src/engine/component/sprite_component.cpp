@@ -15,7 +15,7 @@ SpriteComponent::SpriteComponent(const std::string& textureId,
                                  std::optional<SDL_FRect> sourceRect,
                                  bool isFlipped)
     : m_resourceManager{ &resourceManager }
-    , m_sprite{ textureId, sourceRect, isFlipped }
+    , m_sprite{ textureId, std::move(sourceRect), isFlipped }
     , m_alignment{ alignment }
 {
     if (!m_resourceManager) {
@@ -23,7 +23,7 @@ SpriteComponent::SpriteComponent(const std::string& textureId,
         // 不要在游戏主循环中使用 try...catch / throw，会极大影响性能
     }
     // m_offset 和 m_spriteSize 将在 init 中计算
-    spdlog::trace("创建 SpriteComponent，纹理ID: {}", textureId);
+    spdlog::trace("创建 SpriteComponent，纹理ID: {}", m_sprite.textureId());
 }
 
 SpriteComponent::SpriteComponent(engine::render::Sprite&& sprite,
@@ -40,18 +40,18 @@ SpriteComponent::SpriteComponent(engine::render::Sprite&& sprite,
 }
 
 void SpriteComponent::setSpriteById(const std::string& textureId,
-                                    const std::optional<SDL_FRect>& sourceRect)
+                                    std::optional<SDL_FRect> sourceRect)
 {
     m_sprite.setTextureId(textureId);
-    m_sprite.setSourceRect(sourceRect);
+    m_sprite.setSourceRect(std::move(sourceRect));
 
     updateSpriteSize();
     updateOffset();
 }
 
-void SpriteComponent::setSourceRect(const std::optional<SDL_FRect>& sourceRect)
+void SpriteComponent::setSourceRect(std::optional<SDL_FRect> sourceRect)
 {
-    m_sprite.setSourceRect(sourceRect);
+    m_sprite.setSourceRect(std::move(sourceRect));
 
     updateSpriteSize();
     updateOffset();

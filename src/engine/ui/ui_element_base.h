@@ -26,8 +26,8 @@ public:
      * @param localPosition 初始局部位置
      * @param size 初始大小
      */
-    explicit UiElementBase(const glm::vec2& localPosition = { 0.0f, 0.0f },
-                           const glm::vec2& size = { 0.0f, 0.0f });
+    explicit UiElementBase(glm::vec2 localPosition = { 0.0f, 0.0f },
+                           glm::vec2 size = { 0.0f, 0.0f });
 
     ///< @brief 虚析构函数，确保派生类正确清理
     virtual ~UiElementBase() = default;
@@ -66,9 +66,9 @@ public:
     const std::vector<std::unique_ptr<UiElementBase>>& children() const { return m_children; }
 
     ///< @brief 设置元素位置(相对于父元素)
-    void setLocalPosition(const glm::vec2& localPosition) { m_localPosition = localPosition; }
-    void setSize(const glm::vec2& size) { m_size = size; }   ///< @brief 设置元素大小
-    void setVisible(bool visible) { m_isVisible = visible; } ///< @brief 设置元素的可见性
+    void setLocalPosition(glm::vec2 localPosition) { m_localPosition = std::move(localPosition); }
+    void setSize(glm::vec2 size) { m_size = std::move(size); } ///< @brief 设置元素大小
+    void setVisible(bool visible) { m_isVisible = visible; }   ///< @brief 设置元素的可见性
     ///< @brief 设置元素是否需要移除
     void setShouldRemove(bool shouldRemove) { m_shouldRemove = shouldRemove; }
     void setParent(UiElementBase* parent) { m_parent = parent; } ///< @brief 设置父元素

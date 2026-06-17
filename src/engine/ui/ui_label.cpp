@@ -9,14 +9,14 @@ UiLabel::UiLabel(engine::render::TextRenderer& textRenderer,
                  const std::string& text,
                  const std::string& fontId,
                  int fontSize,
-                 const engine::utils::FColor& textColor,
-                 const glm::vec2& localPosition)
-    : UiElementBase{ localPosition }
+                 engine::utils::FColor textColor,
+                 glm::vec2 localPosition)
+    : UiElementBase{ std::move(localPosition) }
     , m_textRenderer{ textRenderer }
     , m_text{ text }
     , m_fontId{ fontId }
     , m_fontSize{ fontSize }
-    , m_textColor{ textColor }
+    , m_textColor{ std::move(textColor) }
 {
     m_size = m_textRenderer.getTextSize(m_text, m_fontId, m_fontSize);
     spdlog::trace("UiLabel 构造完成");
@@ -53,9 +53,9 @@ void UiLabel::setFontSize(int fontSize)
     m_size = m_textRenderer.getTextSize(m_text, m_fontId, m_fontSize);
 }
 
-void UiLabel::setTextColor(const engine::utils::FColor& textColor)
+void UiLabel::setTextColor(engine::utils::FColor textColor)
 {
-    m_textColor = textColor;
+    m_textColor = std::move(textColor);
     /* 颜色变化, 不需要更新尺寸 */
 }
 

@@ -9,11 +9,11 @@
 namespace engine::component {
 
 ParallaxComponent::ParallaxComponent(const std::string& textureId,
-                                     const glm::vec2& scrollFactor,
-                                     const glm::bvec2& repeat)
+                                     glm::vec2 scrollFactor,
+                                     glm::bvec2 repeat)
     : m_sprite{ engine::render::Sprite{ textureId } }
-    , m_scrollFactor{ scrollFactor }
-    , m_repeat{ repeat }
+    , m_scrollFactor{ std::move(scrollFactor) }
+    , m_repeat{ std::move(repeat) }
 {
     spdlog::trace("ParallaxComponent 初始化完成， 纹理 ID： {}", textureId);
 }

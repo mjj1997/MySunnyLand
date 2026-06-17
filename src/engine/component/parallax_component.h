@@ -27,9 +27,7 @@ public:
      *                      (1, 1) 表示与相机完全同步移动。
      *                      (0.5, 0.5) 表示以相机一半的速度移动。
      */
-    ParallaxComponent(const std::string& textureId,
-                      const glm::vec2& scrollFactor,
-                      const glm::bvec2& repeat);
+    ParallaxComponent(const std::string& textureId, glm::vec2 scrollFactor, glm::bvec2 repeat);
     ~ParallaxComponent() override = default;
 
     // 禁止拷贝和移动
@@ -40,11 +38,11 @@ public:
 
     // --- getters & setters ---
     ///< @brief 设置精灵对象
-    void setSprite(const engine::render::Sprite& sprite) { m_sprite = sprite; }
+    void setSprite(engine::render::Sprite sprite) { m_sprite = std::move(sprite); }
     ///< @brief 设置滚动速度因子
-    void setScrollFactor(const glm::vec2& factor) { m_scrollFactor = factor; }
+    void setScrollFactor(glm::vec2 factor) { m_scrollFactor = std::move(factor); }
     ///< @brief 设置是否重复
-    void setRepeat(const glm::bvec2& repeat) { m_repeat = repeat; }
+    void setRepeat(glm::bvec2 repeat) { m_repeat = std::move(repeat); }
     ///< @brief 设置是否隐藏（不渲染）
     void setHidden(bool hidden) { m_isHidden = hidden; }
 

@@ -40,9 +40,11 @@ public:
     State currentState() const { return m_currentState; }
     void setCurrentState(State newState);
     glm::vec2 windowSize() const;
-    void setWindowSize(const glm::vec2& newSize);
+    //这里不涉及成员变量的赋值，只是访问 windowSize 的值，所以不用 std::move
+    void setWindowSize(const glm::vec2& windowSize);
     glm::vec2 logicalSize() const;
-    void setLogicalSize(const glm::vec2& newSize);
+    //这里不涉及成员变量的赋值，只是访问 logicalSize 的值，所以不用 std::move
+    void setLogicalSize(const glm::vec2& logicalSize);
 
     // --- 便捷查询方法 ---
     bool isInTitle() const { return m_currentState == State::InTitle; }

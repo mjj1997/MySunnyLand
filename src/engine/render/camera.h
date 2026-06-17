@@ -17,9 +17,15 @@ namespace engine::render {
 class Camera final
 {
 public:
-    explicit Camera(const glm::vec2& viewportSize,
-                    const glm::vec2& position = glm::vec2(0.0f),
-                    const std::optional<engine::utils::Rect> limitBounds = std::nullopt);
+    /**
+     * @brief 构造相机对象
+     * @param viewportSize 视口大小
+     * @param position 相机位置
+     * @param limitBounds 限制相机的移动范围
+     */
+    explicit Camera(glm::vec2 viewportSize,
+                    glm::vec2 position = glm::vec2(0.0f),
+                    std::optional<engine::utils::Rect> limitBounds = std::nullopt);
 
     // 禁用拷贝和移动语义
     Camera(const Camera&) = delete;
@@ -43,9 +49,9 @@ public:
     ///< @brief 获取相机跟随目标的变换组件
     const engine::component::TransformComponent* target() const;
 
-    void setPosition(const glm::vec2& position); ///< @brief 设置相机位置
+    void setPosition(glm::vec2 position); ///< @brief 设置相机位置
     ///< @brief 设置限制相机的移动范围
-    void setLimitBounds(const std::optional<engine::utils::Rect>& bounds);
+    void setLimitBounds(std::optional<engine::utils::Rect> limitBounds);
     ///< @brief 设置相机跟随目标的变换组件
     void setTarget(engine::component::TransformComponent* target);
 

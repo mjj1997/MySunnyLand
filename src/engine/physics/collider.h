@@ -26,7 +26,7 @@ public:
     virtual ColliderType type() const = 0; ///< @brief 获取碰撞器的类型。
 
     ///< @brief 设置最小包围盒的尺寸（宽度和高度）。
-    void setAabbSize(const glm::vec2& size) { m_aabbSize = size; }
+    void setAabbSize(glm::vec2 size) { m_aabbSize = std::move(size); }
     ///< @brief 获取最小包围盒的尺寸（宽度和高度）。
     const glm::vec2& aabbSize() const { return m_aabbSize; }
 
@@ -45,8 +45,8 @@ public:
      * @brief 构造函数。
      * @param size 包围盒的宽度和高度。
      */
-    explicit AabbCollider(const glm::vec2& size)
-        : m_size{ size }
+    explicit AabbCollider(glm::vec2 size)
+        : m_size{ std::move(size) }
     {
         setAabbSize(m_size);
     }
@@ -56,7 +56,7 @@ public:
 
     // --- Getters and Setters ---
     const glm::vec2& size() const { return m_size; }
-    void setSize(const glm::vec2& size) { m_size = size; }
+    void setSize(glm::vec2 size) { m_size = std::move(size); }
 
 private:
     ///< @brief 包围盒的尺寸（和 m_aabbSize相同）。

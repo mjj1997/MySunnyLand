@@ -59,7 +59,7 @@ public:
     bool isTrigger() const { return m_isTrigger; } ///< @brief 检查此碰撞器是否为触发器。
     bool isActive() const { return m_isActive; }   ///< @brief 检查此碰撞器是否激活。
 
-    void setOffset(const glm::vec2& offset) { m_offset = offset; } ///< @brief 设置偏移量。
+    void setOffset(glm::vec2 offset) { m_offset = std::move(offset); } ///< @brief 设置偏移量。
     ///< @brief 设置新的对齐方式并重新计算偏移量。
     void setAlignment(engine::utils::Alignment anchor);
     ///< @brief 设置此碰撞器是否为触发器。

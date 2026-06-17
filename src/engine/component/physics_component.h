@@ -76,7 +76,7 @@ public:
     bool isCollidedLadder() const { return m_isCollidedLadder; } ///< @brief 检测组件是否与梯子碰撞
     bool isOnLadderTop() const { return m_isOnLadderTop; }       ///< @brief 检测组件是否在梯子顶部
 
-    void setVelocity(const glm::vec2& velocity) { m_velocity = velocity; } ///< @brief 设置速度
+    void setVelocity(glm::vec2 velocity) { m_velocity = std::move(velocity); } ///< @brief 设置速度
     ///< @brief 设置质量，质量不能为负
     void setMass(float mass) { m_mass = (mass >= 0.0f) ? mass : 1.0f; }
     ///< @brief 设置组件是否受重力影响

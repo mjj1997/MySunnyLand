@@ -47,7 +47,10 @@ public:
     ///< @brief 设置纹理 ID
     void setTextureId(const std::string& textureId) { m_textureId = textureId; }
     ///< @brief 设置源矩形 (如果使用整个纹理则为 std::nullopt)
-    void setSourceRect(const std::optional<SDL_FRect>& sourceRect) { m_sourceRect = sourceRect; }
+    void setSourceRect(std::optional<SDL_FRect> sourceRect)
+    {
+        m_sourceRect = std::move(sourceRect);
+    }
     void setFlipped(bool flipped) { m_isFlipped = flipped; } ///< @brief 设置是否水平翻转
 
 private:

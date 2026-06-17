@@ -292,6 +292,12 @@ void GameScene::handleObjectCollisions()
         } else if (obj2->name() == "player" && obj1->tag() == "nextLevel") {
             goToNextLevel(obj1);
         }
+        // 处理玩家与名称为“win”的游戏结束触发器对象的碰撞
+        else if (obj1->name() == "player" && obj2->name() == "win") {
+            showEndScene(true);
+        } else if (obj2->name() == "player" && obj1->name() == "win") {
+            showEndScene(true);
+        }
     }
 }
 

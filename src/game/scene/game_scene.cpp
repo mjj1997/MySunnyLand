@@ -100,6 +100,17 @@ void GameScene::update(float deltaTime)
     SceneBase::update(deltaTime);
     handleObjectCollisions();
     handleTileTriggers();
+
+    // 玩家掉出地图下方则判断为失败
+    if (m_player != nullptr) {
+        auto pos = m_player->getComponent<engine::component::TransformComponent>()->position();
+        auto worldBoundary = m_context.physicsEngine().worldBounds();
+        // 多 100 像素冗余量
+        if (worldBoundary && pos.y > worldBoundary->position.y + worldBoundary->size.y + 100.0f) {
+            spdlog::debug("玩家掉出地图下方，游戏失败");
+            showEndScene(false);
+        }
+    }
 }
 
 void GameScene::render()

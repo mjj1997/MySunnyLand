@@ -16,8 +16,6 @@
 #include "frame_time_controller.h"
 #include "game_state.h"
 
-#include "../../game/scene/title_scene.h"
-
 #include <SDL3/SDL.h>
 #include <spdlog/spdlog.h>
 
@@ -64,6 +62,12 @@ void GameApp::registerSceneSetupFunc(std::function<void(engine::scene::SceneMana
 bool GameApp::init()
 {
     spdlog::trace("初始化 GameApp ...");
+
+    if (m_sceneSetupFunc == nullptr) {
+        spdlog::error("未注册设置初始场景的函数对象，无法初始化 GameApp。");
+        return false;
+    }
+
     if (!initConfigurator()) {
         return false;
     }
@@ -104,9 +108,8 @@ bool GameApp::init()
         return false;
     }
 
-    // 创建第一个场景并压入场景栈
-    auto scene = std::make_unique<game::scene::TitleScene>(*m_context, *m_sceneManager);
-    m_sceneManager->requestPushScene(std::move(scene));
+    // 调用设置初始场景的函数对象
+    m_sceneSetupFunc(*m_sceneManager);
 
     m_isRunning = true;
     spdlog::trace("GameApp 初始化成功。");

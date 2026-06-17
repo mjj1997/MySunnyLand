@@ -12,7 +12,7 @@
         "targetFps": 144
     },
     "audio": {
-        "musicVolume": 0.5,
+        "musicVolume": 0.2,
         "soundVolume": 0.5
     },
     "inputMappings": {

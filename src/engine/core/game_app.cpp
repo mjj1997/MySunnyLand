@@ -347,6 +347,9 @@ bool GameApp::initAudioPlayer()
 {
     try {
         m_audioPlayer = std::make_unique<engine::audio::AudioPlayer>(m_resourceManager.get());
+        // 设置音量
+        m_audioPlayer->setMusicVolume(m_configurator->m_musicVolume);
+        m_audioPlayer->setSoundVolume(m_configurator->m_soundVolume);
     } catch (const std::exception& e) {
         spdlog::error("初始化音频播放器失败: {}", e.what());
         return false;

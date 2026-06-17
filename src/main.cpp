@@ -4,7 +4,7 @@
 
 int main(int, char*[])
 {
-    spdlog::set_level(spdlog::level::info);
+    spdlog::set_level(spdlog::level::off);
 
     engine::core::GameApp app;
     app.run();

@@ -46,6 +46,8 @@ void TitleScene::init()
     spdlog::trace("TitleScene 初始化开始...");
 
     m_context.gameState().setCurrentState(engine::core::State::InTitle);
+    // 同步最高分
+    m_gameSessionData->syncHighestScore("assets/save.json");
 
     // 加载背景
     engine::scene::LevelLoader levelLoader;

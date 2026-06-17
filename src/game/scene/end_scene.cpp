@@ -37,6 +37,8 @@ void EndScene::init()
     spdlog::trace("EndScene 初始化开始...");
 
     m_context.gameState().setCurrentState(engine::core::State::GameOver);
+    // 同步最高分
+    m_gameSessionData->syncHighestScore("assets/save.json");
 
     if (!initUi()) {
         spdlog::error("初始化 UI 失败，无法继续。");

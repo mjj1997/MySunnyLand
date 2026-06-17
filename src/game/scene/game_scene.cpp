@@ -63,6 +63,8 @@ void GameScene::init()
     spdlog::trace("GameScene 初始化开始...");
 
     m_context.gameState().setCurrentState(engine::core::State::Playing);
+    // 同步最高分
+    m_gameSessionData->syncHighestScore("assets/save.json");
 
     if (!initLevel()) {
         spdlog::error("初始化关卡失败，无法继续。");

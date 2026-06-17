@@ -12,11 +12,13 @@ void setupInitialScene(engine::scene::SceneManager& sceneManager)
     sceneManager.requestPushScene(std::move(initialScene));
 }
 
-int main(int, char*[])
+int main()
 {
     spdlog::set_level(spdlog::level::off);
 
     engine::core::GameApp app;
+    app.registerSceneSetupFunc(setupInitialScene);
     app.run();
+
     return 0;
 }

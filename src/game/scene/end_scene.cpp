@@ -1,5 +1,6 @@
 #include "end_scene.h"
 #include "../data/session_data.h"
+#include "game_scene.h"
 #include "title_scene.h"
 
 #include "../../engine/core/context.h"
@@ -143,6 +144,16 @@ void EndScene::back()
     // 直接替换为TitleScene
     m_sceneManager.requestReplaceScene(
         std::make_unique<TitleScene>(m_context, m_sceneManager, m_gameSessionData));
+}
+
+void EndScene::restart()
+{
+    spdlog::debug("重新开始按钮被点击。弹出菜单场景和游戏场景，重新开始游戏。");
+    // 重置游戏数据
+    m_gameSessionData->reset();
+    // 直接替换为GameScene
+    m_sceneManager.requestReplaceScene(
+        std::make_unique<GameScene>(m_context, m_sceneManager, m_gameSessionData));
 }
 
 } // namespace game::scene

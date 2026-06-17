@@ -1,5 +1,6 @@
 #pragma once
 
+#include <functional>
 #include <memory>
 
 struct SDL_Window;
@@ -84,6 +85,9 @@ private:
     SDL_Window* m_window{ nullptr };
     SDL_Renderer* m_sdlRenderer{ nullptr };
     bool m_isRunning{ false };
+
+    /// @brief 在运行游戏前设置初始场景的函数对象 (GameApp不再决定初始场景是什么)
+    std::function<void(engine::scene::SceneManager&)> m_sceneSetupFunc;
 
     // 引擎组件
     std::unique_ptr<engine::core::FrameTimeController> m_frameTimeController;

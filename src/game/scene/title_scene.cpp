@@ -49,6 +49,11 @@ void TitleScene::init()
     // 同步最高分
     m_gameSessionData->syncHighestScore("assets/save.json");
 
+    // 重置相机坐标，不限制边界
+    m_context.camera().setPosition(glm::vec2(0.0f));
+    // 若无这一行，从GameScene返回到标题场景时，相机会限制在地图边界内
+    m_context.camera().setLimitBounds(std::nullopt);
+
     // 加载背景
     engine::scene::LevelLoader levelLoader;
     if (!levelLoader.loadLevel("assets/maps/level0.tmj", *this)) {

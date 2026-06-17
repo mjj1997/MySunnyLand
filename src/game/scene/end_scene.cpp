@@ -1,9 +1,12 @@
 #include "end_scene.h"
 #include "../data/session_data.h"
+#include "title_scene.h"
 
 #include "../../engine/core/context.h"
 #include "../../engine/core/game_state.h"
 #include "../../engine/input/input_manager.h"
+#include "../../engine/scene/scene_manager.h"
+#include "../../engine/ui/ui_button.h"
 #include "../../engine/ui/ui_label.h"
 #include "../../engine/ui/ui_manager.h"
 
@@ -113,6 +116,14 @@ bool EndScene::initUi()
 
     spdlog::trace("EndScene UI 创建完成.");
     return true;
+}
+
+void EndScene::back()
+{
+    spdlog::debug("返回按钮被点击。弹出菜单场景和游戏场景，返回标题界面。");
+    // 直接替换为TitleScene
+    m_sceneManager.requestReplaceScene(
+        std::make_unique<TitleScene>(m_context, m_sceneManager, m_gameSessionData));
 }
 
 } // namespace game::scene

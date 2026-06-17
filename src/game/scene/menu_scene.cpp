@@ -21,9 +21,7 @@ MenuScene::MenuScene(engine::core::Context& context,
     , m_gameSessionData{ std::move(gameSessionData) }
 {
     if (m_gameSessionData == nullptr) {
-        // 如果没有传入 SessionData，创建一个默认的
-        m_gameSessionData = std::make_shared<game::data::SessionData>();
-        spdlog::info("未提供 SessionData，使用默认值。");
+        spdlog::error("错误：菜单场景收到了空的游戏数据！");
     }
     spdlog::trace("MenuScene 构造完成。");
 }
@@ -153,7 +151,9 @@ void MenuScene::resume()
 void MenuScene::save()
 {
     spdlog::debug("保存游戏按钮被点击。");
-    if (m_gameSessionData != nullptr && m_gameSessionData->saveToFile("assets/save.json")) {
+    // 同步最高分
+    m_gameSessionData->syncHighestScore("assets/save.json");
+    if (m_gameSessionData->saveToFile("assets/save.json")) {
         spdlog::debug("菜单场景中成功保存游戏数据。");
     } else {
         spdlog::error("菜单场景中保存游戏数据失败。");
@@ -171,6 +171,8 @@ void MenuScene::back()
 void MenuScene::quit()
 {
     spdlog::debug("退出按钮被点击。请求应用程序退出。");
+    // 同步最高分
+    m_gameSessionData->syncHighestScore("assets/save.json");
     m_context.inputManager().setShouldQuit(true); // 输入管理器设置退出标志
 }
 

@@ -30,6 +30,7 @@ public:
     int levelHealth() const { return m_levelHealth; }
     int levelScore() const { return m_levelScore; }
     const std::string& mapPath() const { return m_mapPath; }
+    bool isWin() const { return m_isWin; }
 
     // --- Setters ---
     void setCurrentHealth(int health);
@@ -39,6 +40,7 @@ public:
     void setLevelHealth(int levelHealth) { m_levelHealth = levelHealth; }
     void setLevelScore(int levelScore) { m_levelScore = levelScore; }
     void setMapPath(const std::string& mapPath) { m_mapPath = mapPath; }
+    void setIsWin(bool isWin) { m_isWin = isWin; }
 
     ///< @brief 重置游戏数据以准备开始新游戏（保留最高分）
     void reset();
@@ -48,6 +50,8 @@ public:
     bool saveToFile(const std::string& fileName) const;
     ///< @brief 从 JSON 文件中读取游戏数据（读档）
     bool loadFromFile(const std::string& fileName);
+    ///< @brief 同步最高分(文件与当前分数取最大值)
+    bool syncHighestScore(const std::string& fileName);
 
 private:
     int m_currentHealth{ 3 };
@@ -58,6 +62,7 @@ private:
     int m_levelHealth{ 3 }; ///< @brief 进入关卡时的生命值（读/存档用）
     int m_levelScore{ 0 };  ///< @brief 进入关卡时的得分（读/存档用）
     std::string m_mapPath{ "assets/maps/level1.tmj" };
+    bool m_isWin{ false };
 };
 
 } // namespace game::data

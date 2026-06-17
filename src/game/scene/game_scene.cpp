@@ -5,6 +5,7 @@
 #include "../component/ai_component.h"
 #include "../component/player_component.h"
 #include "../data/session_data.h"
+#include "end_scene.h"
 #include "menu_scene.h"
 
 #include "../../engine/audio/audio_player.h"
@@ -62,6 +63,8 @@ void GameScene::init()
     spdlog::trace("GameScene 初始化开始...");
 
     m_context.gameState().setCurrentState(engine::core::State::Playing);
+    // 同步最高分
+    m_gameSessionData->syncHighestScore("assets/save.json");
 
     if (!initLevel()) {
         spdlog::error("初始化关卡失败，无法继续。");
@@ -99,6 +102,17 @@ void GameScene::update(float deltaTime)
     SceneBase::update(deltaTime);
     handleObjectCollisions();
     handleTileTriggers();
+
+    // 玩家掉出地图下方则判断为失败
+    if (m_player != nullptr) {
+        auto pos = m_player->getComponent<engine::component::TransformComponent>()->position();
+        auto worldBoundary = m_context.physicsEngine().worldBounds();
+        // 多 100 像素冗余量
+        if (worldBoundary && pos.y > worldBoundary->position.y + worldBoundary->size.y + 100.0f) {
+            spdlog::debug("玩家掉出地图下方，游戏失败");
+            showEndScene(false);
+        }
+    }
 }
 
 void GameScene::render()
@@ -167,25 +181,36 @@ bool GameScene::initPlayer()
 {
     // 获取玩家对象
     m_player = findGameObjectByName("player");
-    if (!m_player) {
+    if (m_player == nullptr) {
         spdlog::error("未找到玩家对象。");
         return false;
     }
 
     // 添加 PlayerComponent 到玩家对象
-    auto* playerComponent = m_player->addComponent<game::component::PlayerComponent>();
-    if (playerComponent == nullptr) {
+    if (auto* playerComponent = m_player->addComponent<game::component::PlayerComponent>();
+        playerComponent == nullptr) {
         spdlog::error("无法添加 PlayerComponent 到玩家对象。");
         return false;
     }
 
+    // 从 SessionData 中更新玩家的生命值
+    if (auto* healthComponent = m_player->getComponent<engine::component::HealthComponent>();
+        healthComponent != nullptr) {
+        healthComponent->setMaxHealth(m_gameSessionData->maxHealth());
+        healthComponent->setCurrentHealth(m_gameSessionData->currentHealth());
+    } else {
+        spdlog::error("玩家对象缺少 HealthComponent，无法更新生命值。");
+        return false;
+    }
+
     // 设置相机跟随玩家
-    auto playerTransformComponent = m_player->getComponent<engine::component::TransformComponent>();
-    if (playerTransformComponent == nullptr) {
+    if (auto* transformComponent = m_player->getComponent<engine::component::TransformComponent>();
+        transformComponent != nullptr) {
+        m_context.camera().setTarget(transformComponent);
+    } else {
         spdlog::error("玩家对象缺少 TransformComponent，无法设置相机目标。");
         return false;
     }
-    m_context.camera().setTarget(playerTransformComponent);
 
     spdlog::trace("Player 初始化完成。");
     return true;
@@ -290,6 +315,12 @@ void GameScene::handleObjectCollisions()
             goToNextLevel(obj2);
         } else if (obj2->name() == "player" && obj1->tag() == "nextLevel") {
             goToNextLevel(obj1);
+        }
+        // 处理玩家与名称为“win”的游戏结束触发器对象的碰撞
+        else if (obj1->name() == "player" && obj2->name() == "win") {
+            showEndScene(true);
+        } else if (obj2->name() == "player" && obj1->name() == "win") {
+            showEndScene(true);
         }
     }
 }
@@ -408,6 +439,16 @@ void GameScene::goToNextLevel(engine::object::GameObject* trigger)
     m_sceneManager.requestReplaceScene(std::move(nextScene));
 }
 
+void GameScene::showEndScene(bool isWin)
+{
+    spdlog::debug("显示结束场景，游戏 {}", isWin ? "胜利" : "失败");
+    m_gameSessionData->setIsWin(isWin);
+    auto endScene = std::make_unique<game::scene::EndScene>(m_context,
+                                                            m_sceneManager,
+                                                            m_gameSessionData);
+    m_sceneManager.requestPushScene(std::move(endScene));
+}
+
 void GameScene::createEffect(const glm::vec2& center, const std::string& tag)
 {
     // --- 创建游戏对象和变换组件 ---
@@ -496,9 +537,8 @@ void GameScene::createHealthUi()
                                                             iconPos,
                                                             iconSize);
         // 如果当前生命值不足，设置前景图标不可见
-        if (i >= m_gameSessionData->currentHealth()) {
-            fgIcon->setVisible(false);
-        }
+        fgIcon->setVisible(i < m_gameSessionData->currentHealth());
+
         // 添加前景图标到生命值面板
         healthPanel->addChild(std::move(fgIcon));
     }

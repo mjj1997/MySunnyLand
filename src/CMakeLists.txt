@@ -60,7 +60,8 @@ target_sources(
           game/scene/title_scene.cpp
           game/scene/help_scene.cpp
           engine/core/game_state.cpp
-          game/scene/menu_scene.cpp)
+          game/scene/menu_scene.cpp
+          game/scene/end_scene.cpp)
 
 target_link_libraries(
   SunnyLand

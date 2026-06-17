@@ -286,7 +286,7 @@ void GameScene::handleObjectCollisions()
     // 从物理引擎获取碰撞对列表
     auto collisionPairs = m_context.physicsEngine().collisionPairs();
     // 遍历碰撞对列表
-    for (auto& pair : collisionPairs) {
+    for (const auto& pair : collisionPairs) {
         auto* obj1 = pair.first;
         auto* obj2 = pair.second;
 
@@ -427,7 +427,7 @@ void GameScene::handleTileTriggers()
     }
 }
 
-void GameScene::goToNextLevel(engine::object::GameObject* trigger)
+void GameScene::goToNextLevel(const engine::object::GameObject* trigger)
 {
     auto sceneName = trigger->name();
     auto mapPath = levelNameToPath(sceneName);

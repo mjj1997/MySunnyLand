@@ -15,8 +15,8 @@ void UiHoverState::enter()
 
 std::unique_ptr<UiStateBase> UiHoverState::handleInput(engine::core::Context& context)
 {
-    auto& inputManager = context.inputManager();
-    auto mousePos = inputManager.logicalMousePosition();
+    const auto& inputManager = context.inputManager();
+    const auto& mousePos = inputManager.logicalMousePosition();
     if (!m_owner->isPointInside(mousePos)) { // 如果鼠标不在 UI 元素内，切换到正常状态
         return std::make_unique<UiNormalState>(m_owner);
     }

@@ -69,7 +69,7 @@ private:
     }
 
     ///< @brief 进入下一个关卡
-    void goToNextLevel(engine::object::GameObject* trigger);
+    void goToNextLevel(const engine::object::GameObject* trigger);
     ///< @brief 显示结束场景
     void showEndScene(bool isWin);
 

@@ -19,7 +19,7 @@ void IdleState::enter()
 
 std::unique_ptr<PlayerStateBase> IdleState::handleInput(engine::core::Context& context)
 {
-    auto inputManager = context.inputManager();
+    const auto& inputManager = context.inputManager();
     auto physicsComponent = m_playerComponent->physicsComponent();
 
     // 如果按下了"moveUp"键，且与梯子重合，切换到 ClimbState

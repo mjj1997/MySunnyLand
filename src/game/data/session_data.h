@@ -50,6 +50,8 @@ public:
     bool saveToFile(const std::string& fileName) const;
     ///< @brief 从 JSON 文件中读取游戏数据（读档）
     bool loadFromFile(const std::string& fileName);
+    ///< @brief 同步最高分(文件与当前分数取最大值)
+    bool syncHighestScore(const std::string& fileName);
 
 private:
     int m_currentHealth{ 3 };

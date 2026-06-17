@@ -112,4 +112,40 @@ bool SessionData::loadFromFile(const std::string& fileName)
     }
 }
 
+bool SessionData::syncHighestScore(const std::string& fileName)
+{
+    try {
+        // 打开文件进行读取
+        std::fstream file{ fileName };
+        if (!file.is_open()) {
+            spdlog::warn("找不到文件: {}, 无法进行同步", fileName);
+            return false;
+        }
+
+        // 从文件解析 JSON 数据
+        nlohmann::json j;
+        file >> j;
+        auto highestScoreInFile = j.value("highestScore", 0);
+
+        // 根据文件中的最高分和当前最高分来决定处理方式
+        if (highestScoreInFile < m_highestScore) { // 文件中的最高分 低于 当前最高分
+            j["highestScore"] = m_highestScore;
+            file.seekp(0);     // 文件指针回到文件开头
+            file << j.dump(4); // 将JSON对象写入文件
+            spdlog::debug("当前最高分高于存档文件，已将新的最高分保存到存档中");
+        } else if (highestScoreInFile > m_highestScore) { // 文件中的最高分 高于 当前最高分
+            m_highestScore = highestScoreInFile;
+            spdlog::debug("存档文件中的最高分高于当前最高分，已更新当前最高分");
+        } else {
+            spdlog::debug("存档文件中的最高分与当前最高分相同，无需更新");
+        }
+
+        file.close();
+        return true;
+    } catch (const std::exception& e) {
+        spdlog::error("同步最高分时出现错误 {}: {}", fileName, e.what());
+        return false;
+    }
+}
+
 } // namespace game::data

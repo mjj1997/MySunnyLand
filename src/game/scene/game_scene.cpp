@@ -414,9 +414,8 @@ void GameScene::handleTileTriggers()
 {
     const auto& tileTriggersEvents = m_context.physicsEngine().tileTriggerEvents();
     for (const auto& event : tileTriggersEvents) {
-        auto* obj = event.first;
-        auto tileType = event.second;
-        if (tileType == engine::component::TileType::Hazard) {
+        if (auto tileType = event.second; tileType == engine::component::TileType::Hazard) {
+            auto* obj = event.first;
             // 玩家与危险瓦片碰撞，玩家受伤
             if (obj->name() == "player") {
                 handlePlayerDamage(1);

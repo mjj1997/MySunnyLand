@@ -1,5 +1,6 @@
 #pragma once
 
+#include <functional>
 #include <memory>
 
 struct SDL_Window;
@@ -58,6 +59,13 @@ public:
      */
     void run();
 
+    /**
+     * @brief 注册设置初始场景的函数对象。
+     *        这个函数对象将在 SceneManager 初始化后被调用。
+     * @param func 一个接收 SceneManager 引用的函数对象。
+     */
+    void registerSceneSetupFunc(std::function<void(engine::scene::SceneManager&)> func);
+
 private:
     [[nodiscard]] bool init(); // nodiscard属性 表示该函数返回值不应该被忽略
     void handleEvents();
@@ -84,6 +92,9 @@ private:
     SDL_Window* m_window{ nullptr };
     SDL_Renderer* m_sdlRenderer{ nullptr };
     bool m_isRunning{ false };
+
+    /// @brief 在运行游戏前设置初始场景的函数对象 (GameApp不再决定初始场景是什么)
+    std::function<void(engine::scene::SceneManager&)> m_sceneSetupFunc;
 
     // 引擎组件
     std::unique_ptr<engine::core::FrameTimeController> m_frameTimeController;

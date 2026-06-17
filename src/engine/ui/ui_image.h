@@ -25,24 +25,24 @@ public:
      * @param isFlipped 是否翻转
      */
     explicit UiImage(const std::string& textureId,
-                     const glm::vec2& localPosition = { 0.0f, 0.0f },
-                     const glm::vec2& size = { 0.0f, 0.0f },
-                     const std::optional<SDL_FRect>& sourceRect = std::nullopt,
+                     glm::vec2 localPosition = { 0.0f, 0.0f },
+                     glm::vec2 size = { 0.0f, 0.0f },
+                     std::optional<SDL_FRect> sourceRect = std::nullopt,
                      bool isFlipped = false);
 
     void render(engine::core::Context& context) override;
 
     // --- Setters & Getters ---
     const engine::render::Sprite& sprite() const { return m_sprite; }
-    void setSprite(const engine::render::Sprite& sprite) { m_sprite = sprite; }
+    void setSprite(engine::render::Sprite sprite) { m_sprite = std::move(sprite); }
 
     const std::string& textureId() const { return m_sprite.textureId(); }
     void setTextureId(const std::string& textureId) { m_sprite.setTextureId(textureId); }
 
     const std::optional<SDL_FRect>& sourceRect() const { return m_sprite.sourceRect(); }
-    void setSourceRect(const std::optional<SDL_FRect>& sourceRect)
+    void setSourceRect(std::optional<SDL_FRect> sourceRect)
     {
-        m_sprite.setSourceRect(sourceRect);
+        m_sprite.setSourceRect(std::move(sourceRect));
     }
 
     bool isFlipped() const { return m_sprite.isFlipped(); }

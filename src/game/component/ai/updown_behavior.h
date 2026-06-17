@@ -21,13 +21,6 @@ public:
      * @param speed 移动速度。
      */
     UpDownBehavior(float minY, float maxY, float speed = 50.0f);
-    ~UpDownBehavior() override = default;
-
-    // 禁止拷贝和移动
-    UpDownBehavior(const UpDownBehavior&) = delete;
-    UpDownBehavior& operator=(const UpDownBehavior&) = delete;
-    UpDownBehavior(UpDownBehavior&&) = delete;
-    UpDownBehavior& operator=(UpDownBehavior&&) = delete;
 
 protected:
     void enter(AiComponent& aiComponent) override;

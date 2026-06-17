@@ -28,13 +28,6 @@ public:
                  float maxX,
                  glm::vec2 jumpVelocity = glm::vec2{ 100.0f, -300.0f },
                  float jumpInterval = 2.0f);
-    ~JumpBehavior() override = default;
-
-    // 禁止拷贝和移动
-    JumpBehavior(const JumpBehavior&) = delete;
-    JumpBehavior& operator=(const JumpBehavior&) = delete;
-    JumpBehavior(JumpBehavior&&) = delete;
-    JumpBehavior& operator=(JumpBehavior&&) = delete;
 
 protected:
     void update(float deltaTime, AiComponent& aiComponent) override;

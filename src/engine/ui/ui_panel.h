@@ -23,13 +23,13 @@ public:
      * @param size Panel 的大小
      * @param backgroundColor 背景色
      */
-    explicit UiPanel(const glm::vec2& localPosition = { 0.0f, 0.0f },
-                     const glm::vec2& size = { 0.0f, 0.0f },
-                     const std::optional<engine::utils::FColor>& backgroundColor = std::nullopt);
+    explicit UiPanel(glm::vec2 localPosition = { 0.0f, 0.0f },
+                     glm::vec2 size = { 0.0f, 0.0f },
+                     std::optional<engine::utils::FColor> backgroundColor = std::nullopt);
 
     void render(engine::core::Context& context) override;
 
-    void setBackgroundColor(const std::optional<engine::utils::FColor>& backgroundColor);
+    void setBackgroundColor(std::optional<engine::utils::FColor> backgroundColor);
     const std::optional<engine::utils::FColor>& backgroundColor() const;
 
 private:

@@ -141,12 +141,11 @@ void InputManager::processEvent(const SDL_Event& event)
     case SDL_EVENT_KEY_DOWN:
     case SDL_EVENT_KEY_UP: {
         SDL_Scancode scancode{ event.key.scancode }; // 获取按键的scancode
-        bool isDown{ event.key.down };
-        bool isRepeat{ event.key.repeat };
-
+        // 如果按键有对应的 actions
         if (auto it = m_inputKeyToActions.find(scancode); it != m_inputKeyToActions.end()) {
-            // 如果按键有对应的 actions
             const std::vector<std::string>& actions{ it->second };
+            bool isDown{ event.key.down };
+            bool isRepeat{ event.key.repeat };
             for (const std::string& action : actions) {
                 updateActionState(action, isDown, isRepeat); // 更新action状态
             }
@@ -156,11 +155,10 @@ void InputManager::processEvent(const SDL_Event& event)
     case SDL_EVENT_MOUSE_BUTTON_DOWN:
     case SDL_EVENT_MOUSE_BUTTON_UP: {
         Uint8 button{ event.button.button }; // 获取鼠标按钮
-        bool isDown{ event.button.down };
-
+        // 如果鼠标按钮有对应的 actions
         if (auto it = m_inputKeyToActions.find(button); it != m_inputKeyToActions.end()) {
-            // 如果鼠标按钮有对应的 actions
             const std::vector<std::string>& actions{ it->second };
+            bool isDown{ event.button.down };
             for (const std::string& action : actions) {
                 // 鼠标事件不考虑repeat, 所以第三个参数传false
                 updateActionState(action, isDown, false); // 更新action状态

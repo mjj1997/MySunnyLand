@@ -12,7 +12,6 @@ public:
     explicit FallState(PlayerComponent* playerComponent)
         : PlayerStateBase{ playerComponent }
     {}
-    ~FallState() override = default;
 
 protected:
     void enter() override;

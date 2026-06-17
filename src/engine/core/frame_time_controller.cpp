@@ -6,9 +6,9 @@
 namespace engine::core {
 
 FrameTimeController::FrameTimeController()
-{
+    : m_lastFrameEndTimestamp{ SDL_GetTicksNS() }
     // 初始化 lastFrameEndTimestamp 为当前时间，避免第一帧 DeltaTime 过大
-    m_lastFrameEndTimestamp = SDL_GetTicksNS();
+{
     spdlog::trace("FrameTimeController 初始化。Last frame endtimestamp: {}",
                   m_lastFrameEndTimestamp);
 }

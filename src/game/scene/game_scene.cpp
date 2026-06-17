@@ -286,7 +286,7 @@ void GameScene::handleObjectCollisions()
     // 从物理引擎获取碰撞对列表
     auto collisionPairs = m_context.physicsEngine().collisionPairs();
     // 遍历碰撞对列表
-    for (auto& pair : collisionPairs) {
+    for (const auto& pair : collisionPairs) {
         auto* obj1 = pair.first;
         auto* obj2 = pair.second;
 
@@ -414,9 +414,8 @@ void GameScene::handleTileTriggers()
 {
     const auto& tileTriggersEvents = m_context.physicsEngine().tileTriggerEvents();
     for (const auto& event : tileTriggersEvents) {
-        auto* obj = event.first;
-        auto tileType = event.second;
-        if (tileType == engine::component::TileType::Hazard) {
+        if (auto tileType = event.second; tileType == engine::component::TileType::Hazard) {
+            auto* obj = event.first;
             // 玩家与危险瓦片碰撞，玩家受伤
             if (obj->name() == "player") {
                 handlePlayerDamage(1);
@@ -427,7 +426,7 @@ void GameScene::handleTileTriggers()
     }
 }
 
-void GameScene::goToNextLevel(engine::object::GameObject* trigger)
+void GameScene::goToNextLevel(const engine::object::GameObject* trigger)
 {
     auto sceneName = trigger->name();
     auto mapPath = levelNameToPath(sceneName);
@@ -449,11 +448,11 @@ void GameScene::showEndScene(bool isWin)
     m_sceneManager.requestPushScene(std::move(endScene));
 }
 
-void GameScene::createEffect(const glm::vec2& center, const std::string& tag)
+void GameScene::createEffect(glm::vec2 center, const std::string& tag)
 {
     // --- 创建游戏对象和变换组件 ---
     auto effectObj = std::make_unique<engine::object::GameObject>("effect_" + tag);
-    effectObj->addComponent<engine::component::TransformComponent>(center);
+    effectObj->addComponent<engine::component::TransformComponent>(std::move(center));
 
     // --- 根据标签创建不同的精灵组件和动画---
     auto animation = std::make_unique<engine::render::Animation>("effect", false);

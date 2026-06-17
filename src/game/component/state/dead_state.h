@@ -9,10 +9,9 @@ class DeadState final : public PlayerStateBase
     friend class game::component::PlayerComponent;
 
 public:
-    DeadState(PlayerComponent* playerComponent)
+    explicit DeadState(PlayerComponent* playerComponent)
         : PlayerStateBase{ playerComponent }
     {}
-    ~DeadState() override = default;
 
 protected:
     void enter() override;

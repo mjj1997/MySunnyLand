@@ -12,7 +12,6 @@ public:
     explicit ClimbState(PlayerComponent* playerComponent)
         : PlayerStateBase{ playerComponent }
     {}
-    ~ClimbState() override = default;
 
 protected:
     void enter() override;

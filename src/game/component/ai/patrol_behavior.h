@@ -21,13 +21,6 @@ public:
      * @param speed 移动速度。
      */
     PatrolBehavior(float minX, float maxX, float speed = 50.0f);
-    ~PatrolBehavior() override = default;
-
-    // 禁止拷贝和移动
-    PatrolBehavior(const PatrolBehavior&) = delete;
-    PatrolBehavior& operator=(const PatrolBehavior&) = delete;
-    PatrolBehavior(PatrolBehavior&&) = delete;
-    PatrolBehavior& operator=(PatrolBehavior&&) = delete;
 
 protected:
     void enter(AiComponent& aiComponent) override;

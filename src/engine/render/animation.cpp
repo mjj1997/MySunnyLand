@@ -10,14 +10,14 @@ Animation::Animation(const std::string& name, bool isLoop)
     , m_isLoop{ isLoop }
 {}
 
-void Animation::addFrame(const SDL_FRect& sourceRect, float duration)
+void Animation::addFrame(SDL_FRect sourceRect, float duration)
 {
     if (duration <= 0.0f) {
         spdlog::warn("尝试向动画 '{}' 添加无效持续时间的帧", m_name);
         return;
     }
 
-    m_frames.push_back(AnimationFrame{ sourceRect, duration });
+    m_frames.push_back(AnimationFrame{ std::move(sourceRect), duration });
     m_totalDuration += duration;
 }
 

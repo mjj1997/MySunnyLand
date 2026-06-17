@@ -69,7 +69,7 @@ private:
     }
 
     ///< @brief 进入下一个关卡
-    void goToNextLevel(engine::object::GameObject* trigger);
+    void goToNextLevel(const engine::object::GameObject* trigger);
     ///< @brief 显示结束场景
     void showEndScene(bool isWin);
 
@@ -78,7 +78,7 @@ private:
      * @param center 特效中心位置
      * @param tag 特效标签（决定特效类型,例如"enemy","item"）
      */
-    void createEffect(const glm::vec2& center, const std::string& tag);
+    void createEffect(glm::vec2 center, const std::string& tag);
 
     // --- UI 相关函数 ---
     void createScoreUi();           ///< @brief 创建得分UI

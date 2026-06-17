@@ -12,7 +12,6 @@ public:
     explicit WalkState(PlayerComponent* playerComponent)
         : PlayerStateBase{ playerComponent }
     {}
-    ~WalkState() override = default;
 
 protected:
     void enter() override;

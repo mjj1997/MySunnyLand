@@ -9,10 +9,10 @@ UiButton::UiButton(engine::core::Context& context,
                    const std::string& normalSpriteId,
                    const std::string& hoverSpriteId,
                    const std::string& pressedSpriteId,
-                   const glm::vec2& localPosition,
-                   const glm::vec2& size,
+                   glm::vec2 localPosition,
+                   glm::vec2 size,
                    std::function<void()> callback)
-    : UiInteractiveElementBase{ context, localPosition, size }
+    : UiInteractiveElementBase{ context, std::move(localPosition), std::move(size) }
     , m_callback{ std::move(callback) }
 {
     // 添加各状态对应的精灵

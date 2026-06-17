@@ -5,14 +5,14 @@
 
 namespace engine::render {
 
-Camera::Camera(const glm::vec2& viewportSize,
-               const glm::vec2& position,
-               const std::optional<engine::utils::Rect> limitBounds)
-    : m_viewportSize(viewportSize)
-    , m_position(position)
-    , m_limitBounds(limitBounds)
+Camera::Camera(glm::vec2 viewportSize,
+               glm::vec2 position,
+               std::optional<engine::utils::Rect> limitBounds)
+    : m_viewportSize(std::move(viewportSize))
+    , m_position(std::move(position))
+    , m_limitBounds(std::move(limitBounds))
 {
-    spdlog::trace("Camera 初始化成功，位置: {},{}", position.x, position.y);
+    spdlog::trace("Camera 初始化成功，位置: {},{}", m_position.x, m_position.y);
 }
 
 void Camera::update(float deltaTime)
@@ -85,15 +85,15 @@ const engine::component::TransformComponent* Camera::target() const
     return m_target;
 }
 
-void Camera::setPosition(const glm::vec2& position)
+void Camera::setPosition(glm::vec2 position)
 {
-    m_position = position;
+    m_position = std::move(position);
     clampPosition();
 }
 
-void Camera::setLimitBounds(const std::optional<engine::utils::Rect>& bounds)
+void Camera::setLimitBounds(std::optional<engine::utils::Rect> limitBounds)
 {
-    m_limitBounds = bounds;
+    m_limitBounds = std::move(limitBounds);
     clampPosition();
 }
 

@@ -6,11 +6,11 @@
 
 namespace engine::ui {
 
-UiPanel::UiPanel(const glm::vec2& localPosition,
-                 const glm::vec2& size,
-                 const std::optional<engine::utils::FColor>& backgroundColor)
-    : UiElementBase{ localPosition, size }
-    , m_backgroundColor{ backgroundColor }
+UiPanel::UiPanel(glm::vec2 localPosition,
+                 glm::vec2 size,
+                 std::optional<engine::utils::FColor> backgroundColor)
+    : UiElementBase{ std::move(localPosition), std::move(size) }
+    , m_backgroundColor{ std::move(backgroundColor) }
 {
     spdlog::trace("UiPanel 构造完成");
 }
@@ -28,9 +28,9 @@ void UiPanel::render(engine::core::Context& context)
     UiElementBase::render(context); // 调用基类方法渲染子元素
 }
 
-void UiPanel::setBackgroundColor(const std::optional<engine::utils::FColor>& backgroundColor)
+void UiPanel::setBackgroundColor(std::optional<engine::utils::FColor> backgroundColor)
 {
-    m_backgroundColor = backgroundColor;
+    m_backgroundColor = std::move(backgroundColor);
 }
 
 const std::optional<engine::utils::FColor>& UiPanel::backgroundColor() const

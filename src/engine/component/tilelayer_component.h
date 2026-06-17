@@ -107,7 +107,8 @@ public:
     const glm::vec2& offset() const { return m_offset; }           ///< @brief 获取瓦片层的偏移量
     bool isHidden() const { return m_isHidden; } ///< @brief 获取是否隐藏（不渲染）
 
-    void setOffset(const glm::vec2& offset) { m_offset = offset; } ///< @brief 设置瓦片层的偏移量
+    ///< @brief 设置瓦片层的偏移量
+    void setOffset(glm::vec2 offset) { m_offset = std::move(offset); }
     void setHidden(bool hidden) { m_isHidden = hidden; } ///< @brief 设置是否隐藏（不渲染）
     ///< @brief 设置物理引擎实例指针
     void setPhysicsEngine(engine::physics::PhysicsEngine* engine) { m_physicsEngine = engine; }

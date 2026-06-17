@@ -30,8 +30,8 @@ public:
              const std::string& normalSpriteId,
              const std::string& hoverSpriteId,
              const std::string& pressedSpriteId,
-             const glm::vec2& localPosition = { 0.0f, 0.0f },
-             const glm::vec2& size = { 0.0f, 0.0f },
+             glm::vec2 localPosition = { 0.0f, 0.0f },
+             glm::vec2 size = { 0.0f, 0.0f },
              std::function<void()> callback = nullptr);
 
     ~UiButton() override = default;

@@ -7,13 +7,12 @@
 
 namespace engine::resource {
 
-ResourceManager::ResourceManager(SDL_Renderer* renderer)
-{
+ResourceManager::ResourceManager(SDL_Renderer* sdlRenderer)
     // --- 初始化各个子系统 --- (如果出现错误会抛出异常，由上层捕获)
-    m_textureManager = std::make_unique<TextureManager>(renderer);
-    m_audioManager = std::make_unique<AudioManager>();
-    m_fontManager = std::make_unique<FontManager>();
-
+    : m_textureManager{ std::make_unique<TextureManager>(sdlRenderer) }
+    , m_audioManager{ std::make_unique<AudioManager>() }
+    , m_fontManager{ std::make_unique<FontManager>() }
+{
     spdlog::trace("ResourceManager 构造成功。");
 }
 

@@ -134,6 +134,18 @@ bool EndScene::initUi()
                                                              [this]() { this->back(); });
     m_uiManager->addElement(std::move(backButton));
 
+    // Restart Button
+    buttonX += buttonSize.x + buttonSpacing;
+    auto restartButton
+        = std::make_unique<engine::ui::UiButton>(m_context,
+                                                 "assets/textures/UI/buttons/Restart1.png",
+                                                 "assets/textures/UI/buttons/Restart2.png",
+                                                 "assets/textures/UI/buttons/Restart3.png",
+                                                 glm::vec2{ buttonX, buttonY },
+                                                 buttonSize,
+                                                 [this]() { this->restart(); });
+    m_uiManager->addElement(std::move(restartButton));
+
     spdlog::trace("EndScene UI 创建完成.");
     return true;
 }

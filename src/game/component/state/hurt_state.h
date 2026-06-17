@@ -9,7 +9,7 @@ class HurtState final : public PlayerStateBase
     friend class game::component::PlayerComponent;
 
 public:
-    HurtState(PlayerComponent* playerComponent)
+    explicit HurtState(PlayerComponent* playerComponent)
         : PlayerStateBase{ playerComponent }
     {}
 

@@ -18,9 +18,9 @@ void HurtState::enter()
     playAnimation("hurt");
 
     // --- 造成击退效果 ---
-    auto physicsComponent = m_playerComponent->physicsComponent();
-    auto spriteComponent = m_playerComponent->spriteComponent();
-    auto knockbackVelocity = glm::vec2{ -100.0f, -150.0f }; // 默认往左上方击退
+    auto* physicsComponent = m_playerComponent->physicsComponent();
+    auto* spriteComponent = m_playerComponent->spriteComponent();
+    glm::vec2 knockbackVelocity{ -100.0f, -150.0f }; // 默认往左上方击退
     // 根据当前精灵的朝向状态，判断是否需要往右上方击退
     if (spriteComponent->isFlipped()) {
         knockbackVelocity.x = -knockbackVelocity.x; // 击退方向变为向右
@@ -44,7 +44,7 @@ std::unique_ptr<PlayerStateBase> HurtState::update(float deltaTime, engine::core
     m_stunnedTimer += deltaTime;
 
     // --- 两种情况离开受伤（硬直）状态 ---
-    auto physicsComponent = m_playerComponent->physicsComponent();
+    auto* physicsComponent = m_playerComponent->physicsComponent();
     // 1. 落地
     if (physicsComponent->isCollidedBelow()) {
         if (glm::abs(physicsComponent->velocity().x) < 1.0f) {

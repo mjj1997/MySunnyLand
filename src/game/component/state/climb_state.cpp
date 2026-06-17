@@ -56,7 +56,7 @@ std::unique_ptr<PlayerStateBase> ClimbState::handleInput(engine::core::Context& 
 
 std::unique_ptr<PlayerStateBase> ClimbState::update(float deltaTime, engine::core::Context& context)
 {
-    auto physicsComponent = m_playerComponent->physicsComponent();
+    auto* physicsComponent = m_playerComponent->physicsComponent();
 
     // 如果着地，切换到 Idle 状态
     if (physicsComponent->isCollidedBelow()) {

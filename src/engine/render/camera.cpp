@@ -91,7 +91,7 @@ void Camera::setPosition(const glm::vec2& position)
     clampPosition();
 }
 
-void Camera::setLimitBounds(const engine::utils::Rect& bounds)
+void Camera::setLimitBounds(const std::optional<engine::utils::Rect>& bounds)
 {
     m_limitBounds = bounds;
     clampPosition();

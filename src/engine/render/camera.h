@@ -18,7 +18,7 @@ class Camera final
 {
 public:
     explicit Camera(const glm::vec2& viewportSize,
-                    const glm::vec2& position = glm::vec2(0.0f, 0.0f),
+                    const glm::vec2& position = glm::vec2(0.0f),
                     const std::optional<engine::utils::Rect> limitBounds = std::nullopt);
 
     // 禁用拷贝和移动语义
@@ -43,15 +43,15 @@ public:
     ///< @brief 获取相机跟随目标的变换组件
     const engine::component::TransformComponent* target() const;
 
-    void setPosition(const glm::vec2& position);            ///< @brief 设置相机位置
-    void setLimitBounds(const engine::utils::Rect& bounds); ///< @brief 设置限制相机的移动范围
+    void setPosition(const glm::vec2& position); ///< @brief 设置相机位置
+    ///< @brief 设置限制相机的移动范围
+    void setLimitBounds(const std::optional<engine::utils::Rect>& bounds);
     ///< @brief 设置相机跟随目标的变换组件
     void setTarget(engine::component::TransformComponent* target);
 
 private:
     void clampPosition(); ///< @brief 限制相机位置在边界内
 
-private:
     glm::vec2 m_viewportSize; ///< @brief 视口大小（屏幕大小）
     glm::vec2 m_position;     ///< @brief 相机左上角的世界坐标
     ///< @brief 限制相机的移动范围，空值表示不限制

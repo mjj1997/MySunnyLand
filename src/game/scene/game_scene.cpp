@@ -193,6 +193,16 @@ bool GameScene::initPlayer()
         return false;
     }
 
+    // 从 SessionData 中更新玩家的生命值
+    if (auto* healthComponent = m_player->getComponent<engine::component::HealthComponent>();
+        healthComponent != nullptr) {
+        healthComponent->setMaxHealth(m_gameSessionData->maxHealth());
+        healthComponent->setCurrentHealth(m_gameSessionData->currentHealth());
+    } else {
+        spdlog::error("玩家对象缺少 HealthComponent，无法更新生命值。");
+        return false;
+    }
+
     // 设置相机跟随玩家
     auto playerTransformComponent = m_player->getComponent<engine::component::TransformComponent>();
     if (playerTransformComponent == nullptr) {

@@ -12,7 +12,6 @@ public:
     DeadState(PlayerComponent* playerComponent)
         : PlayerStateBase{ playerComponent }
     {}
-    ~DeadState() override = default;
 
 protected:
     void enter() override;

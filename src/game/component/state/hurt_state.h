@@ -12,7 +12,6 @@ public:
     HurtState(PlayerComponent* playerComponent)
         : PlayerStateBase{ playerComponent }
     {}
-    ~HurtState() override = default;
 
 protected:
     void enter() override;

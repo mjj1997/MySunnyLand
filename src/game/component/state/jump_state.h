@@ -12,7 +12,6 @@ public:
     explicit JumpState(PlayerComponent* playerComponent)
         : PlayerStateBase{ playerComponent }
     {}
-    ~JumpState() override = default;
 
 protected:
     void enter() override;

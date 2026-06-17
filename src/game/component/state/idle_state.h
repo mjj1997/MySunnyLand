@@ -12,7 +12,6 @@ public:
     explicit IdleState(PlayerComponent* playerComponent)
         : PlayerStateBase{ playerComponent }
     {}
-    ~IdleState() override = default;
 
 protected:
     void enter() override;

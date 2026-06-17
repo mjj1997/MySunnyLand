@@ -18,8 +18,6 @@ public:
         : UiStateBase{ owner }
     {}
 
-    ~UiNormalState() override = default;
-
 private:
     void enter() override;
     std::unique_ptr<UiStateBase> handleInput(engine::core::Context& context) override;

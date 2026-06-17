@@ -181,14 +181,14 @@ bool GameScene::initPlayer()
 {
     // 获取玩家对象
     m_player = findGameObjectByName("player");
-    if (!m_player) {
+    if (m_player == nullptr) {
         spdlog::error("未找到玩家对象。");
         return false;
     }
 
     // 添加 PlayerComponent 到玩家对象
-    auto* playerComponent = m_player->addComponent<game::component::PlayerComponent>();
-    if (playerComponent == nullptr) {
+    if (auto* playerComponent = m_player->addComponent<game::component::PlayerComponent>();
+        playerComponent == nullptr) {
         spdlog::error("无法添加 PlayerComponent 到玩家对象。");
         return false;
     }
@@ -204,12 +204,13 @@ bool GameScene::initPlayer()
     }
 
     // 设置相机跟随玩家
-    auto playerTransformComponent = m_player->getComponent<engine::component::TransformComponent>();
-    if (playerTransformComponent == nullptr) {
+    if (auto* transformComponent = m_player->getComponent<engine::component::TransformComponent>();
+        transformComponent != nullptr) {
+        m_context.camera().setTarget(transformComponent);
+    } else {
         spdlog::error("玩家对象缺少 TransformComponent，无法设置相机目标。");
         return false;
     }
-    m_context.camera().setTarget(playerTransformComponent);
 
     spdlog::trace("Player 初始化完成。");
     return true;
@@ -536,9 +537,8 @@ void GameScene::createHealthUi()
                                                             iconPos,
                                                             iconSize);
         // 如果当前生命值不足，设置前景图标不可见
-        if (i >= m_gameSessionData->currentHealth()) {
-            fgIcon->setVisible(false);
-        }
+        fgIcon->setVisible(i < m_gameSessionData->currentHealth());
+
         // 添加前景图标到生命值面板
         healthPanel->addChild(std::move(fgIcon));
     }

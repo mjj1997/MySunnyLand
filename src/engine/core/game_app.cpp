@@ -55,6 +55,12 @@ void GameApp::run()
     clean();
 }
 
+void GameApp::registerSceneSetupFunc(std::function<void(engine::scene::SceneManager&)> func)
+{
+    m_sceneSetupFunc = std::move(func);
+    spdlog::trace("已注册设置初始场景的函数对象。");
+}
+
 bool GameApp::init()
 {
     spdlog::trace("初始化 GameApp ...");

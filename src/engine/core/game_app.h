@@ -59,6 +59,13 @@ public:
      */
     void run();
 
+    /**
+     * @brief 注册设置初始场景的函数对象。
+     *        这个函数对象将在 SceneManager 初始化后被调用。
+     * @param func 一个接收 SceneManager 引用的函数对象。
+     */
+    void registerSceneSetupFunc(std::function<void(engine::scene::SceneManager&)> func);
+
 private:
     [[nodiscard]] bool init(); // nodiscard属性 表示该函数返回值不应该被忽略
     void handleEvents();

@@ -114,6 +114,25 @@ bool EndScene::initUi()
     highestScoreLabel->setLocalPosition(highestScoreLabelLocalPos);
     m_uiManager->addElement(std::move(highestScoreLabel));
 
+    // --- 创建 2 个按钮 --- (2个按钮，设定好大小、间距)
+    glm::vec2 buttonSize{ 120.0f, 40.0f };
+    float buttonSpacing{ 20.0f };
+    float totalButtonWidth{ buttonSize.x * 2 + buttonSpacing };
+
+    // 按钮放在右下角，与边缘间隔 30 像素
+    float buttonX{ windowSize.x - totalButtonWidth - 30.0f };
+    float buttonY{ windowSize.y - buttonSize.y - 30.0f };
+
+    // Back Button
+    auto backButton = std::make_unique<engine::ui::UiButton>(m_context,
+                                                             "assets/textures/UI/buttons/Back1.png",
+                                                             "assets/textures/UI/buttons/Back2.png",
+                                                             "assets/textures/UI/buttons/Back3.png",
+                                                             glm::vec2{ buttonX, buttonY },
+                                                             buttonSize,
+                                                             [this]() { this->back(); });
+    m_uiManager->addElement(std::move(backButton));
+
     spdlog::trace("EndScene UI 创建完成.");
     return true;
 }

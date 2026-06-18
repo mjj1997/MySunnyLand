@@ -27,7 +27,8 @@ namespace engine::scene {
 bool LevelLoader::loadLevel(std::string_view mapPath, SceneBase& scene)
 {
     // 1. 加载关卡地图 JSON 文件
-    std::ifstream file{ mapPath };
+    auto path = std::filesystem::path{ mapPath };
+    std::ifstream file{ path };
     if (!file.is_open()) {
         spdlog::error("无法打开关卡地图文件: {}", mapPath);
         return false;
@@ -644,7 +645,8 @@ std::optional<nlohmann::json> LevelLoader::getTileJsonByGid(int gid) const
 
 void LevelLoader::loadTileset(std::string_view tilesetPath, int firstGid)
 {
-    std::ifstream file{ tilesetPath };
+    auto path = std::filesystem::path{ tilesetPath };
+    std::ifstream file{ path };
     if (!file.is_open()) {
         spdlog::error("无法打开瓦片集文件: {}", tilesetPath);
         return;

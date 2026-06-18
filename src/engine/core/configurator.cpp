@@ -14,7 +14,8 @@ Configurator::Configurator(std::string_view filePath)
 
 bool Configurator::loadFromFile(std::string_view filePath)
 {
-    std::ifstream file{ filePath };
+    auto path = std::filesystem::path{ filePath };
+    std::ifstream file{ path };
     if (!file.is_open()) {
         // 配置文件不存在，使用默认设置并创建默认配置文件
         spdlog::warn("配置文件 '{}' 未找到。使用默认设置并创建默认配置文件。", filePath);
@@ -39,7 +40,8 @@ bool Configurator::loadFromFile(std::string_view filePath)
 
 bool Configurator::saveToFile(std::string_view filePath)
 {
-    std::ofstream file{ filePath };
+    auto path = std::filesystem::path{ filePath };
+    std::ofstream file{ path };
     if (!file.is_open()) {
         spdlog::error("无法打开配置文件 '{}'。", filePath);
         return false;

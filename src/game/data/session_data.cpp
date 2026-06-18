@@ -62,7 +62,8 @@ bool SessionData::saveToFile(std::string_view fileName) const
         json["mapPath"] = m_mapPath;
 
         // 打开文件进行写入
-        std::ofstream file{ fileName };
+        auto path = std::filesystem::path{ fileName };
+        std::ofstream file{ path };
         if (!file.is_open()) {
             spdlog::error("无法打开存档文件进行写入: {}", fileName);
             return false;
@@ -84,7 +85,8 @@ bool SessionData::loadFromFile(std::string_view fileName)
 {
     try {
         // 打开文件进行读取
-        std::ifstream file{ fileName };
+        auto path = std::filesystem::path{ fileName };
+        std::ifstream file{ path };
         if (!file.is_open()) {
             // 如果存档文件不存在，不一定是错误，所以只报警告
             spdlog::warn("读档时找不到文件: {}", fileName);
@@ -116,7 +118,8 @@ bool SessionData::syncHighestScore(std::string_view fileName)
 {
     try {
         // 打开文件进行读取
-        std::fstream file{ fileName };
+        auto path = std::filesystem::path{ fileName };
+        std::fstream file{ path };
         if (!file.is_open()) {
             spdlog::warn("找不到文件: {}, 无法进行同步", fileName);
             return false;

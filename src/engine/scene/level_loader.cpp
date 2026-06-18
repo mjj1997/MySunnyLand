@@ -374,7 +374,7 @@ void LevelLoader::addAnimation(const nlohmann::json& animationJson,
     // 遍历动画 JSON 对象中的每个键值对（动画名称 : 动画信息）
     for (const auto& anime : animationJson.items()) {
         std::string_view animeName{ anime.key() };
-        const auto& animeInfo = anime.value();
+        const auto& animeInfo{ anime.value() };
         if (!animeInfo.is_object()) {
             spdlog::warn("动画 '{}' 的信息无效或为空。", animeName);
             continue;
@@ -425,7 +425,7 @@ void LevelLoader::addSound(const nlohmann::json& soundJson,
 
     // 遍历音效 JSON 对象中的每个键值对（音效 ID : 音效路径）
     for (const auto& sound : soundJson.items()) {
-        std::string soundId{ sound.key() };
+        std::string_view soundId{ sound.key() };
         std::string soundPath{ sound.value().get<std::string>() };
         if (soundId.empty() || soundPath.empty()) {
             spdlog::warn("音效 '{}' 缺少必要信息。", soundId);

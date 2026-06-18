@@ -36,7 +36,7 @@ public:
      * @param context 场景上下文。
      * @param sceneManager 场景管理器。
      */
-    SceneBase(std::string name,
+    SceneBase(std::string_view name,
               engine::core::Context& context,
               engine::scene::SceneManager& sceneManager);
 

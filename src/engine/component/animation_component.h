@@ -45,7 +45,7 @@ public:
     void resumeAnimation() { m_isPlaying = true; } ///< @brief 重新播放当前动画。
 
     // --- Getters and Setters ---
-    std::string currentAnimationName() const;
+    std::string_view currentAnimationName() const;
     bool isPlaying() const { return m_isPlaying; }
     bool isAnimationFinished() const;
     bool isOneShotRemoval() const { return m_isOneShotRemoval; }

@@ -43,13 +43,13 @@ void AnimationComponent::playAnimation(std::string_view name)
     }
 }
 
-std::string AnimationComponent::currentAnimationName() const
+std::string_view AnimationComponent::currentAnimationName() const
 {
     if (m_currentAnimation) {
-        return std::string(m_currentAnimation->name());
+        return m_currentAnimation->name();
     }
 
-    return "";
+    return std::string_view();
 }
 
 bool AnimationComponent::isAnimationFinished() const

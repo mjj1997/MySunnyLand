@@ -12,10 +12,10 @@
 
 namespace engine::scene {
 
-SceneBase::SceneBase(std::string name,
+SceneBase::SceneBase(std::string_view name,
                      engine::core::Context& context,
                      engine::scene::SceneManager& sceneManager)
-    : m_sceneName{ std::move(name) }
+    : m_sceneName{ name }
     , m_context{ context }
     , m_sceneManager{ sceneManager }
     , m_uiManager{ std::make_unique<engine::ui::UiManager>() }

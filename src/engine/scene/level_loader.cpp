@@ -91,7 +91,7 @@ bool LevelLoader::loadLevel(std::string_view mapPath, SceneBase& scene)
 void LevelLoader::loadImageLayer(const nlohmann::json& layerJson, SceneBase& scene)
 {
     // 获取纹理相对路径 （会自动处理'\/'符号）
-    std::string_view imagePath{ layerJson.value("image", "") };
+    std::string imagePath{ layerJson.value("image", "") };
     if (imagePath.empty()) {
         spdlog::error("图层 '{}' 缺少 'image' 属性。", layerJson.value("name", "Unnamed"));
         return;
@@ -109,7 +109,7 @@ void LevelLoader::loadImageLayer(const nlohmann::json& layerJson, SceneBase& sce
                                          layerJson.value("repeaty", false) } };
 
     // 获取图层名称
-    std::string_view layerName{ layerJson.value("name", "Unnamed") };
+    std::string layerName{ layerJson.value("name", "Unnamed") };
 
     /*  可用类似方法获取其它各种属性，这里我们暂时用不上 */
 
@@ -141,7 +141,7 @@ void LevelLoader::loadTileLayer(const nlohmann::json& layerJson, SceneBase& scen
                    [this](const auto& gid) { return getTileInfoByGid(gid); });
 
     // 获取图层名称
-    std::string_view layerName{ layerJson.value("name", "Unnamed") };
+    std::string layerName{ layerJson.value("name", "Unnamed") };
     // 创建游戏对象
     auto gameObject = std::make_unique<engine::object::GameObject>(layerName);
     // 添加Tilelayer组件
@@ -175,7 +175,7 @@ void LevelLoader::loadObjectLayer(const nlohmann::json& layerJson, SceneBase& sc
             // 没有这些标识则默认是矩形对象
             else {
                 // --- 创建游戏对象并添加TransfromComponent ---
-                std::string_view objectName = object.value("name", "Unnamed");
+                std::string objectName = object.value("name", "Unnamed");
                 auto gameObject = std::make_unique<engine::object::GameObject>(objectName);
                 // 获取Transform相关信息 （自定义形状的坐标针对左上角）
                 auto position = glm::vec2{ object.value("x", 0.0f), object.value("y", 0.0f) };
@@ -243,7 +243,7 @@ void LevelLoader::loadObjectLayer(const nlohmann::json& layerJson, SceneBase& sc
             auto scale = dstRectSize / srcRectSize;
 
             // 获取对象名称
-            std::string_view objectName{ object.value("name", "Unnamed") };
+            std::string objectName{ object.value("name", "Unnamed") };
 
             // 创建 GameObject 并添加组件
             auto gameObject = std::make_unique<engine::object::GameObject>(objectName);
@@ -425,8 +425,8 @@ void LevelLoader::addSound(const nlohmann::json& soundJson,
 
     // 遍历音效 JSON 对象中的每个键值对（音效 ID : 音效路径）
     for (const auto& sound : soundJson.items()) {
-        std::string_view soundId{ sound.key() };
-        std::string_view soundPath{ sound.value().get<std::string>() };
+        std::string soundId{ sound.key() };
+        std::string soundPath{ sound.value().get<std::string>() };
         if (soundId.empty() || soundPath.empty()) {
             spdlog::warn("音效 '{}' 缺少必要信息。", soundId);
             continue;
@@ -538,7 +538,7 @@ engine::component::TileInfo LevelLoader::getTileInfoByGid(int gid)
     const auto& tilesetJson = it->second;
     const auto& tilesetFirstGid = it->first;
 
-    std::string_view filePath{ tilesetJson.value("filePath", "") }; // 获取图块集文件路径
+    std::string filePath{ tilesetJson.value("filePath", "") }; // 获取图块集文件路径
     if (filePath.empty()) {
         spdlog::error("Tileset 文件 '{}' 缺少 'filePath' 属性。", tilesetFirstGid);
         return engine::component::TileInfo{};

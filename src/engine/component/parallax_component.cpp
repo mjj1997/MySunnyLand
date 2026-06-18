@@ -8,7 +8,7 @@
 
 namespace engine::component {
 
-ParallaxComponent::ParallaxComponent(const std::string& textureId,
+ParallaxComponent::ParallaxComponent(std::string_view textureId,
                                      glm::vec2 scrollFactor,
                                      glm::bvec2 repeat)
     : m_sprite{ engine::render::Sprite{ textureId } }

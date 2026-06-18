@@ -32,8 +32,8 @@ public:
      * @param localPosition Label 的局部位置  
      */
     explicit UiLabel(engine::render::TextRenderer& textRenderer,
-                     const std::string& text,
-                     const std::string& fontId,
+                     std::string_view text,
+                     std::string_view fontId,
                      int fontSize = 16,
                      engine::utils::FColor textColor = { 1.0f, 1.0f, 1.0f, 1.0f },
                      glm::vec2 localPosition = { 0.0f, 0.0f });
@@ -41,14 +41,14 @@ public:
     void render(engine::core::Context& context) override;
 
     // --- Setters & Getters ---
-    const std::string& text() const { return m_text; }
-    const std::string& fontId() const { return m_fontId; }
+    std::string_view text() const { return m_text; }
+    std::string_view fontId() const { return m_fontId; }
     int fontSize() const { return m_fontSize; }
     const engine::utils::FColor& textColor() const { return m_textColor; }
 
-    void setText(const std::string& text);     ///< @brief 设置文本内容, 同时更新尺寸
-    void setFontId(const std::string& fontId); ///< @brief 设置字体ID, 同时更新尺寸
-    void setFontSize(int fontSize);            ///< @brief 设置字体大小, 同时更新尺寸
+    void setText(std::string_view text);     ///< @brief 设置文本内容, 同时更新尺寸
+    void setFontId(std::string_view fontId); ///< @brief 设置字体ID, 同时更新尺寸
+    void setFontSize(int fontSize);          ///< @brief 设置字体大小, 同时更新尺寸
     void setTextColor(engine::utils::FColor textColor);
 
 private:

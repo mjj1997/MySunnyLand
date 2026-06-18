@@ -17,7 +17,7 @@ namespace engine::core {
 class Configurator final
 {
 public:
-    explicit Configurator(const std::string& filePath); ///< @brief 构造函数，指定配置文件路径。
+    explicit Configurator(std::string_view filePath); ///< @brief 构造函数，指定配置文件路径。
 
     // 删除拷贝和移动语义
     Configurator(const Configurator&) = delete;
@@ -26,9 +26,9 @@ public:
     Configurator& operator=(Configurator&&) = delete;
 
     ///< @brief 从指定的 JSON 文件加载配置。成功返回 true，否则返回 false。
-    bool loadFromFile(const std::string& filePath);
+    bool loadFromFile(std::string_view filePath);
     ///< @brief 将当前配置保存到指定的 JSON 文件。成功返回 true，否则返回 false。
-    [[nodiscard]] bool saveToFile(const std::string& filePath);
+    [[nodiscard]] bool saveToFile(std::string_view filePath);
 
 public:
     // --- 默认配置值 --- (为了方便拓展，全部设置为公有)

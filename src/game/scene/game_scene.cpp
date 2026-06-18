@@ -141,7 +141,7 @@ bool GameScene::initLevel()
 {
     // 加载关卡（level_loader通常加载完成后即可销毁，因此不存为成员变量）
     engine::scene::LevelLoader levelLoader;
-    const std::string& mapPath{ m_gameSessionData->mapPath() };
+    std::string_view mapPath{ m_gameSessionData->mapPath() };
     if (!levelLoader.loadLevel(mapPath, *this)) {
         spdlog::error("加载关卡失败。");
         return false;
@@ -448,7 +448,7 @@ void GameScene::showEndScene(bool isWin)
     m_sceneManager.requestPushScene(std::move(endScene));
 }
 
-void GameScene::createEffect(glm::vec2 center, const std::string& tag)
+void GameScene::createEffect(glm::vec2 center, std::string_view tag)
 {
     // --- 创建游戏对象和变换组件 ---
     auto effectObj = std::make_unique<engine::object::GameObject>("effect_" + tag);
@@ -497,7 +497,7 @@ void GameScene::createEffect(glm::vec2 center, const std::string& tag)
 void GameScene::createScoreUi()
 {
     // 创建得分标签
-    const std::string& scoreText{ "Score: " + std::to_string(m_gameSessionData->currentScore()) };
+    std::string_view scoreText{ "Score: " + std::to_string(m_gameSessionData->currentScore()) };
     auto scoreLabel = std::make_unique<engine::ui::UiLabel>(m_context.textRenderer(),
                                                             scoreText,
                                                             "assets/fonts/VonwaonBitmap-16px.ttf",
@@ -549,7 +549,7 @@ void GameScene::createHealthUi()
 void GameScene::addScoreWithUi(int score)
 {
     m_gameSessionData->addScore(score);
-    const std::string& scoreText{ "Score: " + std::to_string(m_gameSessionData->currentScore()) };
+    std::string_view scoreText{ "Score: " + std::to_string(m_gameSessionData->currentScore()) };
     m_scoreLabel->setText(scoreText);
     spdlog::info("更新得分标签: {}", scoreText);
 }

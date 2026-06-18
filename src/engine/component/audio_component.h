@@ -38,14 +38,14 @@ public:
      * @param soundId 音效文件的id (或路径)。
      * @param useSpatial 是否使用空间定位。
      */
-    void playSound(const std::string& soundId, bool useSpatial = false);
+    void playSound(std::string_view soundId, bool useSpatial = false);
 
     /**
      * @brief 添加音效到映射表。
      * @param soundId 音效的标识符（针对本组件唯一即可）。
      * @param soundPath 音效文件的路径。
      */
-    void addSound(const std::string& soundId, const std::string& soundPath);
+    void addSound(std::string_view soundId, std::string_view soundPath);
 
 protected:
     // 核心循环方法

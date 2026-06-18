@@ -43,7 +43,7 @@ AudioManager::~AudioManager()
 }
 
 // --- 音效管理 ---
-MIX_Audio* AudioManager::loadSound(const std::string& filePath)
+MIX_Audio* AudioManager::loadSound(std::string_view filePath)
 {
     // 首先检查缓存
     auto it = m_sounds.find(filePath);
@@ -65,7 +65,7 @@ MIX_Audio* AudioManager::loadSound(const std::string& filePath)
     return sound;
 }
 
-MIX_Audio* AudioManager::getSound(const std::string& filePath)
+MIX_Audio* AudioManager::getSound(std::string_view filePath)
 {
     auto it = m_sounds.find(filePath);
     if (it != m_sounds.end()) {
@@ -76,7 +76,7 @@ MIX_Audio* AudioManager::getSound(const std::string& filePath)
     return loadSound(filePath);
 }
 
-void AudioManager::unloadSound(const std::string& filePath)
+void AudioManager::unloadSound(std::string_view filePath)
 {
     auto it = m_sounds.find(filePath);
     if (it != m_sounds.end()) {
@@ -96,7 +96,7 @@ void AudioManager::clearSounds()
 }
 
 // --- 音乐管理 ---
-MIX_Audio* AudioManager::loadMusic(const std::string& filePath)
+MIX_Audio* AudioManager::loadMusic(std::string_view filePath)
 {
     // 首先检查缓存
     auto it = m_musics.find(filePath);
@@ -118,7 +118,7 @@ MIX_Audio* AudioManager::loadMusic(const std::string& filePath)
     return music;
 }
 
-MIX_Audio* AudioManager::getMusic(const std::string& filePath)
+MIX_Audio* AudioManager::getMusic(std::string_view filePath)
 {
     auto it = m_musics.find(filePath);
     if (it != m_musics.end()) {
@@ -129,7 +129,7 @@ MIX_Audio* AudioManager::getMusic(const std::string& filePath)
     return loadMusic(filePath);
 }
 
-void AudioManager::unloadMusic(const std::string& filePath)
+void AudioManager::unloadMusic(std::string_view filePath)
 {
     auto it = m_musics.find(filePath);
     if (it != m_musics.end()) {

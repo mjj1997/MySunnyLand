@@ -48,7 +48,7 @@ void UiInteractiveElementBase::render(engine::core::Context& context)
     UiElementBase::render(context);
 }
 
-void UiInteractiveElementBase::addSprite(const std::string& name,
+void UiInteractiveElementBase::addSprite(std::string_view name,
                                          std::unique_ptr<engine::render::Sprite> sprite)
 {
     // 可交互 UI 元素必须有一个 size 用于交互检测，因此如果参数列表中没有指定，则用图片大小作为 size
@@ -60,12 +60,12 @@ void UiInteractiveElementBase::addSprite(const std::string& name,
     m_sprites[name] = std::move(sprite);
 }
 
-void UiInteractiveElementBase::addSound(const std::string& name, const std::string& path)
+void UiInteractiveElementBase::addSound(std::string_view name, std::string_view path)
 {
     m_sounds[name] = path;
 }
 
-void UiInteractiveElementBase::playSound(const std::string& name)
+void UiInteractiveElementBase::playSound(std::string_view name)
 {
     if (m_sounds.find(name) != m_sounds.end()) {
         m_context.audioPlayer().playSound(m_sounds[name]);
@@ -85,7 +85,7 @@ void UiInteractiveElementBase::setCurrentState(std::unique_ptr<engine::ui::state
     m_currentState->enter();
 }
 
-void UiInteractiveElementBase::setCurrentSprite(const std::string& name)
+void UiInteractiveElementBase::setCurrentSprite(std::string_view name)
 {
     if (m_sprites.find(name) != m_sprites.end()) {
         m_currentSprite = m_sprites[name].get();

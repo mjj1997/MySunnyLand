@@ -161,7 +161,7 @@ void SceneBase::safeRemoveGameObject(engine::object::GameObject* gameObject)
     gameObject->setShouldRemove(true);
 }
 
-engine::object::GameObject* SceneBase::findGameObjectByName(const std::string& name) const
+engine::object::GameObject* SceneBase::findGameObjectByName(std::string_view name) const
 {
     // 找到第一个符合条件的游戏对象就返回
     auto it = std::find_if(m_gameObjects.begin(),

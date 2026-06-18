@@ -25,7 +25,7 @@ class GameObject final
 {
 public:
     ///< @brief 构造函数。默认名称为空，标签为空
-    explicit GameObject(const std::string& name = "", const std::string& tag = "");
+    explicit GameObject(std::string_view name = "", std::string_view tag = "");
 
     // 禁止拷贝和移动，确保唯一性 (通常游戏对象不应随意拷贝)
     GameObject(const GameObject&) = delete;
@@ -34,10 +34,10 @@ public:
     GameObject& operator=(GameObject&&) = delete;
 
     // getters and setters
-    void setName(const std::string& name) { m_name = name; } ///< @brief 设置名称
-    const std::string& name() const { return m_name; }       ///< @brief 获取名称
-    void setTag(const std::string& tag) { m_tag = tag; }     ///< @brief 设置标签
-    const std::string& tag() const { return m_tag; }         ///< @brief 获取标签
+    void setName(std::string_view name) { m_name = name; } ///< @brief 设置名称
+    std::string_view name() const { return m_name; }       ///< @brief 获取名称
+    void setTag(std::string_view tag) { m_tag = tag; }     ///< @brief 设置标签
+    std::string_view tag() const { return m_tag; }         ///< @brief 获取标签
     ///< @brief 设置是否需要删除
     void setShouldRemove(bool shouldRemove) { m_shouldRemove = shouldRemove; }
     bool shouldRemove() const { return m_shouldRemove; } ///< @brief 获取是否需要删除

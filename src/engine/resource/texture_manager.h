@@ -34,12 +34,12 @@ public:
 
     // 仅供 ResourceManager 访问的方法
 private:
-    SDL_Texture* loadTexture(const std::string& filePath); ///< @brief 从文件路径加载纹理
+    SDL_Texture* loadTexture(std::string_view filePath); ///< @brief 从文件路径加载纹理
     ///< @brief 尝试获取已加载纹理的指针，如果未加载则尝试加载
-    SDL_Texture* getTexture(const std::string& filePath);
-    glm::vec2 getTextureSize(const std::string& filePath); ///< @brief 获取指定纹理的尺寸
-    void unloadTexture(const std::string& filePath);       ///< @brief 卸载指定的纹理资源
-    void clearTextures();                                  ///< @brief 清空所有纹理资源
+    SDL_Texture* getTexture(std::string_view filePath);
+    glm::vec2 getTextureSize(std::string_view filePath); ///< @brief 获取指定纹理的尺寸
+    void unloadTexture(std::string_view filePath);       ///< @brief 卸载指定的纹理资源
+    void clearTextures();                                ///< @brief 清空所有纹理资源
 
 private:
     friend class ResourceManager;

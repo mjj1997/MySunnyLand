@@ -8,7 +8,7 @@
 
 namespace game::component::state {
 
-void PlayerStateBase::playAnimation(const std::string& animationName)
+void PlayerStateBase::playAnimation(std::string_view animationName)
 {
     if (!m_playerComponent) {
         spdlog::error("PlayerState 没有关联的 PlayerComponent，无法播放动画 '{}'", animationName);

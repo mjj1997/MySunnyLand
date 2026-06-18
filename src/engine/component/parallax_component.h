@@ -27,7 +27,7 @@ public:
      *                      (1, 1) 表示与相机完全同步移动。
      *                      (0.5, 0.5) 表示以相机一半的速度移动。
      */
-    ParallaxComponent(const std::string& textureId, glm::vec2 scrollFactor, glm::bvec2 repeat);
+    ParallaxComponent(std::string_view textureId, glm::vec2 scrollFactor, glm::bvec2 repeat);
     ~ParallaxComponent() override = default;
 
     // 禁止拷贝和移动

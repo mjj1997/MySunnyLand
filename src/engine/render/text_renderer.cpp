@@ -48,8 +48,8 @@ void TextRenderer::close()
     TTF_Quit();
 }
 
-void TextRenderer::drawUiText(const std::string& text,
-                              const std::string& fontId,
+void TextRenderer::drawUiText(std::string_view text,
+                              std::string_view fontId,
                               int fontSize,
                               const glm::vec2& screenPosition,
                               const engine::utils::FColor& color)
@@ -87,8 +87,8 @@ void TextRenderer::drawUiText(const std::string& text,
 }
 
 void TextRenderer::drawText(const Camera& camera,
-                            const std::string& text,
-                            const std::string& fontId,
+                            std::string_view text,
+                            std::string_view fontId,
                             int fontSize,
                             const glm::vec2& worldPosition,
                             const engine::utils::FColor& color)
@@ -100,7 +100,7 @@ void TextRenderer::drawText(const Camera& camera,
     drawUiText(text, fontId, fontSize, screenPos, color);
 }
 
-glm::vec2 TextRenderer::getTextSize(const std::string& text, const std::string& fontId, int fontSize)
+glm::vec2 TextRenderer::getTextSize(std::string_view text, std::string_view fontId, int fontSize)
 {
     /* 构造函数已经保证了必要指针不会为空，这里不需要再检查 */
 

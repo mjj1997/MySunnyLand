@@ -24,7 +24,7 @@ public:
      * @param sourceRect 可选：要绘制的纹理区域（如果未指定，则绘制整个纹理）
      * @param isFlipped 是否翻转
      */
-    explicit UiImage(const std::string& textureId,
+    explicit UiImage(std::string_view textureId,
                      glm::vec2 localPosition = { 0.0f, 0.0f },
                      glm::vec2 size = { 0.0f, 0.0f },
                      std::optional<SDL_FRect> sourceRect = std::nullopt,
@@ -36,8 +36,8 @@ public:
     const engine::render::Sprite& sprite() const { return m_sprite; }
     void setSprite(engine::render::Sprite sprite) { m_sprite = std::move(sprite); }
 
-    const std::string& textureId() const { return m_sprite.textureId(); }
-    void setTextureId(const std::string& textureId) { m_sprite.setTextureId(textureId); }
+    std::string_view textureId() const { return m_sprite.textureId(); }
+    void setTextureId(std::string_view textureId) { m_sprite.setTextureId(textureId); }
 
     const std::optional<SDL_FRect>& sourceRect() const { return m_sprite.sourceRect(); }
     void setSourceRect(std::optional<SDL_FRect> sourceRect)

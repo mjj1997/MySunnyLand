@@ -63,7 +63,7 @@ private:
     void handleTileTriggers();
 
     ///< @brief 根据关卡名称获取对应的地图文件路径
-    std::string levelNameToPath(const std::string& levelName) const
+    std::string levelNameToPath(std::string_view levelName) const
     {
         return "assets/maps/" + levelName + ".tmj";
     }
@@ -78,7 +78,7 @@ private:
      * @param center 特效中心位置
      * @param tag 特效标签（决定特效类型,例如"enemy","item"）
      */
-    void createEffect(glm::vec2 center, const std::string& tag);
+    void createEffect(glm::vec2 center, std::string_view tag);
 
     // --- UI 相关函数 ---
     void createScoreUi();           ///< @brief 创建得分UI

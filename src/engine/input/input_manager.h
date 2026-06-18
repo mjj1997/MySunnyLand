@@ -38,9 +38,9 @@ public:
 
     // 动作状态检查
     ///< @brief 动作当前是否触发 (持续按下或本帧按下)
-    bool isActionDown(const std::string& action) const;
-    bool isActionPressed(const std::string& action) const;  ///< @brief 动作是否在本帧刚刚按下
-    bool isActionReleased(const std::string& action) const; ///< @brief 动作是否在本帧刚刚释放
+    bool isActionDown(std::string_view action) const;
+    bool isActionPressed(std::string_view action) const;  ///< @brief 动作是否在本帧刚刚按下
+    bool isActionReleased(std::string_view action) const; ///< @brief 动作是否在本帧刚刚释放
 
     bool shouldQuit() const;             ///< @brief 查询退出状态
     void setShouldQuit(bool shouldQuit); ///< @brief 设置退出状态
@@ -55,11 +55,11 @@ private:
     void processEvent(const SDL_Event& event);
 
     ///< @brief 将字符串键名转换为 SDL_Scancode
-    SDL_Scancode scancodeFromString(const std::string& keyName);
+    SDL_Scancode scancodeFromString(std::string_view keyName);
     ///< @brief 将字符串按钮名转换为 SDL_Button
-    Uint32 mouseButtonUint32FromString(const std::string& buttonName);
+    Uint32 mouseButtonUint32FromString(std::string_view buttonName);
     ///< @brief 辅助更新动作状态
-    void updateActionState(const std::string& action, bool isInputActive, bool isRepeatEvent);
+    void updateActionState(std::string_view action, bool isInputActive, bool isRepeatEvent);
 
 private:
     ///< @brief 用于获取逻辑坐标的 SDL_Renderer 指针

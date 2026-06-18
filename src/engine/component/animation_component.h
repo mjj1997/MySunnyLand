@@ -38,7 +38,7 @@ public:
 
     ///< @brief 向 m_animations map容器中添加一个动画。
     void addAnimation(std::unique_ptr<engine::render::Animation> animation);
-    void playAnimation(const std::string& name);   ///< @brief 播放指定名称的动画。
+    void playAnimation(std::string_view name);     ///< @brief 播放指定名称的动画。
     void stopAnimation() { m_isPlaying = false; }  ///< @brief 停止当前动画播放。
     void resumeAnimation() { m_isPlaying = true; } ///< @brief 重新播放当前动画。
 

@@ -31,7 +31,7 @@ public:
      * @param name 动画的名称。
      * @param isLoop 动画是否应该循环播放。
      */
-    explicit Animation(const std::string& name = "default", bool isLoop = true);
+    explicit Animation(std::string_view name = "default", bool isLoop = true);
     ~Animation() = default;
 
     // 禁止拷贝和移动，因为 Animation 通常由管理器持有，不应随意拷贝
@@ -56,7 +56,7 @@ public:
     const AnimationFrame& frameAt(float time) const;
 
     // --- Setters and Getters ---
-    const std::string& name() const { return m_name; } ///< @brief 获取动画名称。
+    std::string_view name() const { return m_name; } ///< @brief 获取动画名称。
     ///< @brief 获取动画帧列表。
     const std::vector<AnimationFrame>& frames() const { return m_frames; }
     size_t frameCount() const { return m_frames.size(); }   ///< @brief 获取帧数量。
@@ -64,8 +64,8 @@ public:
     bool isLoop() const { return m_isLoop; }                ///< @brief 检查动画是否循环播放。
     bool isEmpty() const { return m_frames.empty(); }       ///< @brief 检查动画是否没有帧。
 
-    void setName(const std::string& name) { m_name = name; } ///< @brief 设置动画名称。
-    void setLoop(bool loop) { m_isLoop = loop; }             ///< @brief 设置动画是否循环播放。
+    void setName(std::string_view name) { m_name = name; } ///< @brief 设置动画名称。
+    void setLoop(bool loop) { m_isLoop = loop; }           ///< @brief 设置动画是否循环播放。
 
 private:
     std::string m_name;                   ///< @brief 动画的名称 (例如, "walk", "idle")。

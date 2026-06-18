@@ -43,14 +43,14 @@ void SessionData::reset()
     spdlog::info("游戏数据重置完成。");
 }
 
-void SessionData::setNextLevel(const std::string& mapPath)
+void SessionData::setNextLevel(std::string_view mapPath)
 {
     m_mapPath = mapPath;
     m_levelHealth = m_currentHealth;
     m_levelScore = m_currentScore;
 }
 
-bool SessionData::saveToFile(const std::string& fileName) const
+bool SessionData::saveToFile(std::string_view fileName) const
 {
     nlohmann::json json;
     try {
@@ -80,7 +80,7 @@ bool SessionData::saveToFile(const std::string& fileName) const
     }
 }
 
-bool SessionData::loadFromFile(const std::string& fileName)
+bool SessionData::loadFromFile(std::string_view fileName)
 {
     try {
         // 打开文件进行读取
@@ -112,7 +112,7 @@ bool SessionData::loadFromFile(const std::string& fileName)
     }
 }
 
-bool SessionData::syncHighestScore(const std::string& fileName)
+bool SessionData::syncHighestScore(std::string_view fileName)
 {
     try {
         // 打开文件进行读取

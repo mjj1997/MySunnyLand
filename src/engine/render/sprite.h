@@ -30,7 +30,7 @@ public:
      * @param sourceRect 可选的源矩形（SDL_FRect），定义要使用的纹理部分。如果为 std::nullopt，则使用整个纹理。
      * @param isFlipped 是否水平翻转
      */
-    explicit Sprite(const std::string& textureId,
+    explicit Sprite(std::string_view textureId,
                     const std::optional<SDL_FRect>& sourceRect = std::nullopt,
                     bool isFlipped = false)
         : m_textureId(textureId)
@@ -39,13 +39,13 @@ public:
     {}
 
     // --- getters and setters ---
-    const std::string& textureId() const { return m_textureId; } ///< @brief 获取纹理 ID
+    std::string_view textureId() const { return m_textureId; } ///< @brief 获取纹理 ID
     ///< @brief 获取源矩形 (如果使用整个纹理则为 std::nullopt)
     const std::optional<SDL_FRect>& sourceRect() const { return m_sourceRect; }
     bool isFlipped() const { return m_isFlipped; } ///< @brief 获取是否水平翻转
 
     ///< @brief 设置纹理 ID
-    void setTextureId(const std::string& textureId) { m_textureId = textureId; }
+    void setTextureId(std::string_view textureId) { m_textureId = textureId; }
     ///< @brief 设置源矩形 (如果使用整个纹理则为 std::nullopt)
     void setSourceRect(std::optional<SDL_FRect> sourceRect)
     {

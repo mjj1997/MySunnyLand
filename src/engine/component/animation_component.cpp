@@ -18,7 +18,7 @@ void AnimationComponent::addAnimation(std::unique_ptr<engine::render::Animation>
     spdlog::debug("已将动画 '{}' 添加到 GameObject '{}'", name, m_owner ? m_owner->name() : "未知");
 }
 
-void AnimationComponent::playAnimation(const std::string& name)
+void AnimationComponent::playAnimation(std::string_view name)
 {
     auto it = m_animations.find(name);
     if (it == m_animations.end() || !it->second) {

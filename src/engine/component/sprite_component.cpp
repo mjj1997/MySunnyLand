@@ -9,7 +9,7 @@
 
 namespace engine::component {
 
-SpriteComponent::SpriteComponent(const std::string& textureId,
+SpriteComponent::SpriteComponent(std::string_view textureId,
                                  engine::resource::ResourceManager& resourceManager,
                                  engine::utils::Alignment alignment,
                                  std::optional<SDL_FRect> sourceRect,
@@ -39,8 +39,7 @@ SpriteComponent::SpriteComponent(engine::render::Sprite&& sprite,
     spdlog::trace("创建 SpriteComponent，纹理ID: {}", m_sprite.textureId());
 }
 
-void SpriteComponent::setSpriteById(const std::string& textureId,
-                                    std::optional<SDL_FRect> sourceRect)
+void SpriteComponent::setSpriteById(std::string_view textureId, std::optional<SDL_FRect> sourceRect)
 {
     m_sprite.setTextureId(textureId);
     m_sprite.setSourceRect(std::move(sourceRect));

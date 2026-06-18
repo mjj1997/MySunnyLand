@@ -7,12 +7,12 @@
 
 namespace engine::core {
 
-Configurator::Configurator(const std::string& filePath)
+Configurator::Configurator(std::string_view filePath)
 {
     loadFromFile(filePath);
 }
 
-bool Configurator::loadFromFile(const std::string& filePath)
+bool Configurator::loadFromFile(std::string_view filePath)
 {
     std::ifstream file{ filePath };
     if (!file.is_open()) {
@@ -37,7 +37,7 @@ bool Configurator::loadFromFile(const std::string& filePath)
     return false;
 }
 
-bool Configurator::saveToFile(const std::string& filePath)
+bool Configurator::saveToFile(std::string_view filePath)
 {
     std::ofstream file{ filePath };
     if (!file.is_open()) {

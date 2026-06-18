@@ -30,7 +30,7 @@ public:
      * @param scene 要加载数据的目标 Scene 对象。
      * @return bool 是否加载成功。
      */
-    [[nodiscard]] bool loadLevel(const std::string& mapPath, SceneBase& scene);
+    [[nodiscard]] bool loadLevel(std::string_view mapPath, SceneBase& scene);
 
 private:
     ///< @brief 加载图片图层
@@ -66,7 +66,7 @@ private:
      * @return 属性值，如果属性不存在则返回 std::nullopt
      */
     template<typename T>
-    std::optional<T> getTileProperty(const nlohmann::json& tileJson, const std::string& propertyName)
+    std::optional<T> getTileProperty(const nlohmann::json& tileJson, std::string_view propertyName)
     {
         if (!tileJson.contains("properties")) {
             return std::nullopt;
@@ -124,7 +124,7 @@ private:
      * @param tilesetPath Tileset 文件路径。
      * @param firstGid 此 tileset 的第一个全局 ID。
      */
-    void loadTileset(const std::string& tilesetPath, int firstGid);
+    void loadTileset(std::string_view tilesetPath, int firstGid);
 
     /**
      * @brief 解析图片路径，合并文件路径和相对路径。例如：
@@ -135,7 +135,7 @@ private:
      * @param filePath 文件路径
      * @return std::string 解析后的完整路径。
      */
-    std::string resolvePath(const std::string& relativePath, const std::string& filePath);
+    std::string resolvePath(std::string_view relativePath, std::string_view filePath);
 
     ///< @brief 地图路径（拼接路径时需要）
     std::string m_mapPath;

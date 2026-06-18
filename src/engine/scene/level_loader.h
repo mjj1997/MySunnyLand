@@ -73,7 +73,7 @@ private:
         }
 
         for (const auto& property : tileJson["properties"]) {
-            if (property.contains("name") && property["name"] == propertyName) {
+            if (property.contains("name") && property["name"].get<std::string>() == propertyName) {
                 if (property.contains("value")) {
                     return property["value"].get<T>();
                 }

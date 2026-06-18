@@ -44,7 +44,7 @@ TTF_Font* FontManager::loadFont(std::string_view filePath, int pointSize)
 
     // 缓存中不存在，则加载字体
     spdlog::debug("正在加载字体: {} ({}pt)", filePath, pointSize);
-    TTF_Font* font = TTF_OpenFont(filePath.c_str(), pointSize);
+    TTF_Font* font = TTF_OpenFont(filePath.data(), pointSize);
     if (!font) {
         spdlog::error("加载字体 '{}' ({}pt) 失败: {}", filePath, pointSize, SDL_GetError());
         return nullptr;

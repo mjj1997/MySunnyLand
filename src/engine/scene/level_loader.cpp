@@ -670,7 +670,7 @@ std::string LevelLoader::resolvePath(std::string_view relativePath, std::string_
         return finalPath.string();
     } catch (const std::exception& e) {
         spdlog::error("解析路径失败: {}", e.what());
-        return relativePath;
+        return std::string(relativePath);
     }
 }
 

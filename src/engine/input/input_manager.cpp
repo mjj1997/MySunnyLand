@@ -52,7 +52,7 @@ void InputManager::update()
 
 bool InputManager::isActionDown(std::string_view action) const
 {
-    if (auto it = m_actionStates.find(action); it != m_actionStates.end()) {
+    if (auto it = m_actionStates.find(std::string(action)); it != m_actionStates.end()) {
         return it->second == ActionState::PressedThisFrame || it->second == ActionState::HeldDown;
     }
     return false;
@@ -60,7 +60,7 @@ bool InputManager::isActionDown(std::string_view action) const
 
 bool InputManager::isActionPressed(std::string_view action) const
 {
-    if (auto it = m_actionStates.find(action); it != m_actionStates.end()) {
+    if (auto it = m_actionStates.find(std::string(action)); it != m_actionStates.end()) {
         return it->second == ActionState::PressedThisFrame;
     }
     return false;
@@ -68,7 +68,7 @@ bool InputManager::isActionPressed(std::string_view action) const
 
 bool InputManager::isActionReleased(std::string_view action) const
 {
-    if (auto it = m_actionStates.find(action); it != m_actionStates.end()) {
+    if (auto it = m_actionStates.find(std::string(action)); it != m_actionStates.end()) {
         return it->second == ActionState::ReleasedThisFrame;
     }
     return false;
@@ -184,7 +184,7 @@ void InputManager::processEvent(const SDL_Event& event)
 // 将键盘按键名称字符串转换为 SDL_Scancode
 SDL_Scancode InputManager::scancodeFromString(std::string_view keyName)
 {
-    return SDL_GetScancodeFromName(keyName.c_str());
+    return SDL_GetScancodeFromName(keyName.data());
 }
 
 // 将鼠标按钮名称字符串转换为 SDL 按钮 Uint32 值
@@ -212,7 +212,7 @@ Uint32 InputManager::mouseButtonUint32FromString(std::string_view buttonName)
 
 void InputManager::updateActionState(std::string_view action, bool isInputActive, bool isRepeatEvent)
 {
-    auto it = m_actionStates.find(action);
+    auto it = m_actionStates.find(std::string(action));
     if (it == m_actionStates.end()) {
         spdlog::warn("尝试更新未注册动作的状态: {}", action);
         return;

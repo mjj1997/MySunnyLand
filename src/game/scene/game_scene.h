@@ -65,7 +65,7 @@ private:
     ///< @brief 根据关卡名称获取对应的地图文件路径
     std::string levelNameToPath(std::string_view levelName) const
     {
-        return "assets/maps/" + levelName + ".tmj";
+        return "assets/maps/" + std::string(levelName) + ".tmj";
     }
 
     ///< @brief 进入下一个关卡

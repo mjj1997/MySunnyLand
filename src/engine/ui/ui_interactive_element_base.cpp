@@ -57,18 +57,18 @@ void UiInteractiveElementBase::addSprite(std::string_view name,
     }
 
     // 添加精灵
-    m_sprites[name] = std::move(sprite);
+    m_sprites[std::string(name)] = std::move(sprite);
 }
 
 void UiInteractiveElementBase::addSound(std::string_view name, std::string_view path)
 {
-    m_sounds[name] = path;
+    m_sounds[std::string(name)] = path;
 }
 
 void UiInteractiveElementBase::playSound(std::string_view name)
 {
-    if (m_sounds.find(name) != m_sounds.end()) {
-        m_context.audioPlayer().playSound(m_sounds[name]);
+    if (m_sounds.find(std::string(name)) != m_sounds.end()) {
+        m_context.audioPlayer().playSound(m_sounds[std::string(name)]);
     } else {
         spdlog::warn("Sound '{}' 未找到。", name);
     }
@@ -87,8 +87,8 @@ void UiInteractiveElementBase::setCurrentState(std::unique_ptr<engine::ui::state
 
 void UiInteractiveElementBase::setCurrentSprite(std::string_view name)
 {
-    if (m_sprites.find(name) != m_sprites.end()) {
-        m_currentSprite = m_sprites[name].get();
+    if (m_sprites.find(std::string(name)) != m_sprites.end()) {
+        m_currentSprite = m_sprites[std::string(name)].get();
     } else {
         spdlog::warn("Sprite '{}' 未找到。", name);
     }

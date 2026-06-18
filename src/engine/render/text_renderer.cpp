@@ -64,7 +64,7 @@ void TextRenderer::drawUiText(std::string_view text,
     }
 
     // 创建临时 TTF_Text 对象(目前效率不高，未来可以考虑使用缓存优化)
-    TTF_Text* tempTextObject{ TTF_CreateText(m_textEngine, font, text.c_str(), 0) };
+    TTF_Text* tempTextObject{ TTF_CreateText(m_textEngine, font, text.data(), 0) };
     if (tempTextObject == nullptr) {
         spdlog::error("drawUiText 创建临时 TTF_Text 失败: {}", SDL_GetError());
         return;
@@ -112,7 +112,7 @@ glm::vec2 TextRenderer::getTextSize(std::string_view text, std::string_view font
     }
 
     // 创建临时 TTF_Text 对象
-    TTF_Text* tempTextObject{ TTF_CreateText(m_textEngine, font, text.c_str(), 0) };
+    TTF_Text* tempTextObject{ TTF_CreateText(m_textEngine, font, text.data(), 0) };
     if (tempTextObject == nullptr) {
         spdlog::error("getTextSize 创建临时 TTF_Text 失败: {}", SDL_GetError());
         return glm::vec2{ 0.0f, 0.0f };

@@ -9,9 +9,9 @@
 namespace engine::ui {
 
 UiInteractiveElementBase::UiInteractiveElementBase(engine::core::Context& context,
-                                                   const glm::vec2& localPosition,
-                                                   const glm::vec2& size)
-    : UiElementBase{ localPosition, size }
+                                                   glm::vec2 localPosition,
+                                                   glm::vec2 size)
+    : UiElementBase{ std::move(localPosition), std::move(size) }
     , m_context{ context }
 {
     spdlog::trace("UIInteractiveElementBase 构造完成");

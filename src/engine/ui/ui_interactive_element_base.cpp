@@ -57,12 +57,12 @@ void UiInteractiveElementBase::addSprite(std::string_view name,
     }
 
     // 添加精灵
-    m_sprites[std::string(name)] = std::move(sprite);
+    m_sprites.emplace(name, std::move(sprite));
 }
 
 void UiInteractiveElementBase::addSound(std::string_view name, std::string_view path)
 {
-    m_sounds[std::string(name)] = path;
+    m_sounds.emplace(name, path);
 }
 
 void UiInteractiveElementBase::playSound(std::string_view name)

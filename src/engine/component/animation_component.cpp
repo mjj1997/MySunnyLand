@@ -13,8 +13,8 @@ void AnimationComponent::addAnimation(std::unique_ptr<engine::render::Animation>
         return;
     }
 
-    std::string name{ animation->name() }; // 获取名称
-    m_animations[name] = std::move(animation);
+    std::string_view name{ animation->name() }; // 获取名称
+    m_animations.emplace(name, std::move(animation));
     spdlog::debug("已将动画 '{}' 添加到 GameObject '{}'", name, m_owner ? m_owner->name() : "未知");
 }
 

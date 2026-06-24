@@ -46,7 +46,7 @@ void AudioComponent::addSound(std::string_view soundId, std::string_view soundPa
         spdlog::warn("AudioComponent:addSound: 音效id '{}' 已存在，覆盖旧路径。", soundId);
     }
 
-    m_soundIdToPath[std::string(soundId)] = soundPath;
+    m_soundIdToPath.emplace(soundId, soundPath);
     spdlog::debug("AudioComponent:addSound: 音效id '{}' 已添加，路径为 '{}。", soundId, soundPath);
 }
 

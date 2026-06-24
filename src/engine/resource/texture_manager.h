@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../utils/string_view_hash.h"
+
 #include <SDL3/SDL_render.h> // 用于 SDL_Texture 和 SDL_Renderer
 #include <glm/glm.hpp>
 
@@ -56,7 +58,11 @@ private:
     };
 
     // 存储文件路径和指向管理纹理的 unique_ptr 的映射。
-    std::unordered_map<std::string, std::unique_ptr<SDL_Texture, SDLTextureDeletor>> m_textures;
+    std::unordered_map<std::string,
+                       std::unique_ptr<SDL_Texture, SDLTextureDeletor>,
+                       engine::utils::StringViewHash,
+                       std::equal_to<>>
+        m_textures;
 
     SDL_Renderer* m_renderer{ nullptr }; // 指向主渲染器的非拥有指针
 };

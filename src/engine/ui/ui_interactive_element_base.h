@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../render/sprite.h" // 需要引入头文件而不是前置声明（map容器创建时可能会检查内部元素是否有析构定义）
+#include "../utils/string_view_hash.h"
 #include "state/ui_state_base.h"
 #include "ui_element_base.h"
 
@@ -65,9 +66,14 @@ protected:
     engine::core::Context& m_context; ///< @brief 可交互 UI 元素很可能需要其他引擎组件
 
     ///< @brief 状态和精灵的映射，key 为状态名称，value 为精灵指针
-    std::unordered_map<std::string, std::unique_ptr<engine::render::Sprite>> m_sprites;
+    std::unordered_map<std::string,
+                       std::unique_ptr<engine::render::Sprite>,
+                       engine::utils::StringViewHash,
+                       std::equal_to<>>
+        m_sprites;
     ///< @brief 状态和音效的映射，key 为状态名称，value 为音效文件路径
-    std::unordered_map<std::string, std::string> m_sounds;
+    std::unordered_map<std::string, std::string, engine::utils::StringViewHash, std::equal_to<>>
+        m_sounds;
 
     std::unique_ptr<engine::ui::state::UiStateBase> m_currentState; ///< @brief 当前状态
     engine::render::Sprite* m_currentSprite{ nullptr };             ///< @brief 当前显示的精灵

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../utils/string_view_hash.h"
 #include "component_base.h"
 
 #include <string>
@@ -58,7 +59,8 @@ private:
     engine::render::Camera* m_camera;          ///< @brief 相机的非拥有指针，用于音频空间定位
     engine::component::TransformComponent* m_transformComponent{ nullptr }; ///< @brief 缓存变换组件
 
-    std::unordered_map<std::string, std::string> m_soundIdToPath; ///< @brief 音效id 到路径的映射表
+    std::unordered_map<std::string, std::string, engine::utils::StringViewHash, std::equal_to<>>
+        m_soundIdToPath; ///< @brief 音效id 到路径的映射表
 };
 
 } // namespace engine::component

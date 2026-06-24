@@ -11,8 +11,7 @@ AudioManager::AudioManager()
     // 初始化SDL_mixer
     // SDL_mixer 3.2.0 不再需要传入格式标志
     if (!MIX_Init()) {
-        throw std::runtime_error("AudioManager 错误: MIX_Init 失败: "
-                                 + std::string{ SDL_GetError() });
+        throw std::runtime_error("AudioManager 错误: MIX_Init 失败: " + std::string(SDL_GetError()));
     }
 
     // 创建连接到默认音频输出设备的混音器
@@ -20,7 +19,7 @@ AudioManager::AudioManager()
     if (!m_mixer) {
         MIX_Quit();
         throw std::runtime_error("AudioManager 错误: MIX_CreateMixerDevice 失败: "
-                                 + std::string{ SDL_GetError() });
+                                 + std::string(SDL_GetError()));
     }
 
     spdlog::trace("AudioManager 构造成功。");
@@ -46,7 +45,7 @@ AudioManager::~AudioManager()
 MIX_Audio* AudioManager::loadSound(std::string_view filePath)
 {
     // 首先检查缓存
-    auto it = m_sounds.find(std::string(filePath));
+    auto it = m_sounds.find(filePath);
     if (it != m_sounds.end()) {
         return it->second.get();
     }
@@ -67,7 +66,7 @@ MIX_Audio* AudioManager::loadSound(std::string_view filePath)
 
 MIX_Audio* AudioManager::getSound(std::string_view filePath)
 {
-    auto it = m_sounds.find(std::string(filePath));
+    auto it = m_sounds.find(filePath);
     if (it != m_sounds.end()) {
         return it->second.get();
     }
@@ -78,7 +77,7 @@ MIX_Audio* AudioManager::getSound(std::string_view filePath)
 
 void AudioManager::unloadSound(std::string_view filePath)
 {
-    auto it = m_sounds.find(std::string(filePath));
+    auto it = m_sounds.find(filePath);
     if (it != m_sounds.end()) {
         spdlog::debug("成功卸载音效: {}", filePath);
         m_sounds.erase(it); // unique_ptr 处理 MIX_DestroyAudio
@@ -99,7 +98,7 @@ void AudioManager::clearSounds()
 MIX_Audio* AudioManager::loadMusic(std::string_view filePath)
 {
     // 首先检查缓存
-    auto it = m_musics.find(std::string(filePath));
+    auto it = m_musics.find(filePath);
     if (it != m_musics.end()) {
         return it->second.get();
     }
@@ -120,7 +119,7 @@ MIX_Audio* AudioManager::loadMusic(std::string_view filePath)
 
 MIX_Audio* AudioManager::getMusic(std::string_view filePath)
 {
-    auto it = m_musics.find(std::string(filePath));
+    auto it = m_musics.find(filePath);
     if (it != m_musics.end()) {
         return it->second.get();
     }
@@ -131,7 +130,7 @@ MIX_Audio* AudioManager::getMusic(std::string_view filePath)
 
 void AudioManager::unloadMusic(std::string_view filePath)
 {
-    auto it = m_musics.find(std::string(filePath));
+    auto it = m_musics.find(filePath);
     if (it != m_musics.end()) {
         spdlog::debug("卸载音乐: {}", filePath);
         m_musics.erase(it); // unique_ptr 处理 MIX_DestroyAudio

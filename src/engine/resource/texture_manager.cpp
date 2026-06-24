@@ -20,7 +20,7 @@ TextureManager::TextureManager(SDL_Renderer* renderer)
 SDL_Texture* TextureManager::loadTexture(std::string_view filePath)
 {
     // 检查是否已加载该纹理
-    auto it = m_textures.find(std::string(filePath));
+    auto it = m_textures.find(filePath);
     if (it != m_textures.end()) {
         return it->second.get();
     }
@@ -47,7 +47,7 @@ SDL_Texture* TextureManager::loadTexture(std::string_view filePath)
 SDL_Texture* TextureManager::getTexture(std::string_view filePath)
 {
     // 查找现有纹理
-    auto it = m_textures.find(std::string(filePath));
+    auto it = m_textures.find(filePath);
     if (it != m_textures.end()) {
         return it->second.get();
     }
@@ -77,7 +77,7 @@ glm::vec2 TextureManager::getTextureSize(std::string_view filePath)
 
 void TextureManager::unloadTexture(std::string_view filePath)
 {
-    auto it = m_textures.find(std::string(filePath));
+    auto it = m_textures.find(filePath);
     if (it != m_textures.end()) {
         m_textures.erase(it); // unique_ptr 通过自定义删除器自动释放纹理
         spdlog::debug("成功卸载纹理：{}", filePath);

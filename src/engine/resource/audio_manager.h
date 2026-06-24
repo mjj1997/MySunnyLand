@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../utils/string_view_hash.h"
+
 #include <SDL3_mixer/SDL_mixer.h> // SDL_mixer 主头文件
 
 #include <memory> // 用于 std::unique_ptr
@@ -66,9 +68,17 @@ private:
     };
 
     // 音效存储 (文件路径 -> MIX_Audio, 预解码)
-    std::unordered_map<std::string, std::unique_ptr<MIX_Audio, SDLMixAudioDeletor>> m_sounds;
+    std::unordered_map<std::string,
+                       std::unique_ptr<MIX_Audio, SDLMixAudioDeletor>,
+                       engine::utils::StringViewHash,
+                       std::equal_to<>>
+        m_sounds;
     // 音乐存储 (文件路径 -> MIX_Audio, 流式解码)
-    std::unordered_map<std::string, std::unique_ptr<MIX_Audio, SDLMixAudioDeletor>> m_musics;
+    std::unordered_map<std::string,
+                       std::unique_ptr<MIX_Audio, SDLMixAudioDeletor>,
+                       engine::utils::StringViewHash,
+                       std::equal_to<>>
+        m_musics;
 
     MIX_Mixer* m_mixer{ nullptr }; ///< @brief SDL_mixer 混音器实例
 };

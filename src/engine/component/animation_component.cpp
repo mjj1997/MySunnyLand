@@ -20,7 +20,7 @@ void AnimationComponent::addAnimation(std::unique_ptr<engine::render::Animation>
 
 void AnimationComponent::playAnimation(std::string_view name)
 {
-    auto it = m_animations.find(std::string(name));
+    auto it = m_animations.find(name);
     if (it == m_animations.end() || !it->second) {
         spdlog::warn("未找到 GameObject '{}' 的动画 '{}'", m_owner ? m_owner->name() : "未知", name);
         return;

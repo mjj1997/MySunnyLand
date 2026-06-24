@@ -67,8 +67,8 @@ void UiInteractiveElementBase::addSound(std::string_view name, std::string_view 
 
 void UiInteractiveElementBase::playSound(std::string_view name)
 {
-    if (m_sounds.find(std::string(name)) != m_sounds.end()) {
-        m_context.audioPlayer().playSound(m_sounds[std::string(name)]);
+    if (auto it = m_sounds.find(name); it != m_sounds.end()) {
+        m_context.audioPlayer().playSound(it->second);
     } else {
         spdlog::warn("Sound '{}' 未找到。", name);
     }
@@ -87,8 +87,8 @@ void UiInteractiveElementBase::setCurrentState(std::unique_ptr<engine::ui::state
 
 void UiInteractiveElementBase::setCurrentSprite(std::string_view name)
 {
-    if (m_sprites.find(std::string(name)) != m_sprites.end()) {
-        m_currentSprite = m_sprites[std::string(name)].get();
+    if (auto it = m_sprites.find(name); it != m_sprites.end()) {
+        m_currentSprite = it->second.get();
     } else {
         spdlog::warn("Sprite '{}' 未找到。", name);
     }

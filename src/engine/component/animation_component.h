@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../utils/string_view_hash.h"
 #include "component_base.h"
 
 #include <memory>
@@ -57,7 +58,11 @@ protected:
 
 private:
     /// @brief 动画名称到 Animation 对象的映射。
-    std::unordered_map<std::string, std::unique_ptr<engine::render::Animation>> m_animations;
+    std::unordered_map<std::string,
+                       std::unique_ptr<engine::render::Animation>,
+                       engine::utils::StringViewHash,
+                       std::equal_to<>>
+        m_animations;
     SpriteComponent* m_spriteComponent{ nullptr }; ///< @brief 指向必需的 SpriteComponent 的指针
 
     engine::render::Animation* m_currentAnimation{ nullptr }; ///< @brief 指向当前播放动画的原始指针

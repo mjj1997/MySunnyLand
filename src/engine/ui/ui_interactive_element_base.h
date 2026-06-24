@@ -1,9 +1,11 @@
 #pragma once
 
 #include "../render/sprite.h" // 需要引入头文件而不是前置声明（map容器创建时可能会检查内部元素是否有析构定义）
+#include "../utils/string_view_hash.h"
 #include "state/ui_state_base.h"
 #include "ui_element_base.h"
 
+#include <string_view>
 #include <unordered_map>
 
 namespace engine::ui {
@@ -25,8 +27,8 @@ public:
      * @param size 初始大小
      */
     explicit UiInteractiveElementBase(engine::core::Context& context,
-                                      const glm::vec2& localPosition = { 0.0f, 0.0f },
-                                      const glm::vec2& size = { 0.0f, 0.0f });
+                                      glm::vec2 localPosition = { 0.0f, 0.0f },
+                                      glm::vec2 size = { 0.0f, 0.0f });
 
     ~UiInteractiveElementBase() override = default;
 
@@ -43,10 +45,10 @@ public:
     bool handleInput(engine::core::Context& context) override;
     void render(engine::core::Context& context) override;
 
-    void addSprite(const std::string& name,
-                   std::unique_ptr<engine::render::Sprite> sprite);  ///< @brief 添加状态名称-精灵对
-    void addSound(const std::string& name, const std::string& path); ///< @brief 添加状态名称-音效对
-    void playSound(const std::string& name);                         ///< @brief 播放音效
+    void addSprite(std::string_view name,
+                   std::unique_ptr<engine::render::Sprite> sprite); ///< @brief 添加状态名称-精灵对
+    void addSound(std::string_view name, std::string_view path);    ///< @brief 添加状态名称-音效对
+    void playSound(std::string_view name);                          ///< @brief 播放音效
 
     // --- Getters and Setters ---
     ///< @brief 设置当前状态
@@ -54,7 +56,7 @@ public:
     ///< @brief 获取当前状态
     engine::ui::state::UiStateBase* currentState() const { return m_currentState.get(); }
 
-    void setCurrentSprite(const std::string& name); ///< @brief 通过状态名称，设置当前显示的精灵
+    void setCurrentSprite(std::string_view name); ///< @brief 通过状态名称，设置当前显示的精灵
 
     ///< @brief 设置是否可交互
     void setInteractive(bool interactive) { m_isInteractive = interactive; }
@@ -64,9 +66,14 @@ protected:
     engine::core::Context& m_context; ///< @brief 可交互 UI 元素很可能需要其他引擎组件
 
     ///< @brief 状态和精灵的映射，key 为状态名称，value 为精灵指针
-    std::unordered_map<std::string, std::unique_ptr<engine::render::Sprite>> m_sprites;
+    std::unordered_map<std::string,
+                       std::unique_ptr<engine::render::Sprite>,
+                       engine::utils::StringViewHash,
+                       std::equal_to<>>
+        m_sprites;
     ///< @brief 状态和音效的映射，key 为状态名称，value 为音效文件路径
-    std::unordered_map<std::string, std::string> m_sounds;
+    std::unordered_map<std::string, std::string, engine::utils::StringViewHash, std::equal_to<>>
+        m_sounds;
 
     std::unique_ptr<engine::ui::state::UiStateBase> m_currentState; ///< @brief 当前状态
     engine::render::Sprite* m_currentSprite{ nullptr };             ///< @brief 当前显示的精灵

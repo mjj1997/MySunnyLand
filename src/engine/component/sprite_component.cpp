@@ -9,7 +9,7 @@
 
 namespace engine::component {
 
-SpriteComponent::SpriteComponent(const std::string& textureId,
+SpriteComponent::SpriteComponent(std::string_view textureId,
                                  engine::resource::ResourceManager& resourceManager,
                                  engine::utils::Alignment alignment,
                                  std::optional<SDL_FRect> sourceRect,
@@ -39,8 +39,7 @@ SpriteComponent::SpriteComponent(engine::render::Sprite&& sprite,
     spdlog::trace("创建 SpriteComponent，纹理ID: {}", m_sprite.textureId());
 }
 
-void SpriteComponent::setSpriteById(const std::string& textureId,
-                                    std::optional<SDL_FRect> sourceRect)
+void SpriteComponent::setSpriteById(std::string_view textureId, std::optional<SDL_FRect> sourceRect)
 {
     m_sprite.setTextureId(textureId);
     m_sprite.setSourceRect(std::move(sourceRect));
@@ -118,7 +117,7 @@ void SpriteComponent::updateOffset()
 {
     // 如果精灵尺寸无效，偏移为 0
     if (m_spriteSize.x <= 0 || m_spriteSize.y <= 0) {
-        m_offset = glm::vec2{ 0.0f, 0.0f };
+        m_offset = glm::vec2(0.0f);
         return;
     }
 
@@ -126,7 +125,7 @@ void SpriteComponent::updateOffset()
     // 计算精灵左上角相对于 TransformComponent::m_position 的偏移量
     switch (m_alignment) {
     case engine::utils::Alignment::TopLeft:
-        m_offset = glm::vec2{ 0.0f, 0.0f } * scaleFactor;
+        m_offset = glm::vec2(0.0f) * scaleFactor;
         break;
     case engine::utils::Alignment::TopCenter:
         m_offset = glm::vec2{ -m_spriteSize.x / 2.0f, 0.0f } * scaleFactor;

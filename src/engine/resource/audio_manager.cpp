@@ -11,8 +11,7 @@ AudioManager::AudioManager()
     // 初始化SDL_mixer
     // SDL_mixer 3.2.0 不再需要传入格式标志
     if (!MIX_Init()) {
-        throw std::runtime_error("AudioManager 错误: MIX_Init 失败: "
-                                 + std::string{ SDL_GetError() });
+        throw std::runtime_error("AudioManager 错误: MIX_Init 失败: " + std::string(SDL_GetError()));
     }
 
     // 创建连接到默认音频输出设备的混音器
@@ -20,7 +19,7 @@ AudioManager::AudioManager()
     if (!m_mixer) {
         MIX_Quit();
         throw std::runtime_error("AudioManager 错误: MIX_CreateMixerDevice 失败: "
-                                 + std::string{ SDL_GetError() });
+                                 + std::string(SDL_GetError()));
     }
 
     spdlog::trace("AudioManager 构造成功。");
@@ -43,7 +42,7 @@ AudioManager::~AudioManager()
 }
 
 // --- 音效管理 ---
-MIX_Audio* AudioManager::loadSound(const std::string& filePath)
+MIX_Audio* AudioManager::loadSound(std::string_view filePath)
 {
     // 首先检查缓存
     auto it = m_sounds.find(filePath);
@@ -53,7 +52,7 @@ MIX_Audio* AudioManager::loadSound(const std::string& filePath)
 
     // 加载音效（predecode=true，预先解码为PCM，适合短音效）
     spdlog::debug("加载音效: {}", filePath);
-    MIX_Audio* sound = MIX_LoadAudio(m_mixer, filePath.c_str(), true);
+    MIX_Audio* sound = MIX_LoadAudio(m_mixer, filePath.data(), true);
     if (!sound) {
         spdlog::error("加载音效失败: '{}': {}", filePath, SDL_GetError());
         return nullptr;
@@ -65,7 +64,7 @@ MIX_Audio* AudioManager::loadSound(const std::string& filePath)
     return sound;
 }
 
-MIX_Audio* AudioManager::getSound(const std::string& filePath)
+MIX_Audio* AudioManager::getSound(std::string_view filePath)
 {
     auto it = m_sounds.find(filePath);
     if (it != m_sounds.end()) {
@@ -76,7 +75,7 @@ MIX_Audio* AudioManager::getSound(const std::string& filePath)
     return loadSound(filePath);
 }
 
-void AudioManager::unloadSound(const std::string& filePath)
+void AudioManager::unloadSound(std::string_view filePath)
 {
     auto it = m_sounds.find(filePath);
     if (it != m_sounds.end()) {
@@ -96,7 +95,7 @@ void AudioManager::clearSounds()
 }
 
 // --- 音乐管理 ---
-MIX_Audio* AudioManager::loadMusic(const std::string& filePath)
+MIX_Audio* AudioManager::loadMusic(std::string_view filePath)
 {
     // 首先检查缓存
     auto it = m_musics.find(filePath);
@@ -106,7 +105,7 @@ MIX_Audio* AudioManager::loadMusic(const std::string& filePath)
 
     // 加载音乐（predecode=false，流式解码，适合长音乐）
     spdlog::debug("加载音乐: {}", filePath);
-    MIX_Audio* music = MIX_LoadAudio(m_mixer, filePath.c_str(), false);
+    MIX_Audio* music = MIX_LoadAudio(m_mixer, filePath.data(), false);
     if (!music) {
         spdlog::error("加载音乐失败: '{}': {}", filePath, SDL_GetError());
         return nullptr;
@@ -118,7 +117,7 @@ MIX_Audio* AudioManager::loadMusic(const std::string& filePath)
     return music;
 }
 
-MIX_Audio* AudioManager::getMusic(const std::string& filePath)
+MIX_Audio* AudioManager::getMusic(std::string_view filePath)
 {
     auto it = m_musics.find(filePath);
     if (it != m_musics.end()) {
@@ -129,7 +128,7 @@ MIX_Audio* AudioManager::getMusic(const std::string& filePath)
     return loadMusic(filePath);
 }
 
-void AudioManager::unloadMusic(const std::string& filePath)
+void AudioManager::unloadMusic(std::string_view filePath)
 {
     auto it = m_musics.find(filePath);
     if (it != m_musics.end()) {

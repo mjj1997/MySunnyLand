@@ -5,7 +5,7 @@
 #include <SDL3/SDL_render.h>
 #include <glm/vec2.hpp>
 
-#include <string>
+#include <string_view>
 
 struct TTF_TextEngine;
 
@@ -55,8 +55,8 @@ public:
      * @param screenPosition 屏幕坐标。
      * @param color 文本颜色。(默认为白色)
      */
-    void drawUiText(const std::string& text,
-                    const std::string& fontId,
+    void drawUiText(std::string_view text,
+                    std::string_view fontId,
                     int fontSize,
                     const glm::vec2& screenPosition,
                     const engine::utils::FColor& color = { 1.0f, 1.0f, 1.0f, 1.0f });
@@ -72,8 +72,8 @@ public:
      * @param color 文本颜色。(默认为白色)
      */
     void drawText(const Camera& camera,
-                  const std::string& text,
-                  const std::string& fontId,
+                  std::string_view text,
+                  std::string_view fontId,
                   int fontSize,
                   const glm::vec2& worldPosition,
                   const engine::utils::FColor& color = { 1.0f, 1.0f, 1.0f, 1.0f });
@@ -86,7 +86,7 @@ public:
      * @param fontSize 字体大小。
      * @return 文本的尺寸。
      */
-    glm::vec2 getTextSize(const std::string& text, const std::string& fontId, int fontSize);
+    glm::vec2 getTextSize(std::string_view text, std::string_view fontId, int fontSize);
 
 private:
     ///< @brief 持有渲染器的非拥有指针

@@ -8,7 +8,7 @@
 #include <glm/vec2.hpp>
 
 #include <optional>
-#include <string>
+#include <string_view>
 
 namespace engine::resource {
 class ResourceManager;
@@ -35,7 +35,7 @@ public:
      * @param sourceRect 可选的源矩形。
      * @param isFlipped 初始翻转状态。
      */
-    SpriteComponent(const std::string& textureId,
+    SpriteComponent(std::string_view textureId,
                     engine::resource::ResourceManager& resourceManager,
                     engine::utils::Alignment alignment = engine::utils::Alignment::None,
                     std::optional<SDL_FRect> sourceRect = std::nullopt,
@@ -60,16 +60,16 @@ public:
     SpriteComponent& operator=(SpriteComponent&&) = delete;
 
     // Getters
-    const engine::render::Sprite& sprite() const { return m_sprite; }     ///< @brief 获取精灵对象
-    const std::string& textureId() const { return m_sprite.textureId(); } ///< @brief 获取纹理ID
-    bool isFlipped() const { return m_sprite.isFlipped(); }               ///< @brief 获取是否翻转
-    engine::utils::Alignment alignment() const { return m_alignment; }    ///< @brief 获取对齐方式
-    bool isHidden() const { return m_isHidden; }                          ///< @brief 获取是否隐藏
-    const glm::vec2& spriteSize() const { return m_spriteSize; }          ///< @brief 获取精灵尺寸
-    const glm::vec2& offset() const { return m_offset; }                  ///< @brief 获取偏移量
+    const engine::render::Sprite& sprite() const { return m_sprite; }   ///< @brief 获取精灵对象
+    std::string_view textureId() const { return m_sprite.textureId(); } ///< @brief 获取纹理ID
+    bool isFlipped() const { return m_sprite.isFlipped(); }             ///< @brief 获取是否翻转
+    engine::utils::Alignment alignment() const { return m_alignment; }  ///< @brief 获取对齐方式
+    bool isHidden() const { return m_isHidden; }                        ///< @brief 获取是否隐藏
+    const glm::vec2& spriteSize() const { return m_spriteSize; }        ///< @brief 获取精灵尺寸
+    const glm::vec2& offset() const { return m_offset; }                ///< @brief 获取偏移量
 
     // Setters
-    void setSpriteById(const std::string& textureId,
+    void setSpriteById(std::string_view textureId,
                        std::optional<SDL_FRect> sourceRect = std::nullopt); ///< @brief 设置精灵对象
     void setSourceRect(std::optional<SDL_FRect> sourceRect);                ///< @brief 设置源矩形
     void setFlipped(bool flipped) { m_sprite.setFlipped(flipped); }         ///< @brief 设置是否翻转

@@ -17,7 +17,7 @@ AudioPlayer::AudioPlayer(engine::resource::ResourceManager* resourceManager)
     m_musicTrack = MIX_CreateTrack(m_mixer);
     if (!m_musicTrack) {
         throw std::runtime_error("AudioPlayer 构造失败: 无法创建音乐轨道："
-                                 + std::string{ SDL_GetError() });
+                                 + std::string(SDL_GetError()));
     }
 }
 
@@ -29,7 +29,7 @@ AudioPlayer::~AudioPlayer()
     }
 }
 
-int AudioPlayer::playSound(const std::string& soundPath)
+int AudioPlayer::playSound(std::string_view soundPath)
 {
     MIX_Audio* sound{ m_resourceManager->getSound(soundPath) };
     if (!sound) {
@@ -46,7 +46,7 @@ int AudioPlayer::playSound(const std::string& soundPath)
     return 0;
 }
 
-bool AudioPlayer::playMusic(const std::string& musicPath, int loops, int fadeInTime)
+bool AudioPlayer::playMusic(std::string_view musicPath, int loops, int fadeInTime)
 {
     if (musicPath == m_currentMusic) {
         return true; // 如果当前音乐已经在播放，则不重复播放

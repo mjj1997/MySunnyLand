@@ -50,7 +50,7 @@ void InputManager::update()
 
 // --- 状态查询方法 ---
 
-bool InputManager::isActionDown(const std::string& action) const
+bool InputManager::isActionDown(std::string_view action) const
 {
     if (auto it = m_actionStates.find(action); it != m_actionStates.end()) {
         return it->second == ActionState::PressedThisFrame || it->second == ActionState::HeldDown;
@@ -58,7 +58,7 @@ bool InputManager::isActionDown(const std::string& action) const
     return false;
 }
 
-bool InputManager::isActionPressed(const std::string& action) const
+bool InputManager::isActionPressed(std::string_view action) const
 {
     if (auto it = m_actionStates.find(action); it != m_actionStates.end()) {
         return it->second == ActionState::PressedThisFrame;
@@ -66,7 +66,7 @@ bool InputManager::isActionPressed(const std::string& action) const
     return false;
 }
 
-bool InputManager::isActionReleased(const std::string& action) const
+bool InputManager::isActionReleased(std::string_view action) const
 {
     if (auto it = m_actionStates.find(action); it != m_actionStates.end()) {
         return it->second == ActionState::ReleasedThisFrame;
@@ -105,7 +105,7 @@ void InputManager::initMappings(const engine::core::Configurator* config)
 
         // 设置 "按键 -> 动作" 的映射
         spdlog::trace("映射动作: {}", action);
-        for (const std::string& keyName : keyNames) {
+        for (std::string_view keyName : keyNames) {
             // 尝试根据按键名称获取scancode
             SDL_Scancode scancode{ scancodeFromString(keyName) };
             // 尝试根据按键名称获取鼠标按钮
@@ -146,7 +146,7 @@ void InputManager::processEvent(const SDL_Event& event)
             const std::vector<std::string>& actions{ it->second };
             bool isDown{ event.key.down };
             bool isRepeat{ event.key.repeat };
-            for (const std::string& action : actions) {
+            for (std::string_view action : actions) {
                 updateActionState(action, isDown, isRepeat); // 更新action状态
             }
         }
@@ -159,7 +159,7 @@ void InputManager::processEvent(const SDL_Event& event)
         if (auto it = m_inputKeyToActions.find(button); it != m_inputKeyToActions.end()) {
             const std::vector<std::string>& actions{ it->second };
             bool isDown{ event.button.down };
-            for (const std::string& action : actions) {
+            for (std::string_view action : actions) {
                 // 鼠标事件不考虑repeat, 所以第三个参数传false
                 updateActionState(action, isDown, false); // 更新action状态
             }
@@ -182,13 +182,13 @@ void InputManager::processEvent(const SDL_Event& event)
 // --- 工具函数 ---
 
 // 将键盘按键名称字符串转换为 SDL_Scancode
-SDL_Scancode InputManager::scancodeFromString(const std::string& keyName)
+SDL_Scancode InputManager::scancodeFromString(std::string_view keyName)
 {
-    return SDL_GetScancodeFromName(keyName.c_str());
+    return SDL_GetScancodeFromName(keyName.data());
 }
 
 // 将鼠标按钮名称字符串转换为 SDL 按钮 Uint32 值
-Uint32 InputManager::mouseButtonUint32FromString(const std::string& buttonName)
+Uint32 InputManager::mouseButtonUint32FromString(std::string_view buttonName)
 {
     if (buttonName == "MouseLeft") {
         return SDL_BUTTON_LEFT;
@@ -210,9 +210,7 @@ Uint32 InputManager::mouseButtonUint32FromString(const std::string& buttonName)
     return 0;
 }
 
-void InputManager::updateActionState(const std::string& action,
-                                     bool isInputActive,
-                                     bool isRepeatEvent)
+void InputManager::updateActionState(std::string_view action, bool isInputActive, bool isRepeatEvent)
 {
     auto it = m_actionStates.find(action);
     if (it == m_actionStates.end()) {

@@ -4,6 +4,7 @@
 #include <nlohmann/json.hpp>
 #include <spdlog/spdlog.h>
 
+#include <filesystem>
 #include <fstream>
 
 namespace game::data {
@@ -43,14 +44,14 @@ void SessionData::reset()
     spdlog::info("游戏数据重置完成。");
 }
 
-void SessionData::setNextLevel(const std::string& mapPath)
+void SessionData::setNextLevel(std::string_view mapPath)
 {
     m_mapPath = mapPath;
     m_levelHealth = m_currentHealth;
     m_levelScore = m_currentScore;
 }
 
-bool SessionData::saveToFile(const std::string& fileName) const
+bool SessionData::saveToFile(std::string_view fileName) const
 {
     nlohmann::json json;
     try {
@@ -62,7 +63,8 @@ bool SessionData::saveToFile(const std::string& fileName) const
         json["mapPath"] = m_mapPath;
 
         // 打开文件进行写入
-        std::ofstream file{ fileName };
+        auto path = std::filesystem::path{ fileName };
+        std::ofstream file{ path };
         if (!file.is_open()) {
             spdlog::error("无法打开存档文件进行写入: {}", fileName);
             return false;
@@ -80,11 +82,12 @@ bool SessionData::saveToFile(const std::string& fileName) const
     }
 }
 
-bool SessionData::loadFromFile(const std::string& fileName)
+bool SessionData::loadFromFile(std::string_view fileName)
 {
     try {
         // 打开文件进行读取
-        std::ifstream file{ fileName };
+        auto path = std::filesystem::path{ fileName };
+        std::ifstream file{ path };
         if (!file.is_open()) {
             // 如果存档文件不存在，不一定是错误，所以只报警告
             spdlog::warn("读档时找不到文件: {}", fileName);
@@ -112,11 +115,12 @@ bool SessionData::loadFromFile(const std::string& fileName)
     }
 }
 
-bool SessionData::syncHighestScore(const std::string& fileName)
+bool SessionData::syncHighestScore(std::string_view fileName)
 {
     try {
-        // 打开文件进行读取
-        std::fstream file{ fileName };
+        // 打开文件进行读写
+        auto path = std::filesystem::path{ fileName };
+        std::fstream file{ path };
         if (!file.is_open()) {
             spdlog::warn("找不到文件: {}, 无法进行同步", fileName);
             return false;

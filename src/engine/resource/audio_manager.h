@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../utils/string_view_hash.h"
+
 #include <SDL3_mixer/SDL_mixer.h> // SDL_mixer 主头文件
 
 #include <memory> // 用于 std::unique_ptr
@@ -36,18 +38,18 @@ public:
 private:
     // --- 仅供 ResourceManager 访问的方法 ---
     // --- 音效管理 ---
-    MIX_Audio* loadSound(const std::string& filePath); ///< @brief 从文件路径加载音效（预解码）
+    MIX_Audio* loadSound(std::string_view filePath); ///< @brief 从文件路径加载音效（预解码）
     ///< @brief 尝试获取已加载音效的指针，如果未加载则尝试加载
-    MIX_Audio* getSound(const std::string& filePath);
-    void unloadSound(const std::string& filePath); ///< @brief 卸载指定的音效资源
-    void clearSounds();                            ///< @brief 清空所有音效资源
+    MIX_Audio* getSound(std::string_view filePath);
+    void unloadSound(std::string_view filePath); ///< @brief 卸载指定的音效资源
+    void clearSounds();                          ///< @brief 清空所有音效资源
 
     // --- 音乐管理 ---
-    MIX_Audio* loadMusic(const std::string& filePath); ///< @brief 从文件路径加载音乐（流式解码）
+    MIX_Audio* loadMusic(std::string_view filePath); ///< @brief 从文件路径加载音乐（流式解码）
     ///< @brief 尝试获取已加载音乐的指针，如果未加载则尝试加载
-    MIX_Audio* getMusic(const std::string& filePath);
-    void unloadMusic(const std::string& filePath); ///< @brief 卸载指定的音乐资源
-    void clearMusics();                            ///< @brief 清空所有音乐资源
+    MIX_Audio* getMusic(std::string_view filePath);
+    void unloadMusic(std::string_view filePath); ///< @brief 卸载指定的音乐资源
+    void clearMusics();                          ///< @brief 清空所有音乐资源
 
     void clearAudio(); ///< @brief 清空所有音频资源
 
@@ -66,9 +68,17 @@ private:
     };
 
     // 音效存储 (文件路径 -> MIX_Audio, 预解码)
-    std::unordered_map<std::string, std::unique_ptr<MIX_Audio, SDLMixAudioDeletor>> m_sounds;
+    std::unordered_map<std::string,
+                       std::unique_ptr<MIX_Audio, SDLMixAudioDeletor>,
+                       engine::utils::StringViewHash,
+                       std::equal_to<>>
+        m_sounds;
     // 音乐存储 (文件路径 -> MIX_Audio, 流式解码)
-    std::unordered_map<std::string, std::unique_ptr<MIX_Audio, SDLMixAudioDeletor>> m_musics;
+    std::unordered_map<std::string,
+                       std::unique_ptr<MIX_Audio, SDLMixAudioDeletor>,
+                       engine::utils::StringViewHash,
+                       std::equal_to<>>
+        m_musics;
 
     MIX_Mixer* m_mixer{ nullptr }; ///< @brief SDL_mixer 混音器实例
 };

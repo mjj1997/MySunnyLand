@@ -13,12 +13,12 @@ void AnimationComponent::addAnimation(std::unique_ptr<engine::render::Animation>
         return;
     }
 
-    std::string name{ animation->name() }; // 获取名称
-    m_animations[name] = std::move(animation);
+    std::string_view name{ animation->name() }; // 获取名称
+    m_animations.emplace(name, std::move(animation));
     spdlog::debug("已将动画 '{}' 添加到 GameObject '{}'", name, m_owner ? m_owner->name() : "未知");
 }
 
-void AnimationComponent::playAnimation(const std::string& name)
+void AnimationComponent::playAnimation(std::string_view name)
 {
     auto it = m_animations.find(name);
     if (it == m_animations.end() || !it->second) {
@@ -43,13 +43,13 @@ void AnimationComponent::playAnimation(const std::string& name)
     }
 }
 
-std::string AnimationComponent::currentAnimationName() const
+std::string_view AnimationComponent::currentAnimationName() const
 {
     if (m_currentAnimation) {
         return m_currentAnimation->name();
     }
 
-    return "";
+    return std::string_view();
 }
 
 bool AnimationComponent::isAnimationFinished() const

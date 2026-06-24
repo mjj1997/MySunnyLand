@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../utils/string_view_hash.h"
+
 #include <SDL3/SDL_render.h> // 用于 SDL_Texture 和 SDL_Renderer
 #include <glm/glm.hpp>
 
@@ -34,12 +36,12 @@ public:
 
     // 仅供 ResourceManager 访问的方法
 private:
-    SDL_Texture* loadTexture(const std::string& filePath); ///< @brief 从文件路径加载纹理
+    SDL_Texture* loadTexture(std::string_view filePath); ///< @brief 从文件路径加载纹理
     ///< @brief 尝试获取已加载纹理的指针，如果未加载则尝试加载
-    SDL_Texture* getTexture(const std::string& filePath);
-    glm::vec2 getTextureSize(const std::string& filePath); ///< @brief 获取指定纹理的尺寸
-    void unloadTexture(const std::string& filePath);       ///< @brief 卸载指定的纹理资源
-    void clearTextures();                                  ///< @brief 清空所有纹理资源
+    SDL_Texture* getTexture(std::string_view filePath);
+    glm::vec2 getTextureSize(std::string_view filePath); ///< @brief 获取指定纹理的尺寸
+    void unloadTexture(std::string_view filePath);       ///< @brief 卸载指定的纹理资源
+    void clearTextures();                                ///< @brief 清空所有纹理资源
 
 private:
     friend class ResourceManager;
@@ -56,7 +58,11 @@ private:
     };
 
     // 存储文件路径和指向管理纹理的 unique_ptr 的映射。
-    std::unordered_map<std::string, std::unique_ptr<SDL_Texture, SDLTextureDeletor>> m_textures;
+    std::unordered_map<std::string,
+                       std::unique_ptr<SDL_Texture, SDLTextureDeletor>,
+                       engine::utils::StringViewHash,
+                       std::equal_to<>>
+        m_textures;
 
     SDL_Renderer* m_renderer{ nullptr }; // 指向主渲染器的非拥有指针
 };

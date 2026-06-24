@@ -1,9 +1,11 @@
 #pragma once
 
+#include "../utils/string_view_hash.h"
 #include "component_base.h"
 
 #include <memory>
 #include <string>
+#include <string_view>
 #include <unordered_map>
 
 namespace engine::render {
@@ -38,12 +40,12 @@ public:
 
     ///< @brief 向 m_animations map容器中添加一个动画。
     void addAnimation(std::unique_ptr<engine::render::Animation> animation);
-    void playAnimation(const std::string& name);   ///< @brief 播放指定名称的动画。
+    void playAnimation(std::string_view name);     ///< @brief 播放指定名称的动画。
     void stopAnimation() { m_isPlaying = false; }  ///< @brief 停止当前动画播放。
     void resumeAnimation() { m_isPlaying = true; } ///< @brief 重新播放当前动画。
 
     // --- Getters and Setters ---
-    std::string currentAnimationName() const;
+    std::string_view currentAnimationName() const;
     bool isPlaying() const { return m_isPlaying; }
     bool isAnimationFinished() const;
     bool isOneShotRemoval() const { return m_isOneShotRemoval; }
@@ -56,7 +58,11 @@ protected:
 
 private:
     /// @brief 动画名称到 Animation 对象的映射。
-    std::unordered_map<std::string, std::unique_ptr<engine::render::Animation>> m_animations;
+    std::unordered_map<std::string,
+                       std::unique_ptr<engine::render::Animation>,
+                       engine::utils::StringViewHash,
+                       std::equal_to<>>
+        m_animations;
     SpriteComponent* m_spriteComponent{ nullptr }; ///< @brief 指向必需的 SpriteComponent 的指针
 
     engine::render::Animation* m_currentAnimation{ nullptr }; ///< @brief 指向当前播放动画的原始指针

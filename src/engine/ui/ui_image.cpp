@@ -6,7 +6,7 @@
 
 namespace engine::ui {
 
-UiImage::UiImage(const std::string& textureId,
+UiImage::UiImage(std::string_view textureId,
                  glm::vec2 localPosition,
                  glm::vec2 size,
                  std::optional<SDL_FRect> sourceRect,

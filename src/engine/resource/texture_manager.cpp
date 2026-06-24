@@ -17,7 +17,7 @@ TextureManager::TextureManager(SDL_Renderer* renderer)
     spdlog::trace("TextureManager 构造成功。");
 }
 
-SDL_Texture* TextureManager::loadTexture(const std::string& filePath)
+SDL_Texture* TextureManager::loadTexture(std::string_view filePath)
 {
     // 检查是否已加载该纹理
     auto it = m_textures.find(filePath);
@@ -26,7 +26,7 @@ SDL_Texture* TextureManager::loadTexture(const std::string& filePath)
     }
 
     // 如果未加载，则尝试加载纹理
-    SDL_Texture* texture = IMG_LoadTexture(m_renderer, filePath.c_str());
+    SDL_Texture* texture = IMG_LoadTexture(m_renderer, filePath.data());
     if (texture == nullptr) {
         spdlog::error("加载纹理失败：'{}': {}", filePath, SDL_GetError());
         return nullptr;
@@ -44,7 +44,7 @@ SDL_Texture* TextureManager::loadTexture(const std::string& filePath)
     return texture;
 }
 
-SDL_Texture* TextureManager::getTexture(const std::string& filePath)
+SDL_Texture* TextureManager::getTexture(std::string_view filePath)
 {
     // 查找现有纹理
     auto it = m_textures.find(filePath);
@@ -57,25 +57,25 @@ SDL_Texture* TextureManager::getTexture(const std::string& filePath)
     return loadTexture(filePath);
 }
 
-glm::vec2 TextureManager::getTextureSize(const std::string& filePath)
+glm::vec2 TextureManager::getTextureSize(std::string_view filePath)
 {
     // 获取纹理
     SDL_Texture* texture{ getTexture(filePath) };
     if (!texture) {
         spdlog::error("无法获取纹理：{}", filePath);
-        return glm::vec2{ 0 };
+        return glm::vec2(0.0f);
     }
 
     // 获取纹理尺寸
     glm::vec2 size;
     if (!SDL_GetTextureSize(texture, &size.x, &size.y)) {
         spdlog::error("无法查询纹理尺寸：{}", filePath);
-        return glm::vec2{ 0 };
+        return glm::vec2(0.0f);
     }
     return size;
 }
 
-void TextureManager::unloadTexture(const std::string& filePath)
+void TextureManager::unloadTexture(std::string_view filePath)
 {
     auto it = m_textures.find(filePath);
     if (it != m_textures.end()) {

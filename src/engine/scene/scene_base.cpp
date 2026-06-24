@@ -12,10 +12,10 @@
 
 namespace engine::scene {
 
-SceneBase::SceneBase(std::string name,
+SceneBase::SceneBase(std::string_view name,
                      engine::core::Context& context,
                      engine::scene::SceneManager& sceneManager)
-    : m_sceneName{ std::move(name) }
+    : m_sceneName{ name }
     , m_context{ context }
     , m_sceneManager{ sceneManager }
     , m_uiManager{ std::make_unique<engine::ui::UiManager>() }
@@ -161,7 +161,7 @@ void SceneBase::safeRemoveGameObject(engine::object::GameObject* gameObject)
     gameObject->setShouldRemove(true);
 }
 
-engine::object::GameObject* SceneBase::findGameObjectByName(const std::string& name) const
+engine::object::GameObject* SceneBase::findGameObjectByName(std::string_view name) const
 {
     // 找到第一个符合条件的游戏对象就返回
     auto it = std::find_if(m_gameObjects.begin(),

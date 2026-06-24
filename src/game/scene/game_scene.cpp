@@ -141,7 +141,7 @@ bool GameScene::initLevel()
 {
     // 加载关卡（level_loader通常加载完成后即可销毁，因此不存为成员变量）
     engine::scene::LevelLoader levelLoader;
-    const std::string& mapPath{ m_gameSessionData->mapPath() };
+    std::string_view mapPath{ m_gameSessionData->mapPath() };
     if (!levelLoader.loadLevel(mapPath, *this)) {
         spdlog::error("加载关卡失败。");
         return false;
@@ -165,13 +165,12 @@ bool GameScene::initLevel()
     // 设置世界边界
     auto worldSize = layerObjectMain->getComponent<engine::component::TileLayerComponent>()
                          ->worldSize();
-    m_context.physicsEngine().setWorldBounds(
-        engine::utils::Rect{ glm::vec2{ 0.0f, 0.0f }, worldSize });
+    m_context.physicsEngine().setWorldBounds(engine::utils::Rect{ glm::vec2(0.0f), worldSize });
 
     // 设置相机边界
-    m_context.camera().setLimitBounds(engine::utils::Rect{ glm::vec2{ 0.0f, 0.0f }, worldSize });
+    m_context.camera().setLimitBounds(engine::utils::Rect{ glm::vec2(0.0f), worldSize });
     // 开始时重置相机位置，以免切换场景时晃动
-    m_context.camera().setPosition(glm::vec2{ 0.0f, 0.0f });
+    m_context.camera().setPosition(glm::vec2(0.0f));
 
     spdlog::trace("关卡初始化完成。");
     return true;
@@ -448,10 +447,10 @@ void GameScene::showEndScene(bool isWin)
     m_sceneManager.requestPushScene(std::move(endScene));
 }
 
-void GameScene::createEffect(glm::vec2 center, const std::string& tag)
+void GameScene::createEffect(glm::vec2 center, std::string_view tag)
 {
     // --- 创建游戏对象和变换组件 ---
-    auto effectObj = std::make_unique<engine::object::GameObject>("effect_" + tag);
+    auto effectObj = std::make_unique<engine::object::GameObject>("effect_" + std::string(tag));
     effectObj->addComponent<engine::component::TransformComponent>(std::move(center));
 
     // --- 根据标签创建不同的精灵组件和动画---
@@ -497,7 +496,7 @@ void GameScene::createEffect(glm::vec2 center, const std::string& tag)
 void GameScene::createScoreUi()
 {
     // 创建得分标签
-    const std::string& scoreText{ "Score: " + std::to_string(m_gameSessionData->currentScore()) };
+    std::string_view scoreText{ "Score: " + std::to_string(m_gameSessionData->currentScore()) };
     auto scoreLabel = std::make_unique<engine::ui::UiLabel>(m_context.textRenderer(),
                                                             scoreText,
                                                             "assets/fonts/VonwaonBitmap-16px.ttf",
@@ -549,7 +548,7 @@ void GameScene::createHealthUi()
 void GameScene::addScoreWithUi(int score)
 {
     m_gameSessionData->addScore(score);
-    const std::string& scoreText{ "Score: " + std::to_string(m_gameSessionData->currentScore()) };
+    std::string_view scoreText{ "Score: " + std::to_string(m_gameSessionData->currentScore()) };
     m_scoreLabel->setText(scoreText);
     spdlog::info("更新得分标签: {}", scoreText);
 }

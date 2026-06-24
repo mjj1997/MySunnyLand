@@ -5,7 +5,7 @@
 
 namespace engine::render {
 
-Animation::Animation(const std::string& name, bool isLoop)
+Animation::Animation(std::string_view name, bool isLoop)
     : m_name{ name }
     , m_isLoop{ isLoop }
 {}

@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <string>
+#include <string_view>
 #include <vector>
 
 namespace engine::core {
@@ -35,7 +36,7 @@ public:
      * @param context 场景上下文。
      * @param sceneManager 场景管理器。
      */
-    SceneBase(std::string name,
+    SceneBase(std::string_view name,
               engine::core::Context& context,
               engine::scene::SceneManager& sceneManager);
 
@@ -65,11 +66,11 @@ public:
     /// @brief 安全地移除游戏对象。（设置 m_shouldRemove 标记）
     virtual void safeRemoveGameObject(engine::object::GameObject* gameObject);
     /// @brief 根据名称查找游戏对象（返回找到的第一个对象）。
-    engine::object::GameObject* findGameObjectByName(const std::string& name) const;
+    engine::object::GameObject* findGameObjectByName(std::string_view name) const;
 
     // getters and setters
-    void setName(const std::string& name) { m_sceneName = name; } ///< @brief 设置场景名称
-    const std::string& name() const { return m_sceneName; }       ///< @brief 获取场景名称
+    void setName(std::string_view name) { m_sceneName = name; } ///< @brief 设置场景名称
+    std::string_view name() const { return m_sceneName; }       ///< @brief 获取场景名称
     ///< @brief 设置场景是否已初始化
     void setInitialized(bool initialized) { m_isInitialized = initialized; }
     bool isInitialized() const { return m_isInitialized; } ///< @brief 获取场景是否已初始化

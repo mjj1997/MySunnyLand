@@ -9,9 +9,9 @@
 namespace engine::ui {
 
 UiInteractiveElementBase::UiInteractiveElementBase(engine::core::Context& context,
-                                                   const glm::vec2& localPosition,
-                                                   const glm::vec2& size)
-    : UiElementBase{ localPosition, size }
+                                                   glm::vec2 localPosition,
+                                                   glm::vec2 size)
+    : UiElementBase{ std::move(localPosition), std::move(size) }
     , m_context{ context }
 {
     spdlog::trace("UIInteractiveElementBase 构造完成");
@@ -48,7 +48,7 @@ void UiInteractiveElementBase::render(engine::core::Context& context)
     UiElementBase::render(context);
 }
 
-void UiInteractiveElementBase::addSprite(const std::string& name,
+void UiInteractiveElementBase::addSprite(std::string_view name,
                                          std::unique_ptr<engine::render::Sprite> sprite)
 {
     // 可交互 UI 元素必须有一个 size 用于交互检测，因此如果参数列表中没有指定，则用图片大小作为 size
@@ -57,18 +57,18 @@ void UiInteractiveElementBase::addSprite(const std::string& name,
     }
 
     // 添加精灵
-    m_sprites[name] = std::move(sprite);
+    m_sprites.emplace(name, std::move(sprite));
 }
 
-void UiInteractiveElementBase::addSound(const std::string& name, const std::string& path)
+void UiInteractiveElementBase::addSound(std::string_view name, std::string_view path)
 {
-    m_sounds[name] = path;
+    m_sounds.emplace(name, path);
 }
 
-void UiInteractiveElementBase::playSound(const std::string& name)
+void UiInteractiveElementBase::playSound(std::string_view name)
 {
-    if (m_sounds.find(name) != m_sounds.end()) {
-        m_context.audioPlayer().playSound(m_sounds[name]);
+    if (auto it = m_sounds.find(name); it != m_sounds.end()) {
+        m_context.audioPlayer().playSound(it->second);
     } else {
         spdlog::warn("Sound '{}' 未找到。", name);
     }
@@ -85,10 +85,10 @@ void UiInteractiveElementBase::setCurrentState(std::unique_ptr<engine::ui::state
     m_currentState->enter();
 }
 
-void UiInteractiveElementBase::setCurrentSprite(const std::string& name)
+void UiInteractiveElementBase::setCurrentSprite(std::string_view name)
 {
-    if (m_sprites.find(name) != m_sprites.end()) {
-        m_currentSprite = m_sprites[name].get();
+    if (auto it = m_sprites.find(name); it != m_sprites.end()) {
+        m_currentSprite = it->second.get();
     } else {
         spdlog::warn("Sprite '{}' 未找到。", name);
     }

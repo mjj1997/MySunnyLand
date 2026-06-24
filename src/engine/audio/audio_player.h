@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <string_view>
 
 namespace engine::resource {
 class ResourceManager;
@@ -39,7 +40,7 @@ public:
      * @param soundPath 音效文件的路径。
      * @return 成功时返回 0，出错时返回 -1。
      */
-    int playSound(const std::string& soundPath);
+    int playSound(std::string_view soundPath);
 
     /**
      * @brief 播放背景音乐。如果正在播放，则淡出之前的音乐。
@@ -49,7 +50,7 @@ public:
      * @param fadeInTime 音乐淡入的时间（毫秒）（0 表示不淡入）。默认为 0。
      * @return 成功返回 true，出错返回 false。
      */
-    bool playMusic(const std::string& musicPath, int loops = -1, int fadeInTime = 0);
+    bool playMusic(std::string_view musicPath, int loops = -1, int fadeInTime = 0);
 
     /**
      * @brief 停止当前正在播放的背景音乐。

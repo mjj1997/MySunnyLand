@@ -89,12 +89,24 @@ void SceneBase::handleInput()
         return; // 如果 UI 管理器处理了输入，就直接返回。不需要继续让游戏对象处理输入
     }
 
-    // 遍历所有游戏对象，略过需要移除的对象
-    for (const auto& obj : m_gameObjects) {
-        if (obj && !obj->shouldRemove()) {
-            obj->handleInput(m_context);
+    for (auto it = m_gameObjects.begin(); it != m_gameObjects.end();) {
+        if (*it && !(*it)->shouldRemove()) { // 正常更新游戏对象
+            (*it)->handleInput(m_context);
+            ++it;
+        } else {
+            if (*it) { // 安全删除需要移除的对象
+                (*it)->clean();
+            }
+            it = m_gameObjects.erase(it); // 删除需要移除的对象，智能指针自动管理内存
         }
     }
+
+    // 遍历所有游戏对象，略过需要移除的对象
+    // for (const auto& obj : m_gameObjects) {
+    //     if (obj && !obj->shouldRemove()) {
+    //         obj->handleInput(m_context);
+    //     }
+    // }
 }
 
 void SceneBase::clean()

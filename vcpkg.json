@@ -2,7 +2,13 @@
   "dependencies": [
     "glm",
     "nlohmann-json",
-    "sdl3",
+    {
+      "name": "sdl3",
+      "default-features":false,
+      "features": [
+        "wayland"
+      ]
+    },
     {
       "name": "sdl3-image",
       "features": [

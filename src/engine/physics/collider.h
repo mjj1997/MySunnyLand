@@ -2,6 +2,8 @@
 
 #include <glm/vec2.hpp>
 
+#include <utility>
+
 namespace engine::physics {
 
 /**

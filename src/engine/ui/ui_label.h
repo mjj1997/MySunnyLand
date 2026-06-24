@@ -3,6 +3,7 @@
 #include "ui_element_base.h"
 
 #include <string>
+#include <string_view>
 
 namespace engine::render {
 class TextRenderer;

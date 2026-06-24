@@ -8,7 +8,7 @@
 #include <glm/vec2.hpp>
 
 #include <optional>
-#include <string>
+#include <string_view>
 
 namespace engine::resource {
 class ResourceManager;

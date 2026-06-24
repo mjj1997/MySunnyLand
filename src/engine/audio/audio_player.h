@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <string_view>
 
 namespace engine::resource {
 class ResourceManager;

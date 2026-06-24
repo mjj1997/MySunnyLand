@@ -4,6 +4,7 @@
 #include <nlohmann/json.hpp>
 #include <spdlog/spdlog.h>
 
+#include <filesystem>
 #include <fstream>
 
 namespace game::data {
@@ -117,7 +118,7 @@ bool SessionData::loadFromFile(std::string_view fileName)
 bool SessionData::syncHighestScore(std::string_view fileName)
 {
     try {
-        // 打开文件进行读取
+        // 打开文件进行读写
         auto path = std::filesystem::path{ fileName };
         std::fstream file{ path };
         if (!file.is_open()) {

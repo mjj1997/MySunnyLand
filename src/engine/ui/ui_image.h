@@ -4,6 +4,7 @@
 #include "ui_element_base.h"
 
 #include <optional>
+#include <string_view>
 
 namespace engine::ui {
 

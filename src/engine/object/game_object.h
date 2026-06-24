@@ -6,6 +6,7 @@
 
 #include <concepts>
 #include <memory>
+#include <string_view>
 #include <typeindex> // 用于类型索引
 #include <unordered_map>
 #include <utility> // 用于完美转发

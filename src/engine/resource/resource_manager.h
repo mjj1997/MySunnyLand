@@ -4,6 +4,7 @@
 
 #include <memory> // 用于 std::unique_ptr
 #include <string>
+#include <string_view>
 
 // 前向声明 SDL 类型
 struct SDL_Renderer;

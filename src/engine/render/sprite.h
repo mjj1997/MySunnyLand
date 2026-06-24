@@ -5,6 +5,7 @@
 
 #include <optional> // 用于 std::optional 表示可选的源矩形
 #include <string>
+#include <string_view>
 
 namespace engine::render {
 

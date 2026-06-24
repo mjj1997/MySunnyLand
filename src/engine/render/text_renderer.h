@@ -5,7 +5,7 @@
 #include <SDL3/SDL_render.h>
 #include <glm/vec2.hpp>
 
-#include <string>
+#include <string_view>
 
 struct TTF_TextEngine;
 

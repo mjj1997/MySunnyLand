@@ -4,6 +4,7 @@
 #include "state/ui_state_base.h"
 #include "ui_element_base.h"
 
+#include <string_view>
 #include <unordered_map>
 
 namespace engine::ui {

@@ -5,6 +5,7 @@
 
 #include <glm/vec2.hpp>
 #include <string>
+#include <string_view>
 
 namespace engine::component {
 class TransformComponent;

@@ -3,6 +3,7 @@
 #include "component_base.h"
 
 #include <string>
+#include <string_view>
 #include <unordered_map>
 
 namespace engine::audio {

@@ -3,6 +3,7 @@
 #include "../../engine/scene/scene_base.h"
 
 #include <glm/vec2.hpp>
+#include <string_view>
 
 namespace game::data {
 class SessionData;

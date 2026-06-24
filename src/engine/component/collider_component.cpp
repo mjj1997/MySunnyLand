@@ -30,7 +30,7 @@ void ColliderComponent::updateOffset()
     auto colliderAabbSize{ m_collider->aabbSize() };
     // 如果 AABB 尺寸无效，偏移为 0
     if (colliderAabbSize.x <= 0.0f || colliderAabbSize.y <= 0.0f) {
-        m_offset = glm::vec2{ 0.0f, 0.0f };
+        m_offset = glm::vec2(0.0f);
         return;
     }
 
@@ -38,7 +38,7 @@ void ColliderComponent::updateOffset()
     // 计算碰撞器左上角相对于 TransformComponent::m_position 的偏移量
     switch (m_alignment) {
     case engine::utils::Alignment::TopLeft:
-        m_offset = glm::vec2{ 0.0f, 0.0f } * scaleFactor;
+        m_offset = glm::vec2(0.0f) * scaleFactor;
         break;
     case engine::utils::Alignment::TopCenter:
         m_offset = glm::vec2{ -colliderAabbSize.x / 2.0f, 0.0f } * scaleFactor;
@@ -74,7 +74,7 @@ void ColliderComponent::updateOffset()
 engine::utils::Rect ColliderComponent::worldAabb() const
 {
     if (!m_transformComponent || !m_collider) {
-        return engine::utils::Rect{ glm::vec2{ 0.0f, 0.0f }, glm::vec2{ 0.0f, 0.0f } };
+        return engine::utils::Rect{ glm::vec2(0.0f), glm::vec2(0.0f) };
     }
 
     // 计算最小包围盒的左上角坐标

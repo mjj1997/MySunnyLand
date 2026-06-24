@@ -165,13 +165,12 @@ bool GameScene::initLevel()
     // 设置世界边界
     auto worldSize = layerObjectMain->getComponent<engine::component::TileLayerComponent>()
                          ->worldSize();
-    m_context.physicsEngine().setWorldBounds(
-        engine::utils::Rect{ glm::vec2{ 0.0f, 0.0f }, worldSize });
+    m_context.physicsEngine().setWorldBounds(engine::utils::Rect{ glm::vec2(0.0f), worldSize });
 
     // 设置相机边界
-    m_context.camera().setLimitBounds(engine::utils::Rect{ glm::vec2{ 0.0f, 0.0f }, worldSize });
+    m_context.camera().setLimitBounds(engine::utils::Rect{ glm::vec2(0.0f), worldSize });
     // 开始时重置相机位置，以免切换场景时晃动
-    m_context.camera().setPosition(glm::vec2{ 0.0f, 0.0f });
+    m_context.camera().setPosition(glm::vec2(0.0f));
 
     spdlog::trace("关卡初始化完成。");
     return true;

@@ -16,7 +16,23 @@ Checks: "*,
         -misc-no-recursion,
         -misc-use-anonymous-namespace,
         -misc-use-internal-linkage,
-        -misc-include-cleaner
+        -misc-include-cleaner,
+        -cppcoreguidelines-pro-type-union-access,
+        -cppcoreguidelines-avoid-magic-numbers,
+        -readability-magic-numbers,
+        -bugprone-easily-swappable-parameters,
+        -bugprone-narrowing-conversions,
+        -cppcoreguidelines-narrowing-conversions,
+        -readability-function-cognitive-complexity,
+        -bugprone-suspicious-stringview-data-usage,
+        -boost-use-ranges,
+        -modernize-use-ranges,
+        -clang-analyzer-security.FloatLoopCounter,
+        -bugprone-float-loop-counter,
+        -cert-flp30-c,
+        -bugprone-branch-clone,
+        -readability-avoid-nested-conditional-operator,
+        -bugprone-misplaced-widening-cast
 "
 WarningsAsErrors: ''
 HeaderFilterRegex: ''

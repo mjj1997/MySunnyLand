@@ -33,13 +33,14 @@ void HurtState::enter()
     }
 }
 
-std::unique_ptr<PlayerStateBase> HurtState::handleInput(engine::core::Context& context)
+std::unique_ptr<PlayerStateBase> HurtState::handleInput(engine::core::Context& /*context*/)
 {
     // 受伤硬直期间，不能进行任何操控
     return nullptr;
 }
 
-std::unique_ptr<PlayerStateBase> HurtState::update(float deltaTime, engine::core::Context& context)
+std::unique_ptr<PlayerStateBase> HurtState::update(float deltaTime,
+                                                   engine::core::Context& /*context*/)
 {
     m_stunnedTimer += deltaTime;
 

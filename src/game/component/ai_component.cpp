@@ -68,7 +68,7 @@ void AiComponent::init()
     }
 }
 
-void AiComponent::update(float deltaTime, engine::core::Context& context)
+void AiComponent::update(float deltaTime, engine::core::Context& /*context*/)
 {
     // 将更新委托给当前的行为策略
     if (m_currentBehavior) {

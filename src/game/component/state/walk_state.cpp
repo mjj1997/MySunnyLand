@@ -66,7 +66,8 @@ std::unique_ptr<PlayerStateBase> WalkState::handleInput(engine::core::Context& c
     return nullptr;
 }
 
-std::unique_ptr<PlayerStateBase> WalkState::update(float deltaTime, engine::core::Context& context)
+std::unique_ptr<PlayerStateBase> WalkState::update(float /*deltaTime*/,
+                                                   engine::core::Context& /*context*/)
 {
     /** 限制最大速度
      *  因为行走状态只涉及左右移动，所以只需要限制 x 轴速度

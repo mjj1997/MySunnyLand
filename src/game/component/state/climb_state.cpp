@@ -54,7 +54,8 @@ std::unique_ptr<PlayerStateBase> ClimbState::handleInput(engine::core::Context& 
     return nullptr;
 }
 
-std::unique_ptr<PlayerStateBase> ClimbState::update(float deltaTime, engine::core::Context& context)
+std::unique_ptr<PlayerStateBase> ClimbState::update(float /*deltaTime*/,
+                                                    engine::core::Context& /*context*/)
 {
     auto* physicsComponent = m_playerComponent->physicsComponent();
 

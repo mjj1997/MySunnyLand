@@ -33,7 +33,7 @@ void UpDownBehavior::enter(AiComponent& aiComponent)
     }
 }
 
-void UpDownBehavior::update(float deltaTime, AiComponent& aiComponent)
+void UpDownBehavior::update(float /*deltaTime*/, AiComponent& aiComponent)
 {
     // 获取必要组件
     auto* physicsComponent = aiComponent.physicsComponent();

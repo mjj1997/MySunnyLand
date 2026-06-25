@@ -83,7 +83,7 @@ void AnimationComponent::init()
     }
 }
 
-void AnimationComponent::update(float deltaTime, engine::core::Context& context)
+void AnimationComponent::update(float deltaTime, engine::core::Context& /*context*/)
 {
     // 如果没有正在播放的动画，或者没有当前动画，或者没有精灵组件，或者当前动画没有帧，则直接返回
     if (!m_isPlaying || m_currentAnimation == nullptr || m_spriteComponent == nullptr

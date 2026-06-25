@@ -58,7 +58,8 @@ std::unique_ptr<PlayerStateBase> FallState::handleInput(engine::core::Context& c
     return nullptr;
 }
 
-std::unique_ptr<PlayerStateBase> FallState::update(float deltaTime, engine::core::Context& context)
+std::unique_ptr<PlayerStateBase> FallState::update(float /*deltaTime*/,
+                                                   engine::core::Context& /*context*/)
 {
     // 限制最大速度（水平方向）
     auto physicsComponent = m_playerComponent->physicsComponent();

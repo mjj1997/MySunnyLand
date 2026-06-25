@@ -47,7 +47,8 @@ std::unique_ptr<PlayerStateBase> IdleState::handleInput(engine::core::Context& c
     return nullptr;
 }
 
-std::unique_ptr<PlayerStateBase> IdleState::update(float deltaTime, engine::core::Context& context)
+std::unique_ptr<PlayerStateBase> IdleState::update(float /*deltaTime*/,
+                                                   engine::core::Context& /*context*/)
 {
     // 应用摩擦力(水平方向上)
     auto physicsComponent = m_playerComponent->physicsComponent();

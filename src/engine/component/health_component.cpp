@@ -85,7 +85,7 @@ void HealthComponent::setInvincible(float duration)
     }
 }
 
-void HealthComponent::update(float deltaTime, engine::core::Context& context)
+void HealthComponent::update(float deltaTime, engine::core::Context& /*context*/)
 {
     // 更新无敌状态计时器
     if (m_isInvincible) {

@@ -32,13 +32,14 @@ void DeadState::enter()
     }
 }
 
-std::unique_ptr<PlayerStateBase> DeadState::handleInput(engine::core::Context& context)
+std::unique_ptr<PlayerStateBase> DeadState::handleInput(engine::core::Context& /*context*/)
 {
     // 死亡状态下不处理输入
     return nullptr;
 }
 
-std::unique_ptr<PlayerStateBase> DeadState::update(float deltaTime, engine::core::Context& context)
+std::unique_ptr<PlayerStateBase> DeadState::update(float /*deltaTime*/,
+                                                   engine::core::Context& /*context*/)
 {
     // 死亡状态下不更新状态
     return nullptr;

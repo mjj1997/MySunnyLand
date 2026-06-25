@@ -373,7 +373,7 @@ void GameScene::handlePlayerVsEnemyCollision(engine::object::GameObject* player,
     }
 }
 
-void GameScene::handlePlayerVsItemCollision(engine::object::GameObject* player,
+void GameScene::handlePlayerVsItemCollision(engine::object::GameObject* /*player*/,
                                             engine::object::GameObject* item)
 {
     if (item->name() == "fruit") {

@@ -29,7 +29,7 @@ void PatrolBehavior::enter(AiComponent& aiComponent)
     }
 }
 
-void PatrolBehavior::update(float deltaTime, AiComponent& aiComponent)
+void PatrolBehavior::update(float /*deltaTime*/, AiComponent& aiComponent)
 {
     // 获取必要组件
     auto* physicsComponent = aiComponent.physicsComponent();

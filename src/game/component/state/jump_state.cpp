@@ -71,7 +71,8 @@ std::unique_ptr<PlayerStateBase> JumpState::handleInput(engine::core::Context& c
     return nullptr;
 }
 
-std::unique_ptr<PlayerStateBase> JumpState::update(float deltaTime, engine::core::Context& context)
+std::unique_ptr<PlayerStateBase> JumpState::update(float /*deltaTime*/,
+                                                   engine::core::Context& /*context*/)
 {
     /** 限制最大速度（水平方向）
      *  因为向上跳的速度不会超过最大速度，所以只需要限制左右移动时 x 轴速度

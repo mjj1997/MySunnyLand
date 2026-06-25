@@ -13,6 +13,8 @@
 
 namespace game::component {
 
+AiComponent::~AiComponent() = default;
+
 bool AiComponent::takeDamage(int damageAmount)
 {
     bool success{ false };

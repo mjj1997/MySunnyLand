@@ -30,7 +30,7 @@ class AiComponent final : public engine::component::ComponentBase
 
 public:
     AiComponent() = default;
-    ~AiComponent() override = default;
+    ~AiComponent() override;
 
     // 禁止拷贝和移动
     AiComponent(const AiComponent&) = delete;

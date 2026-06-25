@@ -108,7 +108,7 @@ glm::vec2 UiElementBase::screenPosition() const
 engine::utils::Rect UiElementBase::bounds() const
 {
     const auto& screenPos = screenPosition();
-    return engine::utils::Rect{ screenPos, m_size };
+    return engine::utils::Rect{ .position = screenPos, .size = m_size };
 }
 
 bool UiElementBase::isPointInside(const glm::vec2& point) const

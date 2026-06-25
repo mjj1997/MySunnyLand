@@ -53,7 +53,9 @@ void Renderer::drawSprite(const Camera& camera,
     // 计算目标矩形，注意 position 是精灵的左上角坐标
     const float scaledWidth{ srcRect.value().w * scale.x };
     const float scaledHeight{ srcRect.value().h * scale.y };
-    const SDL_FRect destRect{ positionScreen.x, positionScreen.y, scaledWidth, scaledHeight };
+    const SDL_FRect destRect{
+        .x = positionScreen.x, .y = positionScreen.y, .w = scaledWidth, .h = scaledHeight
+    };
 
     // 视口裁剪：如果精灵超出视口，则不绘制
     if (!isRectInViewport(camera, destRect)) {
@@ -123,7 +125,7 @@ void Renderer::drawParallax(const Camera& camera,
 
     for (float y{ startPos.y }; y < endPos.y; y += scaledHeight) {
         for (float x{ startPos.x }; x < endPos.x; x += scaledWidth) {
-            const SDL_FRect destRect{ x, y, scaledWidth, scaledHeight };
+            const SDL_FRect destRect{ .x = x, .y = y, .w = scaledWidth, .h = scaledHeight };
             if (!SDL_RenderTexture(m_renderer, texture, NULL, &destRect)) {
                 spdlog::error("渲染视差纹理失败(ID: {}): {}", sprite.textureId(), SDL_GetError());
                 return;
@@ -148,7 +150,9 @@ void Renderer::drawUiSprite(const Sprite& sprite,
         return;
     }
 
-    SDL_FRect destRect{ position.x, position.y, 0, 0 }; // 首先确定目标矩形的左上角坐标
+    SDL_FRect destRect{
+        .x = position.x, .y = position.y, .w = 0, .h = 0
+    }; // 首先确定目标矩形的左上角坐标
     if (size.has_value()) {
         // 如果提供了尺寸，则使用提供的尺寸
         destRect.w = size.value().x;
@@ -175,7 +179,9 @@ void Renderer::drawUiFilledRect(const engine::utils::Rect& rect, const engine::u
 {
     setDrawColorFloat(color.r, color.g, color.b, color.a);
 
-    const SDL_FRect sdlRect{ rect.position.x, rect.position.y, rect.size.x, rect.size.y };
+    const SDL_FRect sdlRect{
+        .x = rect.position.x, .y = rect.position.y, .w = rect.size.x, .h = rect.size.y
+    };
     if (!SDL_RenderFillRect(m_renderer, &sdlRect)) {
         spdlog::error("绘制填充矩形失败：{}", SDL_GetError());
     }
@@ -225,7 +231,7 @@ std::optional<SDL_FRect> Renderer::getSpriteSrcRect(const Sprite& sprite)
         }
         return srcRect;
     } else {
-        SDL_FRect defaultRect{ 0, 0, 0, 0 };
+        SDL_FRect defaultRect{ .x = 0.0F, .y = 0.0F, .w = 0.0F, .h = 0.0F };
         if (!SDL_GetTextureSize(texture, &defaultRect.w, &defaultRect.h)) {
             spdlog::error("无法获取纹理尺寸, ID: {}", sprite.textureId());
             return std::nullopt;

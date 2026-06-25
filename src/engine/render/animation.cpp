@@ -17,7 +17,7 @@ void Animation::addFrame(SDL_FRect sourceRect, float duration)
         return;
     }
 
-    m_frames.push_back(AnimationFrame{ std::move(sourceRect), duration });
+    m_frames.push_back(AnimationFrame{ .sourceRect = std::move(sourceRect), .duration = duration });
     m_totalDuration += duration;
 }
 

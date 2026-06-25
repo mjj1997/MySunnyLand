@@ -178,8 +178,10 @@ bool TitleScene::initUi()
                                                              "SunnyLand Credits: XXX - 2026",
                                                              "assets/fonts/VonwaonBitmap-16px.ttf",
                                                              16,
-                                                             engine::utils::FColor{
-                                                                 0.8F, 0.8F, 0.8F, 1.0F });
+                                                             engine::utils::FColor{ .r = 0.8F,
+                                                                                    .g = 0.8F,
+                                                                                    .b = 0.8F,
+                                                                                    .a = 1.0F });
     // 设置 Credit 标签位置，使其居中并靠下
     creditLabel->setLocalPosition(glm::vec2{ (windowSize.x - creditLabel->size().x) / 2.0F,
                                              windowSize.y - creditLabel->size().y - 10.0F });

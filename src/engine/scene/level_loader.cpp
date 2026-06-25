@@ -402,9 +402,10 @@ void LevelLoader::addAnimation(const nlohmann::json& animationJson,
 
             auto column = frame.get<int>();
             // 计算源矩形
-            const SDL_FRect srcRect{
-                column * spriteSize.x, row * spriteSize.y, spriteSize.x, spriteSize.y
-            };
+            const SDL_FRect srcRect{ .x = column * spriteSize.x,
+                                     .y = row * spriteSize.y,
+                                     .w = spriteSize.x,
+                                     .h = spriteSize.y };
             // 添加动画帧到 Animation
             animation->addFrame(srcRect, duration);
         }
@@ -450,8 +451,8 @@ std::optional<engine::utils::Rect> LevelLoader::getColliderRect(const nlohmann::
     // 一个图片只支持一个碰撞器。如果有多个，就返回第一个不为空的碰撞器
     for (const auto& object : objectGroup["objects"]) {
         auto rect = engine::utils::Rect{
-            glm::vec2{ object.value("x", 0.0F), object.value("y", 0.0F) },
-            glm::vec2{ object.value("width", 0.0F), object.value("height", 0.0F) }
+            .position = glm::vec2{ object.value("x", 0.0F), object.value("y", 0.0F) },
+            .size = glm::vec2{ object.value("width", 0.0F), object.value("height", 0.0F) }
         };
         if (rect.size.x > 0.0F && rect.size.y > 0.0F) {
             return rect;
@@ -554,10 +555,10 @@ engine::component::TileInfo LevelLoader::getTileInfoByGid(int gid)
         auto coordinateX = localId % tilesetJson["columns"].get<int>();
         auto coordinateY = localId / tilesetJson["columns"].get<int>();
         // 根据瓦片坐标确定源矩形
-        SDL_FRect srcRect{ static_cast<float>(coordinateX * m_tileSize.x),
-                           static_cast<float>(coordinateY * m_tileSize.y),
-                           static_cast<float>(m_tileSize.x),
-                           static_cast<float>(m_tileSize.y) };
+        SDL_FRect srcRect{ .x = static_cast<float>(coordinateX * m_tileSize.x),
+                           .y = static_cast<float>(coordinateY * m_tileSize.y),
+                           .w = static_cast<float>(m_tileSize.x),
+                           .h = static_cast<float>(m_tileSize.y) };
         // 创建瓦片精灵
         const engine::render::Sprite sprite{ textureId, srcRect };
         // 获取瓦片类型
@@ -593,10 +594,10 @@ engine::component::TileInfo LevelLoader::getTileInfoByGid(int gid)
                  * Tiled 中源矩形信息只有设置了才会有值，没有就是默认值
                  * 如果未设置，则使用图片尺寸
                  */
-                SDL_FRect srcRect{ static_cast<float>(tile.value("x", 0)),
-                                   static_cast<float>(tile.value("y", 0)),
-                                   static_cast<float>(tile.value("width", imageWidth)),
-                                   static_cast<float>(tile.value("height", imageHeight)) };
+                SDL_FRect srcRect{ .x = static_cast<float>(tile.value("x", 0)),
+                                   .y = static_cast<float>(tile.value("y", 0)),
+                                   .w = static_cast<float>(tile.value("width", imageWidth)),
+                                   .h = static_cast<float>(tile.value("height", imageHeight)) };
                 // 创建瓦片精灵
                 const engine::render::Sprite sprite{ textureId, srcRect };
                 // 获取瓦片类型

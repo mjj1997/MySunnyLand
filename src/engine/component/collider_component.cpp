@@ -74,7 +74,7 @@ void ColliderComponent::updateOffset()
 engine::utils::Rect ColliderComponent::worldAabb() const
 {
     if (m_transformComponent == nullptr || m_collider == nullptr) {
-        return engine::utils::Rect{ glm::vec2(0.0F), glm::vec2(0.0F) };
+        return engine::utils::Rect{ .position = glm::vec2(0.0F), .size = glm::vec2(0.0F) };
     }
 
     // 计算最小包围盒的左上角坐标
@@ -84,7 +84,7 @@ engine::utils::Rect ColliderComponent::worldAabb() const
     const glm::vec2 scaleFactor{ m_transformComponent->scale() };
     const glm::vec2 scaledSize{ aabSize * scaleFactor };
     //返回最小包围盒的 Rect
-    return engine::utils::Rect{ topLeftPos, scaledSize };
+    return engine::utils::Rect{ .position = topLeftPos, .size = scaledSize };
 }
 
 void ColliderComponent::setAlignment(engine::utils::Alignment anchor)

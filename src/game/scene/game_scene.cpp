@@ -165,10 +165,12 @@ bool GameScene::initLevel()
     // 设置世界边界
     auto worldSize = layerObjectMain->getComponent<engine::component::TileLayerComponent>()
                          ->worldSize();
-    m_context.physicsEngine().setWorldBounds(engine::utils::Rect{ glm::vec2(0.0F), worldSize });
+    m_context.physicsEngine().setWorldBounds(
+        engine::utils::Rect{ .position = glm::vec2(0.0F), .size = worldSize });
 
     // 设置相机边界
-    m_context.camera().setLimitBounds(engine::utils::Rect{ glm::vec2(0.0F), worldSize });
+    m_context.camera().setLimitBounds(
+        engine::utils::Rect{ .position = glm::vec2(0.0F), .size = worldSize });
     // 开始时重置相机位置，以免切换场景时晃动
     m_context.camera().setPosition(glm::vec2(0.0F));
 
@@ -465,7 +467,9 @@ void GameScene::createEffect(glm::vec2 center, std::string_view tag)
             engine::utils::Alignment::Center);
 
         for (int i{ 0 }; i < 5; ++i) {
-            srcRect = SDL_FRect{ static_cast<float>(i * 40), 0.0F, 40.0F, 41.0F };
+            srcRect = SDL_FRect{
+                .x = static_cast<float>(i * 40), .y = 0.0F, .w = 40.0F, .h = 41.0F
+            };
             animation->addFrame(srcRect, duration);
         }
     } else if (tag == "item") {
@@ -475,7 +479,9 @@ void GameScene::createEffect(glm::vec2 center, std::string_view tag)
             engine::utils::Alignment::Center);
 
         for (int i{ 0 }; i < 4; ++i) {
-            srcRect = SDL_FRect{ static_cast<float>(i * 32), 0.0F, 32.0F, 32.0F };
+            srcRect = SDL_FRect{
+                .x = static_cast<float>(i * 32), .y = 0.0F, .w = 32.0F, .h = 32.0F
+            };
             animation->addFrame(srcRect, duration);
         }
     } else {

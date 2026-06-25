@@ -64,8 +64,8 @@ bool EndScene::initUi()
     const bool isWin{ m_gameSessionData->isWin() };
     const std::string message{ isWin ? "YOU WIN! CONGRATS!" : "YOU DIED! TRY AGAIN!" };
     const engine::utils::FColor messageColor{
-        isWin ? engine::utils::FColor{ 0.0F, 1.0F, 0.0F, 1.0F }
-              : engine::utils::FColor{ 1.0F, 0.0F, 0.0F, 1.0F }
+        isWin ? engine::utils::FColor{ .r = 0.0F, .g = 1.0F, .b = 0.0F, .a = 1.0F }
+              : engine::utils::FColor{ .r = 1.0F, .g = 0.0F, .b = 0.0F, .a = 1.0F }
     };
 
     auto mainLabel = std::make_unique<engine::ui::UiLabel>(m_context.textRenderer(),
@@ -87,7 +87,7 @@ bool EndScene::initUi()
     const int score{ m_gameSessionData->currentScore() };
     const std::string scoreText{ "Score: " + std::to_string(score) };
     const int scoreFontSize{ 24 };
-    const engine::utils::FColor scoreColor{ 1.0F, 1.0F, 1.0F, 1.0F };
+    const engine::utils::FColor scoreColor{ .r = 1.0F, .g = 1.0F, .b = 1.0F, .a = 1.0F };
 
     auto scoreLabel = std::make_unique<engine::ui::UiLabel>(m_context.textRenderer(),
                                                             scoreText,

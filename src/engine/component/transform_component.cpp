@@ -8,15 +8,15 @@ namespace engine::component {
 void TransformComponent::setScale(glm::vec2 scale)
 {
     m_scale = std::move(scale);
-    if (m_owner) {
+    if (m_owner != nullptr) {
         // 应用缩放时应同步更新Sprite偏移量
         auto* spriteComponent = m_owner->getComponent<SpriteComponent>();
-        if (spriteComponent) {
+        if (spriteComponent != nullptr) {
             spriteComponent->updateOffset();
         }
         // 应用缩放时应同步更新Collider偏移量
         auto* colliderComponent = m_owner->getComponent<ColliderComponent>();
-        if (colliderComponent) {
+        if (colliderComponent != nullptr) {
             colliderComponent->updateOffset();
         }
     }

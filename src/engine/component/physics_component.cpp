@@ -14,7 +14,7 @@ PhysicsComponent::PhysicsComponent(engine::physics::PhysicsEngine* physicsEngine
     , m_isGravityEnabled{ isGravityEnabled }
     , m_mass{ mass >= 0.0F ? mass : 1.0F }
 {
-    if (!physicsEngine) {
+    if (physicsEngine == nullptr) {
         spdlog::error("PhysicsComponent构造函数中，PhysicsEngine指针不能为nullptr！");
     }
     spdlog::trace("物理组件创建完成，质量: {}, 使用重力: {}", m_mass, m_isGravityEnabled);
@@ -22,17 +22,17 @@ PhysicsComponent::PhysicsComponent(engine::physics::PhysicsEngine* physicsEngine
 
 void PhysicsComponent::init()
 {
-    if (!m_owner) {
+    if (m_owner == nullptr) {
         spdlog::error("物理组件初始化前，需要一个 GameObject 作为所有者！");
         return;
     }
-    if (!m_physicsEngine) {
+    if (m_physicsEngine == nullptr) {
         spdlog::error("物理组件初始化时，PhysicsEngine 未正确初始化。");
         return;
     }
 
     m_transformComponent = m_owner->getComponent<TransformComponent>();
-    if (!m_transformComponent) {
+    if (m_transformComponent == nullptr) {
         spdlog::warn("物理组件初始化时，同一 GameObject 上没有找到 TransformComponent。");
     }
 

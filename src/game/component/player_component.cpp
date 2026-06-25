@@ -17,7 +17,7 @@ namespace game::component {
 
 bool PlayerComponent::takeDamage(int damageAmount)
 {
-    if (!m_isAlive || !m_healthComponent || damageAmount <= 0) {
+    if (!m_isAlive || m_healthComponent == nullptr || damageAmount <= 0) {
         spdlog::warn("玩家已死亡或缺少必要组件，并未造成伤害。");
         return false;
     }
@@ -68,7 +68,7 @@ void PlayerComponent::setState(std::unique_ptr<state::PlayerStateBase> newState)
 
 void PlayerComponent::init()
 {
-    if (!m_owner) {
+    if (m_owner == nullptr) {
         spdlog::error("PlayerComponent 没有所属游戏对象!");
         return;
     }
@@ -82,8 +82,9 @@ void PlayerComponent::init()
     m_audioComponent = m_owner->getComponent<engine::component::AudioComponent>();
 
     // 检查必要组件是否存在
-    if (!m_transformComponent || !m_physicsComponent || !m_spriteComponent || !m_animationComponent
-        || !m_healthComponent || !m_audioComponent) {
+    if (m_transformComponent == nullptr || m_physicsComponent == nullptr
+        || m_spriteComponent == nullptr || m_animationComponent == nullptr
+        || m_healthComponent == nullptr || m_audioComponent == nullptr) {
         spdlog::error("Player 对象缺少必要组件！");
         return;
     }

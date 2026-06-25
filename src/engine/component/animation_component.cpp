@@ -15,14 +15,18 @@ void AnimationComponent::addAnimation(std::unique_ptr<engine::render::Animation>
 
     std::string_view name{ animation->name() }; // 获取名称
     m_animations.emplace(name, std::move(animation));
-    spdlog::debug("已将动画 '{}' 添加到 GameObject '{}'", name, m_owner ? m_owner->name() : "未知");
+    spdlog::debug("已将动画 '{}' 添加到 GameObject '{}'",
+                  name,
+                  m_owner != nullptr ? m_owner->name() : "未知");
 }
 
 void AnimationComponent::playAnimation(std::string_view name)
 {
     auto it = m_animations.find(name);
     if (it == m_animations.end() || !it->second) {
-        spdlog::warn("未找到 GameObject '{}' 的动画 '{}'", m_owner ? m_owner->name() : "未知", name);
+        spdlog::warn("未找到 GameObject '{}' 的动画 '{}'",
+                     m_owner != nullptr ? m_owner->name() : "未知",
+                     name);
         return;
     }
 
@@ -36,16 +40,18 @@ void AnimationComponent::playAnimation(std::string_view name)
     m_isPlaying = true;
 
     // 立即将精灵更新到第一帧
-    if (m_spriteComponent && !m_currentAnimation->isEmpty()) {
+    if (m_spriteComponent != nullptr && !m_currentAnimation->isEmpty()) {
         const auto& firstFrame = m_currentAnimation->frameAt(0.0F);
         m_spriteComponent->setSourceRect(firstFrame.sourceRect);
-        spdlog::debug("GameObject '{}' 播放动画 '{}'", m_owner ? m_owner->name() : "未知", name);
+        spdlog::debug("GameObject '{}' 播放动画 '{}'",
+                      m_owner != nullptr ? m_owner->name() : "未知",
+                      name);
     }
 }
 
 std::string_view AnimationComponent::currentAnimationName() const
 {
-    if (m_currentAnimation) {
+    if (m_currentAnimation != nullptr) {
         return m_currentAnimation->name();
     }
 
@@ -55,7 +61,7 @@ std::string_view AnimationComponent::currentAnimationName() const
 bool AnimationComponent::isAnimationFinished() const
 {
     // 如果没有当前动画(说明从未调用过playAnimation)，或者当前动画是循环的，则返回 false
-    if (!m_currentAnimation || m_currentAnimation->isLoop()) {
+    if (m_currentAnimation == nullptr || m_currentAnimation->isLoop()) {
         return false;
     }
 
@@ -80,7 +86,8 @@ void AnimationComponent::init()
 void AnimationComponent::update(float deltaTime, engine::core::Context& context)
 {
     // 如果没有正在播放的动画，或者没有当前动画，或者没有精灵组件，或者当前动画没有帧，则直接返回
-    if (!m_isPlaying || !m_currentAnimation || !m_spriteComponent || m_currentAnimation->isEmpty()) {
+    if (!m_isPlaying || m_currentAnimation == nullptr || m_spriteComponent == nullptr
+        || m_currentAnimation->isEmpty()) {
         spdlog::trace("AnimationComponent 更新时没有正在播放的动画或精灵组件为空。");
         return;
     }

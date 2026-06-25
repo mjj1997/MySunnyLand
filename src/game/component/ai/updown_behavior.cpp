@@ -38,7 +38,7 @@ void UpDownBehavior::update(float deltaTime, AiComponent& aiComponent)
     // 获取必要组件
     auto* physicsComponent = aiComponent.physicsComponent();
     auto* transformComponent = aiComponent.transformComponent();
-    if (!physicsComponent || !transformComponent) {
+    if (physicsComponent == nullptr || transformComponent == nullptr) {
         spdlog::error("UpDownBehavior: 缺少必要组件，无法执行上下移动行为。");
         return;
     }

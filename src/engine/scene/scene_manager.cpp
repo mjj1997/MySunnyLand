@@ -30,7 +30,7 @@ void SceneManager::update(float deltaTime)
 {
     // 只更新栈顶（当前）场景
     SceneBase* scene = currentScene();
-    if (scene) {
+    if (scene != nullptr) {
         scene->update(deltaTime);
     }
 
@@ -52,7 +52,7 @@ void SceneManager::handleInput()
 {
     // 只考虑栈顶（当前）场景
     SceneBase* scene = currentScene();
-    if (scene) {
+    if (scene != nullptr) {
         scene->handleInput();
     }
 }

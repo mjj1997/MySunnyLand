@@ -12,7 +12,7 @@ namespace engine::input {
 InputManager::InputManager(SDL_Renderer* sdlRenderer, const engine::core::Configurator* config)
     : m_sdlRenderer(sdlRenderer)
 {
-    if (!m_sdlRenderer) {
+    if (m_sdlRenderer == nullptr) {
         spdlog::error("输入管理器: SDL_Renderer 为空指针");
         throw std::runtime_error("输入管理器: SDL_Renderer 为空指针");
     }
@@ -79,7 +79,7 @@ bool InputManager::isActionReleased(std::string_view action) const
 void InputManager::initMappings(const engine::core::Configurator* config)
 {
     spdlog::trace("初始化输入映射...");
-    if (!config) {
+    if (config == nullptr) {
         spdlog::error("输入管理器: Config 为空指针");
         throw std::runtime_error("输入管理器: Config 为空指针");
     }

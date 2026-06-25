@@ -18,7 +18,7 @@ SpriteComponent::SpriteComponent(std::string_view textureId,
     , m_sprite{ textureId, std::move(sourceRect), isFlipped }
     , m_alignment{ alignment }
 {
-    if (!m_resourceManager) {
+    if (m_resourceManager == nullptr) {
         spdlog::critical("创建 SpriteComponent 时 ResourceManager 为空！，此组件将无效。");
         // 不要在游戏主循环中使用 try...catch / throw，会极大影响性能
     }
@@ -33,7 +33,7 @@ SpriteComponent::SpriteComponent(engine::render::Sprite&& sprite,
     , m_sprite{ std::move(sprite) }
     , m_alignment{ alignment }
 {
-    if (!m_resourceManager) {
+    if (m_resourceManager == nullptr) {
         spdlog::critical("创建 SpriteComponent 时 ResourceManager 为空！，此组件将无效。");
     }
     spdlog::trace("创建 SpriteComponent，纹理ID: {}", m_sprite.textureId());
@@ -65,13 +65,13 @@ void SpriteComponent::setAlignment(engine::utils::Alignment anchor)
 
 void SpriteComponent::init()
 {
-    if (!m_owner) {
+    if (m_owner == nullptr) {
         spdlog::error("SpriteComponent 在初始化前未设置所有者 GameObject。");
         return;
     }
 
     m_transformComponent = m_owner->getComponent<TransformComponent>();
-    if (!m_transformComponent) {
+    if (m_transformComponent == nullptr) {
         spdlog::warn("GameObject '{}' 上的 SpriteComponent 需要一个 TransformComponent，但未找到。",
                      m_owner->name());
         // Sprite 没有 Transform，无法计算偏移和渲染，直接返回
@@ -85,7 +85,7 @@ void SpriteComponent::init()
 
 void SpriteComponent::render(engine::core::Context& context)
 {
-    if (m_isHidden || !m_transformComponent || !m_resourceManager) {
+    if (m_isHidden || m_transformComponent == nullptr || m_resourceManager == nullptr) {
         return;
     }
 
@@ -100,7 +100,7 @@ void SpriteComponent::render(engine::core::Context& context)
 
 void SpriteComponent::updateSpriteSize()
 {
-    if (!m_resourceManager) {
+    if (m_resourceManager == nullptr) {
         spdlog::error("ResourceManager 为空！无法获取纹理尺寸。");
         return;
     }

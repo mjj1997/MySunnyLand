@@ -73,7 +73,7 @@ void ColliderComponent::updateOffset()
 
 engine::utils::Rect ColliderComponent::worldAabb() const
 {
-    if (!m_transformComponent || !m_collider) {
+    if (m_transformComponent == nullptr || m_collider == nullptr) {
         return engine::utils::Rect{ glm::vec2(0.0F), glm::vec2(0.0F) };
     }
 
@@ -90,20 +90,20 @@ engine::utils::Rect ColliderComponent::worldAabb() const
 void ColliderComponent::setAlignment(engine::utils::Alignment anchor)
 {
     m_alignment = anchor;
-    if (m_transformComponent && m_collider) {
+    if (m_transformComponent != nullptr && m_collider != nullptr) {
         updateOffset();
     }
 }
 
 void ColliderComponent::init()
 {
-    if (!m_owner) {
+    if (m_owner == nullptr) {
         spdlog::error("ColliderComponent 在初始化前未设置所有者 GameObject。");
         return;
     }
 
     m_transformComponent = m_owner->getComponent<TransformComponent>();
-    if (!m_transformComponent) {
+    if (m_transformComponent == nullptr) {
         spdlog::error(
             "GameObject '{}' 上的 ColliderComponent 需要一个 TransformComponent，但未找到。",
             m_owner->name());

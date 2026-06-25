@@ -9,13 +9,13 @@ namespace engine::audio {
 AudioPlayer::AudioPlayer(engine::resource::ResourceManager* resourceManager)
     : m_resourceManager{ resourceManager }
 {
-    if (!m_resourceManager) {
+    if (m_resourceManager == nullptr) {
         throw std::runtime_error("AudioPlayer 构造失败: 提供的 ResourceManager 指针为空。");
     }
 
     m_mixer = m_resourceManager->mixer();
     m_musicTrack = MIX_CreateTrack(m_mixer);
-    if (!m_musicTrack) {
+    if (m_musicTrack == nullptr) {
         throw std::runtime_error("AudioPlayer 构造失败: 无法创建音乐轨道："
                                  + std::string(SDL_GetError()));
     }
@@ -23,7 +23,7 @@ AudioPlayer::AudioPlayer(engine::resource::ResourceManager* resourceManager)
 
 AudioPlayer::~AudioPlayer()
 {
-    if (m_musicTrack) {
+    if (m_musicTrack != nullptr) {
         MIX_DestroyTrack(m_musicTrack);
         m_musicTrack = nullptr;
     }
@@ -32,7 +32,7 @@ AudioPlayer::~AudioPlayer()
 int AudioPlayer::playSound(std::string_view soundPath)
 {
     MIX_Audio* sound{ m_resourceManager->getSound(soundPath) };
-    if (!sound) {
+    if (sound == nullptr) {
         spdlog::error("AudioPlayer: 无法获取音效 '{}' 播放。", soundPath);
         return -1;
     }
@@ -54,7 +54,7 @@ bool AudioPlayer::playMusic(std::string_view musicPath, int loops, int fadeInTim
     m_currentMusic = musicPath;
 
     MIX_Audio* music{ m_resourceManager->getMusic(musicPath) }; // 通过 ResourceManager 获取资源
-    if (!music) {
+    if (music == nullptr) {
         spdlog::error("AudioPlayer: 无法获取音乐 '{}' 播放。", musicPath);
         return false;
     }

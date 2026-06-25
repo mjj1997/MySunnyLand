@@ -145,7 +145,7 @@ void SceneBase::safeAddGameObject(std::unique_ptr<engine::object::GameObject>&& 
 
 void SceneBase::removeGameObject(engine::object::GameObject* gameObject)
 {
-    if (!gameObject) {
+    if (gameObject == nullptr) {
         spdlog::warn("尝试从场景 '{}' 中移除一个空的游戏对象指针。", m_sceneName);
         return;
     }

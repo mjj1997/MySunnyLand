@@ -16,10 +16,10 @@ Renderer::Renderer(SDL_Renderer* sdlRenderer, engine::resource::ResourceManager*
 {
     spdlog::trace("构造 Renderer...");
 
-    if (!m_renderer) {
+    if (m_renderer == nullptr) {
         throw std::runtime_error("Renderer 构造失败: 提供的 SDL_Renderer 指针为空。");
     }
-    if (!m_resourceManager) {
+    if (m_resourceManager == nullptr) {
         // ResourceManager 是 drawSprite 所必需的
         throw std::runtime_error("Renderer 构造失败: 提供的 ResourceManager 指针为空。");
     }
@@ -36,7 +36,7 @@ void Renderer::drawSprite(const Camera& camera,
                           double angle)
 {
     SDL_Texture* texture{ m_resourceManager->getTexture(sprite.textureId()) };
-    if (!texture) {
+    if (texture == nullptr) {
         spdlog::error("无法为 ID {} 获取纹理。", sprite.textureId());
         return;
     }
@@ -81,7 +81,7 @@ void Renderer::drawParallax(const Camera& camera,
                             const glm::vec2& scale)
 {
     SDL_Texture* texture{ m_resourceManager->getTexture(sprite.textureId()) };
-    if (!texture) {
+    if (texture == nullptr) {
         spdlog::error("无法为 ID {} 获取纹理。", sprite.textureId());
         return;
     }
@@ -137,7 +137,7 @@ void Renderer::drawUiSprite(const Sprite& sprite,
                             const std::optional<glm::vec2>& size)
 {
     SDL_Texture* texture{ m_resourceManager->getTexture(sprite.textureId()) };
-    if (!texture) {
+    if (texture == nullptr) {
         spdlog::error("无法为 ID {} 获取纹理。", sprite.textureId());
         return;
     }
@@ -212,7 +212,7 @@ void Renderer::setDrawColorFloat(float r, float g, float b, float a)
 std::optional<SDL_FRect> Renderer::getSpriteSrcRect(const Sprite& sprite)
 {
     SDL_Texture* texture{ m_resourceManager->getTexture(sprite.textureId()) };
-    if (!texture) {
+    if (texture == nullptr) {
         spdlog::error("无法为 ID {} 获取纹理。", sprite.textureId());
         return std::nullopt;
     }

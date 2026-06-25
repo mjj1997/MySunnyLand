@@ -302,7 +302,7 @@ void LevelLoader::loadObjectLayer(const nlohmann::json& layerJson, SceneBase& sc
             if (gravity) {
                 auto* physicsComponent = gameObject
                                              ->getComponent<engine::component::PhysicsComponent>();
-                if (physicsComponent) {
+                if (physicsComponent != nullptr) {
                     physicsComponent->setGravityEnabled(gravity.value());
                 } else {
                     spdlog::warn("对象 '{}' 在设置重力信息时没有物理组件，请检查地图设置。",
@@ -366,7 +366,7 @@ void LevelLoader::addAnimation(const nlohmann::json& animationJson,
                                const glm::vec2& spriteSize)
 {
     // 检查 animationJson 必须是一个对象，并且 animationComponent 不能为 nullptr
-    if (!animationJson.is_object() || !animationComponent) {
+    if (!animationJson.is_object() || animationComponent == nullptr) {
         spdlog::error("无效的动画 JSON 或 AnimationComponent 指针。");
         return;
     }
@@ -418,7 +418,7 @@ void LevelLoader::addSound(const nlohmann::json& soundJson,
                            engine::component::AudioComponent* audioComponent)
 {
     // 检查 soundJson 必须是一个对象，并且 audioComponent 不能为 nullptr
-    if (!soundJson.is_object() || !audioComponent) {
+    if (!soundJson.is_object() || audioComponent == nullptr) {
         spdlog::error("无效的音效 JSON 或 AudioComponent 指针。");
         return;
     }

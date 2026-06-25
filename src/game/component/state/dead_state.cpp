@@ -23,7 +23,7 @@ void DeadState::enter()
     // 禁用碰撞检测，形成自动掉出屏幕的效果
     auto colliderComponent = m_playerComponent->owner()
                                  ->getComponent<engine::component::ColliderComponent>();
-    if (colliderComponent) {
+    if (colliderComponent != nullptr) {
         colliderComponent->setActive(false);
     }
 

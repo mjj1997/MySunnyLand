@@ -16,7 +16,7 @@ AudioManager::AudioManager()
 
     // 创建连接到默认音频输出设备的混音器
     m_mixer = MIX_CreateMixerDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, nullptr);
-    if (!m_mixer) {
+    if (m_mixer == nullptr) {
         MIX_Quit();
         throw std::runtime_error("AudioManager 错误: MIX_CreateMixerDevice 失败: "
                                  + std::string(SDL_GetError()));
@@ -53,7 +53,7 @@ MIX_Audio* AudioManager::loadSound(std::string_view filePath)
     // 加载音效（predecode=true，预先解码为PCM，适合短音效）
     spdlog::debug("加载音效: {}", filePath);
     MIX_Audio* sound = MIX_LoadAudio(m_mixer, filePath.data(), true);
-    if (!sound) {
+    if (sound == nullptr) {
         spdlog::error("加载音效失败: '{}': {}", filePath, SDL_GetError());
         return nullptr;
     }
@@ -106,7 +106,7 @@ MIX_Audio* AudioManager::loadMusic(std::string_view filePath)
     // 加载音乐（predecode=false，流式解码，适合长音乐）
     spdlog::debug("加载音乐: {}", filePath);
     MIX_Audio* music = MIX_LoadAudio(m_mixer, filePath.data(), false);
-    if (!music) {
+    if (music == nullptr) {
         spdlog::error("加载音乐失败: '{}': {}", filePath, SDL_GetError());
         return nullptr;
     }

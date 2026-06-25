@@ -20,7 +20,7 @@ bool HealthComponent::takeDamage(int damageAmount)
 
     if (m_isInvincible) {
         spdlog::debug("游戏对象 {} 处于无敌状态，免疫了 {} 伤害。",
-                      m_owner ? m_owner->name() : "未知",
+                      m_owner != nullptr ? m_owner->name() : "未知",
                       damageAmount);
         return false; // 无敌状态，不造成伤害
     }
@@ -33,7 +33,7 @@ bool HealthComponent::takeDamage(int damageAmount)
         setInvincible(m_invincibilityDuration);
     }
     spdlog::debug("游戏对象 {} 收到了 {} 点伤害，当前生命值：{}/{}",
-                  m_owner ? m_owner->name() : "未知",
+                  m_owner != nullptr ? m_owner->name() : "未知",
                   damageAmount,
                   m_currentHealth,
                   m_maxHealth);
@@ -50,7 +50,7 @@ void HealthComponent::heal(int healAmount)
     auto health = m_currentHealth + healAmount;
     setCurrentHealth(health);
     spdlog::debug("游戏对象 {} 治疗了 {} 点生命值，当前生命值：{}/{}",
-                  m_owner ? m_owner->name() : "未知",
+                  m_owner != nullptr ? m_owner->name() : "未知",
                   healAmount,
                   m_currentHealth,
                   m_maxHealth);
@@ -74,13 +74,14 @@ void HealthComponent::setInvincible(float duration)
         m_isInvincible = true;
         m_invincibilityTimer = duration;
         spdlog::debug("游戏对象 {} 进入无敌状态，持续 {} 秒",
-                      m_owner ? m_owner->name() : "未知",
+                      m_owner != nullptr ? m_owner->name() : "未知",
                       duration);
     } else {
         // 如果持续时间 <= 0, 则立即退出无敌状态。即手动取消无敌。
         m_isInvincible = false;
         m_invincibilityTimer = 0.0F;
-        spdlog::debug("游戏对象 {} 的无敌状态被手动移除。", m_owner ? m_owner->name() : "未知");
+        spdlog::debug("游戏对象 {} 的无敌状态被手动移除。",
+                      m_owner != nullptr ? m_owner->name() : "未知");
     }
 }
 

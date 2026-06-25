@@ -9,7 +9,7 @@ namespace engine::resource {
 TextureManager::TextureManager(SDL_Renderer* renderer)
     : m_renderer{ renderer }
 {
-    if (!renderer) {
+    if (renderer == nullptr) {
         // 关键错误，无法继续，抛出异常 （它将由catch语句捕获（位于GameApp），并进行处理）
         throw std::runtime_error("TextureManager 构造失败：渲染器指针为空。");
     }
@@ -61,7 +61,7 @@ glm::vec2 TextureManager::getTextureSize(std::string_view filePath)
 {
     // 获取纹理
     SDL_Texture* texture{ getTexture(filePath) };
-    if (!texture) {
+    if (texture == nullptr) {
         spdlog::error("无法获取纹理：{}", filePath);
         return glm::vec2(0.0F);
     }

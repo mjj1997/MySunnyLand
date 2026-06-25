@@ -98,7 +98,7 @@ void UiElementBase::removeAllChildren()
 
 glm::vec2 UiElementBase::screenPosition() const
 {
-    if (m_parent) {
+    if (m_parent != nullptr) {
         return m_parent->screenPosition() + m_localPosition;
     }
 

@@ -41,7 +41,7 @@ const TileInfo* TileLayerComponent::tileInfoAt(glm::ivec2 pos) const
 TileType TileLayerComponent::tileTypeAt(glm::ivec2 pos) const
 {
     const auto* info = tileInfoAt(pos);
-    return info ? info->type : TileType::Empty;
+    return info != nullptr ? info->type : TileType::Empty;
 }
 
 TileType TileLayerComponent::tileTypeAtWorldPos(const glm::vec2& worldPos) const
@@ -54,7 +54,7 @@ TileType TileLayerComponent::tileTypeAtWorldPos(const glm::vec2& worldPos) const
 
 void TileLayerComponent::init()
 {
-    if (!m_owner) {
+    if (m_owner == nullptr) {
         spdlog::warn("TileLayerComponent 的 m_owner 未设置。");
     }
     spdlog::trace("TileLayerComponent 初始化完成");
@@ -94,7 +94,7 @@ void TileLayerComponent::render(engine::core::Context& context)
 
 void TileLayerComponent::clean()
 {
-    if (m_physicsEngine) {
+    if (m_physicsEngine != nullptr) {
         m_physicsEngine->unregisterCollisionLayer(this);
     }
 }

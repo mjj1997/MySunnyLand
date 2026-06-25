@@ -343,7 +343,7 @@ void GameScene::handlePlayerVsEnemyCollision(engine::object::GameObject* player,
         spdlog::info("玩家 {} 踩踏了敌人 {}", player->name(), enemy->name());
         // 处理敌人受伤逻辑
         auto enemyHealth = enemy->getComponent<engine::component::HealthComponent>();
-        if (!enemyHealth) {
+        if (enemyHealth == nullptr) {
             spdlog::error("敌人 {} 没有 HealthComponent 组件，无法处理踩踏伤害", enemy->name());
             return;
         }
@@ -561,7 +561,7 @@ void GameScene::healWithUi(int amount)
 
 void GameScene::updateHealthWithUi()
 {
-    if (!m_player || !m_healthPanel) {
+    if (m_player == nullptr || m_healthPanel == nullptr) {
         spdlog::error("玩家对象或生命值面板不存在，无法更新生命值 UI");
         return;
     }

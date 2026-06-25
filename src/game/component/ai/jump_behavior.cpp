@@ -43,7 +43,8 @@ void JumpBehavior::update(float deltaTime, AiComponent& aiComponent)
     auto* transformComponent = aiComponent.transformComponent();
     auto* spriteComponent = aiComponent.spriteComponent();
     auto* animationComponent = aiComponent.animationComponent();
-    if (!physicsComponent || !transformComponent || !spriteComponent || !animationComponent) {
+    if (physicsComponent == nullptr || transformComponent == nullptr || spriteComponent == nullptr
+        || animationComponent == nullptr) {
         spdlog::error("JumpBehavior：缺少必要的组件，无法执行跳跃行为。");
         return;
     }
@@ -53,7 +54,7 @@ void JumpBehavior::update(float deltaTime, AiComponent& aiComponent)
     if (isOnGround) { // 如果在地面上
         // 刚刚落地时（进入 Idle 状态），如果有音频组件，播放音效
         if (auto* audioComponent = aiComponent.audioComponent();
-            audioComponent && m_jumpTimer < 0.001F) {
+            audioComponent != nullptr && m_jumpTimer < 0.001F) {
             audioComponent->playSound("cry", true); // 使用空间定位播放音效
         }
         // 增加跳跃计时器

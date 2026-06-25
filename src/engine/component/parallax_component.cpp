@@ -20,13 +20,13 @@ ParallaxComponent::ParallaxComponent(std::string_view textureId,
 
 void ParallaxComponent::init()
 {
-    if (!m_owner) {
+    if (m_owner == nullptr) {
         spdlog::error("ParallaxComponent 初始化时，GameObject 为空。");
         return;
     }
 
     m_transformComponent = m_owner->getComponent<TransformComponent>();
-    if (!m_transformComponent) {
+    if (m_transformComponent == nullptr) {
         spdlog::error(
             "ParallaxComponent 初始化时，GameObject 上没有找到 TransformComponent 组件。");
         return;
@@ -35,7 +35,7 @@ void ParallaxComponent::init()
 
 void ParallaxComponent::render(engine::core::Context& context)
 {
-    if (m_isHidden || !m_transformComponent) {
+    if (m_isHidden || m_transformComponent == nullptr) {
         return;
     }
 

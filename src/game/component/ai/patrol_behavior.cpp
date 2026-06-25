@@ -35,7 +35,7 @@ void PatrolBehavior::update(float deltaTime, AiComponent& aiComponent)
     auto* physicsComponent = aiComponent.physicsComponent();
     auto* transformComponent = aiComponent.transformComponent();
     auto* spriteComponent = aiComponent.spriteComponent();
-    if (!physicsComponent || !transformComponent || !spriteComponent) {
+    if (physicsComponent == nullptr || transformComponent == nullptr || spriteComponent == nullptr) {
         spdlog::error("PatrolBehavior: 缺少必要组件，无法执行巡逻行为。");
         return;
     }

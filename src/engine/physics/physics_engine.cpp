@@ -53,7 +53,7 @@ void PhysicsEngine::update(float deltaTime)
     // 遍历所有注册的物理组件
     for (auto* physicsComponent : m_components) {
         // 检查组件是否有效和启用
-        if (!physicsComponent || !physicsComponent->isEnabled()) {
+        if (physicsComponent == nullptr || !physicsComponent->isEnabled()) {
             continue;
         }
 
@@ -90,34 +90,34 @@ void PhysicsEngine::checkObjectCollisions()
 {
     for (size_t i{ 0 }; i < m_components.size(); ++i) {
         auto* physicsComponentA = m_components[i];
-        if (!physicsComponentA || !physicsComponentA->isEnabled()) {
+        if (physicsComponentA == nullptr || !physicsComponentA->isEnabled()) {
             continue;
         }
 
         auto* gameObjectA = physicsComponentA->owner();
-        if (!gameObjectA) {
+        if (gameObjectA == nullptr) {
             continue;
         }
 
         auto* colliderComponentA = gameObjectA->getComponent<engine::component::ColliderComponent>();
-        if (!colliderComponentA || !colliderComponentA->isActive()) {
+        if (colliderComponentA == nullptr || !colliderComponentA->isActive()) {
             continue;
         }
 
         for (size_t j{ i + 1 }; j < m_components.size(); ++j) {
             auto* physicsComponentB = m_components[j];
-            if (!physicsComponentB || !physicsComponentB->isEnabled()) {
+            if (physicsComponentB == nullptr || !physicsComponentB->isEnabled()) {
                 continue;
             }
 
             auto* gameObjectB = physicsComponentB->owner();
-            if (!gameObjectB) {
+            if (gameObjectB == nullptr) {
                 continue;
             }
 
             auto* colliderComponentB = gameObjectB
                                            ->getComponent<engine::component::ColliderComponent>();
-            if (!colliderComponentB || !colliderComponentB->isActive()) {
+            if (colliderComponentB == nullptr || !colliderComponentB->isActive()) {
                 continue;
             }
 
@@ -142,13 +142,14 @@ void PhysicsEngine::resolveTileCollisions(engine::component::PhysicsComponent* p
 {
     // -- 检查组件是否有效 --
     auto* gameObject = physicsComponent->owner();
-    if (!gameObject) {
+    if (gameObject == nullptr) {
         return;
     }
 
     auto* transformComponent = gameObject->getComponent<engine::component::TransformComponent>();
     auto* colliderComponent = gameObject->getComponent<engine::component::ColliderComponent>();
-    if (!transformComponent || !colliderComponent || colliderComponent->isTrigger()) {
+    if (transformComponent == nullptr || colliderComponent == nullptr
+        || colliderComponent->isTrigger()) {
         return;
     }
 
@@ -415,7 +416,7 @@ void PhysicsEngine::resolveSolidCollisions(engine::object::GameObject* movingObj
 
 void PhysicsEngine::applyWorldBounds(engine::component::PhysicsComponent* physicsComponent)
 {
-    if (!physicsComponent || !m_worldBounds) {
+    if (physicsComponent == nullptr || !m_worldBounds) {
         return;
     }
 
@@ -477,17 +478,18 @@ void PhysicsEngine::checkTileTriggers()
 {
     for (auto* physicsComponent : m_components) {
         // --- 检查组件是否有效和启用 ---
-        if (!physicsComponent || !physicsComponent->isEnabled()) {
+        if (physicsComponent == nullptr || !physicsComponent->isEnabled()) {
             continue;
         }
 
         auto* obj = physicsComponent->owner();
-        if (!obj) {
+        if (obj == nullptr) {
             continue;
         }
 
         auto* colliderComponent = obj->getComponent<engine::component::ColliderComponent>();
-        if (!colliderComponent || !colliderComponent->isActive() || colliderComponent->isTrigger()) {
+        if (colliderComponent == nullptr || !colliderComponent->isActive()
+            || colliderComponent->isTrigger()) {
             continue; // 如果游戏对象本就是触发器，则不需要检查瓦片触发事件
         }
 
@@ -500,7 +502,7 @@ void PhysicsEngine::checkTileTriggers()
 
         // 遍历所有注册的碰撞瓦片层分别进行检测
         for (auto* layer : m_collisionTileLayers) {
-            if (!layer) {
+            if (layer == nullptr) {
                 continue;
             }
 

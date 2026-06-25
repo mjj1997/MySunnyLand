@@ -152,16 +152,16 @@ void SceneBase::removeGameObject(engine::object::GameObject* gameObject)
 
     // erase-remove 移除法不可用，因为智能指针与裸指针无法比较
     // 需要使用 std::remove_if 和 lambda 表达式自定义比较的方式
-    auto it = std::remove_if(m_gameObjects.begin(),
-                             m_gameObjects.end(),
-                             [gameObject](const std::unique_ptr<engine::object::GameObject>& p) {
-                                 // 比较裸指针是否相等（自定义比较方式）
-                                 return p.get() == gameObject;
-                             });
+    auto iter = std::remove_if(m_gameObjects.begin(),
+                               m_gameObjects.end(),
+                               [gameObject](const std::unique_ptr<engine::object::GameObject>& ptr) {
+                                   // 比较裸指针是否相等（自定义比较方式）
+                                   return ptr.get() == gameObject;
+                               });
 
-    if (it != m_gameObjects.end()) {
-        (*it)->clean(); // 因为传入的是指针，因此只可能有一个元素被移除，不需要遍历it到末尾
-        m_gameObjects.erase(it, m_gameObjects.end()); // 删除从it到末尾的元素（最后一个元素）
+    if (iter != m_gameObjects.end()) {
+        (*iter)->clean(); // 因为传入的是指针，因此只可能有一个元素被移除，不需要遍历 iter 到末尾
+        m_gameObjects.erase(iter, m_gameObjects.end()); // 删除从 iter 到末尾的元素（最后一个元素）
         spdlog::trace("从场景 '{}' 中移除游戏对象。", m_sceneName);
     } else {
         spdlog::warn("游戏对象指针未找到在场景 '{}' 中。", m_sceneName);
@@ -176,13 +176,13 @@ void SceneBase::safeRemoveGameObject(engine::object::GameObject* gameObject)
 engine::object::GameObject* SceneBase::findGameObjectByName(std::string_view name) const
 {
     // 找到第一个符合条件的游戏对象就返回
-    auto it = std::find_if(m_gameObjects.begin(),
-                           m_gameObjects.end(),
-                           [name](const std::unique_ptr<engine::object::GameObject>& p) {
-                               return p && p->name() == name;
-                           });
-    if (it != m_gameObjects.end()) {
-        return (*it).get();
+    auto iter = std::find_if(m_gameObjects.begin(),
+                             m_gameObjects.end(),
+                             [name](const std::unique_ptr<engine::object::GameObject>& ptr) {
+                                 return ptr && ptr->name() == name;
+                             });
+    if (iter != m_gameObjects.end()) {
+        return (*iter).get();
     }
     return nullptr;
 }

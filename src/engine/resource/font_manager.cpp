@@ -37,9 +37,9 @@ TTF_Font* FontManager::loadFont(std::string_view filePath, int pointSize)
     FontKey key{ filePath, pointSize };
 
     // 首先检查缓存
-    auto it = m_fonts.find(key);
-    if (it != m_fonts.end()) {
-        return it->second.get();
+    auto iter = m_fonts.find(key);
+    if (iter != m_fonts.end()) {
+        return iter->second.get();
     }
 
     // 缓存中不存在，则加载字体
@@ -59,9 +59,9 @@ TTF_Font* FontManager::loadFont(std::string_view filePath, int pointSize)
 TTF_Font* FontManager::getFont(std::string_view filePath, int pointSize)
 {
     const FontKey key{ filePath, pointSize };
-    auto it = m_fonts.find(key);
-    if (it != m_fonts.end()) {
-        return it->second.get();
+    auto iter = m_fonts.find(key);
+    if (iter != m_fonts.end()) {
+        return iter->second.get();
     }
 
     spdlog::warn("字体 '{}' ({}pt) 不在缓存中，尝试加载。", filePath, pointSize);
@@ -71,10 +71,10 @@ TTF_Font* FontManager::getFont(std::string_view filePath, int pointSize)
 void FontManager::unloadFont(std::string_view filePath, int pointSize)
 {
     const FontKey key{ filePath, pointSize };
-    auto it = m_fonts.find(key);
-    if (it != m_fonts.end()) {
+    auto iter = m_fonts.find(key);
+    if (iter != m_fonts.end()) {
         spdlog::debug("成功卸载字体: {} ({}pt)", filePath, pointSize);
-        m_fonts.erase(it); // unique_ptr 处理 TTF_CloseFont
+        m_fonts.erase(iter); // unique_ptr 处理 TTF_CloseFont
     } else {
         spdlog::warn("尝试卸载不存在的字体: {} ({}pt)", filePath, pointSize);
     }

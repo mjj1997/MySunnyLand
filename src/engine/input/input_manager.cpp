@@ -52,24 +52,25 @@ void InputManager::update()
 
 bool InputManager::isActionDown(std::string_view action) const
 {
-    if (auto it = m_actionStates.find(action); it != m_actionStates.end()) {
-        return it->second == ActionState::PressedThisFrame || it->second == ActionState::HeldDown;
+    if (auto iter = m_actionStates.find(action); iter != m_actionStates.end()) {
+        return iter->second == ActionState::PressedThisFrame
+               || iter->second == ActionState::HeldDown;
     }
     return false;
 }
 
 bool InputManager::isActionPressed(std::string_view action) const
 {
-    if (auto it = m_actionStates.find(action); it != m_actionStates.end()) {
-        return it->second == ActionState::PressedThisFrame;
+    if (auto iter = m_actionStates.find(action); iter != m_actionStates.end()) {
+        return iter->second == ActionState::PressedThisFrame;
     }
     return false;
 }
 
 bool InputManager::isActionReleased(std::string_view action) const
 {
-    if (auto it = m_actionStates.find(action); it != m_actionStates.end()) {
-        return it->second == ActionState::ReleasedThisFrame;
+    if (auto iter = m_actionStates.find(action); iter != m_actionStates.end()) {
+        return iter->second == ActionState::ReleasedThisFrame;
     }
     return false;
 }
@@ -142,8 +143,8 @@ void InputManager::processEvent(const SDL_Event& event)
     case SDL_EVENT_KEY_UP: {
         SDL_Scancode scancode{ event.key.scancode }; // 获取按键的scancode
         // 如果按键有对应的 actions
-        if (auto it = m_inputKeyToActions.find(scancode); it != m_inputKeyToActions.end()) {
-            const std::vector<std::string>& actions{ it->second };
+        if (auto iter = m_inputKeyToActions.find(scancode); iter != m_inputKeyToActions.end()) {
+            const std::vector<std::string>& actions{ iter->second };
             const bool isDown{ event.key.down };
             const bool isRepeat{ event.key.repeat };
             for (const std::string_view action : actions) {
@@ -156,8 +157,8 @@ void InputManager::processEvent(const SDL_Event& event)
     case SDL_EVENT_MOUSE_BUTTON_UP: {
         Uint8 button{ event.button.button }; // 获取鼠标按钮
         // 如果鼠标按钮有对应的 actions
-        if (auto it = m_inputKeyToActions.find(button); it != m_inputKeyToActions.end()) {
-            const std::vector<std::string>& actions{ it->second };
+        if (auto iter = m_inputKeyToActions.find(button); iter != m_inputKeyToActions.end()) {
+            const std::vector<std::string>& actions{ iter->second };
             const bool isDown{ event.button.down };
             for (const std::string_view action : actions) {
                 // 鼠标事件不考虑repeat, 所以第三个参数传false
@@ -212,20 +213,20 @@ Uint32 InputManager::mouseButtonUint32FromString(std::string_view buttonName)
 
 void InputManager::updateActionState(std::string_view action, bool isInputActive, bool isRepeatEvent)
 {
-    auto it = m_actionStates.find(action);
-    if (it == m_actionStates.end()) {
+    auto iter = m_actionStates.find(action);
+    if (iter == m_actionStates.end()) {
         spdlog::warn("尝试更新未注册动作的状态: {}", action);
         return;
     }
 
     if (isInputActive) { // 输入被激活（按下）
         if (isRepeatEvent) {
-            it->second = ActionState::HeldDown;
+            iter->second = ActionState::HeldDown;
         } else { // 非重复事件
-            it->second = ActionState::PressedThisFrame;
+            iter->second = ActionState::PressedThisFrame;
         }
     } else { // 输入被释放（松开）
-        it->second = ActionState::ReleasedThisFrame;
+        iter->second = ActionState::ReleasedThisFrame;
     }
 }
 

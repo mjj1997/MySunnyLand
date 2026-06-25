@@ -4,20 +4,20 @@
 
 namespace engine::physics {
 
-bool collision::checkCollision(const engine::component::ColliderComponent& a,
-                               const engine::component::ColliderComponent& b)
+bool collision::checkCollision(const engine::component::ColliderComponent& aColliderComponent,
+                               const engine::component::ColliderComponent& bColliderComponent)
 {
     // 获取碰撞器及对应 TransformComponent 信息
-    auto aCollider = a.collider();
-    auto bCollider = b.collider();
-    auto aTransformComponent = a.transformComponent();
-    auto bTransformComponent = b.transformComponent();
+    auto aCollider = aColliderComponent.collider();
+    auto bCollider = bColliderComponent.collider();
+    auto aTransformComponent = aColliderComponent.transformComponent();
+    auto bTransformComponent = bColliderComponent.transformComponent();
 
     // 先判断最小包围盒是否碰撞，如果没有碰撞，那一定是返回false (不考虑AABB的旋转)
     auto aSize = aCollider->aabbSize() * aTransformComponent->scale();
     auto bSize = bCollider->aabbSize() * bTransformComponent->scale();
-    auto aPos = aTransformComponent->position() + a.offset();
-    auto bPos = bTransformComponent->position() + b.offset();
+    auto aPos = aTransformComponent->position() + aColliderComponent.offset();
+    auto bPos = bTransformComponent->position() + bColliderComponent.offset();
     if (!checkAabbOverlap(aPos, aSize, bPos, bSize)) {
         return false;
     }
@@ -70,9 +70,9 @@ bool collision::checkAabbOverlap(const glm::vec2& aPos,
     return true;
 }
 
-bool collision::checkRectOverlap(const engine::utils::Rect& a, const engine::utils::Rect& b)
+bool collision::checkRectOverlap(const engine::utils::Rect& aRect, const engine::utils::Rect& bRect)
 {
-    return checkAabbOverlap(a.position, a.size, b.position, b.size);
+    return checkAabbOverlap(aRect.position, aRect.size, bRect.position, bRect.size);
 }
 
 bool collision::checkCircleOverlap(const glm::vec2& aCenter,

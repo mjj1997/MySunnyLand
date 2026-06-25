@@ -67,15 +67,15 @@ void TileLayerComponent::render(engine::core::Context& context)
     }
 
     // 遍历所有瓦片
-    for (int y{ 0 }; y < m_mapSize.y; ++y) {
-        for (int x{ 0 }; x < m_mapSize.x; ++x) {
-            const size_t index{ static_cast<size_t>(y * m_mapSize.x + x) };
+    for (int row{ 0 }; row < m_mapSize.y; ++row) {
+        for (int col{ 0 }; col < m_mapSize.x; ++col) {
+            const size_t index{ static_cast<size_t>(row * m_mapSize.x + col) };
             // 检查索引有效性以及瓦片是否需要渲染
             if (index < m_tiles.size() && m_tiles[index].type != TileType::Empty) {
                 const auto& tileInfo = m_tiles[index];
                 // 计算该瓦片在世界中的左上角位置 (drawSprite 预期接收左上角坐标)
-                glm::vec2 tileTopLeftPos{ m_offset.x + static_cast<float>(x) * m_tileSize.x,
-                                          m_offset.y + static_cast<float>(y) * m_tileSize.y };
+                glm::vec2 tileTopLeftPos{ m_offset.x + static_cast<float>(col) * m_tileSize.x,
+                                          m_offset.y + static_cast<float>(row) * m_tileSize.y };
 
                 // 但如果图片的大小与瓦片的大小不一致，需要调整 y 坐标 (瓦片与图片的对齐点是左下角)
                 const auto spriteHeight = tileInfo.sprite.sourceRect()->h;

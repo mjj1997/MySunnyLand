@@ -123,9 +123,9 @@ void Renderer::drawParallax(const Camera& camera,
         endPos.y = glm::min(positionScreen.y + scaledHeight, viewportSize.y);
     }
 
-    for (float y{ startPos.y }; y < endPos.y; y += scaledHeight) {
-        for (float x{ startPos.x }; x < endPos.x; x += scaledWidth) {
-            const SDL_FRect destRect{ .x = x, .y = y, .w = scaledWidth, .h = scaledHeight };
+    for (float posY{ startPos.y }; posY < endPos.y; posY += scaledHeight) {
+        for (float posX{ startPos.x }; posX < endPos.x; posX += scaledWidth) {
+            const SDL_FRect destRect{ .x = posX, .y = posY, .w = scaledWidth, .h = scaledHeight };
             if (!SDL_RenderTexture(m_renderer, texture, NULL, &destRect)) {
                 spdlog::error("渲染视差纹理失败(ID: {}): {}", sprite.textureId(), SDL_GetError());
                 return;
@@ -201,16 +201,16 @@ void Renderer::clearScreen()
     }
 }
 
-void Renderer::setDrawColor(Uint8 r, Uint8 g, Uint8 b, Uint8 a)
+void Renderer::setDrawColor(Uint8 red, Uint8 green, Uint8 blue, Uint8 alpha)
 {
-    if (!SDL_SetRenderDrawColor(m_renderer, r, g, b, a)) {
+    if (!SDL_SetRenderDrawColor(m_renderer, red, green, blue, alpha)) {
         spdlog::error("设置渲染绘制颜色失败：{}", SDL_GetError());
     }
 }
 
-void Renderer::setDrawColorFloat(float r, float g, float b, float a)
+void Renderer::setDrawColorFloat(float red, float green, float blue, float alpha)
 {
-    if (!SDL_SetRenderDrawColorFloat(m_renderer, r, g, b, a)) {
+    if (!SDL_SetRenderDrawColorFloat(m_renderer, red, green, blue, alpha)) {
         spdlog::error("设置渲染绘制颜色失败：{}", SDL_GetError());
     }
 }

@@ -22,8 +22,8 @@ void PhysicsEngine::registerComponent(engine::component::PhysicsComponent* compo
 void PhysicsEngine::unregisterComponent(engine::component::PhysicsComponent* component)
 {
     // 使用 remove-erase 范式安全地移除组件
-    auto it = std::remove(m_components.begin(), m_components.end(), component);
-    m_components.erase(it, m_components.end());
+    auto iter = std::remove(m_components.begin(), m_components.end(), component);
+    m_components.erase(iter, m_components.end());
     spdlog::trace("物理组件注销完成。");
 }
 
@@ -39,8 +39,8 @@ void PhysicsEngine::registerCollisionLayer(engine::component::TileLayerComponent
 void PhysicsEngine::unregisterCollisionLayer(engine::component::TileLayerComponent* layer)
 {
     // 使用 remove-erase 范式安全地移除组件
-    auto it = std::remove(m_collisionTileLayers.begin(), m_collisionTileLayers.end(), layer);
-    m_collisionTileLayers.erase(it, m_collisionTileLayers.end());
+    auto iter = std::remove(m_collisionTileLayers.begin(), m_collisionTileLayers.end(), layer);
+    m_collisionTileLayers.erase(iter, m_collisionTileLayers.end());
     spdlog::trace("碰撞瓦片图层注销完成。");
 }
 
@@ -519,9 +519,9 @@ void PhysicsEngine::checkTileTriggers()
                 std::ceil((worldAabb.position.y + worldAabb.size.y - epsilon) / tileSize.y));
 
             // 遍历瓦片坐标范围进行检测
-            for (int x{ tileXStart }; x < tileXEnd; ++x) {
-                for (int y{ tileYStart }; y < tileYEnd; ++y) {
-                    auto tileType = layer->tileTypeAt(glm::ivec2{ x, y });
+            for (int tileX{ tileXStart }; tileX < tileXEnd; ++tileX) {
+                for (int tileY{ tileYStart }; tileY < tileYEnd; ++tileY) {
+                    auto tileType = layer->tileTypeAt(glm::ivec2{ tileX, tileY });
                     if (tileType == engine::component::TileType::Hazard) {
                         triggers.insert(tileType); // 记录触发事件，set 保证每个瓦片类型只记录一次
                     } else if (tileType == engine::component::TileType::Ladder) {

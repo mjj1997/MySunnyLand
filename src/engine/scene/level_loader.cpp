@@ -510,12 +510,12 @@ engine::component::TileType LevelLoader::getTileTypeById(const nlohmann::json& t
 {
     if (tilesetJson.contains("tiles")) {
         const auto& tiles = tilesetJson["tiles"];
-        auto it = std::find_if(tiles.begin(), tiles.end(), [localId](const auto& tile) {
+        auto iter = std::find_if(tiles.begin(), tiles.end(), [localId](const auto& tile) {
             return tile.value("id", -1) == localId;
         });
 
-        if (it != tiles.end()) {
-            return getTileType(*it);
+        if (iter != tiles.end()) {
+            return getTileType(*iter);
         }
     }
 
@@ -529,15 +529,15 @@ engine::component::TileInfo LevelLoader::getTileInfoByGid(int gid)
     }
 
     // upper_bound：查找 tilesets 中键大于 gid 的第一个元素，返回迭代器
-    auto it = m_tilesets.upper_bound(gid);
-    if (it == m_tilesets.begin()) {
+    auto iter = m_tilesets.upper_bound(gid);
+    if (iter == m_tilesets.begin()) {
         spdlog::error("gid为 {} 的瓦片未找到图块集。", gid);
         return engine::component::TileInfo{};
     }
-    --it; // 前移一个位置，这样就得到不大于gid的最近一个元素（我们需要的）
+    --iter; // 前移一个位置，这样就得到不大于gid的最近一个元素（我们需要的）
 
-    const auto& tilesetJson = it->second;
-    const auto& tilesetFirstGid = it->first;
+    const auto& tilesetJson = iter->second;
+    const auto& tilesetFirstGid = iter->first;
 
     const std::string filePath{ tilesetJson.value("filePath", "") }; // 获取图块集文件路径
     if (filePath.empty()) {
@@ -616,16 +616,16 @@ engine::component::TileInfo LevelLoader::getTileInfoByGid(int gid)
 std::optional<nlohmann::json> LevelLoader::getTileJsonByGid(int gid) const
 {
     // 1. 查找 tilesets 中键大于 gid 的第一个元素，返回迭代器
-    auto it = m_tilesets.upper_bound(gid);
-    if (it == m_tilesets.begin()) {
+    auto iter = m_tilesets.upper_bound(gid);
+    if (iter == m_tilesets.begin()) {
         spdlog::error("gid为 {} 的瓦片未找到图块集。", gid);
         return std::nullopt;
     }
-    --it; // 前移一个位置，这样就得到不大于gid的最近一个元素（我们需要的）
+    --iter; // 前移一个位置，这样就得到不大于gid的最近一个元素（我们需要的）
 
     // 2. 获取 tileset JSON 对象
-    const auto& tilesetJson = it->second;
-    const auto& tilesetFirstGid = it->first;
+    const auto& tilesetJson = iter->second;
+    const auto& tilesetFirstGid = iter->first;
     // 没有 tiles 字段的话不符合数据格式要求，直接返回空
     if (!tilesetJson.contains("tiles")) {
         spdlog::error("Tileset 文件 '{}' 缺少 'tiles' 属性。", tilesetFirstGid);

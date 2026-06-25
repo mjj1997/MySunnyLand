@@ -22,8 +22,8 @@ void AnimationComponent::addAnimation(std::unique_ptr<engine::render::Animation>
 
 void AnimationComponent::playAnimation(std::string_view name)
 {
-    auto it = m_animations.find(name);
-    if (it == m_animations.end() || !it->second) {
+    auto iter = m_animations.find(name);
+    if (iter == m_animations.end() || !iter->second) {
         spdlog::warn("未找到 GameObject '{}' 的动画 '{}'",
                      m_owner != nullptr ? m_owner->name() : "未知",
                      name);
@@ -31,11 +31,11 @@ void AnimationComponent::playAnimation(std::string_view name)
     }
 
     // 如果已经在播放相同的动画，不重新开始（注释这一段则重新开始播放）
-    if (m_currentAnimation == it->second.get() && m_isPlaying) {
+    if (m_currentAnimation == iter->second.get() && m_isPlaying) {
         return;
     }
 
-    m_currentAnimation = it->second.get();
+    m_currentAnimation = iter->second.get();
     m_animationTimer = 0.0F;
     m_isPlaying = true;
 

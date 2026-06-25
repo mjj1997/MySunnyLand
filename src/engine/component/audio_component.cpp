@@ -21,9 +21,8 @@ AudioComponent::AudioComponent(engine::audio::AudioPlayer* audioPlayer,
 void AudioComponent::playSound(std::string_view soundId, bool useSpatial)
 {
     // 如果 音效 ID 在映射表中，使用映射表中的路径；否则，直接使用 ID 作为路径
-    auto soundPath = m_soundIdToPath.find(soundId) != m_soundIdToPath.end()
-                         ? m_soundIdToPath[std::string(soundId)]
-                         : soundId;
+    auto soundPath = m_soundIdToPath.contains(soundId) ? m_soundIdToPath[std::string(soundId)]
+                                                       : soundId;
 
     if (useSpatial && m_transformComponent != nullptr) {
         // TODO: 正式版 SDL3_Mixer 已经支持空间定位，但这里不展开
@@ -42,7 +41,7 @@ void AudioComponent::playSound(std::string_view soundId, bool useSpatial)
 
 void AudioComponent::addSound(std::string_view soundId, std::string_view soundPath)
 {
-    if (m_soundIdToPath.find(soundId) != m_soundIdToPath.end()) {
+    if (m_soundIdToPath.contains(soundId)) {
         spdlog::warn("AudioComponent:addSound: 音效id '{}' 已存在，覆盖旧路径。", soundId);
     }
 

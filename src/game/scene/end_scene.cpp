@@ -19,7 +19,7 @@ EndScene::EndScene(engine::core::Context& context,
                    engine::scene::SceneManager& sceneManager,
                    std::shared_ptr<game::data::SessionData> gameSessionData)
     : SceneBase{ "EndScene", context, sceneManager }
-    , m_gameSessionData{ gameSessionData }
+    , m_gameSessionData{ std::move(gameSessionData) }
 {
     if (m_gameSessionData == nullptr) {
         spdlog::error("错误：结束场景收到了空的游戏数据！");

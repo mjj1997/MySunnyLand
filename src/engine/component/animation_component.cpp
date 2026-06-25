@@ -55,7 +55,7 @@ std::string_view AnimationComponent::currentAnimationName() const
         return m_currentAnimation->name();
     }
 
-    return std::string_view();
+    return {};
 }
 
 bool AnimationComponent::isAnimationFinished() const

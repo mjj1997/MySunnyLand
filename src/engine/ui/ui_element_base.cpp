@@ -5,8 +5,8 @@
 namespace engine::ui {
 
 UiElementBase::UiElementBase(glm::vec2 localPosition, glm::vec2 size)
-    : m_localPosition{ std::move(localPosition) }
-    , m_size{ std::move(size) }
+    : m_localPosition{ localPosition }
+    , m_size{ size }
 {}
 
 bool UiElementBase::handleInput(engine::core::Context& context)

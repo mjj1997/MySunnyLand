@@ -11,7 +11,7 @@ namespace engine::ui {
 UiInteractiveElementBase::UiInteractiveElementBase(engine::core::Context& context,
                                                    glm::vec2 localPosition,
                                                    glm::vec2 size)
-    : UiElementBase{ std::move(localPosition), std::move(size) }
+    : UiElementBase{ localPosition, size }
     , m_context{ context }
 {
     spdlog::trace("UIInteractiveElementBase 构造完成");

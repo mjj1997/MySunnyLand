@@ -12,8 +12,8 @@ ParallaxComponent::ParallaxComponent(std::string_view textureId,
                                      glm::vec2 scrollFactor,
                                      glm::bvec2 repeat)
     : m_sprite{ engine::render::Sprite{ textureId } }
-    , m_scrollFactor{ std::move(scrollFactor) }
-    , m_repeat{ std::move(repeat) }
+    , m_scrollFactor{ scrollFactor }
+    , m_repeat{ repeat }
 {
     spdlog::trace("ParallaxComponent 初始化完成， 纹理 ID： {}", textureId);
 }

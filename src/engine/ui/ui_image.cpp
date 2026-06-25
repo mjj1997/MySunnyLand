@@ -11,8 +11,8 @@ UiImage::UiImage(std::string_view textureId,
                  glm::vec2 size,
                  std::optional<SDL_FRect> sourceRect,
                  bool isFlipped)
-    : UiElementBase{ std::move(localPosition), std::move(size) }
-    , m_sprite{ textureId, std::move(sourceRect), isFlipped }
+    : UiElementBase{ localPosition, size }
+    , m_sprite{ textureId, sourceRect, isFlipped }
 {
     if (textureId.empty()) {
         spdlog::warn("创建了一个空纹理 ID 的 UiImage 元素。");

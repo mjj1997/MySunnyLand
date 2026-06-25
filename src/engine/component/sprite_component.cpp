@@ -15,7 +15,7 @@ SpriteComponent::SpriteComponent(std::string_view textureId,
                                  std::optional<SDL_FRect> sourceRect,
                                  bool isFlipped)
     : m_resourceManager{ &resourceManager }
-    , m_sprite{ textureId, std::move(sourceRect), isFlipped }
+    , m_sprite{ textureId, sourceRect, isFlipped }
     , m_alignment{ alignment }
 {
     if (m_resourceManager == nullptr) {
@@ -42,7 +42,7 @@ SpriteComponent::SpriteComponent(engine::render::Sprite&& sprite,
 void SpriteComponent::setSpriteById(std::string_view textureId, std::optional<SDL_FRect> sourceRect)
 {
     m_sprite.setTextureId(textureId);
-    m_sprite.setSourceRect(std::move(sourceRect));
+    m_sprite.setSourceRect(sourceRect);
 
     updateSpriteSize();
     updateOffset();
@@ -50,7 +50,7 @@ void SpriteComponent::setSpriteById(std::string_view textureId, std::optional<SD
 
 void SpriteComponent::setSourceRect(std::optional<SDL_FRect> sourceRect)
 {
-    m_sprite.setSourceRect(std::move(sourceRect));
+    m_sprite.setSourceRect(sourceRect);
 
     updateSpriteSize();
     updateOffset();

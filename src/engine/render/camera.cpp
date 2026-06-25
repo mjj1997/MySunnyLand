@@ -21,9 +21,9 @@ void Camera::update(float deltaTime)
         return;
     }
 
-    glm::vec2 targetPosition{ m_target->position() };
+    const glm::vec2 targetPosition{ m_target->position() };
     // 计算想要的相机位置，使目标在视口中心
-    glm::vec2 desiredCameraPosition{ targetPosition - m_viewportSize / 2.0F };
+    const glm::vec2 desiredCameraPosition{ targetPosition - m_viewportSize / 2.0F };
 
     // 计算相机当前位置和想要的相机位置之间的距离
     auto distance = glm::distance(m_position, desiredCameraPosition);
@@ -108,9 +108,9 @@ void Camera::clampPosition()
     if (m_limitBounds.has_value() && m_limitBounds.value().size.x > 0
         && m_limitBounds.value().size.y > 0) {
         // 计算允许的相机位置范围
-        glm::vec2 minCameraPos = m_limitBounds.value().position;
-        glm::vec2 maxCameraPos = m_limitBounds.value().position + m_limitBounds.value().size
-                                 - m_viewportSize;
+        const glm::vec2 minCameraPos{ m_limitBounds.value().position };
+        glm::vec2 maxCameraPos{ m_limitBounds.value().position + m_limitBounds.value().size
+                                - m_viewportSize };
 
         // 确保 maxCameraPos 不小于 minCameraPos (视口可能比世界还大)
         maxCameraPos.x = std::max(minCameraPos.x, maxCameraPos.x);

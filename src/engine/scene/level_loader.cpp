@@ -91,7 +91,7 @@ bool LevelLoader::loadLevel(std::string_view mapPath, SceneBase& scene)
 void LevelLoader::loadImageLayer(const nlohmann::json& layerJson, SceneBase& scene)
 {
     // 获取纹理相对路径 （会自动处理'\/'符号）
-    std::string imagePath{ layerJson.value("image", "") };
+    const std::string imagePath{ layerJson.value("image", "") };
     if (imagePath.empty()) {
         spdlog::error("图层 '{}' 缺少 'image' 属性。", layerJson.value("name", "Unnamed"));
         return;
@@ -402,7 +402,7 @@ void LevelLoader::addAnimation(const nlohmann::json& animationJson,
 
             auto column = frame.get<int>();
             // 计算源矩形
-            SDL_FRect srcRect{
+            const SDL_FRect srcRect{
                 column * spriteSize.x, row * spriteSize.y, spriteSize.x, spriteSize.y
             };
             // 添加动画帧到 Animation
@@ -426,7 +426,7 @@ void LevelLoader::addSound(const nlohmann::json& soundJson,
     // 遍历音效 JSON 对象中的每个键值对（音效 ID : 音效路径）
     for (const auto& sound : soundJson.items()) {
         std::string_view soundId{ sound.key() };
-        std::string soundPath{ sound.value().get<std::string>() };
+        const std::string soundPath{ sound.value().get<std::string>() };
         if (soundId.empty() || soundPath.empty()) {
             spdlog::warn("音效 '{}' 缺少必要信息。", soundId);
             continue;
@@ -538,7 +538,7 @@ engine::component::TileInfo LevelLoader::getTileInfoByGid(int gid)
     const auto& tilesetJson = it->second;
     const auto& tilesetFirstGid = it->first;
 
-    std::string filePath{ tilesetJson.value("filePath", "") }; // 获取图块集文件路径
+    const std::string filePath{ tilesetJson.value("filePath", "") }; // 获取图块集文件路径
     if (filePath.empty()) {
         spdlog::error("Tileset 文件 '{}' 缺少 'filePath' 属性。", tilesetFirstGid);
         return engine::component::TileInfo{};
@@ -559,7 +559,7 @@ engine::component::TileInfo LevelLoader::getTileInfoByGid(int gid)
                            static_cast<float>(m_tileSize.x),
                            static_cast<float>(m_tileSize.y) };
         // 创建瓦片精灵
-        engine::render::Sprite sprite{ textureId, srcRect };
+        const engine::render::Sprite sprite{ textureId, srcRect };
         // 获取瓦片类型
         auto tileType = getTileTypeById(tilesetJson, localId);
         // 返回瓦片信息
@@ -598,7 +598,7 @@ engine::component::TileInfo LevelLoader::getTileInfoByGid(int gid)
                                    static_cast<float>(tile.value("width", imageWidth)),
                                    static_cast<float>(tile.value("height", imageHeight)) };
                 // 创建瓦片精灵
-                engine::render::Sprite sprite{ textureId, srcRect };
+                const engine::render::Sprite sprite{ textureId, srcRect };
                 // 获取瓦片类型
                 auto tileType = getTileType(tile);
                 // 返回瓦片信息

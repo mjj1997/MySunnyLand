@@ -82,7 +82,7 @@ engine::utils::Rect ColliderComponent::worldAabb() const
     // 计算最小包围盒的尺寸
     const glm::vec2 aabSize{ m_collider->aabbSize() };
     const glm::vec2 scaleFactor{ m_transformComponent->scale() };
-    glm::vec2 scaledSize{ aabSize * scaleFactor };
+    const glm::vec2 scaledSize{ aabSize * scaleFactor };
     //返回最小包围盒的 Rect
     return engine::utils::Rect{ topLeftPos, scaledSize };
 }

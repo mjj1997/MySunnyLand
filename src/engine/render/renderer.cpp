@@ -48,12 +48,12 @@ void Renderer::drawSprite(const Camera& camera,
     }
 
     // 应用相机变换
-    glm::vec2 positionScreen{ camera.worldToScreen(position) };
+    const glm::vec2 positionScreen{ camera.worldToScreen(position) };
 
     // 计算目标矩形，注意 position 是精灵的左上角坐标
-    float scaledWidth{ srcRect.value().w * scale.x };
-    float scaledHeight{ srcRect.value().h * scale.y };
-    SDL_FRect destRect{ positionScreen.x, positionScreen.y, scaledWidth, scaledHeight };
+    const float scaledWidth{ srcRect.value().w * scale.x };
+    const float scaledHeight{ srcRect.value().h * scale.y };
+    const SDL_FRect destRect{ positionScreen.x, positionScreen.y, scaledWidth, scaledHeight };
 
     // 视口裁剪：如果精灵超出视口，则不绘制
     if (!isRectInViewport(camera, destRect)) {
@@ -93,15 +93,15 @@ void Renderer::drawParallax(const Camera& camera,
     }
 
     // 应用相机变换
-    glm::vec2 positionScreen{ camera.worldToScreenWithParallax(position, scrollFactor) };
+    const glm::vec2 positionScreen{ camera.worldToScreenWithParallax(position, scrollFactor) };
 
     // 计算缩放后的纹理尺寸
-    float scaledWidth{ srcRect.value().w * scale.x };
-    float scaledHeight{ srcRect.value().h * scale.y };
+    const float scaledWidth{ srcRect.value().w * scale.x };
+    const float scaledHeight{ srcRect.value().h * scale.y };
 
     glm::vec2 startPos;
     glm::vec2 endPos;
-    glm::vec2 viewportSize{ camera.viewportSize() };
+    const glm::vec2 viewportSize{ camera.viewportSize() };
     if (repeat.x) {
         // 重复背景纹理的 x 坐标范围，从 -scaledWidth 到 0
         startPos.x = glm::mod(positionScreen.x, scaledWidth) - scaledWidth;
@@ -123,7 +123,7 @@ void Renderer::drawParallax(const Camera& camera,
 
     for (float y{ startPos.y }; y < endPos.y; y += scaledHeight) {
         for (float x{ startPos.x }; x < endPos.x; x += scaledWidth) {
-            SDL_FRect destRect{ x, y, scaledWidth, scaledHeight };
+            const SDL_FRect destRect{ x, y, scaledWidth, scaledHeight };
             if (!SDL_RenderTexture(m_renderer, texture, NULL, &destRect)) {
                 spdlog::error("渲染视差纹理失败(ID: {}): {}", sprite.textureId(), SDL_GetError());
                 return;
@@ -175,7 +175,7 @@ void Renderer::drawUiFilledRect(const engine::utils::Rect& rect, const engine::u
 {
     setDrawColorFloat(color.r, color.g, color.b, color.a);
 
-    SDL_FRect sdlRect{ rect.position.x, rect.position.y, rect.size.x, rect.size.y };
+    const SDL_FRect sdlRect{ rect.position.x, rect.position.y, rect.size.x, rect.size.y };
     if (!SDL_RenderFillRect(m_renderer, &sdlRect)) {
         spdlog::error("绘制填充矩形失败：{}", SDL_GetError());
     }
@@ -236,7 +236,7 @@ std::optional<SDL_FRect> Renderer::getSpriteSrcRect(const Sprite& sprite)
 
 bool Renderer::isRectInViewport(const Camera& camera, const SDL_FRect& rect)
 {
-    glm::vec2 viewportSize{ camera.viewportSize() };
+    const glm::vec2 viewportSize{ camera.viewportSize() };
     // 相当于 AABB 碰撞检测
     return rect.x + rect.w >= 0 && rect.x <= viewportSize.x && rect.y + rect.h >= 0
            && rect.y <= viewportSize.y;

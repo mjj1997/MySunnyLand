@@ -70,7 +70,7 @@ bool AudioPlayer::playMusic(std::string_view musicPath, int loops, int fadeInTim
     }
 
     // 播放音乐
-    bool result{ MIX_PlayTrack(m_musicTrack, props) };
+    const bool result{ MIX_PlayTrack(m_musicTrack, props) };
     SDL_DestroyProperties(props);
 
     if (!result) {
@@ -84,7 +84,8 @@ bool AudioPlayer::playMusic(std::string_view musicPath, int loops, int fadeInTim
 
 void AudioPlayer::stopMusic(int fadeOutTime)
 {
-    Sint64 fadeFrames{ (fadeOutTime > 0) ? MIX_TrackMSToFrames(m_musicTrack, fadeOutTime) : 0 };
+    const Sint64 fadeFrames{ (fadeOutTime > 0) ? MIX_TrackMSToFrames(m_musicTrack, fadeOutTime)
+                                               : 0 };
     MIX_StopTrack(m_musicTrack, fadeFrames);
     m_currentMusic.clear();
     spdlog::trace("AudioPlayer: 停止音乐。");

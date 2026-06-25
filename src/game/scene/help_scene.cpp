@@ -26,7 +26,7 @@ void HelpScene::init()
     spdlog::trace("HelpScene 初始化开始...");
 
     // 创建帮助图片
-    glm::vec2 windowSize{ 640.0F, 360.0F };
+    const glm::vec2 windowSize{ 640.0F, 360.0F };
     auto helpImage = std::make_unique<engine::ui::UiImage>("assets/textures/UI/instructions.png",
                                                            glm::vec2(0.0F),
                                                            windowSize);

@@ -141,7 +141,7 @@ bool GameScene::initLevel()
 {
     // 加载关卡（level_loader通常加载完成后即可销毁，因此不存为成员变量）
     engine::scene::LevelLoader levelLoader;
-    std::string_view mapPath{ m_gameSessionData->mapPath() };
+    const std::string_view mapPath{ m_gameSessionData->mapPath() };
     if (!levelLoader.loadLevel(mapPath, *this)) {
         spdlog::error("加载关卡失败。");
         return false;
@@ -456,7 +456,7 @@ void GameScene::createEffect(glm::vec2 center, std::string_view tag)
     // --- 根据标签创建不同的精灵组件和动画---
     auto animation = std::make_unique<engine::render::Animation>("effect", false);
     SDL_FRect srcRect{};
-    float duration{ 0.1F };
+    const float duration{ 0.1F };
 
     if (tag == "enemy") {
         effectObj->addComponent<engine::component::SpriteComponent>(
@@ -496,7 +496,8 @@ void GameScene::createEffect(glm::vec2 center, std::string_view tag)
 void GameScene::createScoreUi()
 {
     // 创建得分标签
-    std::string_view scoreText{ "Score: " + std::to_string(m_gameSessionData->currentScore()) };
+    const std::string_view scoreText{ "Score: "
+                                      + std::to_string(m_gameSessionData->currentScore()) };
     auto scoreLabel = std::make_unique<engine::ui::UiLabel>(m_context.textRenderer(),
                                                             scoreText,
                                                             "assets/fonts/VonwaonBitmap-16px.ttf",
@@ -518,11 +519,11 @@ void GameScene::createHealthUi()
     m_healthPanel = healthPanel.get(); // 保存指针，方便后续更新
 
     // --- 根据最大生命值，循环创建生命值图标(添加到 UiPanel 中) ---
-    glm::vec2 iconStartPos{ 10.0F, 10.0F };
-    glm::vec2 iconSize{ 20.0F, 18.0F };
-    float spacing{ 5.0F };
+    const glm::vec2 iconStartPos{ 10.0F, 10.0F };
+    const glm::vec2 iconSize{ 20.0F, 18.0F };
+    const float spacing{ 5.0F };
     for (int i{ 0 }; i < m_gameSessionData->maxHealth(); ++i) {
-        glm::vec2 iconPos{ iconStartPos.x + i * (iconSize.x + spacing), iconStartPos.y };
+        const glm::vec2 iconPos{ iconStartPos.x + i * (iconSize.x + spacing), iconStartPos.y };
         // 创建背景图标
         auto bgIcon = std::make_unique<engine::ui::UiImage>("assets/textures/UI/Heart-bg.png",
                                                             iconPos,
@@ -567,11 +568,11 @@ void GameScene::updateHealthWithUi()
     }
 
     // 获取当前生命值并更新游戏数据
-    int currentHealth{
+    const int currentHealth{
         m_player->getComponent<engine::component::HealthComponent>()->currentHealth()
     };
     m_gameSessionData->setCurrentHealth(currentHealth);
-    int maxHealth{ m_gameSessionData->maxHealth() };
+    const int maxHealth{ m_gameSessionData->maxHealth() };
 
     /** 更新生命值图标可见性
      *  前景图标在奇数索引位置（1, 3, 5, ...），需要根据当前生命值设置可见性

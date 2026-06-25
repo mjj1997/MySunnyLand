@@ -63,7 +63,7 @@ void MenuScene::handleInput()
 bool MenuScene::initUi()
 {
     spdlog::trace("创建 MenuScene UI...");
-    glm::vec2 windowSize{ m_context.gameState().logicalSize() };
+    const glm::vec2 windowSize{ m_context.gameState().logicalSize() };
 
     if (!m_uiManager->init(windowSize)) {
         spdlog::error("MenuScene 中初始化 UiManager 失败!");
@@ -83,15 +83,15 @@ bool MenuScene::initUi()
     m_uiManager->addElement(std::move(pauseLabel));
 
     // --- 创建 4 个按钮 --- (4个按钮，设定好大小、间距)
-    float buttonWidth{ 96.0F };
-    float buttonHeight{ 32.0F };
-    float buttonSpacing{ 10.0F };
+    const float buttonWidth{ 96.0F };
+    const float buttonHeight{ 32.0F };
+    const float buttonSpacing{ 10.0F };
 
     glm::vec2 currentButtonLocalPos{
         (windowSize.x - buttonWidth) / 2.0F, // 按钮水平居中位置
         labelLocalPosY + 80.0F               // 从标签下方开始，增加间距
     };
-    glm::vec2 buttonSize{ buttonWidth, buttonHeight };
+    const glm::vec2 buttonSize{ buttonWidth, buttonHeight };
 
     // Resume Button
     auto resumeButton

@@ -44,12 +44,12 @@ void PatrolBehavior::update(float deltaTime, AiComponent& aiComponent)
     auto currentX = transformComponent->position().x;
     if (physicsComponent->isCollidedRight() || currentX >= m_patrolMaxX) {
         // 如果撞右墙或到达巡逻范围右边界，就转向左
-        glm::vec2 newVelocity{ -m_moveSpeed, physicsComponent->velocity().y };
+        const glm::vec2 newVelocity{ -m_moveSpeed, physicsComponent->velocity().y };
         physicsComponent->setVelocity(newVelocity);
         m_movingRight = false;
     } else if (physicsComponent->isCollidedLeft() || currentX <= m_patrolMinX) {
         // 如果撞左墙或到达巡逻范围左边界，就转向右
-        glm::vec2 newVelocity{ m_moveSpeed, physicsComponent->velocity().y };
+        const glm::vec2 newVelocity{ m_moveSpeed, physicsComponent->velocity().y };
         physicsComponent->setVelocity(newVelocity);
         m_movingRight = true;
     }

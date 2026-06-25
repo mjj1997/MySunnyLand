@@ -22,7 +22,7 @@ bool PlayerComponent::takeDamage(int damageAmount)
         return false;
     }
 
-    bool success{ m_healthComponent->takeDamage(damageAmount) };
+    const bool success{ m_healthComponent->takeDamage(damageAmount) };
     if (!success) {
         return false;
     }

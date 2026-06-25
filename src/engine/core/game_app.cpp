@@ -40,7 +40,7 @@ void GameApp::run()
 
     while (m_isRunning) {
         m_frameTimeController->update();
-        float deltaTime{ m_frameTimeController->deltaTime() };
+        const float deltaTime{ m_frameTimeController->deltaTime() };
         m_inputManager->update(); // 每帧首先更新输入管理器
 
         handleEvents();
@@ -192,8 +192,8 @@ bool GameApp::initSDL()
     // 设置渲染器支持透明色
     SDL_SetRenderDrawBlendMode(m_sdlRenderer, SDL_BLENDMODE_BLEND);
 
-    int vsyncMode{ m_configurator->m_isVSyncEnabled ? SDL_RENDERER_VSYNC_ADAPTIVE
-                                                    : SDL_RENDERER_VSYNC_DISABLED };
+    const int vsyncMode{ m_configurator->m_isVSyncEnabled ? SDL_RENDERER_VSYNC_ADAPTIVE
+                                                          : SDL_RENDERER_VSYNC_DISABLED };
     SDL_SetRenderVSync(m_sdlRenderer, vsyncMode);
     spdlog::trace("VSync 模式设置为: {}", m_configurator->m_isVSyncEnabled ? "启用" : "禁用");
 

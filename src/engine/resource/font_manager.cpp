@@ -58,7 +58,7 @@ TTF_Font* FontManager::loadFont(std::string_view filePath, int pointSize)
 
 TTF_Font* FontManager::getFont(std::string_view filePath, int pointSize)
 {
-    FontKey key{ filePath, pointSize };
+    const FontKey key{ filePath, pointSize };
     auto it = m_fonts.find(key);
     if (it != m_fonts.end()) {
         return it->second.get();
@@ -70,7 +70,7 @@ TTF_Font* FontManager::getFont(std::string_view filePath, int pointSize)
 
 void FontManager::unloadFont(std::string_view filePath, int pointSize)
 {
-    FontKey key{ filePath, pointSize };
+    const FontKey key{ filePath, pointSize };
     auto it = m_fonts.find(key);
     if (it != m_fonts.end()) {
         spdlog::debug("成功卸载字体: {} ({}pt)", filePath, pointSize);

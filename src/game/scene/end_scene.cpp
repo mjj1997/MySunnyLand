@@ -53,7 +53,7 @@ void EndScene::init()
 bool EndScene::initUi()
 {
     spdlog::trace("创建 EndScene UI...");
-    glm::vec2 windowSize{ m_context.gameState().logicalSize() };
+    const glm::vec2 windowSize{ m_context.gameState().logicalSize() };
 
     if (!m_uiManager->init(windowSize)) {
         spdlog::error("EndScene 中初始化 UiManager 失败!");
@@ -61,10 +61,12 @@ bool EndScene::initUi()
     }
 
     // --- 创建主标签 ---
-    bool isWin{ m_gameSessionData->isWin() };
-    std::string message{ isWin ? "YOU WIN! CONGRATS!" : "YOU DIED! TRY AGAIN!" };
-    engine::utils::FColor messageColor{ isWin ? engine::utils::FColor{ 0.0F, 1.0F, 0.0F, 1.0F }
-                                              : engine::utils::FColor{ 1.0F, 0.0F, 0.0F, 1.0F } };
+    const bool isWin{ m_gameSessionData->isWin() };
+    const std::string message{ isWin ? "YOU WIN! CONGRATS!" : "YOU DIED! TRY AGAIN!" };
+    const engine::utils::FColor messageColor{
+        isWin ? engine::utils::FColor{ 0.0F, 1.0F, 0.0F, 1.0F }
+              : engine::utils::FColor{ 1.0F, 0.0F, 0.0F, 1.0F }
+    };
 
     auto mainLabel = std::make_unique<engine::ui::UiLabel>(m_context.textRenderer(),
                                                            message,
@@ -73,18 +75,19 @@ bool EndScene::initUi()
                                                            messageColor);
 
     // 设置主标签位置，使其居中并靠上
-    glm::vec2 mainLabelSize{ mainLabel->size() };
-    glm::vec2 mainLabelLocalPos{ (windowSize.x - mainLabelSize.x) / 2.0F, windowSize.y * 0.3F };
+    const glm::vec2 mainLabelSize{ mainLabel->size() };
+    const glm::vec2 mainLabelLocalPos{ (windowSize.x - mainLabelSize.x) / 2.0F,
+                                       windowSize.y * 0.3F };
     mainLabel->setLocalPosition(mainLabelLocalPos);
 
     // 将主标签添加到 UI 管理器
     m_uiManager->addElement(std::move(mainLabel));
 
     // --- 创建得分标签 ---
-    int score{ m_gameSessionData->currentScore() };
-    std::string scoreText{ "Score: " + std::to_string(score) };
-    int scoreFontSize{ 24 };
-    engine::utils::FColor scoreColor{ 1.0F, 1.0F, 1.0F, 1.0F };
+    const int score{ m_gameSessionData->currentScore() };
+    const std::string scoreText{ "Score: " + std::to_string(score) };
+    const int scoreFontSize{ 24 };
+    const engine::utils::FColor scoreColor{ 1.0F, 1.0F, 1.0F, 1.0F };
 
     auto scoreLabel = std::make_unique<engine::ui::UiLabel>(m_context.textRenderer(),
                                                             scoreText,
@@ -93,15 +96,15 @@ bool EndScene::initUi()
                                                             scoreColor);
 
     // 设置得分标签位置，使其 x 方向居中，y 方向在主标签下方 20 像素
-    glm::vec2 scoreLabelSize{ scoreLabel->size() };
-    glm::vec2 scoreLabelLocalPos{ (windowSize.x - scoreLabelSize.x) / 2.0F,
-                                  mainLabelLocalPos.y + scoreLabelSize.y + 20.0F };
+    const glm::vec2 scoreLabelSize{ scoreLabel->size() };
+    const glm::vec2 scoreLabelLocalPos{ (windowSize.x - scoreLabelSize.x) / 2.0F,
+                                        mainLabelLocalPos.y + scoreLabelSize.y + 20.0F };
     scoreLabel->setLocalPosition(scoreLabelLocalPos);
     m_uiManager->addElement(std::move(scoreLabel));
 
     // --- 创建最高分标签 ---
-    int highestScore{ m_gameSessionData->highestScore() };
-    std::string highestScoreText{ "Highest Score: " + std::to_string(highestScore) };
+    const int highestScore{ m_gameSessionData->highestScore() };
+    const std::string highestScoreText{ "Highest Score: " + std::to_string(highestScore) };
 
     auto highestScoreLabel
         = std::make_unique<engine::ui::UiLabel>(m_context.textRenderer(),
@@ -111,20 +114,20 @@ bool EndScene::initUi()
                                                 scoreColor);
 
     // 设置最高分标签位置，使其 x 方向居中，y 方向在得分标签下方 10 像素
-    glm::vec2 highestScoreLabelSize{ highestScoreLabel->size() };
-    glm::vec2 highestScoreLabelLocalPos = { (windowSize.x - highestScoreLabelSize.x) / 2.0F,
-                                            scoreLabelLocalPos.y + scoreLabelSize.y + 10.0F };
+    const glm::vec2 highestScoreLabelSize{ highestScoreLabel->size() };
+    const glm::vec2 highestScoreLabelLocalPos = { (windowSize.x - highestScoreLabelSize.x) / 2.0F,
+                                                  scoreLabelLocalPos.y + scoreLabelSize.y + 10.0F };
     highestScoreLabel->setLocalPosition(highestScoreLabelLocalPos);
     m_uiManager->addElement(std::move(highestScoreLabel));
 
     // --- 创建 2 个按钮 --- (2个按钮，设定好大小、间距)
-    glm::vec2 buttonSize{ 120.0F, 40.0F };
-    float buttonSpacing{ 20.0F };
-    float totalButtonWidth{ buttonSize.x * 2 + buttonSpacing };
+    const glm::vec2 buttonSize{ 120.0F, 40.0F };
+    const float buttonSpacing{ 20.0F };
+    const float totalButtonWidth{ buttonSize.x * 2 + buttonSpacing };
 
     // 按钮放在右下角，与边缘间隔 30 像素
     float buttonX{ windowSize.x - totalButtonWidth - 30.0F };
-    float buttonY{ windowSize.y - buttonSize.y - 30.0F };
+    const float buttonY{ windowSize.y - buttonSize.y - 30.0F };
 
     // Back Button
     auto backButton = std::make_unique<engine::ui::UiButton>(m_context,

@@ -33,8 +33,8 @@ void FrameTimeController::limitFrameRate(float currentDeltaTime)
 {
     // 如果当前帧耗费的时间小于目标帧时间，则等待剩余时间
     if (currentDeltaTime < m_targetFrameTime) {
-        float secondsToWait{ m_targetFrameTime - currentDeltaTime }; // 需要等待的时间差（秒）
-        Uint64 nanoSecondsToWait{ static_cast<Uint64>(secondsToWait * 1.0e9) }; // 转换为纳秒
+        const float secondsToWait{ m_targetFrameTime - currentDeltaTime }; // 需要等待的时间差（秒）
+        const Uint64 nanoSecondsToWait{ static_cast<Uint64>(secondsToWait * 1.0e9) }; // 转换为纳秒
         SDL_DelayNS(nanoSecondsToWait);
         m_deltaTime = static_cast<float>(SDL_GetTicksNS() - m_lastFrameEndTimestamp) / 1.0e9;
     }

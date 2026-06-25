@@ -46,9 +46,9 @@ TileType TileLayerComponent::tileTypeAt(glm::ivec2 pos) const
 
 TileType TileLayerComponent::tileTypeAtWorldPos(const glm::vec2& worldPos) const
 {
-    glm::vec2 relativePos{ worldPos - m_offset };
-    int tileX{ static_cast<int>(std::floor(relativePos.x / m_tileSize.x)) };
-    int tileY{ static_cast<int>(std::floor(relativePos.y / m_tileSize.y)) };
+    const glm::vec2 relativePos{ worldPos - m_offset };
+    const int tileX{ static_cast<int>(std::floor(relativePos.x / m_tileSize.x)) };
+    const int tileY{ static_cast<int>(std::floor(relativePos.y / m_tileSize.y)) };
     return tileTypeAt(glm::ivec2{ tileX, tileY });
 }
 
@@ -69,7 +69,7 @@ void TileLayerComponent::render(engine::core::Context& context)
     // 遍历所有瓦片
     for (int y{ 0 }; y < m_mapSize.y; ++y) {
         for (int x{ 0 }; x < m_mapSize.x; ++x) {
-            size_t index{ static_cast<size_t>(y * m_mapSize.x + x) };
+            const size_t index{ static_cast<size_t>(y * m_mapSize.x + x) };
             // 检查索引有效性以及瓦片是否需要渲染
             if (index < m_tiles.size() && m_tiles[index].type != TileType::Empty) {
                 const auto& tileInfo = m_tiles[index];

@@ -94,7 +94,7 @@ void TextRenderer::drawText(const Camera& camera,
                             const engine::utils::FColor& color)
 {
     // 应用相机变换
-    glm::vec2 screenPos = camera.worldToScreen(worldPosition);
+    const glm::vec2 screenPos{ camera.worldToScreen(worldPosition) };
 
     // 用新坐标调用 drawUiText() 即可
     drawUiText(text, fontId, fontSize, screenPos, color);

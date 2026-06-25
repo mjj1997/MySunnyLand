@@ -47,12 +47,12 @@ void UpDownBehavior::update(float deltaTime, AiComponent& aiComponent)
     auto currentY = transformComponent->position().y;
     if (physicsComponent->isCollidedAbove() || currentY <= m_patrolMinY) {
         // 如果撞上障碍物或到达巡逻范围上边界，就转向下
-        glm::vec2 newVelocity{ physicsComponent->velocity().x, m_moveSpeed };
+        const glm::vec2 newVelocity{ physicsComponent->velocity().x, m_moveSpeed };
         physicsComponent->setVelocity(newVelocity);
         m_movingDown = true;
     } else if (physicsComponent->isCollidedBelow() || currentY >= m_patrolMaxY) {
         // 如果撞下障碍物或到达巡逻范围下边界，就转向上
-        glm::vec2 newVelocity{ physicsComponent->velocity().x, -m_moveSpeed };
+        const glm::vec2 newVelocity{ physicsComponent->velocity().x, -m_moveSpeed };
         physicsComponent->setVelocity(newVelocity);
         m_movingDown = false;
     }

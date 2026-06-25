@@ -60,7 +60,7 @@ void JumpBehavior::update(float deltaTime, AiComponent& aiComponent)
         // 增加跳跃计时器
         m_jumpTimer += deltaTime;
         // 停止水平移动（否则会有惯性）
-        glm::vec2 newVelocity{ 0.0F, physicsComponent->velocity().y };
+        const glm::vec2 newVelocity{ 0.0F, physicsComponent->velocity().y };
         physicsComponent->setVelocity(newVelocity);
 
         // --- 检查是否需要跳跃 ---

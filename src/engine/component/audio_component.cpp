@@ -30,7 +30,7 @@ void AudioComponent::playSound(std::string_view soundId, bool useSpatial)
         // 这里给一个简单的功能：150像素范围内播放，否则不播放
         auto cameraCenter = m_camera->position() + m_camera->viewportSize() / 2.0F;
         auto objectPosition = m_transformComponent->position();
-        float distance{ glm::length(cameraCenter - objectPosition) };
+        const float distance{ glm::length(cameraCenter - objectPosition) };
         if (distance > 150.0F) {
             spdlog::debug("AudioComponent:playSound: 音效 '{}' 距离相机太远，不播放。", soundId);
             return;

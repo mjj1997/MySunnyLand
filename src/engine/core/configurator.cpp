@@ -48,7 +48,7 @@ bool Configurator::saveToFile(std::string_view filePath)
     }
 
     try {
-        nlohmann::ordered_json json{ toJson() };
+        const nlohmann::ordered_json json{ toJson() };
         file << json.dump(4);
         spdlog::info("成功将配置保存到文件 '{}'。", filePath);
         return true;

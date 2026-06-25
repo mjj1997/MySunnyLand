@@ -85,7 +85,7 @@ void TitleScene::update(float deltaTime)
 bool TitleScene::initUi()
 {
     spdlog::trace("创建 TitleScene UI...");
-    glm::vec2 windowSize{ m_context.gameState().logicalSize() };
+    const glm::vec2 windowSize{ m_context.gameState().logicalSize() };
 
     if (!m_uiManager->init(windowSize)) {
         spdlog::error("TitleScene 中初始化 UiManager 失败!");
@@ -105,25 +105,25 @@ bool TitleScene::initUi()
     m_uiManager->addElement(std::move(titleImage));
 
     // --- 创建按钮面板并居中 --- (4个按钮，设定好大小、间距)
-    float buttonWidth{ 96.0F };
-    float buttonHeight{ 32.0F };
-    float buttonSpacing{ 20.0F };
-    int buttonNums{ 4 };
+    const float buttonWidth{ 96.0F };
+    const float buttonHeight{ 32.0F };
+    const float buttonSpacing{ 20.0F };
+    const int buttonNums{ 4 };
 
     // 计算面板总宽度
-    float panelWidth{ buttonNums * buttonWidth + (buttonNums - 1) * buttonSpacing };
-    float panelHeight{ buttonHeight };
+    const float panelWidth{ buttonNums * buttonWidth + (buttonNums - 1) * buttonSpacing };
+    const float panelHeight{ buttonHeight };
 
     // 计算面板位置使其居中
-    float panelX{ (windowSize.x - panelWidth) / 2.0F };
-    float panelY{ windowSize.y * 0.65F }; // 垂直位置中间靠下
+    const float panelX{ (windowSize.x - panelWidth) / 2.0F };
+    const float panelY{ windowSize.y * 0.65F }; // 垂直位置中间靠下
 
     auto buttonPanel = std::make_unique<engine::ui::UiPanel>(glm::vec2{ panelX, panelY },
                                                              glm::vec2{ panelWidth, panelHeight });
 
     // --- 创建按钮并添加到 UiPanel (位置是相对于 UiPanel 左上角的局部位置) ---
     glm::vec2 currentButtonLocalPos{ 0.0F, 0.0F };
-    glm::vec2 buttonSize{ buttonWidth, buttonHeight };
+    const glm::vec2 buttonSize{ buttonWidth, buttonHeight };
 
     // Start Button
     auto startButton

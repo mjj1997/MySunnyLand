@@ -29,7 +29,7 @@ void UiImage::render(engine::core::Context& context)
 
     // 渲染自身
     const auto& screenPos = screenPosition();
-    if (m_size.x == 0.0f && m_size.y == 0.0f) { // 如果尺寸为 0，则使用纹理的原始尺寸
+    if (m_size.x == 0.0F && m_size.y == 0.0F) { // 如果尺寸为 0，则使用纹理的原始尺寸
         context.renderer().drawUiSprite(m_sprite, screenPos);
     } else { // 否则，使用指定的尺寸
         context.renderer().drawUiSprite(m_sprite, screenPos, m_size);

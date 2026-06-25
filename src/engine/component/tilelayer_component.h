@@ -126,7 +126,7 @@ private:
     ///< @brief 存储所有瓦片信息 (按"行主序"存储, index = y * m_mapSize.x + x)
     std::vector<TileInfo> m_tiles;
     ///< @brief 瓦片层在世界中的偏移量 (瓦片层通常不需要缩放及旋转，因此不引入Transform组件)
-    glm::vec2 m_offset{ 0.0f, 0.0f }; // m_offset 最好也保持默认的0，以免增加不必要的复杂性
+    glm::vec2 m_offset{ 0.0F, 0.0F }; // m_offset 最好也保持默认的0，以免增加不必要的复杂性
     bool m_isHidden{ false };         ///< @brief 是否隐藏（不渲染）
     ///< @brief 物理引擎实例指针。clean() 方法中可能需要反注册
     engine::physics::PhysicsEngine* m_physicsEngine{ nullptr };

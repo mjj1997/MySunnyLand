@@ -7,7 +7,7 @@ namespace engine::core {
 
 FrameTimeController::FrameTimeController()
     : m_lastFrameEndTimestamp{ SDL_GetTicksNS() }
-    // 初始化 lastFrameEndTimestamp 为当前时间，避免第一帧 DeltaTime 过大
+// 初始化 lastFrameEndTimestamp 为当前时间，避免第一帧 DeltaTime 过大
 {
     spdlog::trace("FrameTimeController 初始化。Last frame endtimestamp: {}",
                   m_lastFrameEndTimestamp);
@@ -52,9 +52,9 @@ float FrameTimeController::unscaledDeltaTime() const
 
 void FrameTimeController::setTimeScale(float scale)
 {
-    if (scale < 0.0f) {
+    if (scale < 0.0F) {
         spdlog::warn("Time scale 不能为负。Clamping to 0.");
-        scale = 0.0f; // 防止负时间缩放
+        scale = 0.0F; // 防止负时间缩放
     }
     m_timeScale = scale;
 }
@@ -74,10 +74,10 @@ void FrameTimeController::setTargetFps(int fps)
     }
 
     if (m_targetFps > 0) {
-        m_targetFrameTime = 1.0f / static_cast<float>(m_targetFps);
+        m_targetFrameTime = 1.0F / static_cast<float>(m_targetFps);
         spdlog::info("Target FPS 设置为: {} (Frame time: {:.6f}s)", m_targetFps, m_targetFrameTime);
     } else {
-        m_targetFrameTime = 0.0f;
+        m_targetFrameTime = 0.0F;
         spdlog::info("Target FPS 设置为: Unlimited");
     }
 }

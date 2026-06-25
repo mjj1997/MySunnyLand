@@ -63,14 +63,14 @@ glm::vec2 TextureManager::getTextureSize(std::string_view filePath)
     SDL_Texture* texture{ getTexture(filePath) };
     if (!texture) {
         spdlog::error("无法获取纹理：{}", filePath);
-        return glm::vec2(0.0f);
+        return glm::vec2(0.0F);
     }
 
     // 获取纹理尺寸
     glm::vec2 size;
     if (!SDL_GetTextureSize(texture, &size.x, &size.y)) {
         spdlog::error("无法查询纹理尺寸：{}", filePath);
-        return glm::vec2(0.0f);
+        return glm::vec2(0.0F);
     }
     return size;
 }

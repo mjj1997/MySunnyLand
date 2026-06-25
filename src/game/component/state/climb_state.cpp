@@ -36,8 +36,8 @@ std::unique_ptr<PlayerStateBase> ClimbState::handleInput(engine::core::Context& 
     auto physicsComponent = m_playerComponent->physicsComponent();
     auto speed = m_playerComponent->climbVelocity();
     glm::vec2 newVelocity{};
-    newVelocity.y = isUp ? -speed : isDown ? speed : 0.0f;
-    newVelocity.x = isLeft ? -speed : isRight ? speed : 0.0f;
+    newVelocity.y = isUp ? -speed : isDown ? speed : 0.0F;
+    newVelocity.x = isLeft ? -speed : isRight ? speed : 0.0F;
     physicsComponent->setVelocity(newVelocity);
 
     // 根据按键标志，决定是否播放动画。

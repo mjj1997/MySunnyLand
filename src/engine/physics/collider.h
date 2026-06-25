@@ -34,7 +34,7 @@ public:
 
 protected:
     ///< @brief 覆盖 Collider 的最小包围盒的尺寸（宽度和高度）。
-    glm::vec2 m_aabbSize{ 0.0f, 0.0f };
+    glm::vec2 m_aabbSize{ 0.0F, 0.0F };
 };
 
 /**
@@ -62,7 +62,7 @@ public:
 
 private:
     ///< @brief 包围盒的尺寸（和 m_aabbSize相同）。
-    glm::vec2 m_size{ 0.0f, 0.0f };
+    glm::vec2 m_size{ 0.0F, 0.0F };
 };
 
 /**
@@ -78,7 +78,7 @@ public:
     explicit CircleCollider(float radius)
         : m_radius{ radius }
     {
-        setAabbSize(glm::vec2{ radius * 2.0f, radius * 2.0f });
+        setAabbSize(glm::vec2{ radius * 2.0F, radius * 2.0F });
     }
     ~CircleCollider() override = default;
 
@@ -90,7 +90,7 @@ public:
 
 private:
     ///< @brief 圆的半径。
-    float m_radius{ 0.0f };
+    float m_radius{ 0.0F };
 };
 
 } // namespace engine::physics

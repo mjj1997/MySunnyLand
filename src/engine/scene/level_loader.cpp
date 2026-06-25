@@ -99,12 +99,12 @@ void LevelLoader::loadImageLayer(const nlohmann::json& layerJson, SceneBase& sce
     auto textureId = resolvePath(imagePath, m_mapPath);
 
     // 获取图层偏移量（json中没有则代表未设置，给默认值即可）
-    const glm::vec2 offset{ glm::vec2{ layerJson.value("offsetx", 0.0f),
-                                       layerJson.value("offsety", 0.0f) } };
+    const glm::vec2 offset{ glm::vec2{ layerJson.value("offsetx", 0.0F),
+                                       layerJson.value("offsety", 0.0F) } };
 
     // 获取视差因子及重复标志
-    const glm::vec2 scrollFactor{ glm::vec2{ layerJson.value("parallaxx", 1.0f),
-                                             layerJson.value("parallaxy", 1.0f) } };
+    const glm::vec2 scrollFactor{ glm::vec2{ layerJson.value("parallaxx", 1.0F),
+                                             layerJson.value("parallaxy", 1.0F) } };
     const glm::bvec2 repeat{ glm::bvec2{ layerJson.value("repeatx", false),
                                          layerJson.value("repeaty", false) } };
 
@@ -178,13 +178,13 @@ void LevelLoader::loadObjectLayer(const nlohmann::json& layerJson, SceneBase& sc
                 std::string objectName = object.value("name", "Unnamed");
                 auto gameObject = std::make_unique<engine::object::GameObject>(objectName);
                 // 获取Transform相关信息 （自定义形状的坐标针对左上角）
-                auto position = glm::vec2{ object.value("x", 0.0f), object.value("y", 0.0f) };
-                auto dstRectSize = glm::vec2{ object.value("width", 0.0f),
-                                              object.value("height", 0.0f) };
-                auto rotation = object.value("rotation", 0.0f);
-                // 添加TransformComponent，缩放为设定为1.0f
+                auto position = glm::vec2{ object.value("x", 0.0F), object.value("y", 0.0F) };
+                auto dstRectSize = glm::vec2{ object.value("width", 0.0F),
+                                              object.value("height", 0.0F) };
+                auto rotation = object.value("rotation", 0.0F);
+                // 添加TransformComponent，缩放为设定为1.0F
                 gameObject->addComponent<engine::component::TransformComponent>(position,
-                                                                                glm::vec2{ 1.0f },
+                                                                                glm::vec2{ 1.0F },
                                                                                 rotation);
 
                 // --- 添加碰撞组件和物理组件 ---
@@ -221,9 +221,9 @@ void LevelLoader::loadObjectLayer(const nlohmann::json& layerJson, SceneBase& sc
 
             // 获取构建 Transform 组件所需的信息
             // 1. 获取对象位置
-            auto position = glm::vec2{ object.value("x", 0.0f), object.value("y", 0.0f) };
-            auto dstRectSize = glm::vec2{ object.value("width", 0.0f),
-                                          object.value("height", 0.0f) };
+            auto position = glm::vec2{ object.value("x", 0.0F), object.value("y", 0.0F) };
+            auto dstRectSize = glm::vec2{ object.value("width", 0.0F),
+                                          object.value("height", 0.0F) };
 
             /**  !! 关键的坐标转换 !!
              * 从 Tiled 中获取的坐标是左下角，而 SDL 游戏引擎的坐标是左上角，所以需要转换
@@ -231,7 +231,7 @@ void LevelLoader::loadObjectLayer(const nlohmann::json& layerJson, SceneBase& sc
             position = glm::vec2{ position.x, position.y - dstRectSize.y };
 
             // 2. 获取对象旋转角度
-            auto rotation = object.value("rotation", 0.0f);
+            auto rotation = object.value("rotation", 0.0F);
 
             // 3. 计算缩放比例
             auto srcRect = tileInfo.sprite.sourceRect();
@@ -382,7 +382,7 @@ void LevelLoader::addAnimation(const nlohmann::json& animationJson,
 
         // 1. 获取可能存在的动画帧信息
         auto duration_ms = animeInfo.value("duration", 100);       // 默认持续时间为100毫秒
-        auto duration = static_cast<float>(duration_ms) / 1000.0f; // 转换为秒
+        auto duration = static_cast<float>(duration_ms) / 1000.0F; // 转换为秒
         auto row = animeInfo.value("row", 0);                      // 默认行数为0
         // 2. 帧信息（数组）是必须存在的
         if (!animeInfo.contains("frames") || !animeInfo["frames"].is_array()) {
@@ -450,10 +450,10 @@ std::optional<engine::utils::Rect> LevelLoader::getColliderRect(const nlohmann::
     // 一个图片只支持一个碰撞器。如果有多个，就返回第一个不为空的碰撞器
     for (const auto& object : objectGroup["objects"]) {
         auto rect = engine::utils::Rect{
-            glm::vec2{ object.value("x", 0.0f), object.value("y", 0.0f) },
-            glm::vec2{ object.value("width", 0.0f), object.value("height", 0.0f) }
+            glm::vec2{ object.value("x", 0.0F), object.value("y", 0.0F) },
+            glm::vec2{ object.value("width", 0.0F), object.value("height", 0.0F) }
         };
-        if (rect.size.x > 0.0f && rect.size.y > 0.0f) {
+        if (rect.size.x > 0.0F && rect.size.y > 0.0F) {
             return rect;
         }
     }

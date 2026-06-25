@@ -71,7 +71,7 @@ void TextRenderer::drawUiText(std::string_view text,
     }
 
     // 先渲染一次黑色文字模拟阴影(偏移 2 像素)
-    TTF_SetTextColorFloat(tempTextObject, 0.0f, 0.0f, 0.0f, 1.0f);
+    TTF_SetTextColorFloat(tempTextObject, 0.0F, 0.0F, 0.0F, 1.0F);
     if (TTF_DrawRendererText(tempTextObject, screenPosition.x + 2, screenPosition.y + 2) == false) {
         spdlog::error("drawUiText 绘制临时 TTF_Text 失败: {}", SDL_GetError());
     }
@@ -108,14 +108,14 @@ glm::vec2 TextRenderer::getTextSize(std::string_view text, std::string_view font
     TTF_Font* font{ m_resourceManager->getFont(fontId, fontSize) };
     if (font == nullptr) {
         spdlog::warn("getTextSize 获取字体失败: {} 大小 {}", fontId, fontSize);
-        return glm::vec2(0.0f);
+        return glm::vec2(0.0F);
     }
 
     // 创建临时 TTF_Text 对象
     TTF_Text* tempTextObject{ TTF_CreateText(m_textEngine, font, text.data(), 0) };
     if (tempTextObject == nullptr) {
         spdlog::error("getTextSize 创建临时 TTF_Text 失败: {}", SDL_GetError());
-        return glm::vec2(0.0f);
+        return glm::vec2(0.0F);
     }
 
     // 获取文本尺寸

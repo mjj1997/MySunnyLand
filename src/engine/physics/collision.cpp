@@ -31,25 +31,25 @@ bool collision::checkCollision(const engine::component::ColliderComponent& a,
     // Circle vs Circle: 判断两个圆心距离是否小于两个圆的半径之和
     else if (aCollider->type() == engine::physics::ColliderType::Circle
              && bCollider->type() == engine::physics::ColliderType::Circle) {
-        auto aCenter = aPos + 0.5f * aSize; // 圆心位置
-        auto bCenter = bPos + 0.5f * bSize;
-        auto aRadius = 0.5f * aSize.x; // 圆的半径等于AABB的一半宽度
-        auto bRadius = 0.5f * bSize.x;
+        auto aCenter = aPos + 0.5F * aSize; // 圆心位置
+        auto bCenter = bPos + 0.5F * bSize;
+        auto aRadius = 0.5F * aSize.x; // 圆的半径等于AABB的一半宽度
+        auto bRadius = 0.5F * bSize.x;
         return checkCircleOverlap(aCenter, aRadius, bCenter, bRadius);
     }
     // AABB vs Circle: 判断圆心到AABB的最邻近点是否在圆内
     else if (aCollider->type() == engine::physics::ColliderType::Aabb
              && bCollider->type() == engine::physics::ColliderType::Circle) {
-        auto bCenter = bPos + 0.5f * bSize;
-        auto bRadius = 0.5f * bSize.x;
+        auto bCenter = bPos + 0.5F * bSize;
+        auto bRadius = 0.5F * bSize.x;
         auto nearestPoint = glm::clamp(bCenter, aPos, aPos + aSize); // 计算圆心到AABB的最邻近点
         return checkPointInCircle(nearestPoint, bCenter, bRadius);
     }
     // Circle vs AABB
     else if (aCollider->type() == engine::physics::ColliderType::Circle
              && bCollider->type() == engine::physics::ColliderType::Aabb) {
-        auto aCenter = aPos + 0.5f * aSize;
-        auto aRadius = 0.5f * aSize.x;
+        auto aCenter = aPos + 0.5F * aSize;
+        auto aRadius = 0.5F * aSize.x;
         auto nearestPoint = glm::clamp(aCenter, bPos, bPos + bSize); // 计算圆心到AABB的最邻近点
         return checkPointInCircle(nearestPoint, aCenter, aRadius);
     }

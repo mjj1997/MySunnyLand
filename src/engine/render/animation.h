@@ -70,7 +70,7 @@ public:
 private:
     std::string m_name;                   ///< @brief 动画的名称 (例如, "walk", "idle")。
     std::vector<AnimationFrame> m_frames; ///< @brief 动画帧列表
-    float m_totalDuration{ 0.0f };        ///< @brief 动画的总持续时间（秒）
+    float m_totalDuration{ 0.0F };        ///< @brief 动画的总持续时间（秒）
     bool m_isLoop{ true };                ///< @brief 默认动画是循环的
 };
 

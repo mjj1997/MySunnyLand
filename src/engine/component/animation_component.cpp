@@ -32,12 +32,12 @@ void AnimationComponent::playAnimation(std::string_view name)
     }
 
     m_currentAnimation = it->second.get();
-    m_animationTimer = 0.0f;
+    m_animationTimer = 0.0F;
     m_isPlaying = true;
 
     // 立即将精灵更新到第一帧
     if (m_spriteComponent && !m_currentAnimation->isEmpty()) {
-        const auto& firstFrame = m_currentAnimation->frameAt(0.0f);
+        const auto& firstFrame = m_currentAnimation->frameAt(0.0F);
         m_spriteComponent->setSourceRect(firstFrame.sourceRect);
         spdlog::debug("GameObject '{}' 播放动画 '{}'", m_owner ? m_owner->name() : "未知", name);
     }

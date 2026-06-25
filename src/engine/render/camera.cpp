@@ -23,11 +23,11 @@ void Camera::update(float deltaTime)
 
     glm::vec2 targetPosition{ m_target->position() };
     // 计算想要的相机位置，使目标在视口中心
-    glm::vec2 desiredCameraPosition{ targetPosition - m_viewportSize / 2.0f };
+    glm::vec2 desiredCameraPosition{ targetPosition - m_viewportSize / 2.0F };
 
     // 计算相机当前位置和想要的相机位置之间的距离
     auto distance = glm::distance(m_position, desiredCameraPosition);
-    constexpr float threshold{ 1.0f }; // 距离阈值
+    constexpr float threshold{ 1.0F }; // 距离阈值
     if (distance < threshold) {
         // 如果相机当前位置和想要的相机位置之间的距离小于阈值，直接设置为想要的相机位置
         m_position = desiredCameraPosition;

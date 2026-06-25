@@ -12,7 +12,7 @@ PhysicsComponent::PhysicsComponent(engine::physics::PhysicsEngine* physicsEngine
                                    float mass)
     : m_physicsEngine{ physicsEngine }
     , m_isGravityEnabled{ isGravityEnabled }
-    , m_mass{ mass >= 0.0f ? mass : 1.0f }
+    , m_mass{ mass >= 0.0F ? mass : 1.0F }
 {
     if (!physicsEngine) {
         spdlog::error("PhysicsComponent构造函数中，PhysicsEngine指针不能为nullptr！");

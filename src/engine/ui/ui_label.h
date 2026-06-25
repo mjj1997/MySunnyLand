@@ -36,8 +36,8 @@ public:
                      std::string_view text,
                      std::string_view fontId,
                      int fontSize = 16,
-                     engine::utils::FColor textColor = { 1.0f, 1.0f, 1.0f, 1.0f },
-                     glm::vec2 localPosition = { 0.0f, 0.0f });
+                     engine::utils::FColor textColor = { 1.0F, 1.0F, 1.0F, 1.0F },
+                     glm::vec2 localPosition = { 0.0F, 0.0F });
 
     void render(engine::core::Context& context) override;
 
@@ -59,7 +59,7 @@ private:
     std::string m_text;   ///< @brief 文本内容
     std::string m_fontId; ///< @brief 字体 ID
     int m_fontSize;       ///< @brief 字体大小
-    engine::utils::FColor m_textColor{ 1.0f, 1.0f, 1.0f, 1.0f };
+    engine::utils::FColor m_textColor{ 1.0F, 1.0F, 1.0F, 1.0F };
 
     /* 可添加其他内容，例如边框、底色等 */
 };

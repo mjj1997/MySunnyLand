@@ -26,8 +26,8 @@ public:
      * @param localPosition 初始局部位置
      * @param size 初始大小
      */
-    explicit UiElementBase(glm::vec2 localPosition = { 0.0f, 0.0f },
-                           glm::vec2 size = { 0.0f, 0.0f });
+    explicit UiElementBase(glm::vec2 localPosition = { 0.0F, 0.0F },
+                           glm::vec2 size = { 0.0F, 0.0F });
 
     ///< @brief 虚析构函数，确保派生类正确清理
     virtual ~UiElementBase() = default;

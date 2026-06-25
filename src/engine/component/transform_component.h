@@ -21,9 +21,9 @@ public:
      * @param scale 缩放
      * @param rotation 旋转
      */
-    explicit TransformComponent(glm::vec2 position = { 0.0f, 0.0f },
-                                glm::vec2 scale = { 1.0f, 1.0f },
-                                float rotation = 0.0f)
+    explicit TransformComponent(glm::vec2 position = { 0.0F, 0.0F },
+                                glm::vec2 scale = { 1.0F, 1.0F },
+                                float rotation = 0.0F)
         : m_position{ std::move(position) }
         , m_scale{ std::move(scale) }
         , m_rotation{ rotation }
@@ -52,9 +52,9 @@ protected:
     void update(float deltaTime, engine::core::Context&) override {}
 
 private:
-    glm::vec2 m_position{ 0.0f, 0.0f }; ///< @brief 位置
-    glm::vec2 m_scale{ 1.0f, 1.0f };    ///< @brief 缩放
-    float m_rotation{ 0.0f };           ///< @brief 角度制，单位：度
+    glm::vec2 m_position{ 0.0F, 0.0F }; ///< @brief 位置
+    glm::vec2 m_scale{ 1.0F, 1.0F };    ///< @brief 缩放
+    float m_rotation{ 0.0F };           ///< @brief 角度制，单位：度
 };
 
 } // namespace engine::component

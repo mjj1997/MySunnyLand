@@ -27,8 +27,8 @@ public:
      * @param size 初始大小
      */
     explicit UiInteractiveElementBase(engine::core::Context& context,
-                                      glm::vec2 localPosition = { 0.0f, 0.0f },
-                                      glm::vec2 size = { 0.0f, 0.0f });
+                                      glm::vec2 localPosition = { 0.0F, 0.0F },
+                                      glm::vec2 size = { 0.0F, 0.0F });
 
     ~UiInteractiveElementBase() override = default;
 

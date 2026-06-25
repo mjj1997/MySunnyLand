@@ -29,8 +29,8 @@ void ColliderComponent::updateOffset()
     // 获取碰撞器的最小包围盒(AABB)尺寸
     auto colliderAabbSize{ m_collider->aabbSize() };
     // 如果 AABB 尺寸无效，偏移为 0
-    if (colliderAabbSize.x <= 0.0f || colliderAabbSize.y <= 0.0f) {
-        m_offset = glm::vec2(0.0f);
+    if (colliderAabbSize.x <= 0.0F || colliderAabbSize.y <= 0.0F) {
+        m_offset = glm::vec2(0.0F);
         return;
     }
 
@@ -38,29 +38,29 @@ void ColliderComponent::updateOffset()
     // 计算碰撞器左上角相对于 TransformComponent::m_position 的偏移量
     switch (m_alignment) {
     case engine::utils::Alignment::TopLeft:
-        m_offset = glm::vec2(0.0f) * scaleFactor;
+        m_offset = glm::vec2(0.0F) * scaleFactor;
         break;
     case engine::utils::Alignment::TopCenter:
-        m_offset = glm::vec2{ -colliderAabbSize.x / 2.0f, 0.0f } * scaleFactor;
+        m_offset = glm::vec2{ -colliderAabbSize.x / 2.0F, 0.0F } * scaleFactor;
         break;
     case engine::utils::Alignment::TopRight:
-        m_offset = glm::vec2{ -colliderAabbSize.x, 0.0f } * scaleFactor;
+        m_offset = glm::vec2{ -colliderAabbSize.x, 0.0F } * scaleFactor;
         break;
     case engine::utils::Alignment::CenterLeft:
-        m_offset = glm::vec2{ 0.0f, -colliderAabbSize.y / 2.0f } * scaleFactor;
+        m_offset = glm::vec2{ 0.0F, -colliderAabbSize.y / 2.0F } * scaleFactor;
         break;
     case engine::utils::Alignment::Center:
-        m_offset = glm::vec2{ -colliderAabbSize.x / 2.0f, -colliderAabbSize.y / 2.0f }
+        m_offset = glm::vec2{ -colliderAabbSize.x / 2.0F, -colliderAabbSize.y / 2.0F }
                    * scaleFactor;
         break;
     case engine::utils::Alignment::CenterRight:
-        m_offset = glm::vec2{ -colliderAabbSize.x, -colliderAabbSize.y / 2.0f } * scaleFactor;
+        m_offset = glm::vec2{ -colliderAabbSize.x, -colliderAabbSize.y / 2.0F } * scaleFactor;
         break;
     case engine::utils::Alignment::BottomLeft:
-        m_offset = glm::vec2{ 0.0f, -colliderAabbSize.y } * scaleFactor;
+        m_offset = glm::vec2{ 0.0F, -colliderAabbSize.y } * scaleFactor;
         break;
     case engine::utils::Alignment::BottomCenter:
-        m_offset = glm::vec2{ -colliderAabbSize.x / 2.0f, -colliderAabbSize.y } * scaleFactor;
+        m_offset = glm::vec2{ -colliderAabbSize.x / 2.0F, -colliderAabbSize.y } * scaleFactor;
         break;
     case engine::utils::Alignment::BottomRight:
         m_offset = glm::vec2{ -colliderAabbSize.x, -colliderAabbSize.y } * scaleFactor;
@@ -74,7 +74,7 @@ void ColliderComponent::updateOffset()
 engine::utils::Rect ColliderComponent::worldAabb() const
 {
     if (!m_transformComponent || !m_collider) {
-        return engine::utils::Rect{ glm::vec2(0.0f), glm::vec2(0.0f) };
+        return engine::utils::Rect{ glm::vec2(0.0F), glm::vec2(0.0F) };
     }
 
     // 计算最小包围盒的左上角坐标

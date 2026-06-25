@@ -99,9 +99,9 @@ private:
         m_tileTriggerEvents;
 
     ///< @brief 默认重力值 (像素/秒^2, 相当于 100像素 对应现实 1m)
-    glm::vec2 m_gravity{ 0.0f, 980.0f };
+    glm::vec2 m_gravity{ 0.0F, 980.0F };
     ///< @brief 最大速度 (像素/秒)
-    float m_maxSpeed{ 500.0f };
+    float m_maxSpeed{ 500.0F };
     ///< @brief 世界边界，用于限制物体移动范围
     std::optional<engine::utils::Rect> m_worldBounds{ std::nullopt };
 };

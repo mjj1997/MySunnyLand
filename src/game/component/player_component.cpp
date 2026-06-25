@@ -121,14 +121,14 @@ void PlayerComponent::update(float deltaTime, engine::core::Context& context)
     if (!m_physicsComponent->isCollidedBelow()) {
         m_coyoteTimer += deltaTime;
     } else { // 一旦落地，重置土狼时间
-        m_coyoteTimer = 0.0f;
+        m_coyoteTimer = 0.0F;
     }
 
     // 如果处于无敌状态，就进行闪烁
     if (m_healthComponent->isInvincible()) {
         m_flashTimer += deltaTime;
         if (m_flashTimer >= 2 * m_flashInterval) {
-            m_flashTimer = 0.0f;
+            m_flashTimer = 0.0F;
         }
         // 一半时间可见，一半时间不可见
         if (m_flashTimer < m_flashInterval) {

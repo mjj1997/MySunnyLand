@@ -98,8 +98,8 @@ private:
     engine::utils::Alignment m_alignment{ engine::utils::Alignment::None }; ///< @brief 对齐方式
     bool m_isHidden{ false }; ///< @brief 是否隐藏（不渲染）
 
-    glm::vec2 m_spriteSize{ 0.0f, 0.0f }; ///< @brief 精灵尺寸
-    glm::vec2 m_offset{ 0.0f, 0.0f };     ///< @brief 偏移量
+    glm::vec2 m_spriteSize{ 0.0F, 0.0F }; ///< @brief 精灵尺寸
+    glm::vec2 m_offset{ 0.0F, 0.0F };     ///< @brief 偏移量
 };
 
 } // namespace engine::component

@@ -33,24 +33,24 @@ std::unique_ptr<PlayerStateBase> FallState::handleInput(engine::core::Context& c
     // 下落状态下可以左右移动
     if (inputManager.isActionDown("moveLeft")) {
         // 如果当前速度是向右的，则先减速到0 (增强操控手感)
-        if (physicsComponent->velocity().x > 0.0f) {
-            glm::vec2 newVelocity{ 0.0f, physicsComponent->velocity().y };
+        if (physicsComponent->velocity().x > 0.0F) {
+            glm::vec2 newVelocity{ 0.0F, physicsComponent->velocity().y };
             physicsComponent->setVelocity(newVelocity);
         }
 
         // 添加向左的水平力
-        glm::vec2 moveLeftForce{ -m_playerComponent->moveForce(), 0.0f };
+        glm::vec2 moveLeftForce{ -m_playerComponent->moveForce(), 0.0F };
         physicsComponent->addForce(moveLeftForce);
         spriteComponent->setFlipped(true); // 向左移动时翻转
     } else if (inputManager.isActionDown("moveRight")) {
         // 如果当前速度是向左的，则先减速到0
-        if (physicsComponent->velocity().x < 0.0f) {
-            glm::vec2 newVelocity{ 0.0f, physicsComponent->velocity().y };
+        if (physicsComponent->velocity().x < 0.0F) {
+            glm::vec2 newVelocity{ 0.0F, physicsComponent->velocity().y };
             physicsComponent->setVelocity(newVelocity);
         }
 
         // 添加向右的水平力
-        glm::vec2 moveRightForce{ m_playerComponent->moveForce(), 0.0f };
+        glm::vec2 moveRightForce{ m_playerComponent->moveForce(), 0.0F };
         physicsComponent->addForce(moveRightForce);
         spriteComponent->setFlipped(false); // 向右移动时不翻转
     }
@@ -69,7 +69,7 @@ std::unique_ptr<PlayerStateBase> FallState::update(float deltaTime, engine::core
 
     // 如果下方有碰撞，就根据水平速度来决定切换到 IdleState 或 WalkState
     if (physicsComponent->isCollidedBelow()) {
-        if (glm::abs(physicsComponent->velocity().x) < 1.0f) {
+        if (glm::abs(physicsComponent->velocity().x) < 1.0F) {
             return std::make_unique<IdleState>(m_playerComponent);
         } else {
             return std::make_unique<WalkState>(m_playerComponent);

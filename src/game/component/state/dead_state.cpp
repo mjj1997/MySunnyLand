@@ -18,7 +18,7 @@ void DeadState::enter()
 
     // 造成向上击退效果
     auto physicsComponent = m_playerComponent->physicsComponent();
-    physicsComponent->setVelocity(glm::vec2{ 0.0f, -200.0f });
+    physicsComponent->setVelocity(glm::vec2{ 0.0F, -200.0F });
 
     // 禁用碰撞检测，形成自动掉出屏幕的效果
     auto colliderComponent = m_playerComponent->owner()

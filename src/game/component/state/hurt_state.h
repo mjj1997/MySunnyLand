@@ -21,7 +21,7 @@ protected:
     void exit() override;
 
 private:
-    float m_stunnedTimer{ 0.0f }; ///< @brief 硬直计时器，单位为秒
+    float m_stunnedTimer{ 0.0F }; ///< @brief 硬直计时器，单位为秒
 };
 
 } // namespace game::component::state

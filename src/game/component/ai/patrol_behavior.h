@@ -20,16 +20,16 @@ public:
      * @param maxX 巡逻范围的最大 x 坐标。
      * @param speed 移动速度。
      */
-    PatrolBehavior(float minX, float maxX, float speed = 50.0f);
+    PatrolBehavior(float minX, float maxX, float speed = 50.0F);
 
 protected:
     void enter(AiComponent& aiComponent) override;
     void update(float deltaTime, AiComponent& aiComponent) override;
 
 private:
-    float m_patrolMinX{ 0.0f }; ///< @brief 巡逻范围的左边界
-    float m_patrolMaxX{ 0.0f }; ///< @brief 巡逻范围的右边界
-    float m_moveSpeed{ 50.0f }; ///< @brief 移动速度 (像素/秒)
+    float m_patrolMinX{ 0.0F }; ///< @brief 巡逻范围的左边界
+    float m_patrolMaxX{ 0.0F }; ///< @brief 巡逻范围的右边界
+    float m_moveSpeed{ 50.0F }; ///< @brief 移动速度 (像素/秒)
 
     bool m_movingRight{ false }; ///< @brief 当前是否向右移动
 };

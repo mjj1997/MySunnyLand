@@ -12,7 +12,7 @@ Animation::Animation(std::string_view name, bool isLoop)
 
 void Animation::addFrame(SDL_FRect sourceRect, float duration)
 {
-    if (duration <= 0.0f) {
+    if (duration <= 0.0F) {
         spdlog::warn("尝试向动画 '{}' 添加无效持续时间的帧", m_name);
         return;
     }
@@ -29,7 +29,7 @@ const AnimationFrame& Animation::frameAt(float time) const
     }
 
     float currentTime{ time };
-    if (m_isLoop && m_totalDuration > 0.0f) {
+    if (m_isLoop && m_totalDuration > 0.0F) {
         // 对循环动画使用模运算获取有效时间
         currentTime = glm::mod(time, m_totalDuration);
     } else {
@@ -40,7 +40,7 @@ const AnimationFrame& Animation::frameAt(float time) const
     }
 
     // 遍历帧以找到正确的帧
-    float accumulatedTime{ 0.0f };
+    float accumulatedTime{ 0.0F };
     for (const auto& frame : m_frames) {
         accumulatedTime += frame.duration;
         if (currentTime < accumulatedTime) {

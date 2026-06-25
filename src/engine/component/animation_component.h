@@ -66,7 +66,7 @@ private:
     SpriteComponent* m_spriteComponent{ nullptr }; ///< @brief 指向必需的 SpriteComponent 的指针
 
     engine::render::Animation* m_currentAnimation{ nullptr }; ///< @brief 指向当前播放动画的原始指针
-    float m_animationTimer{ 0.0f };                           ///< @brief 动画播放中的计时器
+    float m_animationTimer{ 0.0F };                           ///< @brief 动画播放中的计时器
 
     bool m_isPlaying{ false };        ///< @brief 当前是否有动画正在播放
     bool m_isOneShotRemoval{ false }; ///< @brief 是否在动画结束后删除整个GameObject

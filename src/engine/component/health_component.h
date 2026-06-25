@@ -17,7 +17,7 @@ public:
      * @param maxHealth 最大生命值，默认为 1
      * @param invincibilityDuration 无敌状态持续时间，默认为 2.0 秒
      */
-    explicit HealthComponent(int maxHealth = 1, float invincibilityDuration = 2.0f);
+    explicit HealthComponent(int maxHealth = 1, float invincibilityDuration = 2.0F);
     ~HealthComponent() override = default;
 
     // 禁止拷贝和移动
@@ -61,9 +61,9 @@ private:
     int m_maxHealth{ 1 };                  ///< @brief 最大生命值
     int m_currentHealth{ 1 };              ///< @brief 当前生命值
     bool m_isInvincible{ false };          ///< @brief 是否处于无敌状态
-    float m_invincibilityDuration{ 2.0f }; ///< @brief 受伤后无敌的总时长（秒）
+    float m_invincibilityDuration{ 2.0F }; ///< @brief 受伤后无敌的总时长（秒）
 
-    float m_invincibilityTimer{ 0.0f }; ///< @brief 无敌时间计时器（秒）
+    float m_invincibilityTimer{ 0.0F }; ///< @brief 无敌时间计时器（秒）
 };
 
 } // namespace engine::component

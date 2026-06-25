@@ -77,7 +77,7 @@ private:
 
     std::unique_ptr<engine::physics::ColliderBase> m_collider; ///< @brief 拥有的碰撞器对象。
     ///< @brief 碰撞器(最小包围盒的)左上角相对于变换原点的偏移量。
-    glm::vec2 m_offset{ 0.0f, 0.0f };
+    glm::vec2 m_offset{ 0.0F, 0.0F };
     engine::utils::Alignment m_alignment{ engine::utils::Alignment::None }; ///< @brief 对齐方式。
 
     bool m_isTrigger{ false }; ///< @brief 是否为触发器 (仅检测碰撞，不产生物理响应)

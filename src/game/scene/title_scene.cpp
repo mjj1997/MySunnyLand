@@ -111,7 +111,7 @@ bool TitleScene::initUi()
     const int buttonNums{ 4 };
 
     // 计算面板总宽度
-    const float panelWidth{ buttonNums * buttonWidth + (buttonNums - 1) * buttonSpacing };
+    const float panelWidth{ (buttonNums * buttonWidth) + ((buttonNums - 1) * buttonSpacing) };
     const float panelHeight{ buttonHeight };
 
     // 计算面板位置使其居中

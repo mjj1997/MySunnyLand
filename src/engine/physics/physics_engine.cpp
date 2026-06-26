@@ -197,18 +197,18 @@ void PhysicsEngine::resolveTileCollisions(engine::component::PhysicsComponent* p
             if (tileTypeTopRight == engine::component::TileType::Solid
                 || tileTypeBottomRight == engine::component::TileType::Solid) {
                 // 撞墙了！速度归零，x方向移动到贴着墙的位置
-                newObjectPosition.x = tileXRight * tileSize.x - objectSize.x;
+                newObjectPosition.x = (tileXRight * tileSize.x) - objectSize.x;
                 physicsComponent->setVelocity({ 0.0F, physicsComponent->velocity().y });
                 physicsComponent->setCollidedRight(true);
             } else {
                 // 处理右下角与斜坡的碰撞，根据瓦片中的斜坡高度调整物体位置
-                auto widthRight = newObjectPosition.x + objectSize.x - tileXRight * tileSize.x;
+                auto widthRight = newObjectPosition.x + objectSize.x - (tileXRight * tileSize.x);
                 auto heightRight = getTileHeightAtWidth(widthRight, tileTypeBottomRight, tileSize);
                 if (heightRight > 0.0F) {
                     // 如果有碰撞（右下角的世界 Y 坐标 > 斜坡高度的 Y 坐标），就让物体贴着斜坡表面
                     if (newObjectPosition.y + objectSize.y
-                        > (tileYBottom + 1) * tileSize.y - heightRight) {
-                        newObjectPosition.y = (tileYBottom + 1) * tileSize.y - heightRight
+                        > ((tileYBottom + 1) * tileSize.y) - heightRight) {
+                        newObjectPosition.y = ((tileYBottom + 1) * tileSize.y) - heightRight
                                               - objectSize.y;
                         physicsComponent->setCollidedBelow(true);
                     }
@@ -238,13 +238,13 @@ void PhysicsEngine::resolveTileCollisions(engine::component::PhysicsComponent* p
                 physicsComponent->setCollidedLeft(true);
             } else {
                 // 处理左下角与斜坡的碰撞
-                auto widthLeft = newObjectPosition.x - tileXLeft * tileSize.x;
+                auto widthLeft = newObjectPosition.x - (tileXLeft * tileSize.x);
                 auto heightLeft = getTileHeightAtWidth(widthLeft, tileTypeBottomLeft, tileSize);
                 if (heightLeft > 0.0F) {
                     // 如果有碰撞（左下角的世界 Y 坐标 > 斜坡高度的 Y 坐标），就让物体贴着斜坡表面
                     if (newObjectPosition.y + objectSize.y
-                        > (tileYBottom + 1) * tileSize.y - heightLeft) {
-                        newObjectPosition.y = (tileYBottom + 1) * tileSize.y - heightLeft
+                        > ((tileYBottom + 1) * tileSize.y) - heightLeft) {
+                        newObjectPosition.y = ((tileYBottom + 1) * tileSize.y) - heightLeft
                                               - objectSize.y;
                         physicsComponent->setCollidedBelow(true);
                     }
@@ -273,7 +273,7 @@ void PhysicsEngine::resolveTileCollisions(engine::component::PhysicsComponent* p
                 || tileTypeBottomLeft == engine::component::TileType::Unisolid
                 || tileTypeBottomRight == engine::component::TileType::Unisolid) {
                 // 到达地面！速度归零，y方向移动到贴着地面的位置
-                newObjectPosition.y = tileYBottom * tileSize.y - objectSize.y;
+                newObjectPosition.y = (tileYBottom * tileSize.y) - objectSize.y;
                 physicsComponent->setVelocity({ physicsComponent->velocity().x, 0.0F });
                 physicsComponent->setCollidedBelow(true);
             } else if (tileTypeBottomLeft == engine::component::TileType::Ladder
@@ -291,7 +291,7 @@ void PhysicsEngine::resolveTileCollisions(engine::component::PhysicsComponent* p
                     // 通过是否使用重力来区分是否处于攀爬状态。
                     if (physicsComponent->isGravityEnabled()) { // 非攀爬状态
                         // 让物体贴着梯子顶层位置(与 Solid 情况相同)
-                        newObjectPosition.y = tileYBottom * tileSize.y - objectSize.y;
+                        newObjectPosition.y = (tileYBottom * tileSize.y) - objectSize.y;
                         physicsComponent->setVelocity({ physicsComponent->velocity().x, 0.0F });
                         physicsComponent->setCollidedBelow(true);
                         // 设置在梯子顶层标志
@@ -301,16 +301,16 @@ void PhysicsEngine::resolveTileCollisions(engine::component::PhysicsComponent* p
                 }
             } else {
                 // 处理左下角、右下角与斜坡的碰撞
-                auto widthLeft = objectPosition.x - tileXLeft * tileSize.x;
+                auto widthLeft = objectPosition.x - (tileXLeft * tileSize.x);
                 auto heightLeft = getTileHeightAtWidth(widthLeft, tileTypeBottomLeft, tileSize);
-                auto widthRight = objectPosition.x + objectSize.x - tileXRight * tileSize.x;
+                auto widthRight = objectPosition.x + objectSize.x - (tileXRight * tileSize.x);
                 auto heightRight = getTileHeightAtWidth(widthRight, tileTypeBottomRight, tileSize);
                 auto height = glm::max(heightLeft, heightRight); // 取左右下角的最高高度进行检测
                 if (height > 0.0F) {                             // 说明至少有一个角点处于斜坡瓦片上
                     // 如果有碰撞（角点的世界 Y 坐标 > 斜坡高度的 Y 坐标），就让物体贴着斜坡表面
                     if (newObjectPosition.y + objectSize.y
-                        > (tileYBottom + 1) * tileSize.y - height) {
-                        newObjectPosition.y = (tileYBottom + 1) * tileSize.y - height
+                        > ((tileYBottom + 1) * tileSize.y) - height) {
+                        newObjectPosition.y = ((tileYBottom + 1) * tileSize.y) - height
                                               - objectSize.y;
                         // 到达地面！速度归零，y方向移动到贴着地面的位置
                         physicsComponent->setVelocity({ physicsComponent->velocity().x, 0.0F });
@@ -462,13 +462,13 @@ float PhysicsEngine::getTileHeightAtWidth(float width,
     case engine::component::TileType::Slope_0_2: // 左0   右1/2
         return ratio * tileSize.y * 0.5F;
     case engine::component::TileType::Slope_2_1: // 左1/2 右1
-        return ratio * tileSize.y * 0.5F + tileSize.y * 0.5F;
+        return (ratio * tileSize.y * 0.5F) + (tileSize.y * 0.5F);
     case engine::component::TileType::Slope_1_0: // 左1   右0
         return (1.0F - ratio) * tileSize.y;
     case engine::component::TileType::Slope_2_0: // 左1/2 右0
         return (1.0F - ratio) * tileSize.y * 0.5F;
     case engine::component::TileType::Slope_1_2: // 左1   右1/2
-        return (1.0F - ratio) * tileSize.y * 0.5F + tileSize.y * 0.5F;
+        return ((1.0F - ratio) * tileSize.y * 0.5F) + (tileSize.y * 0.5F);
     default:
         return 0.0F; // 默认返回0，表示没有斜坡
     }

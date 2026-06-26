@@ -123,7 +123,7 @@ bool EndScene::initUi()
     // --- 创建 2 个按钮 --- (2个按钮，设定好大小、间距)
     const glm::vec2 buttonSize{ 120.0F, 40.0F };
     const float buttonSpacing{ 20.0F };
-    const float totalButtonWidth{ buttonSize.x * 2 + buttonSpacing };
+    const float totalButtonWidth{ (buttonSize.x * 2) + buttonSpacing };
 
     // 按钮放在右下角，与边缘间隔 30 像素
     float buttonX{ windowSize.x - totalButtonWidth - 30.0F };

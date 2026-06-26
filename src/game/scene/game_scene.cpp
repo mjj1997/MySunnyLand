@@ -529,7 +529,7 @@ void GameScene::createHealthUi()
     const glm::vec2 iconSize{ 20.0F, 18.0F };
     const float spacing{ 5.0F };
     for (int i{ 0 }; i < m_gameSessionData->maxHealth(); ++i) {
-        const glm::vec2 iconPos{ iconStartPos.x + i * (iconSize.x + spacing), iconStartPos.y };
+        const glm::vec2 iconPos{ iconStartPos.x + (i * (iconSize.x + spacing)), iconStartPos.y };
         // 创建背景图标
         auto bgIcon = std::make_unique<engine::ui::UiImage>("assets/textures/UI/Heart-bg.png",
                                                             iconPos,
@@ -585,7 +585,7 @@ void GameScene::updateHealthWithUi()
      */
     for (int i{ 0 }; i < maxHealth; ++i) {
         // 前景图标的索引是 i * 2 + 1（奇数位置）
-        m_healthPanel->children().at(i * 2 + 1)->setVisible(i < currentHealth);
+        m_healthPanel->children().at((i * 2) + 1)->setVisible(i < currentHealth);
     }
 }
 

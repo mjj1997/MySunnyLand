@@ -68,8 +68,8 @@ private:
     void resolveTileCollisions(engine::component::PhysicsComponent* physicsComponent,
                                float deltaTime);
     /// @brief 处理可移动物体与 Solid 物体的碰撞。
-    void resolveSolidCollisions(engine::object::GameObject* movingObject,
-                                engine::object::GameObject* solidObject);
+    static void resolveSolidCollisions(engine::object::GameObject* movingObject,
+                                       engine::object::GameObject* solidObject);
     ///< @brief 应用世界边界，限制物体移动范围
     void applyWorldBounds(engine::component::PhysicsComponent* physicsComponent);
 
@@ -80,7 +80,9 @@ private:
      * @param tileSize 瓦片尺寸。
      * @return 瓦片上对应高度（从瓦片下侧起算）。
      */
-    float getTileHeightAtWidth(float width, engine::component::TileType type, glm::vec2 tileSize);
+    static float getTileHeightAtWidth(float width,
+                                      engine::component::TileType type,
+                                      glm::vec2 tileSize);
 
     /**
      * @brief 检测所有游戏对象与瓦片层的触发器类型瓦片碰撞，并记录触发事件。(位移处理完毕后再调用)

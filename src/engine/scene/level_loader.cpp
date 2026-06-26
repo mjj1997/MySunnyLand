@@ -51,7 +51,8 @@ bool LevelLoader::loadLevel(std::string_view mapPath, SceneBase& scene)
     // 4. 加载瓦片集数据
     if (mapJson.contains("tilesets") && mapJson.at("tilesets").is_array()) {
         for (const auto& tileset : mapJson.at("tilesets")) {
-            auto tilesetPath = resolvePath(tileset.at("source").get<std::string>(), m_mapPath);
+            auto tilesetPath = LevelLoader::resolvePath(tileset.at("source").get<std::string>(),
+                                                        m_mapPath);
             auto firstGid = tileset.at("firstgid").get<int>();
             loadTileset(tilesetPath, firstGid);
         }
@@ -96,7 +97,7 @@ void LevelLoader::loadImageLayer(const nlohmann::json& layerJson, SceneBase& sce
         spdlog::error("图层 '{}' 缺少 'image' 属性。", layerJson.value("name", "Unnamed"));
         return;
     }
-    auto textureId = resolvePath(imagePath, m_mapPath);
+    auto textureId = LevelLoader::resolvePath(imagePath, m_mapPath);
 
     // 获取图层偏移量（json中没有则代表未设置，给默认值即可）
     const glm::vec2 offset{ glm::vec2{ layerJson.value("offsetx", 0.0F),
@@ -273,7 +274,7 @@ void LevelLoader::loadObjectLayer(const nlohmann::json& layerJson, SceneBase& sc
                 gameObject->setTag("solid");
             }
             // 如果非 Solid 类型，检查自定义碰撞盒是否存在
-            else if (auto rect = getColliderRect(tileJson); rect) {
+            else if (auto rect = LevelLoader::getColliderRect(tileJson); rect) {
                 // 如果有，添加碰撞器组件
                 auto collider = std::make_unique<engine::physics::AabbCollider>(rect->size);
                 auto* colliderComponent = gameObject
@@ -327,7 +328,7 @@ void LevelLoader::loadObjectLayer(const nlohmann::json& layerJson, SceneBase& sc
                 auto* animationComponent
                     = gameObject->addComponent<engine::component::AnimationComponent>();
                 // 添加动画到组件
-                addAnimation(animationJson, animationComponent, srcRectSize);
+                LevelLoader::addAnimation(animationJson, animationComponent, srcRectSize);
             }
 
             // 获取音效信息并设置
@@ -345,7 +346,7 @@ void LevelLoader::loadObjectLayer(const nlohmann::json& layerJson, SceneBase& sc
                 auto* audioComponent = gameObject->addComponent<engine::component::AudioComponent>(
                     &scene.context().audioPlayer(), &scene.context().camera());
                 // 添加音效到组件
-                addSound(soundJson, audioComponent);
+                LevelLoader::addSound(soundJson, audioComponent);
             }
 
             // 获取生命值信息并设置
@@ -515,7 +516,7 @@ engine::component::TileType LevelLoader::getTileTypeById(const nlohmann::json& t
         });
 
         if (iter != tiles.end()) {
-            return getTileType(*iter);
+            return LevelLoader::getTileType(*iter);
         }
     }
 
@@ -550,7 +551,8 @@ engine::component::TileInfo LevelLoader::getTileInfoByGid(int gid)
     // 图块集分为两种情况，需要分别考虑
     if (tilesetJson.contains("image")) { // 这是单一图片的情况
         // 获取图片路径
-        auto textureId = resolvePath(tilesetJson.at("image").get<std::string>(), filePath);
+        auto textureId = LevelLoader::resolvePath(tilesetJson.at("image").get<std::string>(),
+                                                  filePath);
         // 计算在图片网格中的瓦片坐标
         auto coordinateX = localId % tilesetJson.at("columns").get<int>();
         auto coordinateY = localId / tilesetJson.at("columns").get<int>();
@@ -562,7 +564,7 @@ engine::component::TileInfo LevelLoader::getTileInfoByGid(int gid)
         // 创建瓦片精灵
         const engine::render::Sprite sprite{ textureId, srcRect };
         // 获取瓦片类型
-        auto tileType = getTileTypeById(tilesetJson, localId);
+        auto tileType = LevelLoader::getTileTypeById(tilesetJson, localId);
         // 返回瓦片信息
         return engine::component::TileInfo{ sprite, tileType };
     } else { // 这是多图片的情况
@@ -586,7 +588,8 @@ engine::component::TileInfo LevelLoader::getTileInfoByGid(int gid)
 
                 // --- 接下来根据必要信息创建并返回 TileInfo ---
                 // 获取图片路径
-                auto textureId = resolvePath(tile.at("image").get<std::string>(), filePath);
+                auto textureId = LevelLoader::resolvePath(tile.at("image").get<std::string>(),
+                                                          filePath);
                 // 先确认图片尺寸
                 auto imageWidth = tile.value("imagewidth", 0);
                 auto imageHeight = tile.value("imageheight", 0);
@@ -601,7 +604,7 @@ engine::component::TileInfo LevelLoader::getTileInfoByGid(int gid)
                 // 创建瓦片精灵
                 const engine::render::Sprite sprite{ textureId, srcRect };
                 // 获取瓦片类型
-                auto tileType = getTileType(tile);
+                auto tileType = LevelLoader::getTileType(tile);
                 // 返回瓦片信息
                 return engine::component::TileInfo{ sprite, tileType };
             }

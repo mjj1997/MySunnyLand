@@ -125,9 +125,9 @@ void PhysicsEngine::checkObjectCollisions()
             if (collision::checkCollision(*colliderComponentA, *colliderComponentB)) {
                 // 如果是可移动物体与 Solid 物体碰撞，则直接处理位置变化，不用记录碰撞对
                 if (gameObjectA->tag() != "solid" && gameObjectB->tag() == "solid") {
-                    resolveSolidCollisions(gameObjectA, gameObjectB);
+                    PhysicsEngine::resolveSolidCollisions(gameObjectA, gameObjectB);
                 } else if (gameObjectA->tag() == "solid" && gameObjectB->tag() != "solid") {
-                    resolveSolidCollisions(gameObjectB, gameObjectA);
+                    PhysicsEngine::resolveSolidCollisions(gameObjectB, gameObjectA);
                 } else {
                     // 记录碰撞对
                     m_collisionPairs.emplace_back(gameObjectA, gameObjectB);
@@ -203,7 +203,9 @@ void PhysicsEngine::resolveTileCollisions(engine::component::PhysicsComponent* p
             } else {
                 // 处理右下角与斜坡的碰撞，根据瓦片中的斜坡高度调整物体位置
                 auto widthRight = newObjectPosition.x + objectSize.x - (tileXRight * tileSize.x);
-                auto heightRight = getTileHeightAtWidth(widthRight, tileTypeBottomRight, tileSize);
+                auto heightRight = PhysicsEngine::getTileHeightAtWidth(widthRight,
+                                                                       tileTypeBottomRight,
+                                                                       tileSize);
                 if (heightRight > 0.0F) {
                     // 如果有碰撞（右下角的世界 Y 坐标 > 斜坡高度的 Y 坐标），就让物体贴着斜坡表面
                     if (newObjectPosition.y + objectSize.y
@@ -239,7 +241,9 @@ void PhysicsEngine::resolveTileCollisions(engine::component::PhysicsComponent* p
             } else {
                 // 处理左下角与斜坡的碰撞
                 auto widthLeft = newObjectPosition.x - (tileXLeft * tileSize.x);
-                auto heightLeft = getTileHeightAtWidth(widthLeft, tileTypeBottomLeft, tileSize);
+                auto heightLeft = PhysicsEngine::getTileHeightAtWidth(widthLeft,
+                                                                      tileTypeBottomLeft,
+                                                                      tileSize);
                 if (heightLeft > 0.0F) {
                     // 如果有碰撞（左下角的世界 Y 坐标 > 斜坡高度的 Y 坐标），就让物体贴着斜坡表面
                     if (newObjectPosition.y + objectSize.y
@@ -302,9 +306,13 @@ void PhysicsEngine::resolveTileCollisions(engine::component::PhysicsComponent* p
             } else {
                 // 处理左下角、右下角与斜坡的碰撞
                 auto widthLeft = objectPosition.x - (tileXLeft * tileSize.x);
-                auto heightLeft = getTileHeightAtWidth(widthLeft, tileTypeBottomLeft, tileSize);
+                auto heightLeft = PhysicsEngine::getTileHeightAtWidth(widthLeft,
+                                                                      tileTypeBottomLeft,
+                                                                      tileSize);
                 auto widthRight = objectPosition.x + objectSize.x - (tileXRight * tileSize.x);
-                auto heightRight = getTileHeightAtWidth(widthRight, tileTypeBottomRight, tileSize);
+                auto heightRight = PhysicsEngine::getTileHeightAtWidth(widthRight,
+                                                                       tileTypeBottomRight,
+                                                                       tileSize);
                 auto height = glm::max(heightLeft, heightRight); // 取左右下角的最高高度进行检测
                 if (height > 0.0F) {                             // 说明至少有一个角点处于斜坡瓦片上
                     // 如果有碰撞（角点的世界 Y 坐标 > 斜坡高度的 Y 坐标），就让物体贴着斜坡表面

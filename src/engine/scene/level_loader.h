@@ -47,17 +47,17 @@ private:
      * @param animationComponent 动画组件指针（动画添加到此组件）
      * @param spriteSize 每一帧动画的尺寸
      */
-    void addAnimation(const nlohmann::json& animationJson,
-                      engine::component::AnimationComponent* animationComponent,
-                      const glm::vec2& spriteSize);
+    static void addAnimation(const nlohmann::json& animationJson,
+                             engine::component::AnimationComponent* animationComponent,
+                             const glm::vec2& spriteSize);
 
     /**
      * @brief 添加音效到指定的 AudioComponent。
      * @param soundJson 音效 JSON 数据（自定义）
      * @param audioComponent 音效组件指针（音效添加到此组件）
      */
-    void addSound(const nlohmann::json& soundJson,
-                  engine::component::AudioComponent* audioComponent);
+    static void addSound(const nlohmann::json& soundJson,
+                         engine::component::AudioComponent* audioComponent);
 
     /**
      * @brief 获取瓦片属性
@@ -89,14 +89,14 @@ private:
      * @param tileJson 瓦片json数据
      * @return 碰撞器矩形，如果碰撞器不存在则返回 std::nullopt
      */
-    std::optional<engine::utils::Rect> getColliderRect(const nlohmann::json& tileJson);
+    static std::optional<engine::utils::Rect> getColliderRect(const nlohmann::json& tileJson);
 
     /**
      * @brief 根据瓦片json对象获取瓦片类型
      * @param tileJson 瓦片json数据
      * @return 瓦片类型
      */
-    engine::component::TileType getTileType(const nlohmann::json& tileJson);
+    static engine::component::TileType getTileType(const nlohmann::json& tileJson);
 
     /**
      * @brief 根据（单一图片）图块集中的id获取瓦片类型
@@ -104,7 +104,8 @@ private:
      * @param localId 图块集中的id
      * @return 瓦片类型
      */
-    engine::component::TileType getTileTypeById(const nlohmann::json& tilesetJson, int localId);
+    static engine::component::TileType getTileTypeById(const nlohmann::json& tilesetJson,
+                                                       int localId);
 
     /**
      * @brief 根据全局 ID 获取瓦片信息。
@@ -136,7 +137,7 @@ private:
      * @param filePath 文件路径
      * @return std::string 解析后的完整路径。
      */
-    std::string resolvePath(std::string_view relativePath, std::string_view filePath);
+    static std::string resolvePath(std::string_view relativePath, std::string_view filePath);
 
     ///< @brief 地图路径（拼接路径时需要）
     std::string m_mapPath;

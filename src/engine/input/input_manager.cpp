@@ -108,9 +108,9 @@ void InputManager::initMappings(const engine::core::Configurator* config)
         spdlog::trace("映射动作: {}", action);
         for (std::string_view keyName : keyNames) {
             // 尝试根据按键名称获取scancode
-            SDL_Scancode scancode{ scancodeFromString(keyName) };
+            SDL_Scancode scancode{ InputManager::scancodeFromString(keyName) };
             // 尝试根据按键名称获取鼠标按钮
-            Uint32 mouseButton{ mouseButtonUint32FromString(keyName) };
+            Uint32 mouseButton{ InputManager::mouseButtonUint32FromString(keyName) };
             // 未来可添加其它输入类型 ...
 
             if (scancode != SDL_SCANCODE_UNKNOWN) {

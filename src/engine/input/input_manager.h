@@ -57,9 +57,9 @@ private:
     void processEvent(const SDL_Event& event);
 
     ///< @brief 将字符串键名转换为 SDL_Scancode
-    SDL_Scancode scancodeFromString(std::string_view keyName);
+    static SDL_Scancode scancodeFromString(std::string_view keyName);
     ///< @brief 将字符串按钮名转换为 SDL_Button
-    Uint32 mouseButtonUint32FromString(std::string_view buttonName);
+    static Uint32 mouseButtonUint32FromString(std::string_view buttonName);
     ///< @brief 辅助更新动作状态
     void updateActionState(std::string_view action, bool isInputActive, bool isRepeatEvent);
 

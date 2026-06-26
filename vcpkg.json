@@ -4,10 +4,15 @@
     "nlohmann-json",
     {
       "name": "sdl3",
+      "platform": "!linux"
+    },
+    {
+      "name": "sdl3",
       "default-features":false,
       "features": [
         "wayland"
-      ]
+      ],
+      "platform": "linux"
     },
     {
       "name": "sdl3-image",

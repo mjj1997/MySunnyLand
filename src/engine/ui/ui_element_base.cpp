@@ -18,7 +18,7 @@ bool UiElementBase::handleInput(engine::core::Context& context)
 
     // 遍历子元素，处理输入
     for (auto& child : m_children) {
-        if (child && child->shouldRemove() == false) {
+        if (child && !child->shouldRemove()) {
             if (child->handleInput(context)) {
                 return true;
             }
@@ -38,7 +38,7 @@ void UiElementBase::update(float deltaTime, engine::core::Context& context)
 
     // 遍历子元素，更新。如果子元素应该移除，直接删除。
     for (auto iter = m_children.begin(); iter != m_children.end();) {
-        if (*iter && (*iter)->shouldRemove() == false) {
+        if (*iter && !(*iter)->shouldRemove()) {
             (*iter)->update(deltaTime, context);
             ++iter;
         } else {

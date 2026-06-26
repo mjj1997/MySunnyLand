@@ -65,7 +65,7 @@ std::unique_ptr<PlayerStateBase> ClimbState::update(float /*deltaTime*/,
     }
 
     // 如果离开梯子区域，切换到 Fall 状态（能走到这里，说明非着地状态）
-    if (physicsComponent->isCollidedLadder() == false) {
+    if (!physicsComponent->isCollidedLadder()) {
         return std::make_unique<FallState>(m_playerComponent);
     }
 

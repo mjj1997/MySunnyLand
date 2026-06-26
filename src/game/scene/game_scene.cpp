@@ -397,12 +397,12 @@ void GameScene::handlePlayerVsItemCollision(engine::object::GameObject* /*player
 void GameScene::handlePlayerDamage(int damage)
 {
     auto* playerComponent = m_player->getComponent<game::component::PlayerComponent>();
-    if (playerComponent->takeDamage(damage) == false) {
+    if (!playerComponent->takeDamage(damage)) {
         // 没有受伤，直接返回
         return;
     }
 
-    if (playerComponent->isAlive() == false) {
+    if (!playerComponent->isAlive()) {
         spdlog::info("玩家 '{}' 死亡", m_player->name());
         // TODO: 可能的死亡逻辑处理
     }

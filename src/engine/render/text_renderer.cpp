@@ -17,7 +17,7 @@ TextRenderer::TextRenderer(SDL_Renderer* sdlRenderer,
     }
 
     // 初始化 SDL_ttf
-    if (TTF_WasInit() == 0 && TTF_Init() == false) {
+    if (TTF_WasInit() == 0 && !TTF_Init()) {
         throw std::runtime_error("初始化 SDL_ttf 失败: " + std::string{ SDL_GetError() });
     }
 
@@ -72,13 +72,13 @@ void TextRenderer::drawUiText(std::string_view text,
 
     // 先渲染一次黑色文字模拟阴影(偏移 2 像素)
     TTF_SetTextColorFloat(tempTextObject, 0.0F, 0.0F, 0.0F, 1.0F);
-    if (TTF_DrawRendererText(tempTextObject, screenPosition.x + 2, screenPosition.y + 2) == false) {
+    if (!TTF_DrawRendererText(tempTextObject, screenPosition.x + 2, screenPosition.y + 2)) {
         spdlog::error("drawUiText 绘制临时 TTF_Text 失败: {}", SDL_GetError());
     }
 
     // 然后正常绘制
     TTF_SetTextColorFloat(tempTextObject, color.r, color.g, color.b, color.a);
-    if (TTF_DrawRendererText(tempTextObject, screenPosition.x, screenPosition.y) == false) {
+    if (!TTF_DrawRendererText(tempTextObject, screenPosition.x, screenPosition.y)) {
         spdlog::error("drawUiText 绘制临时 TTF_Text 失败: {}", SDL_GetError());
     }
 

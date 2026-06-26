@@ -71,8 +71,8 @@ void TileLayerComponent::render(engine::core::Context& context)
         for (int col{ 0 }; col < m_mapSize.x; ++col) {
             const size_t index{ static_cast<size_t>(row * m_mapSize.x + col) };
             // 检查索引有效性以及瓦片是否需要渲染
-            if (index < m_tiles.size() && m_tiles[index].type != TileType::Empty) {
-                const auto& tileInfo = m_tiles[index];
+            if (index < m_tiles.size() && m_tiles.at(index).type != TileType::Empty) {
+                const auto& tileInfo = m_tiles.at(index);
                 // 计算该瓦片在世界中的左上角位置 (drawSprite 预期接收左上角坐标)
                 glm::vec2 tileTopLeftPos{ m_offset.x + static_cast<float>(col) * m_tileSize.x,
                                           m_offset.y + static_cast<float>(row) * m_tileSize.y };

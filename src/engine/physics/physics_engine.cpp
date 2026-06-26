@@ -89,7 +89,7 @@ void PhysicsEngine::update(float deltaTime)
 void PhysicsEngine::checkObjectCollisions()
 {
     for (size_t i{ 0 }; i < m_components.size(); ++i) {
-        auto* physicsComponentA = m_components[i];
+        auto* physicsComponentA = m_components.at(i);
         if (physicsComponentA == nullptr || !physicsComponentA->isEnabled()) {
             continue;
         }
@@ -105,7 +105,7 @@ void PhysicsEngine::checkObjectCollisions()
         }
 
         for (size_t j{ i + 1 }; j < m_components.size(); ++j) {
-            auto* physicsComponentB = m_components[j];
+            auto* physicsComponentB = m_components.at(j);
             if (physicsComponentB == nullptr || !physicsComponentB->isEnabled()) {
                 continue;
             }

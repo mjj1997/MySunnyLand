@@ -26,7 +26,7 @@ void ClimbState::enter()
 std::unique_ptr<PlayerStateBase> ClimbState::handleInput(engine::core::Context& context)
 {
     // 记录攀爬状态下的按键输入标志
-    auto inputManager = context.inputManager();
+    const auto& inputManager = context.inputManager();
     auto isUp = inputManager.isActionDown("moveUp");
     auto isDown = inputManager.isActionDown("moveDown");
     auto isLeft = inputManager.isActionDown("moveLeft");

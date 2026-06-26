@@ -20,7 +20,7 @@ void FallState::enter()
 
 std::unique_ptr<PlayerStateBase> FallState::handleInput(engine::core::Context& context)
 {
-    auto inputManager = context.inputManager();
+    const auto& inputManager = context.inputManager();
     auto* physicsComponent = m_playerComponent->physicsComponent();
     auto* spriteComponent = m_playerComponent->spriteComponent();
 

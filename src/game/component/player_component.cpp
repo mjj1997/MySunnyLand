@@ -62,7 +62,10 @@ void PlayerComponent::setState(std::unique_ptr<state::PlayerStateBase> newState)
     }
 
     m_currentState = std::move(newState);
-    spdlog::debug("PlayerComponent 正在切换到状态：{}。", typeid(*m_currentState).name());
+
+    auto& state = *m_currentState;
+    spdlog::debug("PlayerComponent 正在切换到状态：{}。", typeid(state).name());
+
     m_currentState->enter();
 }
 

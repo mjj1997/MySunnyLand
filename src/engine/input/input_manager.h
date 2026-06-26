@@ -75,8 +75,8 @@ private:
     std::unordered_map<std::string, ActionState, engine::utils::StringViewHash, std::equal_to<>>
         m_actionStates; ///< @brief 存储每个动作的当前状态
 
-    bool m_shouldQuit{ false }; ///< @brief 退出标志
-    glm::vec2 m_mousePosition;  ///< @brief 鼠标位置 (针对屏幕坐标)
+    bool m_shouldQuit{ false };              ///< @brief 退出标志
+    glm::vec2 m_mousePosition{ 0.0F, 0.0F }; ///< @brief 鼠标位置 (针对屏幕坐标)
 };
 
 } // namespace engine::input

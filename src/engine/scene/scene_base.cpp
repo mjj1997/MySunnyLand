@@ -19,7 +19,6 @@ SceneBase::SceneBase(std::string_view name,
     , m_context{ context }
     , m_sceneManager{ sceneManager }
     , m_uiManager{ std::make_unique<engine::ui::UiManager>() }
-    , m_isInitialized{ false }
 {
     spdlog::trace("场景 '{}' 构造完成。", m_sceneName);
 }

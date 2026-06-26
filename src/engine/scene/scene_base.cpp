@@ -34,8 +34,9 @@ void SceneBase::init()
 
 void SceneBase::update(float deltaTime)
 {
-    if (!m_isInitialized)
+    if (!m_isInitialized) {
         return;
+    }
 
     if (m_context.gameState().isPlaying()) {
         // 首先更新物理引擎
@@ -65,8 +66,9 @@ void SceneBase::update(float deltaTime)
 
 void SceneBase::render()
 {
-    if (!m_isInitialized)
+    if (!m_isInitialized) {
         return;
+    }
 
     // 渲染所有游戏对象
     for (const auto& obj : m_gameObjects) {
@@ -81,8 +83,9 @@ void SceneBase::render()
 
 void SceneBase::handleInput()
 {
-    if (!m_isInitialized)
+    if (!m_isInitialized) {
         return;
+    }
 
     // 处理 UI 管理器的输入
     if (m_uiManager->handleInput(m_context)) {
@@ -111,8 +114,9 @@ void SceneBase::handleInput()
 
 void SceneBase::clean()
 {
-    if (!m_isInitialized)
+    if (!m_isInitialized) {
         return;
+    }
 
     for (const auto& obj : m_gameObjects) {
         if (obj) {

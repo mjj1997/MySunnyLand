@@ -51,7 +51,7 @@ std::unique_ptr<PlayerStateBase> IdleState::update(float /*deltaTime*/,
                                                    engine::core::Context& /*context*/)
 {
     // 应用摩擦力(水平方向上)
-    auto physicsComponent = m_playerComponent->physicsComponent();
+    auto* physicsComponent = m_playerComponent->physicsComponent();
     auto frictionFactor = m_playerComponent->frictionFactor();
     auto newVeclocity = glm::vec2{ frictionFactor * physicsComponent->velocity().x,
                                    physicsComponent->velocity().y };

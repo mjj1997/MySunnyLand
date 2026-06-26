@@ -17,12 +17,12 @@ void DeadState::enter()
     playAnimation("hurt");
 
     // 造成向上击退效果
-    auto physicsComponent = m_playerComponent->physicsComponent();
+    auto* physicsComponent = m_playerComponent->physicsComponent();
     physicsComponent->setVelocity(glm::vec2{ 0.0F, -200.0F });
 
     // 禁用碰撞检测，形成自动掉出屏幕的效果
-    auto colliderComponent = m_playerComponent->owner()
-                                 ->getComponent<engine::component::ColliderComponent>();
+    auto* colliderComponent = m_playerComponent->owner()
+                                  ->getComponent<engine::component::ColliderComponent>();
     if (colliderComponent != nullptr) {
         colliderComponent->setActive(false);
     }

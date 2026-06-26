@@ -33,7 +33,7 @@ std::unique_ptr<PlayerStateBase> ClimbState::handleInput(engine::core::Context& 
     auto isRight = inputManager.isActionDown("moveRight");
 
     // 根据按键标志，更新速度。按键则移动，不按键则静止。
-    auto physicsComponent = m_playerComponent->physicsComponent();
+    auto* physicsComponent = m_playerComponent->physicsComponent();
     auto speed = m_playerComponent->climbVelocity();
     glm::vec2 newVelocity{};
     newVelocity.y = isUp ? -speed : isDown ? speed : 0.0F;
@@ -41,7 +41,7 @@ std::unique_ptr<PlayerStateBase> ClimbState::handleInput(engine::core::Context& 
     physicsComponent->setVelocity(newVelocity);
 
     // 根据按键标志，决定是否播放动画。
-    auto animationComponent = m_playerComponent->animationComponent();
+    auto* animationComponent = m_playerComponent->animationComponent();
     (isUp || isDown || isLeft || isRight)
         ? animationComponent->resumeAnimation() // 有按键则恢复动画播放
         : animationComponent->stopAnimation();  // 无按键则停止动画播放

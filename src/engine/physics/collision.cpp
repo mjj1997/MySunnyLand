@@ -8,10 +8,10 @@ bool collision::checkCollision(const engine::component::ColliderComponent& aColl
                                const engine::component::ColliderComponent& bColliderComponent)
 {
     // 获取碰撞器及对应 TransformComponent 信息
-    auto aCollider = aColliderComponent.collider();
-    auto bCollider = bColliderComponent.collider();
-    auto aTransformComponent = aColliderComponent.transformComponent();
-    auto bTransformComponent = bColliderComponent.transformComponent();
+    const auto* aCollider = aColliderComponent.collider();
+    const auto* bCollider = bColliderComponent.collider();
+    const auto* aTransformComponent = aColliderComponent.transformComponent();
+    const auto* bTransformComponent = bColliderComponent.transformComponent();
 
     // 先判断最小包围盒是否碰撞，如果没有碰撞，那一定是返回false (不考虑AABB的旋转)
     auto aSize = aCollider->aabbSize() * aTransformComponent->scale();

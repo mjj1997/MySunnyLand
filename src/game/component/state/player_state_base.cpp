@@ -15,7 +15,7 @@ void PlayerStateBase::playAnimation(std::string_view animationName)
         return;
     }
 
-    auto animationComponent = m_playerComponent->animationComponent();
+    auto* animationComponent = m_playerComponent->animationComponent();
     if (animationComponent == nullptr) {
         spdlog::error("PlayerComponent '{}' 没有 AnimationComponent，无法播放动画 '{}'",
                       m_playerComponent->owner()->name(),

@@ -18,7 +18,7 @@ void JumpState::enter()
 {
     playAnimation("jump"); // 播放跳跃动画
 
-    auto physicsComponent = m_playerComponent->physicsComponent();
+    auto* physicsComponent = m_playerComponent->physicsComponent();
     auto newVelocity = glm::vec2{ physicsComponent->velocity().x,
                                   -m_playerComponent->jumpVelocity() }; // 向上跳跃
     physicsComponent->setVelocity(newVelocity);
@@ -34,8 +34,8 @@ void JumpState::enter()
 std::unique_ptr<PlayerStateBase> JumpState::handleInput(engine::core::Context& context)
 {
     auto inputManager = context.inputManager();
-    auto physicsComponent = m_playerComponent->physicsComponent();
-    auto spriteComponent = m_playerComponent->spriteComponent();
+    auto* physicsComponent = m_playerComponent->physicsComponent();
+    auto* spriteComponent = m_playerComponent->spriteComponent();
 
     // 如果按下了"moveUp"或"moveDown"键，且与梯子重合，切换到 ClimbState
     if ((inputManager.isActionDown("moveUp") || inputManager.isActionDown("moveDown"))
@@ -77,7 +77,7 @@ std::unique_ptr<PlayerStateBase> JumpState::update(float /*deltaTime*/,
     /** 限制最大速度（水平方向）
      *  因为向上跳的速度不会超过最大速度，所以只需要限制左右移动时 x 轴速度
      */
-    auto physicsComponent = m_playerComponent->physicsComponent();
+    auto* physicsComponent = m_playerComponent->physicsComponent();
     auto maxSpeed = m_playerComponent->maxSpeed();
     auto velocityX = glm::clamp(physicsComponent->velocity().x, -maxSpeed, maxSpeed);
     const glm::vec2 newVelocity{ velocityX, physicsComponent->velocity().y };

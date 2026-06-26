@@ -344,7 +344,7 @@ void GameScene::handlePlayerVsEnemyCollision(engine::object::GameObject* player,
     if (overlap.x > overlap.y && playerCenter.y < enemyCenter.y) {
         spdlog::info("玩家 {} 踩踏了敌人 {}", player->name(), enemy->name());
         // 处理敌人受伤逻辑
-        auto enemyHealth = enemy->getComponent<engine::component::HealthComponent>();
+        auto* enemyHealth = enemy->getComponent<engine::component::HealthComponent>();
         if (enemyHealth == nullptr) {
             spdlog::error("敌人 {} 没有 HealthComponent 组件，无法处理踩踏伤害", enemy->name());
             return;
@@ -359,7 +359,7 @@ void GameScene::handlePlayerVsEnemyCollision(engine::object::GameObject* player,
         }
 
         // 播放玩家跳起效果
-        auto playerPhysicsComponent = player->getComponent<engine::component::PhysicsComponent>();
+        auto* playerPhysicsComponent = player->getComponent<engine::component::PhysicsComponent>();
         playerPhysicsComponent->setVelocity(
             glm::vec2{ playerPhysicsComponent->velocity().x, -300.0F }); // 向上跳起
         // 播放玩家跳起音效（此音效完全可以放在玩家的音频组件中，这里示例另一种用法：直接用 AudioPlayer 播放，传入文件路径）
@@ -396,7 +396,7 @@ void GameScene::handlePlayerVsItemCollision(engine::object::GameObject* /*player
 
 void GameScene::handlePlayerDamage(int damage)
 {
-    auto playerComponent = m_player->getComponent<game::component::PlayerComponent>();
+    auto* playerComponent = m_player->getComponent<game::component::PlayerComponent>();
     if (playerComponent->takeDamage(damage) == false) {
         // 没有受伤，直接返回
         return;

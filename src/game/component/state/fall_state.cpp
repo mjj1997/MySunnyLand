@@ -21,8 +21,8 @@ void FallState::enter()
 std::unique_ptr<PlayerStateBase> FallState::handleInput(engine::core::Context& context)
 {
     auto inputManager = context.inputManager();
-    auto physicsComponent = m_playerComponent->physicsComponent();
-    auto spriteComponent = m_playerComponent->spriteComponent();
+    auto* physicsComponent = m_playerComponent->physicsComponent();
+    auto* spriteComponent = m_playerComponent->spriteComponent();
 
     // 如果按下了"moveUp"或"moveDown"键，且与梯子重合，切换到 ClimbState
     if ((inputManager.isActionDown("moveUp") || inputManager.isActionDown("moveDown"))
@@ -62,7 +62,7 @@ std::unique_ptr<PlayerStateBase> FallState::update(float /*deltaTime*/,
                                                    engine::core::Context& /*context*/)
 {
     // 限制最大速度（水平方向）
-    auto physicsComponent = m_playerComponent->physicsComponent();
+    auto* physicsComponent = m_playerComponent->physicsComponent();
     auto maxSpeed = m_playerComponent->maxSpeed();
     auto velocityX = glm::clamp(physicsComponent->velocity().x, -maxSpeed, maxSpeed);
     const glm::vec2 newVelocity{ velocityX, physicsComponent->velocity().y };

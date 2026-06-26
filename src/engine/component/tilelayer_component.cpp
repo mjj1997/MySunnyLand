@@ -78,7 +78,9 @@ void TileLayerComponent::render(engine::core::Context& context)
                                           m_offset.y + (static_cast<float>(row) * m_tileSize.y) };
 
                 // 但如果图片的大小与瓦片的大小不一致，需要调整 y 坐标 (瓦片与图片的对齐点是左下角)
-                const auto spriteHeight = tileInfo.sprite.sourceRect()->h;
+                const auto spriteHeight = tileInfo.sprite.sourceRect() != std::nullopt
+                                              ? tileInfo.sprite.sourceRect()->h
+                                              : m_tileSize.y;
                 if (static_cast<int>(spriteHeight) != m_tileSize.y) {
                     // 计算 y 坐标偏移量(从图片左上角到瓦片左上角之间的距离，即图片高度 - 瓦片高度)
                     const auto offsetY = spriteHeight - static_cast<float>(m_tileSize.y);

@@ -69,7 +69,7 @@ void Renderer::drawSprite(const Camera& camera,
                                   &srcRect.value(),
                                   &destRect,
                                   angle,
-                                  NULL,
+                                  nullptr,
                                   sprite.isFlipped() ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE)) {
         spdlog::error("渲染旋转纹理失败(ID: {}): {}", sprite.textureId(), SDL_GetError());
     }
@@ -126,7 +126,7 @@ void Renderer::drawParallax(const Camera& camera,
     for (float posY{ startPos.y }; posY < endPos.y; posY += scaledHeight) {
         for (float posX{ startPos.x }; posX < endPos.x; posX += scaledWidth) {
             const SDL_FRect destRect{ .x = posX, .y = posY, .w = scaledWidth, .h = scaledHeight };
-            if (!SDL_RenderTexture(m_renderer, texture, NULL, &destRect)) {
+            if (!SDL_RenderTexture(m_renderer, texture, nullptr, &destRect)) {
                 spdlog::error("渲染视差纹理失败(ID: {}): {}", sprite.textureId(), SDL_GetError());
                 return;
             }

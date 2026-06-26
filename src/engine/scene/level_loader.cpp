@@ -133,7 +133,7 @@ void LevelLoader::loadTileLayer(const nlohmann::json& layerJson, SceneBase& scen
 
     // 准备 TileInfo Vector (瓦片数量 = 地图宽度 * 地图高度)
     std::vector<engine::component::TileInfo> tiles;
-    tiles.reserve(m_mapSize.x * m_mapSize.y);
+    tiles.reserve(static_cast<std::size_t>(m_mapSize.x * m_mapSize.y));
 
     // 根据gid获取必要信息，并依次填充 TileInfo Vector
     std::transform(layerJson.at("data").begin(),

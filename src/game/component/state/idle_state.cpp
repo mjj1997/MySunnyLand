@@ -30,7 +30,7 @@ std::unique_ptr<PlayerStateBase> IdleState::handleInput(engine::core::Context& c
     // 如果按下了"moveDown"键，且位于梯子顶端，切换到 ClimbState
     if (inputManager.isActionDown("moveDown") && physicsComponent->isOnLadderTop()) {
         // 需要向下移动一点，确保下一帧能与梯子碰撞（否则会切换回FallState）
-        m_playerComponent->transformComponent()->translate(glm::vec2{ 0.0f, 2.0f });
+        m_playerComponent->transformComponent()->translate(glm::vec2{ 0.0F, 2.0F });
         return std::make_unique<ClimbState>(m_playerComponent);
     }
 
@@ -47,10 +47,11 @@ std::unique_ptr<PlayerStateBase> IdleState::handleInput(engine::core::Context& c
     return nullptr;
 }
 
-std::unique_ptr<PlayerStateBase> IdleState::update(float deltaTime, engine::core::Context& context)
+std::unique_ptr<PlayerStateBase> IdleState::update(float /*deltaTime*/,
+                                                   engine::core::Context& /*context*/)
 {
     // 应用摩擦力(水平方向上)
-    auto physicsComponent = m_playerComponent->physicsComponent();
+    auto* physicsComponent = m_playerComponent->physicsComponent();
     auto frictionFactor = m_playerComponent->frictionFactor();
     auto newVeclocity = glm::vec2{ frictionFactor * physicsComponent->velocity().x,
                                    physicsComponent->velocity().y };

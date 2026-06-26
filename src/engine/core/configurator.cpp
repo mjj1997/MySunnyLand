@@ -48,7 +48,7 @@ bool Configurator::saveToFile(std::string_view filePath)
     }
 
     try {
-        nlohmann::ordered_json json{ toJson() };
+        const nlohmann::ordered_json json{ toJson() };
         file << json.dump(4);
         spdlog::info("成功将配置保存到文件 '{}'。", filePath);
         return true;
@@ -61,7 +61,7 @@ bool Configurator::saveToFile(std::string_view filePath)
 void Configurator::fromJson(const nlohmann::json& json)
 {
     if (json.contains("window")) {
-        const auto& windowConfig = json["window"];
+        const auto& windowConfig = json.at("window");
         m_windowTitle = windowConfig.value("title", m_windowTitle);
         m_windowWidth = windowConfig.value("width", m_windowWidth);
         m_windowHeight = windowConfig.value("height", m_windowHeight);
@@ -69,12 +69,12 @@ void Configurator::fromJson(const nlohmann::json& json)
     }
 
     if (json.contains("graphics")) {
-        const auto& graphicsConfig = json["graphics"];
+        const auto& graphicsConfig = json.at("graphics");
         m_isVSyncEnabled = graphicsConfig.value("VSync", m_isVSyncEnabled);
     }
 
     if (json.contains("performance")) {
-        const auto& performanceConfig = json["performance"];
+        const auto& performanceConfig = json.at("performance");
         m_targetFps = performanceConfig.value("targetFps", m_targetFps);
         if (m_targetFps < 0) {
             spdlog::warn("目标 FPS 不能为负数。设置为 0（无限制）。");
@@ -83,13 +83,13 @@ void Configurator::fromJson(const nlohmann::json& json)
     }
 
     if (json.contains("audio")) {
-        const auto& audioConfig = json["audio"];
+        const auto& audioConfig = json.at("audio");
         m_musicVolume = audioConfig.value("musicVolume", m_musicVolume);
         m_soundVolume = audioConfig.value("soundVolume", m_soundVolume);
     }
 
-    if (json.contains("inputMappings") && json["inputMappings"].is_object()) {
-        const auto& inputMappingsConfig = json["inputMappings"];
+    if (json.contains("inputMappings") && json.at("inputMappings").is_object()) {
+        const auto& inputMappingsConfig = json.at("inputMappings");
         try {
             // 直接尝试从 JSON 对象转换为 unordered_map<string, vector<string>>
             auto inputMappings

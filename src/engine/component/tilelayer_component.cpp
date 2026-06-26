@@ -29,7 +29,7 @@ const TileInfo* TileLayerComponent::tileInfoAt(glm::ivec2 pos) const
         return nullptr;
     }
 
-    const auto index = static_cast<size_t>(pos.y * m_mapSize.x + pos.x);
+    const auto index = static_cast<size_t>((pos.y * m_mapSize.x) + pos.x);
     if (index >= m_tiles.size()) {
         spdlog::warn("TileLayerComponent: 索引超出瓦片向量范围: {}", index);
         return nullptr;
@@ -41,20 +41,20 @@ const TileInfo* TileLayerComponent::tileInfoAt(glm::ivec2 pos) const
 TileType TileLayerComponent::tileTypeAt(glm::ivec2 pos) const
 {
     const auto* info = tileInfoAt(pos);
-    return info ? info->type : TileType::Empty;
+    return info != nullptr ? info->type : TileType::Empty;
 }
 
 TileType TileLayerComponent::tileTypeAtWorldPos(const glm::vec2& worldPos) const
 {
-    glm::vec2 relativePos{ worldPos - m_offset };
-    int tileX{ static_cast<int>(std::floor(relativePos.x / m_tileSize.x)) };
-    int tileY{ static_cast<int>(std::floor(relativePos.y / m_tileSize.y)) };
+    const glm::vec2 relativePos{ worldPos - m_offset };
+    const int tileX{ static_cast<int>(std::floor(relativePos.x / m_tileSize.x)) };
+    const int tileY{ static_cast<int>(std::floor(relativePos.y / m_tileSize.y)) };
     return tileTypeAt(glm::ivec2{ tileX, tileY });
 }
 
 void TileLayerComponent::init()
 {
-    if (!m_owner) {
+    if (m_owner == nullptr) {
         spdlog::warn("TileLayerComponent 的 m_owner 未设置。");
     }
     spdlog::trace("TileLayerComponent 初始化完成");
@@ -67,18 +67,20 @@ void TileLayerComponent::render(engine::core::Context& context)
     }
 
     // 遍历所有瓦片
-    for (int y{ 0 }; y < m_mapSize.y; ++y) {
-        for (int x{ 0 }; x < m_mapSize.x; ++x) {
-            size_t index{ static_cast<size_t>(y * m_mapSize.x + x) };
+    for (int row{ 0 }; row < m_mapSize.y; ++row) {
+        for (int col{ 0 }; col < m_mapSize.x; ++col) {
+            const size_t index{ static_cast<size_t>((row * m_mapSize.x) + col) };
             // 检查索引有效性以及瓦片是否需要渲染
-            if (index < m_tiles.size() && m_tiles[index].type != TileType::Empty) {
-                const auto& tileInfo = m_tiles[index];
+            if (index < m_tiles.size() && m_tiles.at(index).type != TileType::Empty) {
+                const auto& tileInfo = m_tiles.at(index);
                 // 计算该瓦片在世界中的左上角位置 (drawSprite 预期接收左上角坐标)
-                glm::vec2 tileTopLeftPos{ m_offset.x + static_cast<float>(x) * m_tileSize.x,
-                                          m_offset.y + static_cast<float>(y) * m_tileSize.y };
+                glm::vec2 tileTopLeftPos{ m_offset.x + (static_cast<float>(col) * m_tileSize.x),
+                                          m_offset.y + (static_cast<float>(row) * m_tileSize.y) };
 
                 // 但如果图片的大小与瓦片的大小不一致，需要调整 y 坐标 (瓦片与图片的对齐点是左下角)
-                const auto spriteHeight = tileInfo.sprite.sourceRect()->h;
+                const auto spriteHeight = tileInfo.sprite.sourceRect() != std::nullopt
+                                              ? tileInfo.sprite.sourceRect()->h
+                                              : m_tileSize.y;
                 if (static_cast<int>(spriteHeight) != m_tileSize.y) {
                     // 计算 y 坐标偏移量(从图片左上角到瓦片左上角之间的距离，即图片高度 - 瓦片高度)
                     const auto offsetY = spriteHeight - static_cast<float>(m_tileSize.y);
@@ -94,7 +96,7 @@ void TileLayerComponent::render(engine::core::Context& context)
 
 void TileLayerComponent::clean()
 {
-    if (m_physicsEngine) {
+    if (m_physicsEngine != nullptr) {
         m_physicsEngine->unregisterCollisionLayer(this);
     }
 }

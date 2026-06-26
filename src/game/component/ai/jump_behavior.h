@@ -26,19 +26,19 @@ public:
      */
     JumpBehavior(float minX,
                  float maxX,
-                 glm::vec2 jumpVelocity = glm::vec2{ 100.0f, -300.0f },
-                 float jumpInterval = 2.0f);
+                 glm::vec2 jumpVelocity = glm::vec2{ 100.0F, -300.0F },
+                 float jumpInterval = 2.0F);
 
 protected:
     void update(float deltaTime, AiComponent& aiComponent) override;
 
 private:
-    float m_patrolMinX{ 0.0f };                  ///< @brief 巡逻范围的左边界
-    float m_patrolMaxX{ 0.0f };                  ///< @brief 巡逻范围的右边界
-    glm::vec2 m_jumpVelocity{ 100.0f, -300.0f }; ///< @brief 跳跃速度
-    float m_jumpInterval{ 2.0f };                ///< @brief 跳跃间隔时间 (秒)
+    float m_patrolMinX{ 0.0F };                  ///< @brief 巡逻范围的左边界
+    float m_patrolMaxX{ 0.0F };                  ///< @brief 巡逻范围的右边界
+    glm::vec2 m_jumpVelocity{ 100.0F, -300.0F }; ///< @brief 跳跃速度
+    float m_jumpInterval{ 2.0F };                ///< @brief 跳跃间隔时间 (秒)
 
-    float m_jumpTimer{ 0.0f };    ///< @brief 距离下次跳跃的计时器
+    float m_jumpTimer{ 0.0F };    ///< @brief 距离下次跳跃的计时器
     bool m_jumpingRight{ false }; ///< @brief 当前是否向右跳跃
 };
 

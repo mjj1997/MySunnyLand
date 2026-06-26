@@ -108,7 +108,7 @@ void GameScene::update(float deltaTime)
         auto pos = m_player->getComponent<engine::component::TransformComponent>()->position();
         auto worldBoundary = m_context.physicsEngine().worldBounds();
         // 多 100 像素冗余量
-        if (worldBoundary && pos.y > worldBoundary->position.y + worldBoundary->size.y + 100.0f) {
+        if (worldBoundary && pos.y > worldBoundary->position.y + worldBoundary->size.y + 100.0F) {
             spdlog::debug("玩家掉出地图下方，游戏失败");
             showEndScene(false);
         }
@@ -141,7 +141,7 @@ bool GameScene::initLevel()
 {
     // 加载关卡（level_loader通常加载完成后即可销毁，因此不存为成员变量）
     engine::scene::LevelLoader levelLoader;
-    std::string_view mapPath{ m_gameSessionData->mapPath() };
+    const std::string_view mapPath{ m_gameSessionData->mapPath() };
     if (!levelLoader.loadLevel(mapPath, *this)) {
         spdlog::error("加载关卡失败。");
         return false;
@@ -165,12 +165,14 @@ bool GameScene::initLevel()
     // 设置世界边界
     auto worldSize = layerObjectMain->getComponent<engine::component::TileLayerComponent>()
                          ->worldSize();
-    m_context.physicsEngine().setWorldBounds(engine::utils::Rect{ glm::vec2(0.0f), worldSize });
+    m_context.physicsEngine().setWorldBounds(
+        engine::utils::Rect{ .position = glm::vec2(0.0F), .size = worldSize });
 
     // 设置相机边界
-    m_context.camera().setLimitBounds(engine::utils::Rect{ glm::vec2(0.0f), worldSize });
+    m_context.camera().setLimitBounds(
+        engine::utils::Rect{ .position = glm::vec2(0.0F), .size = worldSize });
     // 开始时重置相机位置，以免切换场景时晃动
-    m_context.camera().setPosition(glm::vec2(0.0f));
+    m_context.camera().setPosition(glm::vec2(0.0F));
 
     spdlog::trace("关卡初始化完成。");
     return true;
@@ -225,7 +227,7 @@ bool GameScene::initEnemyAndItem()
                 auto maxY = gameObject->getComponent<engine::component::TransformComponent>()
                                 ->position()
                                 .y;
-                auto minY = maxY - 80.0f; // 鹰的飞行范围（当前位置 ~ 上方 80px 的区域）
+                auto minY = maxY - 80.0F; // 鹰的飞行范围（当前位置 ~ 上方 80px 的区域）
                 aiComponent->setBehavior(
                     std::make_unique<game::component::ai::UpDownBehavior>(minY, maxY));
             }
@@ -235,8 +237,8 @@ bool GameScene::initEnemyAndItem()
                 aiComponent) {
                 auto maxX
                     = gameObject->getComponent<engine::component::TransformComponent>()->position().x
-                      - 10.0f;            // 这里减去 10px 是为了增加青蛙跳跃的稳定性
-                auto minX = maxX - 90.0f; // 青蛙的跳跃范围（当前位置 ~ 左方 90px 的区域）
+                      - 10.0F;            // 这里减去 10px 是为了增加青蛙跳跃的稳定性
+                auto minX = maxX - 90.0F; // 青蛙的跳跃范围（当前位置 ~ 左方 90px 的区域）
                 aiComponent->setBehavior(
                     std::make_unique<game::component::ai::JumpBehavior>(minX, maxX));
             }
@@ -247,7 +249,7 @@ bool GameScene::initEnemyAndItem()
                 auto maxX = gameObject->getComponent<engine::component::TransformComponent>()
                                 ->position()
                                 .x;
-                auto minX = maxX - 200.0f;
+                auto minX = maxX - 200.0F;
                 aiComponent->setBehavior(
                     std::make_unique<game::component::ai::PatrolBehavior>(minX, maxX));
             }
@@ -333,17 +335,17 @@ void GameScene::handlePlayerVsEnemyCollision(engine::object::GameObject* player,
      */
     auto playerAabb = player->getComponent<engine::component::ColliderComponent>()->worldAabb();
     auto enemyAabb = enemy->getComponent<engine::component::ColliderComponent>()->worldAabb();
-    auto playerCenter = playerAabb.position + playerAabb.size / 2.0f;
-    auto enemyCenter = enemyAabb.position + enemyAabb.size / 2.0f;
-    auto overlap = glm::vec2{ playerAabb.size / 2.0f + enemyAabb.size / 2.0f }
+    auto playerCenter = playerAabb.position + playerAabb.size / 2.0F;
+    auto enemyCenter = enemyAabb.position + enemyAabb.size / 2.0F;
+    auto overlap = glm::vec2{ playerAabb.size / 2.0F + enemyAabb.size / 2.0F }
                    - glm::abs(playerCenter - enemyCenter);
 
     // 踩踏判断成功，敌人受伤
     if (overlap.x > overlap.y && playerCenter.y < enemyCenter.y) {
         spdlog::info("玩家 {} 踩踏了敌人 {}", player->name(), enemy->name());
         // 处理敌人受伤逻辑
-        auto enemyHealth = enemy->getComponent<engine::component::HealthComponent>();
-        if (!enemyHealth) {
+        auto* enemyHealth = enemy->getComponent<engine::component::HealthComponent>();
+        if (enemyHealth == nullptr) {
             spdlog::error("敌人 {} 没有 HealthComponent 组件，无法处理踩踏伤害", enemy->name());
             return;
         }
@@ -357,9 +359,9 @@ void GameScene::handlePlayerVsEnemyCollision(engine::object::GameObject* player,
         }
 
         // 播放玩家跳起效果
-        auto playerPhysicsComponent = player->getComponent<engine::component::PhysicsComponent>();
+        auto* playerPhysicsComponent = player->getComponent<engine::component::PhysicsComponent>();
         playerPhysicsComponent->setVelocity(
-            glm::vec2{ playerPhysicsComponent->velocity().x, -300.0f }); // 向上跳起
+            glm::vec2{ playerPhysicsComponent->velocity().x, -300.0F }); // 向上跳起
         // 播放玩家跳起音效（此音效完全可以放在玩家的音频组件中，这里示例另一种用法：直接用 AudioPlayer 播放，传入文件路径）
         m_context.audioPlayer().playSound("assets/audio/punch2a.mp3");
         // 加分
@@ -373,7 +375,7 @@ void GameScene::handlePlayerVsEnemyCollision(engine::object::GameObject* player,
     }
 }
 
-void GameScene::handlePlayerVsItemCollision(engine::object::GameObject* player,
+void GameScene::handlePlayerVsItemCollision(engine::object::GameObject* /*player*/,
                                             engine::object::GameObject* item)
 {
     if (item->name() == "fruit") {
@@ -386,7 +388,7 @@ void GameScene::handlePlayerVsItemCollision(engine::object::GameObject* player,
 
     // 播放道具反馈特效
     auto itemAabb = item->getComponent<engine::component::ColliderComponent>()->worldAabb();
-    auto itemCenter = itemAabb.position + itemAabb.size / 2.0f;
+    auto itemCenter = itemAabb.position + itemAabb.size / 2.0F;
     createEffect(itemCenter, item->tag()); // 创建特效
     // 播放道具反馈音效（此音效完全可以放在道具的音频组件中，这里示例另一种用法：直接用 AudioPlayer 播放，传入文件路径）
     m_context.audioPlayer().playSound("assets/audio/poka01.mp3");
@@ -394,13 +396,13 @@ void GameScene::handlePlayerVsItemCollision(engine::object::GameObject* player,
 
 void GameScene::handlePlayerDamage(int damage)
 {
-    auto playerComponent = m_player->getComponent<game::component::PlayerComponent>();
-    if (playerComponent->takeDamage(damage) == false) {
+    auto* playerComponent = m_player->getComponent<game::component::PlayerComponent>();
+    if (!playerComponent->takeDamage(damage)) {
         // 没有受伤，直接返回
         return;
     }
 
-    if (playerComponent->isAlive() == false) {
+    if (!playerComponent->isAlive()) {
         spdlog::info("玩家 '{}' 死亡", m_player->name());
         // TODO: 可能的死亡逻辑处理
     }
@@ -451,12 +453,12 @@ void GameScene::createEffect(glm::vec2 center, std::string_view tag)
 {
     // --- 创建游戏对象和变换组件 ---
     auto effectObj = std::make_unique<engine::object::GameObject>("effect_" + std::string(tag));
-    effectObj->addComponent<engine::component::TransformComponent>(std::move(center));
+    effectObj->addComponent<engine::component::TransformComponent>(center);
 
     // --- 根据标签创建不同的精灵组件和动画---
     auto animation = std::make_unique<engine::render::Animation>("effect", false);
     SDL_FRect srcRect{};
-    float duration{ 0.1f };
+    const float duration{ 0.1F };
 
     if (tag == "enemy") {
         effectObj->addComponent<engine::component::SpriteComponent>(
@@ -465,7 +467,9 @@ void GameScene::createEffect(glm::vec2 center, std::string_view tag)
             engine::utils::Alignment::Center);
 
         for (int i{ 0 }; i < 5; ++i) {
-            srcRect = SDL_FRect{ static_cast<float>(i * 40), 0.0f, 40.0f, 41.0f };
+            srcRect = SDL_FRect{
+                .x = static_cast<float>(i * 40), .y = 0.0F, .w = 40.0F, .h = 41.0F
+            };
             animation->addFrame(srcRect, duration);
         }
     } else if (tag == "item") {
@@ -475,7 +479,9 @@ void GameScene::createEffect(glm::vec2 center, std::string_view tag)
             engine::utils::Alignment::Center);
 
         for (int i{ 0 }; i < 4; ++i) {
-            srcRect = SDL_FRect{ static_cast<float>(i * 32), 0.0f, 32.0f, 32.0f };
+            srcRect = SDL_FRect{
+                .x = static_cast<float>(i * 32), .y = 0.0F, .w = 32.0F, .h = 32.0F
+            };
             animation->addFrame(srcRect, duration);
         }
     } else {
@@ -496,7 +502,8 @@ void GameScene::createEffect(glm::vec2 center, std::string_view tag)
 void GameScene::createScoreUi()
 {
     // 创建得分标签
-    std::string_view scoreText{ "Score: " + std::to_string(m_gameSessionData->currentScore()) };
+    const std::string_view scoreText{ "Score: "
+                                      + std::to_string(m_gameSessionData->currentScore()) };
     auto scoreLabel = std::make_unique<engine::ui::UiLabel>(m_context.textRenderer(),
                                                             scoreText,
                                                             "assets/fonts/VonwaonBitmap-16px.ttf",
@@ -505,7 +512,7 @@ void GameScene::createScoreUi()
 
     // 设置得分标签位置，确保在屏幕顶部右侧
     auto screenSize = m_uiManager->rootElement()->size();
-    scoreLabel->setLocalPosition(glm::vec2{ screenSize.x - 100.0f, 10.0f });
+    scoreLabel->setLocalPosition(glm::vec2{ screenSize.x - 100.0F, 10.0F });
 
     // 将得分标签添加到 UI 管理器
     m_uiManager->addElement(std::move(scoreLabel));
@@ -518,11 +525,11 @@ void GameScene::createHealthUi()
     m_healthPanel = healthPanel.get(); // 保存指针，方便后续更新
 
     // --- 根据最大生命值，循环创建生命值图标(添加到 UiPanel 中) ---
-    glm::vec2 iconStartPos{ 10.0f, 10.0f };
-    glm::vec2 iconSize{ 20.0f, 18.0f };
-    float spacing{ 5.0f };
+    const glm::vec2 iconStartPos{ 10.0F, 10.0F };
+    const glm::vec2 iconSize{ 20.0F, 18.0F };
+    const float spacing{ 5.0F };
     for (int i{ 0 }; i < m_gameSessionData->maxHealth(); ++i) {
-        glm::vec2 iconPos{ iconStartPos.x + i * (iconSize.x + spacing), iconStartPos.y };
+        const glm::vec2 iconPos{ iconStartPos.x + (i * (iconSize.x + spacing)), iconStartPos.y };
         // 创建背景图标
         auto bgIcon = std::make_unique<engine::ui::UiImage>("assets/textures/UI/Heart-bg.png",
                                                             iconPos,
@@ -561,24 +568,24 @@ void GameScene::healWithUi(int amount)
 
 void GameScene::updateHealthWithUi()
 {
-    if (!m_player || !m_healthPanel) {
+    if (m_player == nullptr || m_healthPanel == nullptr) {
         spdlog::error("玩家对象或生命值面板不存在，无法更新生命值 UI");
         return;
     }
 
     // 获取当前生命值并更新游戏数据
-    int currentHealth{
+    const int currentHealth{
         m_player->getComponent<engine::component::HealthComponent>()->currentHealth()
     };
     m_gameSessionData->setCurrentHealth(currentHealth);
-    int maxHealth{ m_gameSessionData->maxHealth() };
+    const int maxHealth{ m_gameSessionData->maxHealth() };
 
     /** 更新生命值图标可见性
      *  前景图标在奇数索引位置（1, 3, 5, ...），需要根据当前生命值设置可见性
      */
     for (int i{ 0 }; i < maxHealth; ++i) {
         // 前景图标的索引是 i * 2 + 1（奇数位置）
-        m_healthPanel->children().at(i * 2 + 1)->setVisible(i < currentHealth);
+        m_healthPanel->children().at((i * 2) + 1)->setVisible(i < currentHealth);
     }
 }
 

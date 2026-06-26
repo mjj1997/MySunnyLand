@@ -9,7 +9,7 @@ namespace engine::core {
 GameState::GameState(SDL_Window* window, SDL_Renderer* sdlRenderer, State initialState)
     : m_window{ window }
     , m_sdlRenderer{ sdlRenderer }
-    , m_currentState{ std::move(initialState) }
+    , m_currentState{ initialState }
 {
     if (m_window == nullptr || m_sdlRenderer == nullptr) {
         spdlog::error("窗口或渲染器为空");
@@ -22,7 +22,7 @@ void GameState::setCurrentState(State newState)
 {
     if (m_currentState != newState) {
         spdlog::debug("游戏状态改变");
-        m_currentState = std::move(newState);
+        m_currentState = newState;
     } else {
         spdlog::debug("尝试设置相同的游戏状态，跳过");
     }
@@ -30,8 +30,8 @@ void GameState::setCurrentState(State newState)
 
 glm::vec2 GameState::windowSize() const
 {
-    int width;
-    int height;
+    int width{ 0 };
+    int height{ 0 };
     // SDL3 获取窗口大小的方法
     SDL_GetWindowSize(m_window, &width, &height);
     return glm::vec2{ width, height };
@@ -46,8 +46,8 @@ void GameState::setWindowSize(const glm::vec2& windowSize)
 
 glm::vec2 GameState::logicalSize() const
 {
-    int width;
-    int height;
+    int width{ 0 };
+    int height{ 0 };
     // SDL3 获取逻辑分辨率大小的方法
     SDL_GetRenderLogicalPresentation(m_sdlRenderer, &width, &height, nullptr);
     return glm::vec2{ width, height };

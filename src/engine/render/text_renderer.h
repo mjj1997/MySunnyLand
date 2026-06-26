@@ -59,7 +59,7 @@ public:
                     std::string_view fontId,
                     int fontSize,
                     const glm::vec2& screenPosition,
-                    const engine::utils::FColor& color = { 1.0f, 1.0f, 1.0f, 1.0f });
+                    const engine::utils::FColor& color = { 1.0F, 1.0F, 1.0F, 1.0F });
 
     /**
      * @brief 绘制地图上的字符串。
@@ -76,7 +76,7 @@ public:
                   std::string_view fontId,
                   int fontSize,
                   const glm::vec2& worldPosition,
-                  const engine::utils::FColor& color = { 1.0f, 1.0f, 1.0f, 1.0f });
+                  const engine::utils::FColor& color = { 1.0F, 1.0F, 1.0F, 1.0F });
 
     /**
      * @brief 获取文本的尺寸。

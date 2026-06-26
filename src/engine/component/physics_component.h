@@ -31,7 +31,7 @@ public:
      */
     explicit PhysicsComponent(engine::physics::PhysicsEngine* physicsEngine,
                               bool isGravityEnabled = true,
-                              float mass = 1.0f);
+                              float mass = 1.0F);
     ~PhysicsComponent() override = default;
 
     // 禁止拷贝和移动
@@ -48,7 +48,7 @@ public:
             m_force += force;
     }
     ///< @brief 清除力
-    void clearForce() { m_force = { 0.0f, 0.0f }; }
+    void clearForce() { m_force = { 0.0F, 0.0F }; }
 
     ///< @brief 重置所有碰撞标志 (在物理更新开始时调用)
     void resetCollisionFlags()
@@ -78,7 +78,7 @@ public:
 
     void setVelocity(glm::vec2 velocity) { m_velocity = std::move(velocity); } ///< @brief 设置速度
     ///< @brief 设置质量，质量不能为负
-    void setMass(float mass) { m_mass = (mass >= 0.0f) ? mass : 1.0f; }
+    void setMass(float mass) { m_mass = (mass >= 0.0F) ? mass : 1.0F; }
     ///< @brief 设置组件是否受重力影响
     void setGravityEnabled(bool isGravityEnabled) { m_isGravityEnabled = isGravityEnabled; }
     void setEnabled(bool enabled) { m_enabled = enabled; } ///< @brief 设置组件是否启用
@@ -105,10 +105,10 @@ private:
     engine::physics::PhysicsEngine* m_physicsEngine{ nullptr }; ///< @brief 指向 PhysicsEngine 的指针
     TransformComponent* m_transformComponent{ nullptr }; ///< @brief TransformComponent 的缓存指针
 
-    glm::vec2 m_velocity{ 0.0f, 0.0f }; ///< @brief 物体的速度
-    glm::vec2 m_force{ 0.0f, 0.0f };    ///< @brief 当前帧受到的力
+    glm::vec2 m_velocity{ 0.0F, 0.0F }; ///< @brief 物体的速度
+    glm::vec2 m_force{ 0.0F, 0.0F };    ///< @brief 当前帧受到的力
     bool m_isGravityEnabled{ true };    ///< @brief 物体是否受重力影响
-    float m_mass{ 1.0f };               ///< @brief 物体质量（默认1.0）
+    float m_mass{ 1.0F };               ///< @brief 物体质量（默认1.0）
     bool m_enabled{ true };             ///< @brief 组件是否激活
 
     // -- 碰撞状态标志 --

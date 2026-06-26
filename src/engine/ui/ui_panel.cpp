@@ -9,8 +9,8 @@ namespace engine::ui {
 UiPanel::UiPanel(glm::vec2 localPosition,
                  glm::vec2 size,
                  std::optional<engine::utils::FColor> backgroundColor)
-    : UiElementBase{ std::move(localPosition), std::move(size) }
-    , m_backgroundColor{ std::move(backgroundColor) }
+    : UiElementBase{ localPosition, size }
+    , m_backgroundColor{ backgroundColor }
 {
     spdlog::trace("UiPanel 构造完成");
 }
@@ -30,7 +30,7 @@ void UiPanel::render(engine::core::Context& context)
 
 void UiPanel::setBackgroundColor(std::optional<engine::utils::FColor> backgroundColor)
 {
-    m_backgroundColor = std::move(backgroundColor);
+    m_backgroundColor = backgroundColor;
 }
 
 const std::optional<engine::utils::FColor>& UiPanel::backgroundColor() const

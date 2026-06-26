@@ -16,7 +16,7 @@ AudioManager::AudioManager()
 
     // 创建连接到默认音频输出设备的混音器
     m_mixer = MIX_CreateMixerDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, nullptr);
-    if (!m_mixer) {
+    if (m_mixer == nullptr) {
         MIX_Quit();
         throw std::runtime_error("AudioManager 错误: MIX_CreateMixerDevice 失败: "
                                  + std::string(SDL_GetError()));
@@ -45,15 +45,15 @@ AudioManager::~AudioManager()
 MIX_Audio* AudioManager::loadSound(std::string_view filePath)
 {
     // 首先检查缓存
-    auto it = m_sounds.find(filePath);
-    if (it != m_sounds.end()) {
-        return it->second.get();
+    auto iter = m_sounds.find(filePath);
+    if (iter != m_sounds.end()) {
+        return iter->second.get();
     }
 
     // 加载音效（predecode=true，预先解码为PCM，适合短音效）
     spdlog::debug("加载音效: {}", filePath);
     MIX_Audio* sound = MIX_LoadAudio(m_mixer, filePath.data(), true);
-    if (!sound) {
+    if (sound == nullptr) {
         spdlog::error("加载音效失败: '{}': {}", filePath, SDL_GetError());
         return nullptr;
     }
@@ -66,9 +66,9 @@ MIX_Audio* AudioManager::loadSound(std::string_view filePath)
 
 MIX_Audio* AudioManager::getSound(std::string_view filePath)
 {
-    auto it = m_sounds.find(filePath);
-    if (it != m_sounds.end()) {
-        return it->second.get();
+    auto iter = m_sounds.find(filePath);
+    if (iter != m_sounds.end()) {
+        return iter->second.get();
     }
 
     spdlog::warn("音效 '{}' 未找到缓存，尝试加载。", filePath);
@@ -77,10 +77,10 @@ MIX_Audio* AudioManager::getSound(std::string_view filePath)
 
 void AudioManager::unloadSound(std::string_view filePath)
 {
-    auto it = m_sounds.find(filePath);
-    if (it != m_sounds.end()) {
+    auto iter = m_sounds.find(filePath);
+    if (iter != m_sounds.end()) {
         spdlog::debug("成功卸载音效: {}", filePath);
-        m_sounds.erase(it); // unique_ptr 处理 MIX_DestroyAudio
+        m_sounds.erase(iter); // unique_ptr 处理 MIX_DestroyAudio
     } else {
         spdlog::warn("尝试卸载不存在的音效: {}", filePath);
     }
@@ -98,15 +98,15 @@ void AudioManager::clearSounds()
 MIX_Audio* AudioManager::loadMusic(std::string_view filePath)
 {
     // 首先检查缓存
-    auto it = m_musics.find(filePath);
-    if (it != m_musics.end()) {
-        return it->second.get();
+    auto iter = m_musics.find(filePath);
+    if (iter != m_musics.end()) {
+        return iter->second.get();
     }
 
     // 加载音乐（predecode=false，流式解码，适合长音乐）
     spdlog::debug("加载音乐: {}", filePath);
     MIX_Audio* music = MIX_LoadAudio(m_mixer, filePath.data(), false);
-    if (!music) {
+    if (music == nullptr) {
         spdlog::error("加载音乐失败: '{}': {}", filePath, SDL_GetError());
         return nullptr;
     }
@@ -119,9 +119,9 @@ MIX_Audio* AudioManager::loadMusic(std::string_view filePath)
 
 MIX_Audio* AudioManager::getMusic(std::string_view filePath)
 {
-    auto it = m_musics.find(filePath);
-    if (it != m_musics.end()) {
-        return it->second.get();
+    auto iter = m_musics.find(filePath);
+    if (iter != m_musics.end()) {
+        return iter->second.get();
     }
 
     spdlog::warn("音乐 '{}' 未找到缓存，尝试加载。", filePath);
@@ -130,10 +130,10 @@ MIX_Audio* AudioManager::getMusic(std::string_view filePath)
 
 void AudioManager::unloadMusic(std::string_view filePath)
 {
-    auto it = m_musics.find(filePath);
-    if (it != m_musics.end()) {
+    auto iter = m_musics.find(filePath);
+    if (iter != m_musics.end()) {
         spdlog::debug("卸载音乐: {}", filePath);
-        m_musics.erase(it); // unique_ptr 处理 MIX_DestroyAudio
+        m_musics.erase(iter); // unique_ptr 处理 MIX_DestroyAudio
     } else {
         spdlog::warn("尝试卸载不存在的音乐: {}", filePath);
     }

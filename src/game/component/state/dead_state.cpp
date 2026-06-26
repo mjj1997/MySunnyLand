@@ -17,13 +17,13 @@ void DeadState::enter()
     playAnimation("hurt");
 
     // 造成向上击退效果
-    auto physicsComponent = m_playerComponent->physicsComponent();
-    physicsComponent->setVelocity(glm::vec2{ 0.0f, -200.0f });
+    auto* physicsComponent = m_playerComponent->physicsComponent();
+    physicsComponent->setVelocity(glm::vec2{ 0.0F, -200.0F });
 
     // 禁用碰撞检测，形成自动掉出屏幕的效果
-    auto colliderComponent = m_playerComponent->owner()
-                                 ->getComponent<engine::component::ColliderComponent>();
-    if (colliderComponent) {
+    auto* colliderComponent = m_playerComponent->owner()
+                                  ->getComponent<engine::component::ColliderComponent>();
+    if (colliderComponent != nullptr) {
         colliderComponent->setActive(false);
     }
 
@@ -32,13 +32,14 @@ void DeadState::enter()
     }
 }
 
-std::unique_ptr<PlayerStateBase> DeadState::handleInput(engine::core::Context& context)
+std::unique_ptr<PlayerStateBase> DeadState::handleInput(engine::core::Context& /*context*/)
 {
     // 死亡状态下不处理输入
     return nullptr;
 }
 
-std::unique_ptr<PlayerStateBase> DeadState::update(float deltaTime, engine::core::Context& context)
+std::unique_ptr<PlayerStateBase> DeadState::update(float /*deltaTime*/,
+                                                   engine::core::Context& /*context*/)
 {
     // 死亡状态下不更新状态
     return nullptr;

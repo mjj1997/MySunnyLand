@@ -68,8 +68,8 @@ private:
     void resolveTileCollisions(engine::component::PhysicsComponent* physicsComponent,
                                float deltaTime);
     /// @brief 处理可移动物体与 Solid 物体的碰撞。
-    void resolveSolidCollisions(engine::object::GameObject* movingObject,
-                                engine::object::GameObject* solidObject);
+    static void resolveSolidCollisions(engine::object::GameObject* movingObject,
+                                       engine::object::GameObject* solidObject);
     ///< @brief 应用世界边界，限制物体移动范围
     void applyWorldBounds(engine::component::PhysicsComponent* physicsComponent);
 
@@ -80,7 +80,9 @@ private:
      * @param tileSize 瓦片尺寸。
      * @return 瓦片上对应高度（从瓦片下侧起算）。
      */
-    float getTileHeightAtWidth(float width, engine::component::TileType type, glm::vec2 tileSize);
+    static float getTileHeightAtWidth(float width,
+                                      engine::component::TileType type,
+                                      glm::vec2 tileSize);
 
     /**
      * @brief 检测所有游戏对象与瓦片层的触发器类型瓦片碰撞，并记录触发事件。(位移处理完毕后再调用)
@@ -99,9 +101,9 @@ private:
         m_tileTriggerEvents;
 
     ///< @brief 默认重力值 (像素/秒^2, 相当于 100像素 对应现实 1m)
-    glm::vec2 m_gravity{ 0.0f, 980.0f };
+    glm::vec2 m_gravity{ 0.0F, 980.0F };
     ///< @brief 最大速度 (像素/秒)
-    float m_maxSpeed{ 500.0f };
+    float m_maxSpeed{ 500.0F };
     ///< @brief 世界边界，用于限制物体移动范围
     std::optional<engine::utils::Rect> m_worldBounds{ std::nullopt };
 };

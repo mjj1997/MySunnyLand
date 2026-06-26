@@ -98,22 +98,22 @@ private:
     bool m_isAlive{ true };
 
     // --- 移动相关参数 ---
-    float m_moveForce{ 200.0f };     ///< @brief 水平移动力
-    float m_maxSpeed{ 120.0f };      ///< @brief 最大移动速度 (像素/秒)
-    float m_frictionFactor{ 0.85f }; ///< @brief 摩擦系数 (Idle时缓冲效果，每帧乘以此系数)
-    float m_jumpVelocity{ 350.0f };  ///< @brief 跳跃速度 (按下"jump"键给的瞬间向上的速度)
-    float m_climbVelocity{ 100.0f }; ///< @brief 爬梯速度 (像素/秒)
+    float m_moveForce{ 200.0F };     ///< @brief 水平移动力
+    float m_maxSpeed{ 120.0F };      ///< @brief 最大移动速度 (像素/秒)
+    float m_frictionFactor{ 0.85F }; ///< @brief 摩擦系数 (Idle时缓冲效果，每帧乘以此系数)
+    float m_jumpVelocity{ 350.0F };  ///< @brief 跳跃速度 (按下"jump"键给的瞬间向上的速度)
+    float m_climbVelocity{ 100.0F }; ///< @brief 爬梯速度 (像素/秒)
 
     // --- 属性相关参数 ---
-    float m_stunnedDuration{ 0.4f }; ///< @brief 玩家被击中后的硬直时间（单位：秒）
+    float m_stunnedDuration{ 0.4F }; ///< @brief 玩家被击中后的硬直时间（单位：秒）
 
     // 土狼时间（Coyote Time）：允许玩家在离地后，短暂时间内仍然可以跳跃
-    static constexpr float m_coyoteTime{ 0.1f }; ///< @brief 土狼时间（单位：秒）
-    float m_coyoteTimer{ 0.0f };                 ///< @brief 土狼时间计时器（单位：秒）
+    static constexpr float m_coyoteTime{ 0.1F }; ///< @brief 土狼时间（单位：秒）
+    float m_coyoteTimer{ 0.0F };                 ///< @brief 土狼时间计时器（单位：秒）
 
     // 无敌闪烁时间
-    static constexpr float m_flashInterval{ 0.1f }; ///< @brief 无敌闪烁间隔时间（单位：秒）
-    float m_flashTimer{ 0.0f };                     ///< @brief 无敌闪烁时间计时器（单位：秒）
+    static constexpr float m_flashInterval{ 0.1F }; ///< @brief 无敌闪烁间隔时间（单位：秒）
+    float m_flashTimer{ 0.0F };                     ///< @brief 无敌闪烁时间计时器（单位：秒）
 };
 
 } // namespace game::component

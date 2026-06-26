@@ -23,16 +23,16 @@ JumpBehavior::JumpBehavior(float minX, float maxX, glm::vec2 jumpVelocity, float
     }
 
     // 确保垂直跳跃速度是负数（向上）
-    if (m_jumpVelocity.y > 0.0f) {
+    if (m_jumpVelocity.y > 0.0F) {
         spdlog::error("JumpBehavior: 垂直跳跃速度（{}）应为负数（向上）。已取相反数。",
                       m_jumpVelocity.y);
         m_jumpVelocity.y = -m_jumpVelocity.y;
     }
 
     // 确保跳跃间隔时间是正数
-    if (m_jumpInterval <= 0.0f) {
+    if (m_jumpInterval <= 0.0F) {
         spdlog::error("JumpBehavior: 跳跃间隔时间（{}）应为正数。已修正为 2.0 秒。", m_jumpInterval);
-        m_jumpInterval = 2.0f;
+        m_jumpInterval = 2.0F;
     }
 }
 
@@ -43,7 +43,8 @@ void JumpBehavior::update(float deltaTime, AiComponent& aiComponent)
     auto* transformComponent = aiComponent.transformComponent();
     auto* spriteComponent = aiComponent.spriteComponent();
     auto* animationComponent = aiComponent.animationComponent();
-    if (!physicsComponent || !transformComponent || !spriteComponent || !animationComponent) {
+    if (physicsComponent == nullptr || transformComponent == nullptr || spriteComponent == nullptr
+        || animationComponent == nullptr) {
         spdlog::error("JumpBehavior：缺少必要的组件，无法执行跳跃行为。");
         return;
     }
@@ -53,19 +54,19 @@ void JumpBehavior::update(float deltaTime, AiComponent& aiComponent)
     if (isOnGround) { // 如果在地面上
         // 刚刚落地时（进入 Idle 状态），如果有音频组件，播放音效
         if (auto* audioComponent = aiComponent.audioComponent();
-            audioComponent && m_jumpTimer < 0.001f) {
+            audioComponent != nullptr && m_jumpTimer < 0.001F) {
             audioComponent->playSound("cry", true); // 使用空间定位播放音效
         }
         // 增加跳跃计时器
         m_jumpTimer += deltaTime;
         // 停止水平移动（否则会有惯性）
-        glm::vec2 newVelocity{ 0.0f, physicsComponent->velocity().y };
+        const glm::vec2 newVelocity{ 0.0F, physicsComponent->velocity().y };
         physicsComponent->setVelocity(newVelocity);
 
         // --- 检查是否需要跳跃 ---
         if (m_jumpTimer >= m_jumpInterval) { // 时间到，准备跳跃
             // 重置计时器
-            m_jumpTimer = 0.0f;
+            m_jumpTimer = 0.0F;
 
             // --- 检查是否需要更新跳跃方向 ---
             auto currentX = transformComponent->position().x;

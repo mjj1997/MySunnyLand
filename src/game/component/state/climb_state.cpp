@@ -26,22 +26,22 @@ void ClimbState::enter()
 std::unique_ptr<PlayerStateBase> ClimbState::handleInput(engine::core::Context& context)
 {
     // 记录攀爬状态下的按键输入标志
-    auto inputManager = context.inputManager();
+    const auto& inputManager = context.inputManager();
     auto isUp = inputManager.isActionDown("moveUp");
     auto isDown = inputManager.isActionDown("moveDown");
     auto isLeft = inputManager.isActionDown("moveLeft");
     auto isRight = inputManager.isActionDown("moveRight");
 
     // 根据按键标志，更新速度。按键则移动，不按键则静止。
-    auto physicsComponent = m_playerComponent->physicsComponent();
+    auto* physicsComponent = m_playerComponent->physicsComponent();
     auto speed = m_playerComponent->climbVelocity();
     glm::vec2 newVelocity{};
-    newVelocity.y = isUp ? -speed : isDown ? speed : 0.0f;
-    newVelocity.x = isLeft ? -speed : isRight ? speed : 0.0f;
+    newVelocity.y = isUp ? -speed : isDown ? speed : 0.0F;
+    newVelocity.x = isLeft ? -speed : isRight ? speed : 0.0F;
     physicsComponent->setVelocity(newVelocity);
 
     // 根据按键标志，决定是否播放动画。
-    auto animationComponent = m_playerComponent->animationComponent();
+    auto* animationComponent = m_playerComponent->animationComponent();
     (isUp || isDown || isLeft || isRight)
         ? animationComponent->resumeAnimation() // 有按键则恢复动画播放
         : animationComponent->stopAnimation();  // 无按键则停止动画播放
@@ -54,7 +54,8 @@ std::unique_ptr<PlayerStateBase> ClimbState::handleInput(engine::core::Context& 
     return nullptr;
 }
 
-std::unique_ptr<PlayerStateBase> ClimbState::update(float deltaTime, engine::core::Context& context)
+std::unique_ptr<PlayerStateBase> ClimbState::update(float /*deltaTime*/,
+                                                    engine::core::Context& /*context*/)
 {
     auto* physicsComponent = m_playerComponent->physicsComponent();
 
@@ -64,7 +65,7 @@ std::unique_ptr<PlayerStateBase> ClimbState::update(float deltaTime, engine::cor
     }
 
     // 如果离开梯子区域，切换到 Fall 状态（能走到这里，说明非着地状态）
-    if (physicsComponent->isCollidedLadder() == false) {
+    if (!physicsComponent->isCollidedLadder()) {
         return std::make_unique<FallState>(m_playerComponent);
     }
 

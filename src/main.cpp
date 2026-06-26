@@ -12,7 +12,7 @@ void setupInitialScene(engine::scene::SceneManager& sceneManager)
     sceneManager.requestPushScene(std::move(initialScene));
 }
 
-int main()
+int main(int /*argc*/, char* /*argv*/[])
 {
     spdlog::set_level(spdlog::level::off);
 

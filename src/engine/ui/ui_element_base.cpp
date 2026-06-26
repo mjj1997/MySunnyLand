@@ -5,8 +5,8 @@
 namespace engine::ui {
 
 UiElementBase::UiElementBase(glm::vec2 localPosition, glm::vec2 size)
-    : m_localPosition{ std::move(localPosition) }
-    , m_size{ std::move(size) }
+    : m_localPosition{ localPosition }
+    , m_size{ size }
 {}
 
 bool UiElementBase::handleInput(engine::core::Context& context)
@@ -18,7 +18,7 @@ bool UiElementBase::handleInput(engine::core::Context& context)
 
     // 遍历子元素，处理输入
     for (auto& child : m_children) {
-        if (child && child->shouldRemove() == false) {
+        if (child && !child->shouldRemove()) {
             if (child->handleInput(context)) {
                 return true;
             }
@@ -37,12 +37,12 @@ void UiElementBase::update(float deltaTime, engine::core::Context& context)
     }
 
     // 遍历子元素，更新。如果子元素应该移除，直接删除。
-    for (auto it = m_children.begin(); it != m_children.end();) {
-        if (*it && (*it)->shouldRemove() == false) {
-            (*it)->update(deltaTime, context);
-            ++it;
+    for (auto iter = m_children.begin(); iter != m_children.end();) {
+        if (*iter && !(*iter)->shouldRemove()) {
+            (*iter)->update(deltaTime, context);
+            ++iter;
         } else {
-            it = m_children.erase(it);
+            iter = m_children.erase(iter);
         }
     }
 }
@@ -73,13 +73,13 @@ void UiElementBase::addChild(std::unique_ptr<UiElementBase> child)
 
 std::unique_ptr<UiElementBase> UiElementBase::removeChild(UiElementBase* child)
 {
-    auto it = std::find_if(m_children.begin(), m_children.end(), [child](const auto& p) {
-        return p.get() == child;
+    auto iter = std::find_if(m_children.begin(), m_children.end(), [child](const auto& ptr) {
+        return ptr.get() == child;
     });
 
-    if (it != m_children.end()) {
-        std::unique_ptr<UiElementBase> removedChild{ std::move(*it) };
-        m_children.erase(it);
+    if (iter != m_children.end()) {
+        std::unique_ptr<UiElementBase> removedChild{ std::move(*iter) };
+        m_children.erase(iter);
         removedChild->setParent(nullptr); // 清除父指针
         return removedChild;              // 返回被移除的子元素（可以挂载到别的父 UI 元素下）
     }
@@ -98,7 +98,7 @@ void UiElementBase::removeAllChildren()
 
 glm::vec2 UiElementBase::screenPosition() const
 {
-    if (m_parent) {
+    if (m_parent != nullptr) {
         return m_parent->screenPosition() + m_localPosition;
     }
 
@@ -108,7 +108,7 @@ glm::vec2 UiElementBase::screenPosition() const
 engine::utils::Rect UiElementBase::bounds() const
 {
     const auto& screenPos = screenPosition();
-    return engine::utils::Rect{ screenPos, m_size };
+    return engine::utils::Rect{ .position = screenPos, .size = m_size };
 }
 
 bool UiElementBase::isPointInside(const glm::vec2& point) const

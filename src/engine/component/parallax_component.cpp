@@ -12,21 +12,21 @@ ParallaxComponent::ParallaxComponent(std::string_view textureId,
                                      glm::vec2 scrollFactor,
                                      glm::bvec2 repeat)
     : m_sprite{ engine::render::Sprite{ textureId } }
-    , m_scrollFactor{ std::move(scrollFactor) }
-    , m_repeat{ std::move(repeat) }
+    , m_scrollFactor{ scrollFactor }
+    , m_repeat{ repeat }
 {
     spdlog::trace("ParallaxComponent 初始化完成， 纹理 ID： {}", textureId);
 }
 
 void ParallaxComponent::init()
 {
-    if (!m_owner) {
+    if (m_owner == nullptr) {
         spdlog::error("ParallaxComponent 初始化时，GameObject 为空。");
         return;
     }
 
     m_transformComponent = m_owner->getComponent<TransformComponent>();
-    if (!m_transformComponent) {
+    if (m_transformComponent == nullptr) {
         spdlog::error(
             "ParallaxComponent 初始化时，GameObject 上没有找到 TransformComponent 组件。");
         return;
@@ -35,7 +35,7 @@ void ParallaxComponent::init()
 
 void ParallaxComponent::render(engine::core::Context& context)
 {
-    if (m_isHidden || !m_transformComponent) {
+    if (m_isHidden || m_transformComponent == nullptr) {
         return;
     }
 

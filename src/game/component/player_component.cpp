@@ -17,12 +17,12 @@ namespace game::component {
 
 bool PlayerComponent::takeDamage(int damageAmount)
 {
-    if (!m_isAlive || !m_healthComponent || damageAmount <= 0) {
+    if (!m_isAlive || m_healthComponent == nullptr || damageAmount <= 0) {
         spdlog::warn("玩家已死亡或缺少必要组件，并未造成伤害。");
         return false;
     }
 
-    bool success{ m_healthComponent->takeDamage(damageAmount) };
+    const bool success{ m_healthComponent->takeDamage(damageAmount) };
     if (!success) {
         return false;
     }
@@ -62,13 +62,16 @@ void PlayerComponent::setState(std::unique_ptr<state::PlayerStateBase> newState)
     }
 
     m_currentState = std::move(newState);
-    spdlog::debug("PlayerComponent 正在切换到状态：{}。", typeid(*m_currentState).name());
+
+    auto& state = *m_currentState;
+    spdlog::debug("PlayerComponent 正在切换到状态：{}。", typeid(state).name());
+
     m_currentState->enter();
 }
 
 void PlayerComponent::init()
 {
-    if (!m_owner) {
+    if (m_owner == nullptr) {
         spdlog::error("PlayerComponent 没有所属游戏对象!");
         return;
     }
@@ -82,8 +85,9 @@ void PlayerComponent::init()
     m_audioComponent = m_owner->getComponent<engine::component::AudioComponent>();
 
     // 检查必要组件是否存在
-    if (!m_transformComponent || !m_physicsComponent || !m_spriteComponent || !m_animationComponent
-        || !m_healthComponent || !m_audioComponent) {
+    if (m_transformComponent == nullptr || m_physicsComponent == nullptr
+        || m_spriteComponent == nullptr || m_animationComponent == nullptr
+        || m_healthComponent == nullptr || m_audioComponent == nullptr) {
         spdlog::error("Player 对象缺少必要组件！");
         return;
     }
@@ -121,14 +125,14 @@ void PlayerComponent::update(float deltaTime, engine::core::Context& context)
     if (!m_physicsComponent->isCollidedBelow()) {
         m_coyoteTimer += deltaTime;
     } else { // 一旦落地，重置土狼时间
-        m_coyoteTimer = 0.0f;
+        m_coyoteTimer = 0.0F;
     }
 
     // 如果处于无敌状态，就进行闪烁
     if (m_healthComponent->isInvincible()) {
         m_flashTimer += deltaTime;
         if (m_flashTimer >= 2 * m_flashInterval) {
-            m_flashTimer = 0.0f;
+            m_flashTimer = 0.0F;
         }
         // 一半时间可见，一半时间不可见
         if (m_flashTimer < m_flashInterval) {

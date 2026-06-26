@@ -57,9 +57,9 @@ private:
     void processEvent(const SDL_Event& event);
 
     ///< @brief 将字符串键名转换为 SDL_Scancode
-    SDL_Scancode scancodeFromString(std::string_view keyName);
+    static SDL_Scancode scancodeFromString(std::string_view keyName);
     ///< @brief 将字符串按钮名转换为 SDL_Button
-    Uint32 mouseButtonUint32FromString(std::string_view buttonName);
+    static Uint32 mouseButtonUint32FromString(std::string_view buttonName);
     ///< @brief 辅助更新动作状态
     void updateActionState(std::string_view action, bool isInputActive, bool isRepeatEvent);
 
@@ -75,8 +75,8 @@ private:
     std::unordered_map<std::string, ActionState, engine::utils::StringViewHash, std::equal_to<>>
         m_actionStates; ///< @brief 存储每个动作的当前状态
 
-    bool m_shouldQuit{ false }; ///< @brief 退出标志
-    glm::vec2 m_mousePosition;  ///< @brief 鼠标位置 (针对屏幕坐标)
+    bool m_shouldQuit{ false };              ///< @brief 退出标志
+    glm::vec2 m_mousePosition{ 0.0F, 0.0F }; ///< @brief 鼠标位置 (针对屏幕坐标)
 };
 
 } // namespace engine::input

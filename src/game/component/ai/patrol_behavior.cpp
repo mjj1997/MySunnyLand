@@ -29,13 +29,13 @@ void PatrolBehavior::enter(AiComponent& aiComponent)
     }
 }
 
-void PatrolBehavior::update(float deltaTime, AiComponent& aiComponent)
+void PatrolBehavior::update(float /*deltaTime*/, AiComponent& aiComponent)
 {
     // 获取必要组件
     auto* physicsComponent = aiComponent.physicsComponent();
     auto* transformComponent = aiComponent.transformComponent();
     auto* spriteComponent = aiComponent.spriteComponent();
-    if (!physicsComponent || !transformComponent || !spriteComponent) {
+    if (physicsComponent == nullptr || transformComponent == nullptr || spriteComponent == nullptr) {
         spdlog::error("PatrolBehavior: 缺少必要组件，无法执行巡逻行为。");
         return;
     }
@@ -44,12 +44,12 @@ void PatrolBehavior::update(float deltaTime, AiComponent& aiComponent)
     auto currentX = transformComponent->position().x;
     if (physicsComponent->isCollidedRight() || currentX >= m_patrolMaxX) {
         // 如果撞右墙或到达巡逻范围右边界，就转向左
-        glm::vec2 newVelocity{ -m_moveSpeed, physicsComponent->velocity().y };
+        const glm::vec2 newVelocity{ -m_moveSpeed, physicsComponent->velocity().y };
         physicsComponent->setVelocity(newVelocity);
         m_movingRight = false;
     } else if (physicsComponent->isCollidedLeft() || currentX <= m_patrolMinX) {
         // 如果撞左墙或到达巡逻范围左边界，就转向右
-        glm::vec2 newVelocity{ m_moveSpeed, physicsComponent->velocity().y };
+        const glm::vec2 newVelocity{ m_moveSpeed, physicsComponent->velocity().y };
         physicsComponent->setVelocity(newVelocity);
         m_movingRight = true;
     }

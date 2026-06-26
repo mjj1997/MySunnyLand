@@ -24,7 +24,7 @@ public:
      * @param limitBounds 限制相机的移动范围
      */
     explicit Camera(glm::vec2 viewportSize,
-                    glm::vec2 position = glm::vec2(0.0f),
+                    glm::vec2 position = glm::vec2(0.0F),
                     std::optional<engine::utils::Rect> limitBounds = std::nullopt);
 
     // 禁用拷贝和移动语义
@@ -62,7 +62,7 @@ private:
     glm::vec2 m_position;     ///< @brief 相机左上角的世界坐标
     ///< @brief 限制相机的移动范围，空值表示不限制
     std::optional<engine::utils::Rect> m_limitBounds{ std::nullopt };
-    float m_smoothSpeed{ 5.0f }; ///< @brief 相机移动的平滑速度
+    float m_smoothSpeed{ 5.0F }; ///< @brief 相机移动的平滑速度
     ///< @brief 相机跟随目标的变换组件，空值表示不跟随
     engine::component::TransformComponent* m_target{ nullptr };
 };

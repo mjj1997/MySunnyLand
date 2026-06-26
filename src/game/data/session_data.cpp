@@ -56,11 +56,11 @@ bool SessionData::saveToFile(std::string_view fileName) const
     nlohmann::json json;
     try {
         // 将成员变量序列化到 JSON 对象中
-        json["levelScore"] = m_levelScore;
-        json["levelHealth"] = m_levelHealth;
-        json["maxHealth"] = m_maxHealth;
-        json["highestScore"] = m_highestScore;
-        json["mapPath"] = m_mapPath;
+        json.emplace("levelScore", m_levelScore);
+        json.emplace("levelHealth", m_levelHealth);
+        json.emplace("maxHealth", m_maxHealth);
+        json.emplace("highestScore", m_highestScore);
+        json.emplace("mapPath", m_mapPath);
 
         // 打开文件进行写入
         auto path = std::filesystem::path{ fileName };
@@ -127,15 +127,15 @@ bool SessionData::syncHighestScore(std::string_view fileName)
         }
 
         // 从文件解析 JSON 数据
-        nlohmann::json j;
-        file >> j;
-        auto highestScoreInFile = j.value("highestScore", 0);
+        nlohmann::json json;
+        file >> json;
+        auto highestScoreInFile = json.value("highestScore", 0);
 
         // 根据文件中的最高分和当前最高分来决定处理方式
         if (highestScoreInFile < m_highestScore) { // 文件中的最高分 低于 当前最高分
-            j["highestScore"] = m_highestScore;
-            file.seekp(0);     // 文件指针回到文件开头
-            file << j.dump(4); // 将JSON对象写入文件
+            json.emplace("highestScore", m_highestScore);
+            file.seekp(0);        // 文件指针回到文件开头
+            file << json.dump(4); // 将JSON对象写入文件
             spdlog::debug("当前最高分高于存档文件，已将新的最高分保存到存档中");
         } else if (highestScoreInFile > m_highestScore) { // 文件中的最高分 高于 当前最高分
             m_highestScore = highestScoreInFile;

@@ -33,12 +33,12 @@ void UpDownBehavior::enter(AiComponent& aiComponent)
     }
 }
 
-void UpDownBehavior::update(float deltaTime, AiComponent& aiComponent)
+void UpDownBehavior::update(float /*deltaTime*/, AiComponent& aiComponent)
 {
     // 获取必要组件
     auto* physicsComponent = aiComponent.physicsComponent();
     auto* transformComponent = aiComponent.transformComponent();
-    if (!physicsComponent || !transformComponent) {
+    if (physicsComponent == nullptr || transformComponent == nullptr) {
         spdlog::error("UpDownBehavior: 缺少必要组件，无法执行上下移动行为。");
         return;
     }
@@ -47,12 +47,12 @@ void UpDownBehavior::update(float deltaTime, AiComponent& aiComponent)
     auto currentY = transformComponent->position().y;
     if (physicsComponent->isCollidedAbove() || currentY <= m_patrolMinY) {
         // 如果撞上障碍物或到达巡逻范围上边界，就转向下
-        glm::vec2 newVelocity{ physicsComponent->velocity().x, m_moveSpeed };
+        const glm::vec2 newVelocity{ physicsComponent->velocity().x, m_moveSpeed };
         physicsComponent->setVelocity(newVelocity);
         m_movingDown = true;
     } else if (physicsComponent->isCollidedBelow() || currentY >= m_patrolMaxY) {
         // 如果撞下障碍物或到达巡逻范围下边界，就转向上
-        glm::vec2 newVelocity{ physicsComponent->velocity().x, -m_moveSpeed };
+        const glm::vec2 newVelocity{ physicsComponent->velocity().x, -m_moveSpeed };
         physicsComponent->setVelocity(newVelocity);
         m_movingDown = false;
     }

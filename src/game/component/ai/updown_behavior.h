@@ -20,16 +20,16 @@ public:
      * @param maxY 巡逻范围的最大 y 坐标。
      * @param speed 移动速度。
      */
-    UpDownBehavior(float minY, float maxY, float speed = 50.0f);
+    UpDownBehavior(float minY, float maxY, float speed = 50.0F);
 
 protected:
     void enter(AiComponent& aiComponent) override;
     void update(float deltaTime, AiComponent& aiComponent) override;
 
 private:
-    float m_patrolMinY{ 0.0f }; ///< @brief 巡逻范围的上边界 (Y 坐标较小值)
-    float m_patrolMaxY{ 0.0f }; ///< @brief 巡逻范围的下边界 (Y 坐标较大值)
-    float m_moveSpeed{ 50.0f }; ///< @brief 移动速度 (像素/秒)
+    float m_patrolMinY{ 0.0F }; ///< @brief 巡逻范围的上边界 (Y 坐标较小值)
+    float m_patrolMaxY{ 0.0F }; ///< @brief 巡逻范围的下边界 (Y 坐标较大值)
+    float m_moveSpeed{ 50.0F }; ///< @brief 移动速度 (像素/秒)
 
     bool m_movingDown{ false }; ///< @brief 当前是否向下移动
 };

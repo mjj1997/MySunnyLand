@@ -21,9 +21,9 @@ void WalkState::enter()
 
 std::unique_ptr<PlayerStateBase> WalkState::handleInput(engine::core::Context& context)
 {
-    auto inputManager = context.inputManager();
-    auto physicsComponent = m_playerComponent->physicsComponent();
-    auto spriteComponent = m_playerComponent->spriteComponent();
+    const auto& inputManager = context.inputManager();
+    auto* physicsComponent = m_playerComponent->physicsComponent();
+    auto* spriteComponent = m_playerComponent->spriteComponent();
 
     // 如果按下了"moveUp"键，且与梯子重合，切换到 ClimbState
     if (inputManager.isActionDown("moveUp") && physicsComponent->isCollidedLadder()) {
@@ -38,24 +38,24 @@ std::unique_ptr<PlayerStateBase> WalkState::handleInput(engine::core::Context& c
     // 步行状态可以左右移动
     if (inputManager.isActionDown("moveLeft")) {
         // 如果当前速度是向右的，则先减速到0 (增强操控手感)
-        if (physicsComponent->velocity().x > 0.0f) {
-            glm::vec2 newVelocity{ 0.0f, physicsComponent->velocity().y };
+        if (physicsComponent->velocity().x > 0.0F) {
+            const glm::vec2 newVelocity{ 0.0F, physicsComponent->velocity().y };
             physicsComponent->setVelocity(newVelocity);
         }
 
         // 添加向左的水平力
-        glm::vec2 moveLeftForce{ -m_playerComponent->moveForce(), 0.0f };
+        const glm::vec2 moveLeftForce{ -m_playerComponent->moveForce(), 0.0F };
         physicsComponent->addForce(moveLeftForce);
         spriteComponent->setFlipped(true); // 向左移动时翻转
     } else if (inputManager.isActionDown("moveRight")) {
         // 如果当前速度是向左的，则先减速到0
-        if (physicsComponent->velocity().x < 0.0f) {
-            glm::vec2 newVelocity{ 0.0f, physicsComponent->velocity().y };
+        if (physicsComponent->velocity().x < 0.0F) {
+            const glm::vec2 newVelocity{ 0.0F, physicsComponent->velocity().y };
             physicsComponent->setVelocity(newVelocity);
         }
 
         // 添加向右的水平力
-        glm::vec2 moveRightForce{ m_playerComponent->moveForce(), 0.0f };
+        const glm::vec2 moveRightForce{ m_playerComponent->moveForce(), 0.0F };
         physicsComponent->addForce(moveRightForce);
         spriteComponent->setFlipped(false); // 向右移动时不翻转
     } else {
@@ -66,15 +66,16 @@ std::unique_ptr<PlayerStateBase> WalkState::handleInput(engine::core::Context& c
     return nullptr;
 }
 
-std::unique_ptr<PlayerStateBase> WalkState::update(float deltaTime, engine::core::Context& context)
+std::unique_ptr<PlayerStateBase> WalkState::update(float /*deltaTime*/,
+                                                   engine::core::Context& /*context*/)
 {
     /** 限制最大速度
      *  因为行走状态只涉及左右移动，所以只需要限制 x 轴速度
      */
-    auto physicsComponent = m_playerComponent->physicsComponent();
+    auto* physicsComponent = m_playerComponent->physicsComponent();
     auto maxSpeed = m_playerComponent->maxSpeed();
     auto velocityX = glm::clamp(physicsComponent->velocity().x, -maxSpeed, maxSpeed);
-    glm::vec2 newVelocity{ velocityX, physicsComponent->velocity().y };
+    const glm::vec2 newVelocity{ velocityX, physicsComponent->velocity().y };
     physicsComponent->setVelocity(newVelocity);
 
     // 如果离地，切换到 FallState

@@ -13,6 +13,8 @@
 
 namespace game::component {
 
+AiComponent::~AiComponent() = default;
+
 bool AiComponent::takeDamage(int damageAmount)
 {
     bool success{ false };
@@ -39,7 +41,7 @@ void AiComponent::setBehavior(std::unique_ptr<ai::AiBehaviorBase> behavior)
 {
     m_currentBehavior = std::move(behavior);
     spdlog::debug("GameObject '{}' 上的 AiComponent 设置了新的行为。",
-                  m_owner ? m_owner->name() : "未知");
+                  m_owner != nullptr ? m_owner->name() : "未知");
     if (m_currentBehavior) {
         m_currentBehavior->enter(*this); // 调用新行为的 enter 方法
     }
@@ -66,14 +68,14 @@ void AiComponent::init()
     }
 }
 
-void AiComponent::update(float deltaTime, engine::core::Context& context)
+void AiComponent::update(float deltaTime, engine::core::Context& /*context*/)
 {
     // 将更新委托给当前的行为策略
     if (m_currentBehavior) {
         m_currentBehavior->update(deltaTime, *this);
     } else {
         spdlog::warn("GameObject '{}' 上的 AiComponent 没有设置行为。",
-                     m_owner ? m_owner->name() : "未知");
+                     m_owner != nullptr ? m_owner->name() : "未知");
     }
 }
 

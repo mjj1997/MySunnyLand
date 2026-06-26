@@ -29,8 +29,8 @@ void ColliderComponent::updateOffset()
     // 获取碰撞器的最小包围盒(AABB)尺寸
     auto colliderAabbSize{ m_collider->aabbSize() };
     // 如果 AABB 尺寸无效，偏移为 0
-    if (colliderAabbSize.x <= 0.0f || colliderAabbSize.y <= 0.0f) {
-        m_offset = glm::vec2(0.0f);
+    if (colliderAabbSize.x <= 0.0F || colliderAabbSize.y <= 0.0F) {
+        m_offset = glm::vec2(0.0F);
         return;
     }
 
@@ -38,29 +38,29 @@ void ColliderComponent::updateOffset()
     // 计算碰撞器左上角相对于 TransformComponent::m_position 的偏移量
     switch (m_alignment) {
     case engine::utils::Alignment::TopLeft:
-        m_offset = glm::vec2(0.0f) * scaleFactor;
+        m_offset = glm::vec2(0.0F) * scaleFactor;
         break;
     case engine::utils::Alignment::TopCenter:
-        m_offset = glm::vec2{ -colliderAabbSize.x / 2.0f, 0.0f } * scaleFactor;
+        m_offset = glm::vec2{ -colliderAabbSize.x / 2.0F, 0.0F } * scaleFactor;
         break;
     case engine::utils::Alignment::TopRight:
-        m_offset = glm::vec2{ -colliderAabbSize.x, 0.0f } * scaleFactor;
+        m_offset = glm::vec2{ -colliderAabbSize.x, 0.0F } * scaleFactor;
         break;
     case engine::utils::Alignment::CenterLeft:
-        m_offset = glm::vec2{ 0.0f, -colliderAabbSize.y / 2.0f } * scaleFactor;
+        m_offset = glm::vec2{ 0.0F, -colliderAabbSize.y / 2.0F } * scaleFactor;
         break;
     case engine::utils::Alignment::Center:
-        m_offset = glm::vec2{ -colliderAabbSize.x / 2.0f, -colliderAabbSize.y / 2.0f }
+        m_offset = glm::vec2{ -colliderAabbSize.x / 2.0F, -colliderAabbSize.y / 2.0F }
                    * scaleFactor;
         break;
     case engine::utils::Alignment::CenterRight:
-        m_offset = glm::vec2{ -colliderAabbSize.x, -colliderAabbSize.y / 2.0f } * scaleFactor;
+        m_offset = glm::vec2{ -colliderAabbSize.x, -colliderAabbSize.y / 2.0F } * scaleFactor;
         break;
     case engine::utils::Alignment::BottomLeft:
-        m_offset = glm::vec2{ 0.0f, -colliderAabbSize.y } * scaleFactor;
+        m_offset = glm::vec2{ 0.0F, -colliderAabbSize.y } * scaleFactor;
         break;
     case engine::utils::Alignment::BottomCenter:
-        m_offset = glm::vec2{ -colliderAabbSize.x / 2.0f, -colliderAabbSize.y } * scaleFactor;
+        m_offset = glm::vec2{ -colliderAabbSize.x / 2.0F, -colliderAabbSize.y } * scaleFactor;
         break;
     case engine::utils::Alignment::BottomRight:
         m_offset = glm::vec2{ -colliderAabbSize.x, -colliderAabbSize.y } * scaleFactor;
@@ -73,8 +73,8 @@ void ColliderComponent::updateOffset()
 
 engine::utils::Rect ColliderComponent::worldAabb() const
 {
-    if (!m_transformComponent || !m_collider) {
-        return engine::utils::Rect{ glm::vec2(0.0f), glm::vec2(0.0f) };
+    if (m_transformComponent == nullptr || m_collider == nullptr) {
+        return engine::utils::Rect{ .position = glm::vec2(0.0F), .size = glm::vec2(0.0F) };
     }
 
     // 计算最小包围盒的左上角坐标
@@ -82,28 +82,28 @@ engine::utils::Rect ColliderComponent::worldAabb() const
     // 计算最小包围盒的尺寸
     const glm::vec2 aabSize{ m_collider->aabbSize() };
     const glm::vec2 scaleFactor{ m_transformComponent->scale() };
-    glm::vec2 scaledSize{ aabSize * scaleFactor };
+    const glm::vec2 scaledSize{ aabSize * scaleFactor };
     //返回最小包围盒的 Rect
-    return engine::utils::Rect{ topLeftPos, scaledSize };
+    return engine::utils::Rect{ .position = topLeftPos, .size = scaledSize };
 }
 
 void ColliderComponent::setAlignment(engine::utils::Alignment anchor)
 {
     m_alignment = anchor;
-    if (m_transformComponent && m_collider) {
+    if (m_transformComponent != nullptr && m_collider != nullptr) {
         updateOffset();
     }
 }
 
 void ColliderComponent::init()
 {
-    if (!m_owner) {
+    if (m_owner == nullptr) {
         spdlog::error("ColliderComponent 在初始化前未设置所有者 GameObject。");
         return;
     }
 
     m_transformComponent = m_owner->getComponent<TransformComponent>();
-    if (!m_transformComponent) {
+    if (m_transformComponent == nullptr) {
         spdlog::error(
             "GameObject '{}' 上的 ColliderComponent 需要一个 TransformComponent，但未找到。",
             m_owner->name());

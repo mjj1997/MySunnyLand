@@ -12,17 +12,17 @@ TextRenderer::TextRenderer(SDL_Renderer* sdlRenderer,
     : m_sdlRenderer{ sdlRenderer }
     , m_resourceManager{ resourceManager }
 {
-    if (!m_sdlRenderer || !m_resourceManager) {
+    if (m_sdlRenderer == nullptr || m_resourceManager == nullptr) {
         throw std::runtime_error("TextRenderer 需要一个有效的 SDL_Renderer 和 ResourceManager。");
     }
 
     // 初始化 SDL_ttf
-    if (!TTF_WasInit() && TTF_Init() == false) {
+    if (TTF_WasInit() == 0 && !TTF_Init()) {
         throw std::runtime_error("初始化 SDL_ttf 失败: " + std::string{ SDL_GetError() });
     }
 
     m_textEngine = TTF_CreateRendererTextEngine(m_sdlRenderer);
-    if (!m_textEngine) {
+    if (m_textEngine == nullptr) {
         spdlog::error("创建 TTF_TextEngine 失败: {}", SDL_GetError());
         throw std::runtime_error("创建 TTF_TextEngine 失败。");
     }
@@ -32,14 +32,14 @@ TextRenderer::TextRenderer(SDL_Renderer* sdlRenderer,
 
 TextRenderer::~TextRenderer()
 {
-    if (m_textEngine) {
+    if (m_textEngine != nullptr) {
         close();
     }
 }
 
 void TextRenderer::close()
 {
-    if (m_textEngine) {
+    if (m_textEngine != nullptr) {
         TTF_DestroyRendererTextEngine(m_textEngine);
         m_textEngine = nullptr;
         spdlog::trace("TTF_TextEngine 已销毁。");
@@ -71,14 +71,14 @@ void TextRenderer::drawUiText(std::string_view text,
     }
 
     // 先渲染一次黑色文字模拟阴影(偏移 2 像素)
-    TTF_SetTextColorFloat(tempTextObject, 0.0f, 0.0f, 0.0f, 1.0f);
-    if (TTF_DrawRendererText(tempTextObject, screenPosition.x + 2, screenPosition.y + 2) == false) {
+    TTF_SetTextColorFloat(tempTextObject, 0.0F, 0.0F, 0.0F, 1.0F);
+    if (!TTF_DrawRendererText(tempTextObject, screenPosition.x + 2, screenPosition.y + 2)) {
         spdlog::error("drawUiText 绘制临时 TTF_Text 失败: {}", SDL_GetError());
     }
 
     // 然后正常绘制
     TTF_SetTextColorFloat(tempTextObject, color.r, color.g, color.b, color.a);
-    if (TTF_DrawRendererText(tempTextObject, screenPosition.x, screenPosition.y) == false) {
+    if (!TTF_DrawRendererText(tempTextObject, screenPosition.x, screenPosition.y)) {
         spdlog::error("drawUiText 绘制临时 TTF_Text 失败: {}", SDL_GetError());
     }
 
@@ -94,7 +94,7 @@ void TextRenderer::drawText(const Camera& camera,
                             const engine::utils::FColor& color)
 {
     // 应用相机变换
-    glm::vec2 screenPos = camera.worldToScreen(worldPosition);
+    const glm::vec2 screenPos{ camera.worldToScreen(worldPosition) };
 
     // 用新坐标调用 drawUiText() 即可
     drawUiText(text, fontId, fontSize, screenPos, color);
@@ -108,19 +108,19 @@ glm::vec2 TextRenderer::getTextSize(std::string_view text, std::string_view font
     TTF_Font* font{ m_resourceManager->getFont(fontId, fontSize) };
     if (font == nullptr) {
         spdlog::warn("getTextSize 获取字体失败: {} 大小 {}", fontId, fontSize);
-        return glm::vec2(0.0f);
+        return glm::vec2(0.0F);
     }
 
     // 创建临时 TTF_Text 对象
     TTF_Text* tempTextObject{ TTF_CreateText(m_textEngine, font, text.data(), 0) };
     if (tempTextObject == nullptr) {
         spdlog::error("getTextSize 创建临时 TTF_Text 失败: {}", SDL_GetError());
-        return glm::vec2(0.0f);
+        return glm::vec2(0.0F);
     }
 
     // 获取文本尺寸
-    int width;
-    int height;
+    int width{ 0 };
+    int height{ 0 };
     TTF_GetTextSize(tempTextObject, &width, &height);
 
     // 销毁临时 TTF_Text 对象

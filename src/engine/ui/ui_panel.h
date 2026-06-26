@@ -23,8 +23,8 @@ public:
      * @param size Panel 的大小
      * @param backgroundColor 背景色
      */
-    explicit UiPanel(glm::vec2 localPosition = { 0.0f, 0.0f },
-                     glm::vec2 size = { 0.0f, 0.0f },
+    explicit UiPanel(glm::vec2 localPosition = { 0.0F, 0.0F },
+                     glm::vec2 size = { 0.0F, 0.0F },
                      std::optional<engine::utils::FColor> backgroundColor = std::nullopt);
 
     void render(engine::core::Context& context) override;

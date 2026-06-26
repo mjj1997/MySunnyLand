@@ -8,9 +8,9 @@ namespace engine::render {
 Camera::Camera(glm::vec2 viewportSize,
                glm::vec2 position,
                std::optional<engine::utils::Rect> limitBounds)
-    : m_viewportSize(std::move(viewportSize))
-    , m_position(std::move(position))
-    , m_limitBounds(std::move(limitBounds))
+    : m_viewportSize{ viewportSize }
+    , m_position{ position }
+    , m_limitBounds{ limitBounds }
 {
     spdlog::trace("Camera 初始化成功，位置: {},{}", m_position.x, m_position.y);
 }
@@ -21,13 +21,13 @@ void Camera::update(float deltaTime)
         return;
     }
 
-    glm::vec2 targetPosition{ m_target->position() };
+    const glm::vec2 targetPosition{ m_target->position() };
     // 计算想要的相机位置，使目标在视口中心
-    glm::vec2 desiredCameraPosition{ targetPosition - m_viewportSize / 2.0f };
+    const glm::vec2 desiredCameraPosition{ targetPosition - m_viewportSize / 2.0F };
 
     // 计算相机当前位置和想要的相机位置之间的距离
     auto distance = glm::distance(m_position, desiredCameraPosition);
-    constexpr float threshold{ 1.0f }; // 距离阈值
+    constexpr float threshold{ 1.0F }; // 距离阈值
     if (distance < threshold) {
         // 如果相机当前位置和想要的相机位置之间的距离小于阈值，直接设置为想要的相机位置
         m_position = desiredCameraPosition;
@@ -87,13 +87,13 @@ const engine::component::TransformComponent* Camera::target() const
 
 void Camera::setPosition(glm::vec2 position)
 {
-    m_position = std::move(position);
+    m_position = position;
     clampPosition();
 }
 
 void Camera::setLimitBounds(std::optional<engine::utils::Rect> limitBounds)
 {
-    m_limitBounds = std::move(limitBounds);
+    m_limitBounds = limitBounds;
     clampPosition();
 }
 
@@ -108,9 +108,9 @@ void Camera::clampPosition()
     if (m_limitBounds.has_value() && m_limitBounds.value().size.x > 0
         && m_limitBounds.value().size.y > 0) {
         // 计算允许的相机位置范围
-        glm::vec2 minCameraPos = m_limitBounds.value().position;
-        glm::vec2 maxCameraPos = m_limitBounds.value().position + m_limitBounds.value().size
-                                 - m_viewportSize;
+        const glm::vec2 minCameraPos{ m_limitBounds.value().position };
+        glm::vec2 maxCameraPos{ m_limitBounds.value().position + m_limitBounds.value().size
+                                - m_viewportSize };
 
         // 确保 maxCameraPos 不小于 minCameraPos (视口可能比世界还大)
         maxCameraPos.x = std::max(minCameraPos.x, maxCameraPos.x);

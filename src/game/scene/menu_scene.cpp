@@ -63,7 +63,7 @@ void MenuScene::handleInput()
 bool MenuScene::initUi()
 {
     spdlog::trace("创建 MenuScene UI...");
-    glm::vec2 windowSize{ m_context.gameState().logicalSize() };
+    const glm::vec2 windowSize{ m_context.gameState().logicalSize() };
 
     if (!m_uiManager->init(windowSize)) {
         spdlog::error("MenuScene 中初始化 UiManager 失败!");
@@ -76,22 +76,22 @@ bool MenuScene::initUi()
                                                             "assets/fonts/VonwaonBitmap-16px.ttf",
                                                             32);
     // 设置 PAUSE 标签位置，使其居中并靠上
-    auto labelLocalPosY{ windowSize.y * 0.2f };
+    auto labelLocalPosY{ windowSize.y * 0.2F };
     pauseLabel->setLocalPosition(
-        glm::vec2{ (windowSize.x - pauseLabel->size().x) / 2.0f, labelLocalPosY });
+        glm::vec2{ (windowSize.x - pauseLabel->size().x) / 2.0F, labelLocalPosY });
     // 将 PAUSE 标签添加到 UI 管理器
     m_uiManager->addElement(std::move(pauseLabel));
 
     // --- 创建 4 个按钮 --- (4个按钮，设定好大小、间距)
-    float buttonWidth{ 96.0f };
-    float buttonHeight{ 32.0f };
-    float buttonSpacing{ 10.0f };
+    const float buttonWidth{ 96.0F };
+    const float buttonHeight{ 32.0F };
+    const float buttonSpacing{ 10.0F };
 
     glm::vec2 currentButtonLocalPos{
-        (windowSize.x - buttonWidth) / 2.0f, // 按钮水平居中位置
-        labelLocalPosY + 80.0f               // 从标签下方开始，增加间距
+        (windowSize.x - buttonWidth) / 2.0F, // 按钮水平居中位置
+        labelLocalPosY + 80.0F               // 从标签下方开始，增加间距
     };
-    glm::vec2 buttonSize{ buttonWidth, buttonHeight };
+    const glm::vec2 buttonSize{ buttonWidth, buttonHeight };
 
     // Resume Button
     auto resumeButton

@@ -45,8 +45,8 @@ public:
     int m_targetFps{ 144 }; ///< @brief 目标 FPS 设置，0 表示不限制
 
     // 音频设置
-    float m_musicVolume{ 0.5f };
-    float m_soundVolume{ 0.5f };
+    float m_musicVolume{ 0.5F };
+    float m_soundVolume{ 0.5F };
 
     // 存储动作名称到 SDL Scancode 名称列表的映射
     std::unordered_map<std::string, std::vector<std::string>> m_inputMappings{

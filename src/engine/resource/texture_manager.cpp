@@ -9,7 +9,7 @@ namespace engine::resource {
 TextureManager::TextureManager(SDL_Renderer* renderer)
     : m_renderer{ renderer }
 {
-    if (!renderer) {
+    if (renderer == nullptr) {
         // 关键错误，无法继续，抛出异常 （它将由catch语句捕获（位于GameApp），并进行处理）
         throw std::runtime_error("TextureManager 构造失败：渲染器指针为空。");
     }
@@ -20,9 +20,9 @@ TextureManager::TextureManager(SDL_Renderer* renderer)
 SDL_Texture* TextureManager::loadTexture(std::string_view filePath)
 {
     // 检查是否已加载该纹理
-    auto it = m_textures.find(filePath);
-    if (it != m_textures.end()) {
-        return it->second.get();
+    auto iter = m_textures.find(filePath);
+    if (iter != m_textures.end()) {
+        return iter->second.get();
     }
 
     // 如果未加载，则尝试加载纹理
@@ -47,9 +47,9 @@ SDL_Texture* TextureManager::loadTexture(std::string_view filePath)
 SDL_Texture* TextureManager::getTexture(std::string_view filePath)
 {
     // 查找现有纹理
-    auto it = m_textures.find(filePath);
-    if (it != m_textures.end()) {
-        return it->second.get();
+    auto iter = m_textures.find(filePath);
+    if (iter != m_textures.end()) {
+        return iter->second.get();
     }
 
     // 如果未找到纹理，尝试加载纹理
@@ -61,25 +61,25 @@ glm::vec2 TextureManager::getTextureSize(std::string_view filePath)
 {
     // 获取纹理
     SDL_Texture* texture{ getTexture(filePath) };
-    if (!texture) {
+    if (texture == nullptr) {
         spdlog::error("无法获取纹理：{}", filePath);
-        return glm::vec2(0.0f);
+        return glm::vec2(0.0F);
     }
 
     // 获取纹理尺寸
     glm::vec2 size;
     if (!SDL_GetTextureSize(texture, &size.x, &size.y)) {
         spdlog::error("无法查询纹理尺寸：{}", filePath);
-        return glm::vec2(0.0f);
+        return glm::vec2(0.0F);
     }
     return size;
 }
 
 void TextureManager::unloadTexture(std::string_view filePath)
 {
-    auto it = m_textures.find(filePath);
-    if (it != m_textures.end()) {
-        m_textures.erase(it); // unique_ptr 通过自定义删除器自动释放纹理
+    auto iter = m_textures.find(filePath);
+    if (iter != m_textures.end()) {
+        m_textures.erase(iter); // unique_ptr 通过自定义删除器自动释放纹理
         spdlog::debug("成功卸载纹理：{}", filePath);
     } else {
         spdlog::warn("尝试卸载不存在的纹理：{}", filePath);

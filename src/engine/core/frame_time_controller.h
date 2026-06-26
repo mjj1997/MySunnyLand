@@ -80,12 +80,12 @@ private:
 private:
     Uint64 m_lastFrameEndTimestamp{ 0 };      ///< @brief 上一帧结束的时间戳
     Uint64 m_currentFrameStartTimestamp{ 0 }; ///< @brief 当前帧开始的时间戳
-    float m_deltaTime{ 0.0f };                ///< @brief 未缩放的帧间时间差 (秒)
-    float m_timeScale{ 1.0f };                ///< @brief 时间缩放因子
+    float m_deltaTime{ 0.0F };                ///< @brief 未缩放的帧间时间差 (秒)
+    float m_timeScale{ 1.0F };                ///< @brief 时间缩放因子
 
     // 帧率限制相关
     int m_targetFps{ 0 };            ///< @brief 目标 FPS (0 表示不限制)
-    float m_targetFrameTime{ 0.0f }; ///< @brief 目标每帧时间 (秒)
+    float m_targetFrameTime{ 0.0F }; ///< @brief 目标每帧时间 (秒)
 };
 
 } // namespace engine::core

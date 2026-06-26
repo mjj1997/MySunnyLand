@@ -11,7 +11,7 @@ namespace engine::ui {
 UiInteractiveElementBase::UiInteractiveElementBase(engine::core::Context& context,
                                                    glm::vec2 localPosition,
                                                    glm::vec2 size)
-    : UiElementBase{ std::move(localPosition), std::move(size) }
+    : UiElementBase{ localPosition, size }
     , m_context{ context }
 {
     spdlog::trace("UIInteractiveElementBase 构造完成");
@@ -52,7 +52,7 @@ void UiInteractiveElementBase::addSprite(std::string_view name,
                                          std::unique_ptr<engine::render::Sprite> sprite)
 {
     // 可交互 UI 元素必须有一个 size 用于交互检测，因此如果参数列表中没有指定，则用图片大小作为 size
-    if (m_size.x == 0.0f && m_size.y == 0.0f) {
+    if (m_size.x == 0.0F && m_size.y == 0.0F) {
         m_size = m_context.resourceManager().getTextureSize(sprite->textureId());
     }
 
@@ -67,8 +67,8 @@ void UiInteractiveElementBase::addSound(std::string_view name, std::string_view 
 
 void UiInteractiveElementBase::playSound(std::string_view name)
 {
-    if (auto it = m_sounds.find(name); it != m_sounds.end()) {
-        m_context.audioPlayer().playSound(it->second);
+    if (auto iter = m_sounds.find(name); iter != m_sounds.end()) {
+        m_context.audioPlayer().playSound(iter->second);
     } else {
         spdlog::warn("Sound '{}' 未找到。", name);
     }
@@ -87,8 +87,8 @@ void UiInteractiveElementBase::setCurrentState(std::unique_ptr<engine::ui::state
 
 void UiInteractiveElementBase::setCurrentSprite(std::string_view name)
 {
-    if (auto it = m_sprites.find(name); it != m_sprites.end()) {
-        m_currentSprite = it->second.get();
+    if (auto iter = m_sprites.find(name); iter != m_sprites.end()) {
+        m_currentSprite = iter->second.get();
     } else {
         spdlog::warn("Sprite '{}' 未找到。", name);
     }

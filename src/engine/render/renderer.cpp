@@ -16,10 +16,10 @@ Renderer::Renderer(SDL_Renderer* sdlRenderer, engine::resource::ResourceManager*
 {
     spdlog::trace("构造 Renderer...");
 
-    if (!m_renderer) {
+    if (m_renderer == nullptr) {
         throw std::runtime_error("Renderer 构造失败: 提供的 SDL_Renderer 指针为空。");
     }
-    if (!m_resourceManager) {
+    if (m_resourceManager == nullptr) {
         // ResourceManager 是 drawSprite 所必需的
         throw std::runtime_error("Renderer 构造失败: 提供的 ResourceManager 指针为空。");
     }
@@ -36,7 +36,7 @@ void Renderer::drawSprite(const Camera& camera,
                           double angle)
 {
     SDL_Texture* texture{ m_resourceManager->getTexture(sprite.textureId()) };
-    if (!texture) {
+    if (texture == nullptr) {
         spdlog::error("无法为 ID {} 获取纹理。", sprite.textureId());
         return;
     }
@@ -48,15 +48,17 @@ void Renderer::drawSprite(const Camera& camera,
     }
 
     // 应用相机变换
-    glm::vec2 positionScreen{ camera.worldToScreen(position) };
+    const glm::vec2 positionScreen{ camera.worldToScreen(position) };
 
     // 计算目标矩形，注意 position 是精灵的左上角坐标
-    float scaledWidth{ srcRect.value().w * scale.x };
-    float scaledHeight{ srcRect.value().h * scale.y };
-    SDL_FRect destRect{ positionScreen.x, positionScreen.y, scaledWidth, scaledHeight };
+    const float scaledWidth{ srcRect.value().w * scale.x };
+    const float scaledHeight{ srcRect.value().h * scale.y };
+    const SDL_FRect destRect{
+        .x = positionScreen.x, .y = positionScreen.y, .w = scaledWidth, .h = scaledHeight
+    };
 
     // 视口裁剪：如果精灵超出视口，则不绘制
-    if (!isRectInViewport(camera, destRect)) {
+    if (!Renderer::isRectInViewport(camera, destRect)) {
         // spdlog::info("精灵超出视口范围, ID: {}", sprite.textureId());
         return;
     }
@@ -67,7 +69,7 @@ void Renderer::drawSprite(const Camera& camera,
                                   &srcRect.value(),
                                   &destRect,
                                   angle,
-                                  NULL,
+                                  nullptr,
                                   sprite.isFlipped() ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE)) {
         spdlog::error("渲染旋转纹理失败(ID: {}): {}", sprite.textureId(), SDL_GetError());
     }
@@ -81,7 +83,7 @@ void Renderer::drawParallax(const Camera& camera,
                             const glm::vec2& scale)
 {
     SDL_Texture* texture{ m_resourceManager->getTexture(sprite.textureId()) };
-    if (!texture) {
+    if (texture == nullptr) {
         spdlog::error("无法为 ID {} 获取纹理。", sprite.textureId());
         return;
     }
@@ -93,15 +95,15 @@ void Renderer::drawParallax(const Camera& camera,
     }
 
     // 应用相机变换
-    glm::vec2 positionScreen{ camera.worldToScreenWithParallax(position, scrollFactor) };
+    const glm::vec2 positionScreen{ camera.worldToScreenWithParallax(position, scrollFactor) };
 
     // 计算缩放后的纹理尺寸
-    float scaledWidth{ srcRect.value().w * scale.x };
-    float scaledHeight{ srcRect.value().h * scale.y };
+    const float scaledWidth{ srcRect.value().w * scale.x };
+    const float scaledHeight{ srcRect.value().h * scale.y };
 
     glm::vec2 startPos;
     glm::vec2 endPos;
-    glm::vec2 viewportSize{ camera.viewportSize() };
+    const glm::vec2 viewportSize{ camera.viewportSize() };
     if (repeat.x) {
         // 重复背景纹理的 x 坐标范围，从 -scaledWidth 到 0
         startPos.x = glm::mod(positionScreen.x, scaledWidth) - scaledWidth;
@@ -121,10 +123,10 @@ void Renderer::drawParallax(const Camera& camera,
         endPos.y = glm::min(positionScreen.y + scaledHeight, viewportSize.y);
     }
 
-    for (float y{ startPos.y }; y < endPos.y; y += scaledHeight) {
-        for (float x{ startPos.x }; x < endPos.x; x += scaledWidth) {
-            SDL_FRect destRect{ x, y, scaledWidth, scaledHeight };
-            if (!SDL_RenderTexture(m_renderer, texture, NULL, &destRect)) {
+    for (float posY{ startPos.y }; posY < endPos.y; posY += scaledHeight) {
+        for (float posX{ startPos.x }; posX < endPos.x; posX += scaledWidth) {
+            const SDL_FRect destRect{ .x = posX, .y = posY, .w = scaledWidth, .h = scaledHeight };
+            if (!SDL_RenderTexture(m_renderer, texture, nullptr, &destRect)) {
                 spdlog::error("渲染视差纹理失败(ID: {}): {}", sprite.textureId(), SDL_GetError());
                 return;
             }
@@ -137,7 +139,7 @@ void Renderer::drawUiSprite(const Sprite& sprite,
                             const std::optional<glm::vec2>& size)
 {
     SDL_Texture* texture{ m_resourceManager->getTexture(sprite.textureId()) };
-    if (!texture) {
+    if (texture == nullptr) {
         spdlog::error("无法为 ID {} 获取纹理。", sprite.textureId());
         return;
     }
@@ -148,7 +150,9 @@ void Renderer::drawUiSprite(const Sprite& sprite,
         return;
     }
 
-    SDL_FRect destRect{ position.x, position.y, 0, 0 }; // 首先确定目标矩形的左上角坐标
+    SDL_FRect destRect{
+        .x = position.x, .y = position.y, .w = 0, .h = 0
+    }; // 首先确定目标矩形的左上角坐标
     if (size.has_value()) {
         // 如果提供了尺寸，则使用提供的尺寸
         destRect.w = size.value().x;
@@ -175,7 +179,9 @@ void Renderer::drawUiFilledRect(const engine::utils::Rect& rect, const engine::u
 {
     setDrawColorFloat(color.r, color.g, color.b, color.a);
 
-    SDL_FRect sdlRect{ rect.position.x, rect.position.y, rect.size.x, rect.size.y };
+    const SDL_FRect sdlRect{
+        .x = rect.position.x, .y = rect.position.y, .w = rect.size.x, .h = rect.size.y
+    };
     if (!SDL_RenderFillRect(m_renderer, &sdlRect)) {
         spdlog::error("绘制填充矩形失败：{}", SDL_GetError());
     }
@@ -195,16 +201,16 @@ void Renderer::clearScreen()
     }
 }
 
-void Renderer::setDrawColor(Uint8 r, Uint8 g, Uint8 b, Uint8 a)
+void Renderer::setDrawColor(Uint8 red, Uint8 green, Uint8 blue, Uint8 alpha)
 {
-    if (!SDL_SetRenderDrawColor(m_renderer, r, g, b, a)) {
+    if (!SDL_SetRenderDrawColor(m_renderer, red, green, blue, alpha)) {
         spdlog::error("设置渲染绘制颜色失败：{}", SDL_GetError());
     }
 }
 
-void Renderer::setDrawColorFloat(float r, float g, float b, float a)
+void Renderer::setDrawColorFloat(float red, float green, float blue, float alpha)
 {
-    if (!SDL_SetRenderDrawColorFloat(m_renderer, r, g, b, a)) {
+    if (!SDL_SetRenderDrawColorFloat(m_renderer, red, green, blue, alpha)) {
         spdlog::error("设置渲染绘制颜色失败：{}", SDL_GetError());
     }
 }
@@ -212,7 +218,7 @@ void Renderer::setDrawColorFloat(float r, float g, float b, float a)
 std::optional<SDL_FRect> Renderer::getSpriteSrcRect(const Sprite& sprite)
 {
     SDL_Texture* texture{ m_resourceManager->getTexture(sprite.textureId()) };
-    if (!texture) {
+    if (texture == nullptr) {
         spdlog::error("无法为 ID {} 获取纹理。", sprite.textureId());
         return std::nullopt;
     }
@@ -225,7 +231,7 @@ std::optional<SDL_FRect> Renderer::getSpriteSrcRect(const Sprite& sprite)
         }
         return srcRect;
     } else {
-        SDL_FRect defaultRect{ 0, 0, 0, 0 };
+        SDL_FRect defaultRect{ .x = 0.0F, .y = 0.0F, .w = 0.0F, .h = 0.0F };
         if (!SDL_GetTextureSize(texture, &defaultRect.w, &defaultRect.h)) {
             spdlog::error("无法获取纹理尺寸, ID: {}", sprite.textureId());
             return std::nullopt;
@@ -236,7 +242,7 @@ std::optional<SDL_FRect> Renderer::getSpriteSrcRect(const Sprite& sprite)
 
 bool Renderer::isRectInViewport(const Camera& camera, const SDL_FRect& rect)
 {
-    glm::vec2 viewportSize{ camera.viewportSize() };
+    const glm::vec2 viewportSize{ camera.viewportSize() };
     // 相当于 AABB 碰撞检测
     return rect.x + rect.w >= 0 && rect.x <= viewportSize.x && rect.y + rect.h >= 0
            && rect.y <= viewportSize.y;

@@ -12,7 +12,7 @@ UiButton::UiButton(engine::core::Context& context,
                    glm::vec2 localPosition,
                    glm::vec2 size,
                    std::function<void()> callback)
-    : UiInteractiveElementBase{ context, std::move(localPosition), std::move(size) }
+    : UiInteractiveElementBase{ context, localPosition, size }
     , m_callback{ std::move(callback) }
 {
     // 添加各状态对应的精灵

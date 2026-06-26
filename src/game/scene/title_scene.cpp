@@ -50,7 +50,7 @@ void TitleScene::init()
     m_gameSessionData->syncHighestScore("assets/save.json");
 
     // 重置相机坐标，不限制边界
-    m_context.camera().setPosition(glm::vec2(0.0f));
+    m_context.camera().setPosition(glm::vec2(0.0F));
     // 若无这一行，从GameScene返回到标题场景时，相机会限制在地图边界内
     m_context.camera().setLimitBounds(std::nullopt);
 
@@ -79,13 +79,13 @@ void TitleScene::update(float deltaTime)
     SceneBase::update(deltaTime);
 
     // 相机自动向右移动
-    m_context.camera().move(glm::vec2{ deltaTime * 100.0f, 0.0f });
+    m_context.camera().move(glm::vec2{ deltaTime * 100.0F, 0.0F });
 }
 
 bool TitleScene::initUi()
 {
     spdlog::trace("创建 TitleScene UI...");
-    glm::vec2 windowSize{ m_context.gameState().logicalSize() };
+    const glm::vec2 windowSize{ m_context.gameState().logicalSize() };
 
     if (!m_uiManager->init(windowSize)) {
         spdlog::error("TitleScene 中初始化 UiManager 失败!");
@@ -95,35 +95,35 @@ bool TitleScene::initUi()
     // --- 创建标题图片 (假设不知道大小) ---
     auto titleImage = std::make_unique<engine::ui::UiImage>("assets/textures/UI/title-screen.png");
     auto size = m_context.resourceManager().getTextureSize(titleImage->textureId());
-    titleImage->setSize(size * 2.0f); // 放大为2倍
+    titleImage->setSize(size * 2.0F); // 放大为2倍
 
     // 水平居中
-    auto titleLocalPos = (windowSize - titleImage->size()) / 2.0f - glm::vec2{ 0.0f, 50.0f };
+    auto titleLocalPos = (windowSize - titleImage->size()) / 2.0F - glm::vec2{ 0.0F, 50.0F };
     titleImage->setLocalPosition(titleLocalPos);
 
     // 将标题图片添加到UI管理器
     m_uiManager->addElement(std::move(titleImage));
 
     // --- 创建按钮面板并居中 --- (4个按钮，设定好大小、间距)
-    float buttonWidth{ 96.0f };
-    float buttonHeight{ 32.0f };
-    float buttonSpacing{ 20.0f };
-    int buttonNums{ 4 };
+    const float buttonWidth{ 96.0F };
+    const float buttonHeight{ 32.0F };
+    const float buttonSpacing{ 20.0F };
+    const int buttonNums{ 4 };
 
     // 计算面板总宽度
-    float panelWidth{ buttonNums * buttonWidth + (buttonNums - 1) * buttonSpacing };
-    float panelHeight{ buttonHeight };
+    const float panelWidth{ (buttonNums * buttonWidth) + ((buttonNums - 1) * buttonSpacing) };
+    const float panelHeight{ buttonHeight };
 
     // 计算面板位置使其居中
-    float panelX{ (windowSize.x - panelWidth) / 2.0f };
-    float panelY{ windowSize.y * 0.65f }; // 垂直位置中间靠下
+    const float panelX{ (windowSize.x - panelWidth) / 2.0F };
+    const float panelY{ windowSize.y * 0.65F }; // 垂直位置中间靠下
 
     auto buttonPanel = std::make_unique<engine::ui::UiPanel>(glm::vec2{ panelX, panelY },
                                                              glm::vec2{ panelWidth, panelHeight });
 
     // --- 创建按钮并添加到 UiPanel (位置是相对于 UiPanel 左上角的局部位置) ---
-    glm::vec2 currentButtonLocalPos{ 0.0f, 0.0f };
-    glm::vec2 buttonSize{ buttonWidth, buttonHeight };
+    glm::vec2 currentButtonLocalPos{ 0.0F, 0.0F };
+    const glm::vec2 buttonSize{ buttonWidth, buttonHeight };
 
     // Start Button
     auto startButton
@@ -178,11 +178,13 @@ bool TitleScene::initUi()
                                                              "SunnyLand Credits: XXX - 2026",
                                                              "assets/fonts/VonwaonBitmap-16px.ttf",
                                                              16,
-                                                             engine::utils::FColor{
-                                                                 0.8f, 0.8f, 0.8f, 1.0f });
+                                                             engine::utils::FColor{ .r = 0.8F,
+                                                                                    .g = 0.8F,
+                                                                                    .b = 0.8F,
+                                                                                    .a = 1.0F });
     // 设置 Credit 标签位置，使其居中并靠下
-    creditLabel->setLocalPosition(glm::vec2{ (windowSize.x - creditLabel->size().x) / 2.0f,
-                                             windowSize.y - creditLabel->size().y - 10.0f });
+    creditLabel->setLocalPosition(glm::vec2{ (windowSize.x - creditLabel->size().x) / 2.0F,
+                                             windowSize.y - creditLabel->size().y - 10.0F });
     // 将 Credit 标签添加到UI管理器
     m_uiManager->addElement(std::move(creditLabel));
 

@@ -21,8 +21,8 @@ InputManager::InputManager(SDL_Renderer* sdlRenderer, const engine::core::Config
     initMappings(config);
 
     // 获取初始鼠标位置
-    float x;
-    float y;
+    float x{ 0.0F };
+    float y{ 0.0F };
     SDL_GetMouseState(&x, &y);
     m_mousePosition = glm::vec2{ x, y };
     spdlog::trace("初始鼠标位置: ({}, {})", m_mousePosition.x, m_mousePosition.y);

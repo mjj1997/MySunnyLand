@@ -30,8 +30,8 @@ void GameState::setCurrentState(State newState)
 
 glm::vec2 GameState::windowSize() const
 {
-    int width;
-    int height;
+    int width{ 0 };
+    int height{ 0 };
     // SDL3 获取窗口大小的方法
     SDL_GetWindowSize(m_window, &width, &height);
     return glm::vec2{ width, height };
@@ -46,8 +46,8 @@ void GameState::setWindowSize(const glm::vec2& windowSize)
 
 glm::vec2 GameState::logicalSize() const
 {
-    int width;
-    int height;
+    int width{ 0 };
+    int height{ 0 };
     // SDL3 获取逻辑分辨率大小的方法
     SDL_GetRenderLogicalPresentation(m_sdlRenderer, &width, &height, nullptr);
     return glm::vec2{ width, height };

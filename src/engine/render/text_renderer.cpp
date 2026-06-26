@@ -119,8 +119,8 @@ glm::vec2 TextRenderer::getTextSize(std::string_view text, std::string_view font
     }
 
     // 获取文本尺寸
-    int width;
-    int height;
+    int width{ 0 };
+    int height{ 0 };
     TTF_GetTextSize(tempTextObject, &width, &height);
 
     // 销毁临时 TTF_Text 对象

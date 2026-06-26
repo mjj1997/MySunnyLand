@@ -25,7 +25,7 @@ const AnimationFrame& Animation::frameAt(float time) const
 {
     if (m_frames.empty()) {
         spdlog::error("动画 '{}' 没有帧，无法获取帧", m_name);
-        return AnimationFrame{}; // 返回空帧
+        return s_emptyAnimationFrame; // 返回空帧
     }
 
     float currentTime{ time };
